@@ -123,6 +123,9 @@ config.globals = {
     SERVER_URL         : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`),
     GRAPHQL_ENDPOINT   : JSON.stringify(config.graphql_endpoint),
 
+    PARSE_MODULE_PATH  : JSON.stringify('parse'),
+
+
     ENV                : JSON.stringify('client'),
     BASENAME           : JSON.stringify(process.env.BASENAME || ''),
     SITE_TITLE        : JSON.stringify(process.env.SITE_TITLE),
