@@ -1,0 +1,44 @@
+# webstorm
+.idea/
+
+dist/
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# Logs
+logs
+*.log
+
+# Config
+.env
+
+.tmux
+
+.DS_Store
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# auto-generated tag files
+.tags
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# Optional REPL history
+.node_repl_history
+
+# Optional npm cache directory
+.npm
+
+# Coverage directory used by tools like istanbul
+coverage
+

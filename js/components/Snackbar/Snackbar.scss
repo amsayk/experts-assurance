@@ -1,0 +1,39 @@
+/* $app-color-black:           #373a3c; // rgb(55,58,60) */
+/* */
+/* $brand-primary:             #0275d8; // rgb(2,117,216) */
+/* $brand-success:             #5cb85c; // rgb(92,184,92) */
+/* $brand-info:                #5bc0de; // rgb(91,192,222) */
+/* $brand-warning:             #f0ad4e; // rgb(240,173,78) */
+/* $brand-danger:              #d9534f; // rgb(217,83,79) */
+
+.snackbar {
+  animation-duration : .5s;
+  background         : rgba(55,58,60, 0.9);
+  border-radius      : 4px;
+  box-shadow         : 0 0 5px rgba(55,58,60, 0.1);
+  color              : #fff;
+  font-size          : 14px;
+  min-height         : 48px;
+  line-height        : 1.65em;
+  padding            : 15px 24px;
+  position           : fixed;
+  max-width          : 568px;
+
+  .btn-snackbar {
+    background  : none;
+    border      : none;
+    font-weight : 600;
+    height      : 100%;
+    line-height : 100%;
+    position    : absolute;
+    right       : 24px;
+    top         : 0;
+  }
+
+  &.primary { background : rgba(2,117,216, 0.9); }
+  &.success { background : rgba(92,184,92, 0.9); }
+  &.info    { background : rgba(91,192,222, 0.9); }
+  &.warning { background : rgba(240,173,78, 0.9); }
+  &.danger  { background : rgba(217,83,79, 0.9); }
+}
+
