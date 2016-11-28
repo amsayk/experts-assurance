@@ -2,7 +2,8 @@ import {
 
 } from './constants';
 
-const log = require('debug')('app:backend');
+const debug = require('debug')('app:backend');
+const error = require('debug')('app:backend:error');
 
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;
@@ -21,7 +22,7 @@ Parse.Cloud.define('initialization', function (request, response) {
 Parse.Cloud.define('initUsers', function (request, response) {
 
   function doAdd(obj) {
-    log(obj.displayName + ' doesn\'t exist, creating now...');
+    debug(obj.displayName + ' doesn\'t exist, creating now...');
 
     const p = new Parse.User();
 
@@ -34,7 +35,7 @@ Parse.Cloud.define('initUsers', function (request, response) {
     return p.signUp(null, {
       useMasterKey: true,
       success: function (user) {
-        log('Successfully created user `', user.get('displayName'), '`');
+        debug('Successfully created user `', user.get('displayName'), '`');
       },
       error: function (user, err) {
         error('Error creating user `' + obj.displayName + '`: ', err);
@@ -46,7 +47,7 @@ Parse.Cloud.define('initUsers', function (request, response) {
 
     const qy = new Parse.Query(Parse.User);
     qy.find({useMasterKey: true}).then(function (objects) {
-      log('found: ', objects.map(function (o) {
+      debug('found: ', objects.map(function (o) {
         return o;
       }));
     });

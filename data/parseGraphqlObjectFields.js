@@ -1,4 +1,4 @@
-const log = require('debug')('app:server');
+const error = require('debug')('app:server:graphql:error');
 
 export default function parseGraphqlScalarFields(fields) {
   return fields.reduce(function(fields, fieldName) {
@@ -9,7 +9,7 @@ export default function parseGraphqlScalarFields(fields) {
           ? (value.toJSON ? { id: value.id, ...value.toJSON() } : value)
           : null;
       } catch (e) {
-        log.error('Error in parseGraphqlScalarFields:', e);
+        error('Error in parseGraphqlScalarFields:', e);
         throw e;
       }
     }

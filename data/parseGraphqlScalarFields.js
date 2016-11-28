@@ -1,4 +1,5 @@
-const log = require('debug')('app:server');
+const error = require('debug')('app:server:graphql:error');
+
 import { GraphQLNonNull } from 'graphql';
 
 export default function parseGraphqlScalarFields(fields) {
@@ -29,7 +30,7 @@ export default function parseGraphqlScalarFields(fields) {
 
       const errMsg = 'parseGraphqlScalarFields error: NonNull field: ' + fieldName + ' returned nothing.';
 
-      log.error(errMsg);
+      error(errMsg);
       throw new Error(errMsg);
 
       return null;
