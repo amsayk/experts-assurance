@@ -128,7 +128,7 @@ config.globals = {
 
     ENV                : JSON.stringify('client'),
     BASENAME           : JSON.stringify(process.env.BASENAME || ''),
-    SITE_TITLE        : JSON.stringify(process.env.SITE_TITLE),
+    SITE_TITLE         : JSON.stringify(process.env.SITE_TITLE),
   },
 }
 

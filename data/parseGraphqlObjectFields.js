@@ -1,7 +1,7 @@
 const error = require('debug')('app:server:graphql:error');
 
 export default function parseGraphqlScalarFields(fields) {
-  return fields.reduce(function(fields, fieldName) {
+  return fields.reduce(function (fields, fieldName) {
     fields[fieldName] = (obj) => {
       try {
         const value = obj[fieldName] || obj.get(fieldName);
