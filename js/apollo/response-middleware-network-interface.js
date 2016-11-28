@@ -4,7 +4,7 @@ export default class ResponseMiddlewareNetworkInterface {
   constructor(endpoint = '/graphql', options = {}) {
     this.defaultNetworkInterface = createBatchingNetworkInterface({
       uri: endpoint,
-      batchInterval: process.env.BATCHING_INTERVAL ? parseInt(process.env.BATCHING_INTERVAL) : 10,
+      batchInterval: process.env.APOLLO_QUERY_BATCH_INTERVAL ? parseInt(process.env.APOLLO_QUERY_BATCH_INTERVAL) : 10,
       opts: options,
     });
     this.responseMiddlewares = [];
