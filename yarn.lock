@@ -4218,7 +4218,7 @@ lodash.isboolean@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
 
-lodash.isempty@4.4.0, lodash.isempty@^4.4.0:
+lodash.isempty@4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.isempty/-/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
 
@@ -4408,10 +4408,6 @@ lru-cache@4.0.1, lru-cache@^4.0.1:
 lru-cache@~2.6.5:
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-2.6.5.tgz#e56d6354148ede8d7707b58d143220fd08df0fd5"
-
-lru-memoize@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/lru-memoize/-/lru-memoize-1.0.1.tgz#25afa87290562ab6addac4f323d16e8724306a9d"
 
 macaddress@^0.2.8:
   version "0.2.8"
