@@ -10,6 +10,8 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
+    "test": "better-npm-run test",
+    "test:dev": "better-npm-run test --watch",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod"
@@ -51,6 +53,13 @@
     "start": {
       "command": "node -r server/env bin/server",
       "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "test": {
+      "command": "jest",
+      "env": {
+        "NODE_ENV": "test",
         "DEBUG": "app:*"
       }
     }
@@ -135,6 +144,7 @@
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
     "babel-plugin-check-es2015-constants": "^6.8.0",
+    "babel-plugin-jest-hoist": "^17.0.2",
     "babel-plugin-react-intl": "^2.2.0",
     "babel-plugin-syntax-class-properties": "^6.13.0",
     "babel-plugin-syntax-flow": "^6.18.0",
@@ -188,6 +198,7 @@
     "file-loader": "^0.9.0",
     "fs-extra": "^1.0.0",
     "html-webpack-plugin": "^2.24.1",
+    "jest-cli": "^17.0.3",
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
@@ -210,5 +221,18 @@
     "webpack-hot-middleware": "^2.13.2",
     "webpack-vendor-chunk-plugin": "^1.0.0",
     "worker-loader": "^0.7.1"
+  },
+  "jest": {
+    "transform": { ".*": "<rootDir>/scripts/jest/preprocessor" },
+    "setupFiles": [
+      "node_modules/fbjs-scripts/jest/environment.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "./dist"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
   }
 }
