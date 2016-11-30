@@ -1,40 +1,16 @@
-const error = require('debug')('app:server:graphql:error');
-
 import { GraphQLNonNull } from 'graphql';
+const error = require('debug')('app:server:graphql:error');
+import invariant from 'invariant';
 
 export default function parseGraphqlScalarFields(fields) {
   return fields.reduce(function (fields, fieldName) {
     fields[fieldName] = (obj, {}, {}, info) => {
-      let value;
-
-      if (typeof obj.get === 'function') {
-        value = obj.get(fieldName);
-        if (value || value === 0) {
-          return value;
-        }
-
-        if (value === null && !(info.returnType instanceof GraphQLNonNull)) {
-          return value;
-        }
+      const value = typeof obj.get === 'function' ? obj.get(fieldName) : obj[fieldName];
+      if (info.returnType instanceof GraphQLNonNull) {
+        invariant(!(value === null || value === undefined), 'NonNull field: ' + fieldName + ' returned nothing.');
       }
-
-      value = obj[fieldName];
-
-      if (value || value === 0) {
-        return value;
-      }
-
-      if (value === null && !(info.returnType instanceof GraphQLNonNull)) {
-        return value;
-      }
-
-      const errMsg = 'parseGraphqlScalarFields error: NonNull field: ' + fieldName + ' returned nothing.';
-
-      error(errMsg);
-      throw new Error(errMsg);
-
-      return null;
-    }
+      return value === null || value === undefined ? null : value;
+    };
     return fields;
   }, {});
 };
