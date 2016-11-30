@@ -3,12 +3,12 @@ let Landing;
 export default (store) => ({
   path: '/app',
   /*  Async getComponent is only invoked when route matches   */
-  getComponent (nextState, cb) {
+  getComponent(nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
         and embed an async module loader (jsonp) when bundling   */
     require.ensure([], (require) => {
 
-      if(Landing){
+      if (Landing) {
         /*  Return getComponent   */
         cb(null, Landing);
         return;
@@ -21,10 +21,10 @@ export default (store) => ({
       Landing = Component;
 
       /*  Return getComponent   */
-      cb(null, Landing)
+      cb(null, Landing);
 
       /* Webpack named bundle   */
     }, 'Landing');
-  }
+  },
 });
 

@@ -1,20 +1,20 @@
 import {
-  LOCATION_CHANGE
+  LOCATION_CHANGE,
 } from './constants';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function locationChange (location = '/') {
+export function locationChange(location = '/') {
   return {
     type    : LOCATION_CHANGE,
-    payload : location
-  }
+    payload : location,
+  };
 }
 
 // ------------------------------------
 // Specialized Action Creator
 // ------------------------------------
 export const updateLocation = ({ dispatch }) => {
-  return (nextLocation) => dispatch(locationChange(nextLocation))
-}
+  return (nextLocation) => dispatch(locationChange(nextLocation));
+};

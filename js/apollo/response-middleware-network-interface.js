@@ -1,10 +1,13 @@
-import { createBatchingNetworkInterface } from 'apollo-client'
+import { createBatchingNetworkInterface } from 'apollo-client';
 
 export default class ResponseMiddlewareNetworkInterface {
   constructor(endpoint = '/graphql', options = {}) {
+    const batchInterval = process.env.APOLLO_QUERY_BATCH_INTERVAL
+      ? parseInt(process.env.APOLLO_QUERY_BATCH_INTERVAL, 10)
+      : 10;
     this.defaultNetworkInterface = createBatchingNetworkInterface({
       uri: endpoint,
-      batchInterval: process.env.APOLLO_QUERY_BATCH_INTERVAL ? parseInt(process.env.APOLLO_QUERY_BATCH_INTERVAL) : 10,
+      batchInterval,
       opts: options,
     });
     this.responseMiddlewares = [];
@@ -23,7 +26,7 @@ export default class ResponseMiddlewareNetworkInterface {
       } else {
         throw new Error('Middleware must implement the applyMiddleware or applyResponseMiddleware functions');
       }
-    })
+    });
   }
 
   async applyResponseMiddlewares(response) {
@@ -36,12 +39,12 @@ export default class ResponseMiddlewareNetworkInterface {
           } else {
             resolve(response);
           }
-        }
+        };
         next();
-      }
+      };
 
       queue([...this.responseMiddlewares]);
-    })
+    });
   }
 
   async query(request) {
@@ -49,5 +52,5 @@ export default class ResponseMiddlewareNetworkInterface {
     response = await this.applyResponseMiddlewares(response);
     return response;
   }
-};
+}
 

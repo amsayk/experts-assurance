@@ -4,9 +4,9 @@ import invariant from 'invariant';
 
 export default function parseGraphqlObjectFields(fields) {
   return fields.reduce(function (fields, fieldName) {
-    fields[fieldName] = (obj, {}, {}, info) => {
+    fields[fieldName] = (obj, _, __, info) => {
       const value = typeof obj.get === 'function' ? obj.get(fieldName) : obj[fieldName];
-      invariant(value ? isObject(value) : true, 'value for ' + fieldName + ' must be an object.')
+      invariant(value ? isObject(value) : true, 'value for ' + fieldName + ' must be an object.');
       if (info.returnType instanceof GraphQLNonNull) {
         invariant(!(value === null || value === undefined), 'NonNull field: ' + fieldName + ' returned nothing.');
       }
@@ -16,5 +16,5 @@ export default function parseGraphqlObjectFields(fields) {
     };
     return fields;
   }, {});
-};
+}
 

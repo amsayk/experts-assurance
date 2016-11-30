@@ -12,12 +12,12 @@ export default class extends React.Component {
     title: PropTypes.string.isRequired,
   };
 
-  shouldComponentUpdate(nextProps){
+  shouldComponentUpdate(nextProps) {
     return this.props.title !== nextProps.title;
   }
 
   render() {
-    const { title, } = this.props;
+    const { title } = this.props;
     return (
       <Helmet title={title}/>
     );

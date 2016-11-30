@@ -5,7 +5,7 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 import {
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString
+  GraphQLString,
 } from 'graphql';
 
 describe('parseGraphqlObjectFields', () => {
@@ -13,18 +13,18 @@ describe('parseGraphqlObjectFields', () => {
   const ERR_MSG = new RegExp('NonNull field: ' + FIELD_NAME + ' returned nothing.');
   const NO_PRIMITIVE_ERR_MSG = new RegExp('value for ' + FIELD_NAME + ' must be an object.');
   const { [FIELD_NAME] : fieldResolver } = parseGraphqlObjectFields([
-    FIELD_NAME
+    FIELD_NAME,
   ]);
   const graphqlObjectType = new GraphQLObjectType({
     name: 'TestObject',
     fields: ({
       objectId: {
-        type: new GraphQLNonNull(GraphQLString)
+        type: new GraphQLNonNull(GraphQLString),
       },
       prop1: {
-        type: GraphQLString
-      }
-    })
+        type: GraphQLString,
+      },
+    }),
   });
 
   it('throws when object is a primitive value', function () {
@@ -38,18 +38,18 @@ describe('parseGraphqlObjectFields', () => {
     function toParseObject(obj) {
       const ret = objectAssign({}, obj);
       ret.toJSON = jest.fn().mockReturnValue({
-        ...obj
+        ...obj,
       });
       ret.id = obj.objectId;
       return ret;
     }
     const objWhichReturns = (returnValue) => ({
-      get: jest.fn().mockReturnValue(returnValue)
+      get: jest.fn().mockReturnValue(returnValue),
     });
 
     describe('nullable fields', function () {
       const info = {
-        returnType: graphqlObjectType
+        returnType: graphqlObjectType,
       };
 
       it('resolves when object is not null', function () {
@@ -77,7 +77,7 @@ describe('parseGraphqlObjectFields', () => {
 
     describe('non null fields', function () {
       const info = {
-        returnType: new GraphQLNonNull(graphqlObjectType)
+        returnType: new GraphQLNonNull(graphqlObjectType),
       };
 
       it('resolves when object is not null', function () {
@@ -112,12 +112,12 @@ describe('parseGraphqlObjectFields', () => {
 
   describe('with plain js objects', function () {
     const objWhichReturns = (returnValue) => ({
-      [FIELD_NAME]: returnValue
+      [FIELD_NAME]: returnValue,
     });
 
     describe('nullable fields', function () {
       const info = {
-        returnType: graphqlObjectType
+        returnType: graphqlObjectType,
       };
 
       it('resolves when object is not null', function () {
@@ -139,7 +139,7 @@ describe('parseGraphqlObjectFields', () => {
 
     describe('non null fields', function () {
       const info = {
-        returnType: new GraphQLNonNull(graphqlObjectType)
+        returnType: new GraphQLNonNull(graphqlObjectType),
       };
 
       it('resolves when object is not null', function () {

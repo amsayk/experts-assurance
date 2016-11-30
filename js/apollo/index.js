@@ -1,4 +1,4 @@
-import ApolloClient, { toIdValue, } from 'apollo-client';
+import ApolloClient from 'apollo-client';
 import ResponseMiddlewareNetworkInterface from './response-middleware-network-interface';
 const error = require('debug')('app:client:error');
 
@@ -24,12 +24,10 @@ responseMiddlewareNetworkInterface.use({
       }
     }
     next();
-  }
+  },
 });
 
 export const client = new ApolloClient({
-  initialState: window.__APOLLO_STATE__,
-  ssrForceFetchDelay: process.env.SSR ? 100 : 0,
   networkInterface: responseMiddlewareNetworkInterface,
   addTypename: true,
   customResolvers: {

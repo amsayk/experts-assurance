@@ -1,10 +1,9 @@
 import { GraphQLNonNull } from 'graphql';
-const error = require('debug')('app:server:graphql:error');
 import invariant from 'invariant';
 
 export default function parseGraphqlScalarFields(fields) {
   return fields.reduce(function (fields, fieldName) {
-    fields[fieldName] = (obj, {}, {}, info) => {
+    fields[fieldName] = (obj, _, __, info) => {
       const value = typeof obj.get === 'function' ? obj.get(fieldName) : obj[fieldName];
       if (info.returnType instanceof GraphQLNonNull) {
         invariant(!(value === null || value === undefined), 'NonNull field: ' + fieldName + ' returned nothing.');
@@ -13,5 +12,5 @@ export default function parseGraphqlScalarFields(fields) {
     };
     return fields;
   }, {});
-};
+}
 

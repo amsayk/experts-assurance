@@ -2,7 +2,7 @@
 
 const objectAssign = require('object-assign');
 
-module.exports = function(options) {
+module.exports = function (options) {
   options = objectAssign({
     env: 'production',
     moduleMap: {},
@@ -26,11 +26,11 @@ module.exports = function(options) {
   presets = presets.map(function (preset, i) {
     if (i === 0) {
       return {
-        plugins: [ 'transform-regenerator' ].concat(preset.plugins),
+        plugins: ['transform-regenerator'].concat(preset.plugins),
       };
     }
     return preset;
-  })
+  });
   return {
     plugins : options.plugins,
     presets : {

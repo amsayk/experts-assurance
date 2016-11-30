@@ -25,7 +25,7 @@ class Snackbar extends React.Component {
       left       : '50%',
       marginLeft : 0,
       position   : 'fixed',
-      zIndex     : 9999
+      zIndex     : 9999,
     };
   }
 
@@ -107,8 +107,8 @@ class Snackbar extends React.Component {
       style : {
         ...this.state.style,
         marginLeft   : -(cWidth / 2),
-        paddingRight : aWidth
-      }
+        paddingRight : aWidth,
+      },
     });
 
     // ### Update
@@ -122,12 +122,12 @@ class Snackbar extends React.Component {
    * @return {String}
    */
   getClass() {
-    const { snackbar: { type, animation }, styles : theme, } = this.props;
+    const { snackbar: { type, animation }, styles : theme } = this.props;
     return cx({
-      [theme.snackbar]  : true,
-      [ theme[type] ]   : type      ? true : false,
-      animated          : animation ? true : false,
-      [animation]       : animation ? true : false
+      [theme.snackbar] : true,
+      [theme[type]]    : !!type,
+      animated         : !!animation,
+      [animation]      : !!animation,
     });
   }
 
@@ -146,12 +146,16 @@ class Snackbar extends React.Component {
    * @return {button}
    */
   getAction() {
-    const { snackbar: { action }, styles : theme, } = this.props;
-    if (action) {
-      return (
-        <button type='button' className={theme['btn-snackbar']} onClick={ action.click } ref='action'>{ action.title }</button>
-      );
-    }
+    const { snackbar: { action }, styles : theme } = this.props;
+    return (action) ? (
+      <button
+        type="button"
+        className={theme['btn-snackbar']}
+        onClick={ action.click }
+        ref="action">
+        { action.title }
+      </button>
+    ) : null;
   }
 
   /**
@@ -161,7 +165,7 @@ class Snackbar extends React.Component {
   render() {
     const { message } = this.props.snackbar;
     return (
-      <div className={ this.getClass() } style={ this.getStyle() } ref='snackbar'>
+      <div className={ this.getClass() } style={ this.getStyle() } ref="snackbar">
         { message }
         { this.getAction() }
       </div>
@@ -170,7 +174,7 @@ class Snackbar extends React.Component {
 
 }
 
-function mapStateToProps(state, props){
+function mapStateToProps(state, props) {
   return selector(state, props);
 }
 

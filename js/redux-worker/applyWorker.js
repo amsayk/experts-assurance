@@ -1,6 +1,6 @@
-const defer = function() {
+const defer = function () {
   let result = {};
-  result.promise = new Promise(function(resolve, reject) {
+  result.promise = new Promise(function (resolve, reject) {
     result.resolve = resolve;
     result.reject = reject;
   });
@@ -29,14 +29,14 @@ const applyWorker = (worker) => {
         let task = Object.assign({}, action, { _taskId: taskId });
         let deferred = defer();
 
-        taskCompleteCallbacks[ taskId ] = deferred
+        taskCompleteCallbacks[taskId] = deferred;
         taskId++;
         worker.postMessage(task);
         return deferred.promise;
       }
 
-      next(action);
-    }
+      return next(action);
+    };
 
     store.isWorker = true;
 
@@ -45,17 +45,17 @@ const applyWorker = (worker) => {
       let action = e.data;
 
       if (typeof action._taskId === 'number') {
-        let wrapped = taskCompleteCallbacks[ action._taskId ];
+        let wrapped = taskCompleteCallbacks[action._taskId];
 
         if (wrapped) {
           wrapped.resolve(action);
-          delete taskCompleteCallbacks[ action._taskId ];
+          delete taskCompleteCallbacks[action._taskId];
         }
       }
     });
 
     return store;
-  }
-}
+  };
+};
 
 export default applyWorker;

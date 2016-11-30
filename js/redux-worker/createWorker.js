@@ -6,7 +6,7 @@ export default function createWorker() {
     const action = e.data;
 
     if (typeof action.task === 'string' && typeof action._taskId === 'number') {
-      const taskRunner = worker.tasks[ action.task ];
+      const taskRunner = worker.tasks[action.task];
 
       if (!taskRunner || typeof taskRunner !== 'function') {
         throw new Error('Cannot find runner for task ' + action.task + '. Have you registerTask yet?');
@@ -15,7 +15,7 @@ export default function createWorker() {
       // Send new state to main thread
       self.postMessage({
         _taskId: action._taskId,
-        response: taskRunner(action)
+        response: taskRunner(action),
       });
     }
   });
@@ -31,7 +31,7 @@ class ReduxWorker {
   }
 
   registerTask(name, taskFn) {
-    this.tasks[ name ] = taskFn;
+    this.tasks[name] = taskFn;
   }
 
 }

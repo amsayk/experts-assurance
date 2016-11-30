@@ -16,12 +16,12 @@ const babelOptions = require('../../scripts/getBabelOptions')({
     'transform-export-extensions',
     ['react-intl', {
       messagesDir: path.resolve(process.cwd(), 'build', 'intl-messages'),
-      enforceDescriptions: false
+      enforceDescriptions: false,
     }],
   ],
 });
 
-debug('Creating default configuration.')
+debug('Creating default configuration.');
 // ========================================================
 // Default Configuration
 // ========================================================
@@ -73,7 +73,7 @@ const config = {
     compact: true,
     env: {
       development: {
-        plugins: [ 'transform-react-jsx-source' ],
+        plugins: ['transform-react-jsx-source'],
       },
     },
     retainLines: true,
@@ -86,18 +86,18 @@ const config = {
   compiler_stats           : {
     chunks : false,
     chunkModules : false,
-    colors : true
+    colors : true,
   },
   compiler_vendors : [
     'react',
     'react-redux',
     'react-router',
-    'redux'
+    'redux',
   ],
   compiler_offline_assets : [
 
-  ]
-}
+  ],
+};
 
 /************************************************
 -------------------------------------------------
@@ -120,7 +120,7 @@ config.globals = {
     JAVASCRIPT_KEY     : JSON.stringify(process.env.JAVASCRIPT_KEY),
     MASTER_KEY         : JSON.stringify(process.env.MASTER_KEY),
 
-    SERVER_URL         : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`),
+    SERVER_URL         : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
     GRAPHQL_ENDPOINT   : JSON.stringify(config.graphql_endpoint),
 
     PARSE_MODULE_PATH  : JSON.stringify('parse'),
@@ -130,37 +130,38 @@ config.globals = {
     BASENAME           : JSON.stringify(process.env.BASENAME || ''),
     SITE_TITLE         : JSON.stringify(process.env.SITE_TITLE),
   },
-}
+};
 
 // ------------------------------------
 // Validate Vendor Dependencies
 // ------------------------------------
-const pkg = require('../../package.json')
+const pkg = require('../../package.json');
 
 config.compiler_vendors = config.compiler_vendors
   .filter((dep) => {
-    if (pkg.dependencies[dep]) return true
+    if (pkg.dependencies[dep]) {return true;}
 
     debug(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
        Consider removing it from \`compiler_vendors\` in ~/build/config/index.js`
-    )
-  })
+    );
+    return false;
+  });
 
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function base () {
-  const args = [config.path_base].concat([].slice.call(arguments))
-  return path.resolve.apply(path, args)
+function base() {
+  const args = [config.path_base].concat([].slice.call(arguments));
+  return path.resolve.apply(path, args);
 }
 
 config.utils_paths = {
   base   : base,
   client : base.bind(null, config.dir_client),
-  dist   : base.bind(null, config.dir_dist)
-}
+  dist   : base.bind(null, config.dir_dist),
+};
 
 // ========================================================
 // Environment Configuration
@@ -169,7 +170,7 @@ debug(`Looking for environment overrides for NODE_ENV "${config.env}".`);
 const environments = require('./environments');
 const overrides = environments[config.env];
 if (overrides) {
-  debug('Found overrides, applying to default configuration.')
+  debug('Found overrides, applying to default configuration.');
   objectAssign(config, overrides(config));
 } else {
   debug('No environment overrides found, defaults will be used.');

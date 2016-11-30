@@ -34,7 +34,7 @@ const debug = require('debug')('app:server');
 const error = require('debug')('app:server:error');
 
 const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
-if (! databaseUri) {
+if (!databaseUri) {
   debug('DATABASE_URI not specified, falling back to localhost.');
 }
 
@@ -67,7 +67,7 @@ app.use(ua.express());
 if (config.env === 'development') {
   const compiler = webpack(webpackConfig);
 
-  debug('Enable webpack dev and HMR middleware')
+  debug('Enable webpack dev and HMR middleware');
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath  : webpackConfig.output.publicPath,
     contentBase : paths.client(),
@@ -75,7 +75,7 @@ if (config.env === 'development') {
     quiet       : config.compiler_quiet,
     noInfo      : config.compiler_quiet,
     lazy        : false,
-    stats       : config.compiler_stats
+    stats       : config.compiler_stats,
   }));
   app.use(require('webpack-hot-middleware')(compiler));
 
@@ -91,7 +91,7 @@ if (config.env === 'development') {
     'do not need an application server for this and can instead use a web ' +
     'server such as nginx to serve your static files. See the "deployment" ' +
     'section in the README for more information on deployment strategies.'
-  )
+  );
 
   // Serving ~/dist by default. Ideally these files should be served by
   // the web server and not the app server, but this helps to demo the
@@ -104,7 +104,7 @@ if (config.env === 'development') {
 // ------------------------------------
 // Parse server entrypoint
 // ------------------------------------
-if (! config.parse_database_uri) {
+if (!config.parse_database_uri) {
   debug('DATABASE_URI not specified, falling back to localhost.');
 }
 const api = new ParseServer({
@@ -113,7 +113,7 @@ const api = new ParseServer({
   appId                    : process.env.APPLICATION_ID,
   javascriptKey            : process.env.JAVASCRIPT_KEY,
   masterKey                : process.env.MASTER_KEY,
-  serverURL                : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`,
+  serverURL                : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
   enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
   allowClientClassCreation : true,
   maxUploadSize            : '25mb',
@@ -131,17 +131,17 @@ const dashboard = new ParseDashboard({
       'appId'         : process.env.APPLICATION_ID,
       'javascriptKey' : process.env.JAVASCRIPT_KEY,
       'masterKey'     : process.env.MASTER_KEY,
-      'serverURL'     : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`,
+      'serverURL'     : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
       'appName'       : TITLE,
-      'production'    : ! __DEV__,
-    }
+      'production'    : !__DEV__,
+    },
   ],
   'trustProxy': 1,
   'useEncryptedPasswords': true,
   'users': users.map(function (user) {
     return {
       'user' : user.username,
-      'pass' : user.bcryptPassword
+      'pass' : user.bcryptPassword,
     };
   }),
 }, /* allowInsecureHTTP = */ __DEV__);
@@ -175,7 +175,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), apolloExpress((req, res) => 
     return Promise.resolve(getCurrentUser());
   }
 
-  return getUser(token).then(user => ({
+  return getUser().then(user => ({
     schema: executableSchema,
     context: {
       user,

@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const debug = require('debug')('app:build:webpack-compiler');
 const config = require('./config');
 
-function webpackCompiler (webpackConfig, statsFormat) {
+function webpackCompiler(webpackConfig, statsFormat) {
   statsFormat = statsFormat || config.compiler_stats;
 
   return new Promise((resolve, reject) => {
@@ -28,9 +28,9 @@ function webpackCompiler (webpackConfig, statsFormat) {
       } else {
         debug('No errors or warnings encountered.');
       }
-      resolve(jsonStats);
-    })
-  })
+      return resolve(jsonStats);
+    });
+  });
 }
 
 module.exports = webpackCompiler;

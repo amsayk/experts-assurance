@@ -1,5 +1,3 @@
-const path = require('path');
-
 const objectAssign = require('object-assign');
 
 const babelRegister = require('babel-core/register');
@@ -13,7 +11,7 @@ const babelOptions = require('../scripts/getBabelOptions')({
   },
   plugins: [
     'transform-runtime',
-    'transform-export-extensions'
+    'transform-export-extensions',
   ],
 });
 
@@ -27,7 +25,7 @@ babelRegister(objectAssign(babelOptions, {
       plugins: [
         'transform-react-remove-prop-types',
         'transform-react-constant-elements',
-        'transform-react-inline-elements'
+        'transform-react-inline-elements',
       ],
     },
   },

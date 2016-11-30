@@ -2,7 +2,7 @@ import React from 'react';
 import {
   IndexRedirect,
   Redirect,
-  Route
+  Route,
 } from 'react-router';
 
 import CoreLayout from 'layouts/CoreLayout';

@@ -7,7 +7,6 @@ const error = require('debug')('app:backend:error');
 
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;
-  const req = { user: request.user, params: request.params.args, };
 
   switch (operationKey) {
     default:
@@ -39,7 +38,7 @@ Parse.Cloud.define('initUsers', function (request, response) {
       },
       error: function (user, err) {
         error('Error creating user `' + obj.displayName + '`: ', err);
-      }
+      },
     });
   }
 
@@ -65,7 +64,7 @@ Parse.Cloud.define('initUsers', function (request, response) {
           return doAdd(obj);
         }
         return Promise.resolve(o);
-      }
+      },
     });
 
   });

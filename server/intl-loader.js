@@ -5,7 +5,7 @@ const loaders = {
   en() {
     addLocaleData(require('react-intl/locale-data/en.js'));
     return { messages: {} }; // This is the default language.
-  }
+  },
 
 };
 

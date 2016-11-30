@@ -29,21 +29,21 @@ class CoreLayout extends React.PureComponent {
     onLine: T.bool.isRequired,
   };
   static contextTypes = {
-    intl: intlShape
+    intl: intlShape,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.onResize = this.onResize.bind(this);
   }
-  onResize(){
+  onResize() {
     this.props.actions.resize();
   }
-  componentDidMount(){
+  componentDidMount() {
     this._resizeEventListener = EventListener.listen(window, 'resize', this.onResize);
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._resizeEventListener.remove();
   }
   render() {
@@ -52,12 +52,12 @@ class CoreLayout extends React.PureComponent {
     return (
       <div className={'root'}>
         <Title title={TITLE}/>
-        {function() {
-          if(!displayMatches) {
+        {function () {
+          if (!displayMatches) {
             return (<Center>{intl.formatMessage(messages.UnsupportedDisplay)}</Center>);
           }
 
-          if(!onLine) {
+          if (!onLine) {
             return (<Center>{intl.formatMessage(messages.NavigatorOffline)}</Center>);
           }
 

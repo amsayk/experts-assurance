@@ -1,4 +1,1 @@
-import { createWorker } from 'redux-worker';
-
-const worker = createWorker();
-
+// Do nothing for now.

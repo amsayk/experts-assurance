@@ -6,8 +6,8 @@ import {
   update,
 } from 'redux/reducers/snackbar/actions';
 
-export function createNotificationController(store){
-  function getState(){
+export function createNotificationController(store) {
+  function getState() {
     return store.getState().get('snackbar').toJS();
   }
 
@@ -71,7 +71,7 @@ export function createNotificationController(store){
       store.dispatch(update({
         active    : true,
         animation : 'fadeInUp',
-        ...notification
+        ...notification,
       }));
       if (!notification.persist) {
         this.timer = setTimeout(function () {
@@ -85,7 +85,7 @@ export function createNotificationController(store){
      */
     slideOut(done) {
       store.dispatch(update({
-        animation : 'fadeOutDown'
+        animation : 'fadeOutDown',
       }));
 
       // ### Reset State
@@ -104,15 +104,15 @@ export function createNotificationController(store){
         if (done) {
           done();
         }
-      }.bind(this), 500);
+      }, 500);
     },
 
     /**
      * @return {Component}
      */
     render() {
-      return <Component />
-    }
-  }
+      return <Component />;
+    },
+  };
 }
 

@@ -1,4 +1,4 @@
-import { connectionStateChange, } from 'redux/reducers/app/actions';
+import { connectionStateChange } from 'redux/reducers/app/actions';
 import EventListener from 'EventListener';
 const debug = require('debug')('app:client:connectionStateChangeObserver');
 

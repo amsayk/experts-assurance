@@ -8,7 +8,7 @@ export default defineMessages({
   NavigatorOffline: {
     id: 'navigator_offline',
     defaultMessage: 'No Internet connection.',
-  }
+  },
 });
 
 

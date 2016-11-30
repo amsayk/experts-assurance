@@ -9,7 +9,7 @@ const babelOptions = require('../getBabelOptions')({
   moduleMap: {
   },
   plugins: [
-    jestPluginHoist
+    jestPluginHoist,
   ],
 });
 

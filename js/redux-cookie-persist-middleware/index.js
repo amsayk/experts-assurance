@@ -1,5 +1,4 @@
 import cookie from 'react-cookie';
-import Immutable from 'immutable';
 
 export const middleware = (params) => (store) => (next) => (action) => {
   const result = next(action);
@@ -12,7 +11,7 @@ export const middleware = (params) => (store) => (next) => (action) => {
     cookie.save(keys.cookieKey, value, {
       hostOnly: true,
       maxAge: year,
-    })
+    });
   }
 
   return result;

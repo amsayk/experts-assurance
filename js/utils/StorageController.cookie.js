@@ -25,6 +25,6 @@ export default /* StorageController = */ {
   },
 
   clear() {
-  }
+  },
 };
 

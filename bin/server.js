@@ -7,7 +7,7 @@ const error = require('debug')('app:bin:server:error');
 
 const port = config.server_port;
 
-server.listen(port, async(err) => {
+server.listen(port, async (err) => {
 
   if (err) {
     throw err;

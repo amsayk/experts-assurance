@@ -5,7 +5,7 @@ import snackbar from './snackbar/reducer';
 import { USER_LOGGED_OUT } from './user/constants';
 
 import {
-  combineReducers
+  combineReducers,
 } from 'redux-immutable';
 
 import routerReducer from './routing/reducer';
@@ -26,7 +26,7 @@ const reducers = {
             },
           }) : state;
         default:
-          return state
+          return state;
       }
     },
   }),
@@ -43,7 +43,7 @@ const makeRootReducer = (asyncReducers) => {
 export const injectReducers = (store, reducers) => {
   let changed = false;
   reducers.forEach(({ key, reducer }) => {
-    if (Object.hasOwnProperty.call(store.asyncReducers, key)) return;
+    if (Object.hasOwnProperty.call(store.asyncReducers, key)) {return;}
     changed = true;
     store.asyncReducers[key] = reducer;
   });

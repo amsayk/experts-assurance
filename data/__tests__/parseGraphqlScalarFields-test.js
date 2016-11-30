@@ -4,33 +4,33 @@ import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 import {
   GraphQLNonNull,
   GraphQLInt,
-  GraphQLString
+  GraphQLString,
 } from 'graphql';
 
 describe('parseGraphqlScalarFields', () => {
   const FIELD_NAME = 'field';
   const ERR_MSG = new RegExp('NonNull field: ' + FIELD_NAME + ' returned nothing.');
   const { [FIELD_NAME] : fieldResolver } = parseGraphqlScalarFields([
-    FIELD_NAME
+    FIELD_NAME,
   ]);
 
   describe('with parse objects', function () {
     const objWhichReturns = (returnValue) => ({
-      get: jest.fn().mockReturnValue(returnValue)
+      get: jest.fn().mockReturnValue(returnValue),
     });
 
     it('resolves when object is zero', function () {
       const obj = objWhichReturns(0);
 
       const nullableInfo = {
-        returnType: GraphQLInt
+        returnType: GraphQLInt,
       };
 
       expect(fieldResolver(obj, {}, {}, nullableInfo)).toEqual(0);
       expect(obj.get.mock.calls.length).toBe(1);
 
       const nonNullableInfo = {
-        returnType: new GraphQLNonNull(GraphQLInt)
+        returnType: new GraphQLNonNull(GraphQLInt),
       };
 
       expect(fieldResolver(obj, {}, {}, nonNullableInfo)).toEqual(0);
@@ -39,7 +39,7 @@ describe('parseGraphqlScalarFields', () => {
 
     describe('nullable fields', function () {
       const info = {
-        returnType: GraphQLString
+        returnType: GraphQLString,
       };
 
       it('resolves when object is not null', function () {
@@ -65,7 +65,7 @@ describe('parseGraphqlScalarFields', () => {
 
     describe('non null fields', function () {
       const info = {
-        returnType: new GraphQLNonNull(GraphQLString)
+        returnType: new GraphQLNonNull(GraphQLString),
       };
 
       it('resolves when object is not null', function () {
@@ -97,20 +97,20 @@ describe('parseGraphqlScalarFields', () => {
 
   describe('with plain js objects', function () {
     const objWhichReturns = (returnValue) => ({
-      [FIELD_NAME]: returnValue
+      [FIELD_NAME]: returnValue,
     });
 
     it('resolves when object is zero', function () {
       const obj = objWhichReturns(0);
 
       const nullableInfo = {
-        returnType: GraphQLInt
+        returnType: GraphQLInt,
       };
 
       expect(fieldResolver(obj, {}, {}, nullableInfo)).toEqual(0);
 
       const nonNullableInfo = {
-        returnType: new GraphQLNonNull(GraphQLInt)
+        returnType: new GraphQLNonNull(GraphQLInt),
       };
 
       expect(fieldResolver(obj, {}, {}, nonNullableInfo)).toEqual(0);
@@ -118,7 +118,7 @@ describe('parseGraphqlScalarFields', () => {
 
     describe('nullable fields', function () {
       const info = {
-        returnType: GraphQLString
+        returnType: GraphQLString,
       };
 
       it('resolves when object is not null', function () {
@@ -141,7 +141,7 @@ describe('parseGraphqlScalarFields', () => {
 
     describe('non null fields', function () {
       const info = {
-        returnType: new GraphQLNonNull(GraphQLString)
+        returnType: new GraphQLNonNull(GraphQLString),
       };
 
       it('resolves when object is not null', function () {

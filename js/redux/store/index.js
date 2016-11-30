@@ -24,7 +24,7 @@ import { applyWorker } from 'redux-worker';
 
 import { getBeforeUnloadMessage } from 'utils/onbeforeunload';
 
-export const history = useBeforeUnload(useRouterHistory(createHistory))({ basename: process.env.BASENAME, });
+export const history = useBeforeUnload(useRouterHistory(createHistory))({ basename: process.env.BASENAME });
 
 history.listenBeforeUnload(function () {
   return getBeforeUnloadMessage();
@@ -42,14 +42,14 @@ const middlewares = [
   thunk.withExtraArgument(apolloClient),
   array,
   reduxCookieMiddleware({
-  })
+  }),
 ];
 
 // ======================================================
 // Store Enhancers
 // ======================================================
 const enhancers = [
-  applyWorker(worker)
+  applyWorker(worker),
 ];
 if (__DEV__) {
   const devToolsExtension = window.devToolsExtension;

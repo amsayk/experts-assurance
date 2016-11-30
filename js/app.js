@@ -3,11 +3,7 @@ import 'parse-config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import getCurrentUser from 'getCurrentUser';
-
 import { Router } from 'react-router';
-
-import messages from 'messages';
 
 const log = require('debug')('app:client');
 
@@ -24,7 +20,7 @@ import { Provider } from 'react-redux';
 
 import { store, history } from 'redux/store';
 
-import { IntlProvider, intlShape } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 
 import intlLoader from 'utils/intl-loader';
 
@@ -37,7 +33,7 @@ window.notificationMgr = createNotificationController(store);
 const APP_MOUNT_NODE = document.getElementById('app');
 const NOTIFICATIONS_MOUNT_NODE = document.getElementById('notifications');
 
-async function render() {
+let render = async function render() {
   const locale = window.navigator.language;
 
   const { messages : translations } = await intlLoader(locale);
@@ -54,7 +50,7 @@ async function render() {
         dismiss: React.PropTypes.func.isRequired,
       }).isRequired,
     };
-    getChildContext(){
+    getChildContext() {
       return {
         notificationMgr: window.notificationMgr,
       };
@@ -77,11 +73,11 @@ async function render() {
 
   ReactDOM.render(
     <Provider store={store}>
-      {notificationMgr.render()}
+      {window.notificationMgr.render()}
     </Provider>,
     NOTIFICATIONS_MOUNT_NODE
   );
-}
+};
 
 if (__DEV__) {
   if (window.devToolsExtension) {
@@ -94,7 +90,7 @@ if (__DEV__) {
       const RedBox = require('redbox-react').default;
 
       ReactDOM.render(<RedBox error={error} />, APP_MOUNT_NODE);
-    }
+    };
 
     // Wrap render in try/catch
     render = () => {

@@ -3,7 +3,7 @@ const debug = require('debug')('app:client:intl');
 
 const loaders = {
   en(callback, force) {
-    if (! window.Intl || force) {
+    if (!window.Intl || force) {
       require.ensure([], (require) => {
         require('intl');
         require('intl/locale-data/jsonp/en.js');
@@ -16,7 +16,7 @@ const loaders = {
         callback({messages: {}}); // This is the default language
       });
     }
-  }
+  },
 
 };
 

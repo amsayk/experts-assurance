@@ -7,8 +7,6 @@ import moment from 'moment';
 
 import invariant from 'invariant';
 
-import parseGraphqlObjectFields from './parseGraphqlObjectFields';
-import parseGraphqlScalarFields from './parseGraphqlScalarFields';
 import parseJSONLiteral from './parseJSONLiteral';
 
 const rootSchema = [`
@@ -34,12 +32,12 @@ const rootSchema = [`
 
 const rootResolvers = {
   Date: {
-    __parseValue (value) {
+    __parseValue(value) {
       invariant(typeof value === 'number', 'Number required.');
       return new Date(value); // value from the client
     },
     __serialize(value: any): number {
-      if (value instanceof Date){
+      if (value instanceof Date) {
         return value.getTime();   // value sent to the client
       }
 
@@ -56,7 +54,7 @@ const rootResolvers = {
 
       throw new Error('Field error: value is an invalid Date');
     },
-    __parseLiteral (ast: any): ?number {
+    __parseLiteral(ast: any): ?number {
       if (ast.kind !== Kind.INT) {
         throw new GraphQLError('Query error: Can only parse integers to dates but got a: ' + ast.kind, [ast]);
       }
@@ -73,7 +71,7 @@ const rootResolvers = {
 };
 
 export const schema = [
-  ...rootSchema
+  ...rootSchema,
 ];
 
 export const resolvers = merge({}, rootResolvers);

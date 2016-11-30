@@ -1,3 +1,5 @@
+import { Kind } from 'graphql/language';
+
 export default function parseJSONLiteral(ast) {
   switch (ast.kind) {
     case Kind.STRING:
@@ -19,5 +21,5 @@ export default function parseJSONLiteral(ast) {
     default:
       return null;
   }
-};
+}
 

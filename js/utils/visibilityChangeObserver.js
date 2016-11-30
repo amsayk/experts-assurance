@@ -1,7 +1,7 @@
 import { logout } from 'redux/reducers/user/actions';
 import EventListener from 'EventListener';
 import {
-  INACTIVITY_TIMEOUT
+  INACTIVITY_TIMEOUT,
 } from 'environment';
 const debug = require('debug')('app:client:visibilityChangeObserver');
 
