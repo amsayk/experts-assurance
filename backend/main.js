@@ -1,14 +1,28 @@
 import {
-
+  RESEND_PASSWORD_VERIFICATION,
+  PASSWORD_RESET,
+  SIGN_UP,
 } from './constants';
 
 const debug = require('debug')('app:backend');
 const error = require('debug')('app:backend:error');
 
+import { signUp as doSignUp, resendPasswordVerification, passwordReset } from './ops/user';
+
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;
+  const req = { user: request.user, params: request.params.args };
 
   switch (operationKey) {
+    case PASSWORD_RESET: {
+      return passwordReset(req, response);
+    }
+    case RESEND_PASSWORD_VERIFICATION: {
+      return resendPasswordVerification(req, response);
+    }
+    case SIGN_UP: {
+      return doSignUp(req, response);
+    }
     default:
       response.error(new Error('OperationNotFound', operationKey));
   }
@@ -43,14 +57,6 @@ Parse.Cloud.define('initUsers', function (request, response) {
   }
 
   const promises = require('../data/_User').map(function (obj) {
-
-    const qy = new Parse.Query(Parse.User);
-    qy.find({useMasterKey: true}).then(function (objects) {
-      debug('found: ', objects.map(function (o) {
-        return o;
-      }));
-    });
-
     const query = new Parse.Query(Parse.User);
     query.equalTo('username', obj.username);
 

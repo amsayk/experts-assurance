@@ -1,2 +1,4 @@
-export const UPDATE = 'snackbar/UPDATE';
+import keyOf from 'keyOf';
+
+export const UPDATE = keyOf({UPDATE: null});
 

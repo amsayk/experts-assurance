@@ -1,6 +1,6 @@
 import Title from './Title';
 
-import { isServer } from 'environment';
+import { isServer } from 'env';
 
 import emptyFunction from 'emptyFunction';
 

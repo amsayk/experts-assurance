@@ -6,9 +6,7 @@ import cx from 'classnames';
 
 import selector from './selector';
 
-import CSSModules from 'react-css-modules';
-
-import styles from './Snackbar.scss';
+import style from './Snackbar.scss';
 
 class Snackbar extends React.Component {
 
@@ -122,10 +120,10 @@ class Snackbar extends React.Component {
    * @return {String}
    */
   getClass() {
-    const { snackbar: { type, animation }, styles : theme } = this.props;
+    const { snackbar: { type, animation } } = this.props;
     return cx({
-      [theme.snackbar] : true,
-      [theme[type]]    : !!type,
+      [style.snackbar] : true,
+      [style[type]]    : !!type,
       animated         : !!animation,
       [animation]      : !!animation,
     });
@@ -146,11 +144,11 @@ class Snackbar extends React.Component {
    * @return {button}
    */
   getAction() {
-    const { snackbar: { action }, styles : theme } = this.props;
+    const { snackbar: { action } } = this.props;
     return (action) ? (
       <button
         type="button"
-        className={theme['btn-snackbar']}
+        className={style['btn-snackbar']}
         onClick={ action.click }
         ref="action">
         { action.title }
@@ -179,6 +177,6 @@ function mapStateToProps(state, props) {
 }
 
 export default connect(mapStateToProps)(
-  CSSModules(Snackbar, styles)
+  Snackbar
 );
 

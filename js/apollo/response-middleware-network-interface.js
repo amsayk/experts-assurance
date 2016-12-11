@@ -1,9 +1,11 @@
 import { createBatchingNetworkInterface } from 'apollo-client';
 
+import { APOLLO_QUERY_BATCH_INTERVAL } from 'env';
+
 export default class ResponseMiddlewareNetworkInterface {
   constructor(endpoint = '/graphql', options = {}) {
-    const batchInterval = process.env.APOLLO_QUERY_BATCH_INTERVAL
-      ? parseInt(process.env.APOLLO_QUERY_BATCH_INTERVAL, 10)
+    const batchInterval = APOLLO_QUERY_BATCH_INTERVAL
+      ? parseInt(APOLLO_QUERY_BATCH_INTERVAL, 10)
       : 10;
     this.defaultNetworkInterface = createBatchingNetworkInterface({
       uri: endpoint,

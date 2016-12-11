@@ -3,19 +3,22 @@ const path = require('path');
 const debug = require('debug')('app:config');
 const ip = require('ip');
 const objectAssign = require('object-assign');
+const nullthrows = require('nullthrows');
 
 const babelOptions = require('../../scripts/getBabelOptions')({
   moduleMap: {
-    'messages'         : 'common/messages',
-    'getCurrentUser'   : 'common/getCurrentUser',
-    'environment'      : 'common/environment',
-    'dataIdFromObject' : 'common/dataIdFromObject',
+    'loadScript'            : 'utils/loadScript',
+    'validation'            : 'common/validation',
+    'validation-messages'   : 'common/messages/validation-messages',
+    'getCurrentUser'        : 'common/getCurrentUser',
+    'env'                   : 'common/env',
+    'dataIdFromObject'      : 'common/dataIdFromObject',
   },
   plugins: [
     'transform-runtime',
     'transform-export-extensions',
     ['react-intl', {
-      messagesDir: path.resolve(process.cwd(), 'build', 'intl-messages'),
+      messagesDir: path.resolve(process.cwd(), 'build', 'intl', 'messages'),
       enforceDescriptions: false,
     }],
   ],
@@ -31,7 +34,8 @@ const config = {
   // ----------------------------------
   // Site info
   // ----------------------------------
-  title : process.env.SITE_TITLE,
+  appName : 'Trading',
+  title   : process.env.HOME_TITLE,
 
   // ----------------------------------
   // Project Structure
@@ -39,6 +43,7 @@ const config = {
   path_base  : process.cwd(),
   dir_client : 'js',
   dir_dist   : 'dist',
+  dir_public : 'public',
   dir_server : 'server',
 
   // ----------------------------------
@@ -54,6 +59,24 @@ const config = {
   parse_server_url            : process.env.SERVER_URL,
   parse_database_uri          : process.env.DATABASE_URI,
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
+
+  // App config
+  path_login                        : process.env.PATH_LOGIN || '/login',
+  path_signup                       : process.env.PATH_SIGNUP || '/signup',
+  path_password_reset               : process.env.PATH_PASSWORD_RESET || '/password_reset',
+  path_choose_password              : process.env.PATH_CHOOSE_PASSWORD || '/choose_password',
+  path_email_verification_success   : process.env.PATH_EMAIL_VERIFICATION_SUCCESS || '/verify_email_success',
+  path_password_reset_success       : process.env.PATH_PASSWORD_RESET_SUCCESS || '/password_reset_success',
+  path_invalid_link                 : process.env.PATH_INVALID_LINK || '/invalid_link',
+
+  password_min_length : nullthrows(process.env.PASSWORD_MIN_LENGTH && parseInt(process.env.PASSWORD_MIN_LENGTH, 10)),
+
+  // ----------------------------------
+  // Mailgun settings
+  // ----------------------------------
+  mailgun_api_key       : nullthrows(process.env.MAILGUN_API_KEY),
+  mailgun_domain        : nullthrows(process.env.MAILGUN_DOMAIN),
+  mailgun_from_address  : nullthrows(process.env.MAILGUN_FROM_ADDRESS),
 
   // ----------------------------------
   // graphql config
@@ -114,21 +137,38 @@ Edit at Your Own Risk
 // N.B.: globals added here must _also_ be added to .eslintrc
 config.globals = {
   'process.env'  : {
-    NODE_ENV           : JSON.stringify(config.env),
+    NODE_ENV              : JSON.stringify(config.env),
 
-    APPLICATION_ID     : JSON.stringify(process.env.APPLICATION_ID),
-    JAVASCRIPT_KEY     : JSON.stringify(process.env.JAVASCRIPT_KEY),
-    MASTER_KEY         : JSON.stringify(process.env.MASTER_KEY),
+    APPLICATION_ID        : JSON.stringify(process.env.APPLICATION_ID),
+    JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),
+    MASTER_KEY            : JSON.stringify(process.env.MASTER_KEY),
 
-    SERVER_URL         : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
-    GRAPHQL_ENDPOINT   : JSON.stringify(config.graphql_endpoint),
+    SERVER_URL            : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
+    GRAPHQL_ENDPOINT      : JSON.stringify(config.graphql_endpoint),
 
-    PARSE_MODULE_PATH  : JSON.stringify('parse'),
+    PARSE_MODULE_PATH     : JSON.stringify('parse'),
 
 
-    ENV                : JSON.stringify('client'),
-    BASENAME           : JSON.stringify(process.env.BASENAME || ''),
-    SITE_TITLE         : JSON.stringify(process.env.SITE_TITLE),
+    _ENV                  : JSON.stringify('client'),
+    BASENAME              : JSON.stringify(process.env.BASENAME || ''),
+    HOME_TITLE            : JSON.stringify(process.env.HOME_TITLE),
+
+    PATH_LOGIN                        : JSON.stringify(config.path_login),
+    PATH_SIGNUP                       : JSON.stringify(config.path_signup),
+    PATH_PASSWORD_RESET               : JSON.stringify(config.path_password_reset),
+    PATH_CHOOSE_PASSWORD              : JSON.stringify(config.path_choose_password),
+    PATH_EMAIL_VERIFICATION_SUCCESS   : JSON.stringify(config.path_email_verification_success),
+    PATH_PASSWORD_RESET_SUCCESS       : JSON.stringify(config.path_password_reset_success),
+    PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
+
+    PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
+
+    RECAPCHA_SITE_KEY     : JSON.stringify(process.env.RECAPCHA_SITE_KEY),
+    RECAPCHA_JS_URL       : JSON.stringify(process.env.RECAPCHA_JS_URL),
+
+    APP_NAME              : JSON.stringify(config.appName),
+
+    DEV_PASSWORD          : JSON.stringify(process.env.DEV_PASSWORD),
   },
 };
 
@@ -160,6 +200,8 @@ function base() {
 config.utils_paths = {
   base   : base,
   client : base.bind(null, config.dir_client),
+  server : base.bind(null, config.dir_server),
+  public : base.bind(null, config.dir_public),
   dist   : base.bind(null, config.dir_dist),
 };
 

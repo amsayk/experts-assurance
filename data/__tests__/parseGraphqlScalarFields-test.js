@@ -93,6 +93,10 @@ describe('parseGraphqlScalarFields', () => {
         expect(obj.get.mock.calls.length).toBe(1);
       });
     });
+
+    xdescribe('id field', function () {
+
+    });
   });
 
   describe('with plain js objects', function () {

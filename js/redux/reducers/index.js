@@ -10,7 +10,7 @@ import {
 
 import routerReducer from './routing/reducer';
 
-import { reducer as formReducer } from 'redux-form/immutable';
+import { reducer as formReducer, actionTypes } from 'redux-form/immutable';
 
 const reducers = {
   app,
@@ -24,6 +24,10 @@ const reducers = {
             values: {
               password: undefined,
             },
+          }) : state;
+        case actionTypes.SUBMIT_START: // Clear errors
+          return state ? state.merge({
+            error: null,
           }) : state;
         default:
           return state;

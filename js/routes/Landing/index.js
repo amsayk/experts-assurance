@@ -16,9 +16,11 @@ export default (store) => ({
 
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const { default : Component } = require('./containers/Landing');
+      const { default : Component } = require('./containers/LandingContainer');
 
-      Landing = Component;
+      const { default : UserIsAuthenticated } = require('utils/UserIsAuthenticated');
+
+      Landing = UserIsAuthenticated(Component);
 
       /*  Return getComponent   */
       cb(null, Landing);

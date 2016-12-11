@@ -4,7 +4,9 @@ const error = require('debug')('app:client:error');
 
 import dataIdFromObject from 'dataIdFromObject';
 
-const responseMiddlewareNetworkInterface = new ResponseMiddlewareNetworkInterface(process.env.GRAPHQL_ENDPOINT, {
+import { GRAPHQL_ENDPOINT } from 'env';
+
+const responseMiddlewareNetworkInterface = new ResponseMiddlewareNetworkInterface(GRAPHQL_ENDPOINT, {
   credentials: 'same-origin',
 });
 

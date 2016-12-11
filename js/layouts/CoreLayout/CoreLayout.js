@@ -2,9 +2,11 @@ import React, { PropTypes as T } from 'react';
 
 import { connect } from 'react-redux';
 
+import compose from 'recompose/compose';
+
 import raf from 'requestAnimationFrame';
 
-import messages from 'messages';
+import messages from './messages';
 
 import EventListener from 'EventListener';
 
@@ -12,7 +14,7 @@ import throttle from 'lodash.throttle';
 
 import Center from 'components/Center';
 
-import { intlShape } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { resize } from 'redux/reducers/app/actions';
 
@@ -20,16 +22,16 @@ import selector from './selector';
 
 import Title from 'components/Title';
 
-import { TITLE } from 'environment';
+import { HOME_TITLE, APP_NAME } from 'env';
+
+import 'styles/core.scss';
 
 class CoreLayout extends React.PureComponent {
   static propTypes = {
-    children: T.element.isRequired,
-    displayMatches: T.bool.isRequired,
-    onLine: T.bool.isRequired,
-  };
-  static contextTypes = {
-    intl: intlShape,
+    children       : T.element.isRequired,
+    displayMatches : T.bool.isRequired,
+    onLine         : T.bool.isRequired,
+    intl           : intlShape.isRequired,
   };
 
   constructor(props) {
@@ -44,14 +46,16 @@ class CoreLayout extends React.PureComponent {
     this._resizeEventListener = EventListener.listen(window, 'resize', this.onResize);
   }
   componentWillUnmount() {
-    this._resizeEventListener.remove();
+    try {
+      this._resizeEventListener.remove();
+    } catch (e) {
+    }
   }
   render() {
-    const { intl } = this.context;
-    const { displayMatches, onLine, children : body } = this.props;
+    const { intl, displayMatches, onLine, children : body } = this.props;
     return (
-      <div className={'root'}>
-        <Title title={TITLE}/>
+      <div className={'container'} style={{ height: '100%' }}>
+        <Title title={HOME_TITLE + ' · ' + APP_NAME}/>
         {function () {
           if (!displayMatches) {
             return (<Center>{intl.formatMessage(messages.UnsupportedDisplay)}</Center>);
@@ -63,7 +67,7 @@ class CoreLayout extends React.PureComponent {
 
           return React.Children.only(body);
         }()}
-    </div>
+      </div>
     );
   }
 }
@@ -78,5 +82,10 @@ function mapDispatchToProps(dispatch) {
   }};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout);
+const Connect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(
+  injectIntl,
+  Connect
+)(CoreLayout);
 

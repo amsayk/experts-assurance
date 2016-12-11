@@ -6,7 +6,7 @@ import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
 function maybeUser() {
   const user = getCurrentUser();
-  return user ? { id: user.id, ...user.toJSON() } : {};
+  return user ? { id: user.id } : {};
 }
 
 const initialState = Immutable.fromJS(maybeUser());

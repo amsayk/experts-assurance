@@ -1,0 +1,50 @@
+@import '_bootstrap-variables-override';
+
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  footer {
+    height: 50px
+  }
+  .navbar {
+    background: $navbar-bg;
+    border-bottom: 1px solid rgba(0,0,0,0.075);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    margin-bottom: -1px;
+    background-clip: padding-box;
+  }
+  .form {
+    border-radius: 4px;
+
+    align-self: center;
+
+    width: 380px;
+    padding: 15px 35px 45px;
+    margin: 0 auto;
+    background-color: #fff;
+
+    .heading {
+      margin-bottom: 30px;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+      width: 100%;
+    }
+
+    button {
+      margin-top: 30px;
+    }
+
+    .error {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+  }
+}

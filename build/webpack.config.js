@@ -62,7 +62,7 @@ webpackConfig.plugins = [
   new HtmlWebpackPlugin({
     template : paths.client('index.html'),
     hash     : false,
-    favicon  : paths.client('static/favicon.ico'),
+    favicon  : paths.public('favicon.ico'),
     filename : 'index.html',
     inject   : 'body',
     minify   : {
@@ -70,7 +70,7 @@ webpackConfig.plugins = [
     },
 
     // local variables
-    title    : config.title,
+    title    : config.title + ' · ' + config.appName,
   }),
 ];
 
@@ -139,6 +139,10 @@ webpackConfig.module.loaders = [{
 }, {
   test   : /\.html$/,
   loader : 'ejs',
+}, {
+  test: /\.(graphql|gql)$/,
+  exclude: /node_modules/,
+  loader: 'graphql-tag/loader',
 }];
 
 // ------------------------------------
@@ -146,7 +150,7 @@ webpackConfig.module.loaders = [{
 // ------------------------------------
 // We use cssnano with the postcss loader, so we tell
 // css-loader not to duplicate minimization.
-const BASE_CSS_LOADER = 'css?sourceMap&-minize&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'; // eslint-disable-line max-len
+const BASE_CSS_LOADER = `css?sourceMap&-minize&modules&importLoaders=2&localIdentName=${__DEV__ ? '[name]__[local]___[hash:base64:5]' : '[hash:base64:5]'}`;  // eslint-disable-line max-len
 
 webpackConfig.module.loaders.push({
   test    : /\.scss$/,
@@ -177,7 +181,7 @@ webpackConfig.postcss = [
     mergeIdents   : false,
     reduceIdents  : false,
     safe          : true,
-    sourcemap     : true,
+    sourcemap     : __DEV__,
   }),
 ];
 

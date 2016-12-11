@@ -1,14 +1,16 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
+import { APP_NAME } from 'env';
+
 import array from '../middleware/array';
 
 import Immutable from 'immutable';
 
-import { client as apolloClient } from 'apollo-client';
+import { client as apolloClient } from 'apollo';
 
 import { middleware as reduxCookieMiddleware } from 'redux-cookie-persist-middleware';
 
-import { createHistory, useBeforeUnload } from 'history';
+import { createHistory, useBeforeUnload, useQueries } from 'history';
 
 import { useRouterHistory } from 'react-router';
 
@@ -24,7 +26,15 @@ import { applyWorker } from 'redux-worker';
 
 import { getBeforeUnloadMessage } from 'utils/onbeforeunload';
 
-export const history = useBeforeUnload(useRouterHistory(createHistory))({ basename: process.env.BASENAME });
+import { BASENAME } from 'env';
+
+export const history = useQueries(
+  useBeforeUnload(
+    useRouterHistory(
+      createHistory
+    )
+  )
+)({ basename: BASENAME });
 
 history.listenBeforeUnload(function () {
   return getBeforeUnloadMessage();
@@ -39,7 +49,7 @@ const worker = new ReduxWorker();
 // Middleware Configuration
 // ======================================================
 const middlewares = [
-  thunk.withExtraArgument(apolloClient),
+  thunk.withExtraArgument({ client: apolloClient, history }),
   array,
   reduxCookieMiddleware({
   }),
@@ -51,25 +61,26 @@ const middlewares = [
 const enhancers = [
   applyWorker(worker),
 ];
-if (__DEV__) {
-  const devToolsExtension = window.devToolsExtension;
-  if (typeof devToolsExtension === 'function') {
-    enhancers.push(devToolsExtension());
-  }
-}
 
-const enhancer = compose(
+const composeEnhancers =
+  __DEV__ &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    name: APP_NAME,
+  }) : compose;
+
+const enhancer = composeEnhancers(
   applyMiddleware(...middlewares),
   ...enhancers
 );
 
-export const store = createStore(makeRootReducer(), Immutable.fromJS(window.__APP_STATE__ || {}), enhancer);
+export const store = createStore(makeRootReducer(), Immutable.fromJS({}), enhancer);
 
 store.asyncReducers = {};
 store.injectReducers = (reducers) => injectReducers(store, reducers);
 
 // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-store.unsubscribeHistory = history.listen(updateLocation(store));
+store.unsubscribeHistory = history.listenBefore(updateLocation(store));
 
 if (module.hot) {
   module.hot.accept('../reducers', () => {

@@ -1,6 +1,6 @@
 import 'parse-config';
 
-import React from 'react';
+import React, { PropTypes as T } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Router } from 'react-router';
@@ -28,13 +28,11 @@ import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
 
-window.notificationMgr = createNotificationController(store);
-
-const APP_MOUNT_NODE = document.getElementById('app');
-const NOTIFICATIONS_MOUNT_NODE = document.getElementById('notifications');
+const APP_MOUNT_NODE = document.querySelector('#app');
+const NOTIFICATIONS_MOUNT_NODE = document.querySelector('#notifications');
 
 let render = async function render() {
-  const locale = window.navigator.language;
+  const locale = window.navigator.language.split(/-/)[0];
 
   const { messages : translations } = await intlLoader(locale);
 
@@ -42,17 +40,18 @@ let render = async function render() {
   };
 
   const routes = getRoutes(store);
+  const snackbar = createNotificationController(store);
 
   class Application extends React.Component {
     static childContextTypes = {
-      notificationMgr: React.PropTypes.shape({
-        notify: React.PropTypes.func.isRequired,
-        dismiss: React.PropTypes.func.isRequired,
+      snackbar: T.shape({
+        notify  : T.func.isRequired,
+        dismiss : T.func.isRequired,
       }).isRequired,
     };
     getChildContext() {
       return {
-        notificationMgr: window.notificationMgr,
+        snackbar,
       };
     }
     render() {
@@ -60,7 +59,9 @@ let render = async function render() {
       return (
         <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>
           <ApolloProvider store={store} client={apolloClient} immutable>
-            <Router {...routerProps}/>
+            <div style={{ height: '100%' }}>
+              <Router {...routerProps}/>
+            </div>
           </ApolloProvider>
         </IntlProvider>
       );
@@ -73,16 +74,13 @@ let render = async function render() {
 
   ReactDOM.render(
     <Provider store={store}>
-      {window.notificationMgr.render()}
+      {snackbar.render()}
     </Provider>,
     NOTIFICATIONS_MOUNT_NODE
   );
 };
 
 if (__DEV__) {
-  if (window.devToolsExtension) {
-    window.devToolsExtension.open();
-  }
   if (module.hot) {
     // Development render functions
     const renderApp = render;
@@ -105,15 +103,16 @@ if (__DEV__) {
     module.hot.accept('./routes', () =>
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(APP_MOUNT_NODE);
-        ReactDOM.unmountComponentAtNode(APP_MOUNT_NODE);
+        ReactDOM.unmountComponentAtNode(NOTIFICATIONS_MOUNT_NODE);
         render();
       })
     );
   }
 
-  window.reduxStore = store;
-  window.Parse      = require('parse');
-  window.Perf       = require('react-addons-perf');
+  window.reduxStore   = store;
+  window.Parse        = require('parse');
+  window.Perf         = require('react-addons-perf');
+  window.reduxHistory = history;
 } else {
   doSetupVisibilityChangeObserver(store);
   doSetupConnectionStateChangeObserver(store);
