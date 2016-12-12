@@ -34,7 +34,7 @@ export const schema = [`
   }
 
   # ------------------------------------
-  # Password reset
+  # Resend verification email
   # ------------------------------------
   input ResendVerificationPayload {
     email: String!
