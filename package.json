@@ -66,8 +66,7 @@
     },
     "translate": {
       "command": "node -r server/env bin/translate",
-      "env": {
-      }
+      "env": {}
     }
   },
   "engines": {
@@ -96,7 +95,6 @@
   },
   "dependencies": {
     "apollo-client": "^0.5.10",
-    "apollo-server": "^0.3.3",
     "babel-polyfill": "^6.16.0",
     "bootstrap": "amsayk/bootstrap#v4.0.0-alpha.5-css-modules-sass-compat",
     "classnames": "^2.2.5",
@@ -109,7 +107,7 @@
     "express-locale": "^1.0.0",
     "express-useragent": "^1.0.4",
     "graphql": "^0.8.2",
-    "graphql-server": "^0.3.2",
+    "graphql-server-express": "^0.4.3",
     "graphql-tag": "^1.1.2",
     "graphql-tools": "^0.8.3",
     "history": "3.2.1",

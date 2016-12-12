@@ -83,7 +83,6 @@ const config = {
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
-  graphiql_pretty   : true,
 
   // ----------------------------------
   // Compiler Configuration

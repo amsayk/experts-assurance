@@ -21,7 +21,7 @@ import cors from 'cors';
 import { ParseServer } from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 
-import { apolloExpress, graphiqlExpress } from 'apollo-server';
+import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import {
   makeExecutableSchema,
 } from 'graphql-tools';
@@ -35,6 +35,7 @@ import { Users } from 'data/user/models';
 
 import bodyParser from 'body-parser';
 
+const graphqlDebug = require('debug')('app:server:graphql');
 const debug = require('debug')('app:server');
 const error = require('debug')('app:server:error');
 
@@ -212,7 +213,7 @@ const executableSchema = makeExecutableSchema({
   logger                  : { log: (e) => error('[GRAPHQL ERROR]', e.stack) },
 });
 
-app.use(config.graphql_endpoint, bodyParser.json(), apolloExpress((req, res) => {
+app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
   // Get the query, the same way express-graphql does it
   // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
   const query = req.query.query || req.body.query;
@@ -224,24 +225,21 @@ app.use(config.graphql_endpoint, bodyParser.json(), apolloExpress((req, res) => 
 
   cookie.plugToRequest(req, res);
 
-  function getUser() {
-    return Promise.resolve(getCurrentUser());
-  }
-
-  return getUser().then(user => ({
+  const user = getCurrentUser();
+  return {
     schema: executableSchema,
     context: {
       user,
       Users: new Users({ user, connector: new UserConnector() }),
     },
-    printErrors: __DEV__,
-  }));
+    logFunction: graphqlDebug,
+    debug: __DEV__,
+  };
 }));
 
 if (__DEV__) {
   app.use(config.graphiql_endpoint, graphiqlExpress({
     endpointURL: config.graphql_endpoint,
-    pretty: config.graphiql_pretty,
   }));
 }
 
