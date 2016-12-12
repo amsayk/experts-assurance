@@ -2,12 +2,10 @@ import React, { PropTypes as T } from 'react';
 import { withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 
-import {bindActionCreators} from 'redux';
+import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import cookie from 'react-cookie';
-
-import compose from 'recompose/compose';
 
 import invariant from 'invariant';
 

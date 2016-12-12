@@ -5,10 +5,8 @@ import Parse from 'parse';
 
 import cookie from 'react-cookie';
 
-import {bindActionCreators} from 'redux';
+import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
-import { compose } from 'recompose';
 
 import selector from './selector';
 

@@ -1,11 +1,9 @@
 import React, { PropTypes as T } from 'react';
 import { withApollo, graphql } from 'react-apollo';
-import {bindActionCreators} from 'redux';
+import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
 import Center from 'components/Center';
-
-import compose from 'recompose/compose';
 
 import { logOut } from 'redux/reducers/user/actions';
 

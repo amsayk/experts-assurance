@@ -2,7 +2,7 @@ import React, { PropTypes as T } from 'react';
 import {connect} from 'react-redux';
 import { getFormValues } from 'redux-form/immutable';
 
-import compose from 'recompose/compose';
+import { compose } from 'redux';
 
 import cx from 'classnames';
 

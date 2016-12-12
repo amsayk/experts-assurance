@@ -2,10 +2,8 @@ import React, { PropTypes as T } from 'react';
 import { Link, withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 
-import {bindActionCreators} from 'redux';
+import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
-import compose from 'recompose/compose';
 
 import isEmpty from 'isEmpty';
 
