@@ -10,7 +10,7 @@ export default async function setPassword(request, response) {
 
   request.user.set({ password: newPassword });
   try {
-    await request.user.save(null, { useMasterKey: true, sessionToken: request.user.sessionToken });
+    await request.user.save(null, { sessionToken: request.user.getSessionToken() });
     response.success({});
   } catch (e) {
     response.error(formatError(e));

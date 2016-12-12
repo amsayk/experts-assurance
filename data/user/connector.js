@@ -9,7 +9,7 @@ export class UserConnector {
   }
   fetch(ids) {
     return Promise.all(ids.map((id) => {
-      return new Parse.Query(Parse.User).get(id, { useMasterKey: true }); // TODO: how to avoid using master key here?
+      return new Parse.Query(Parse.User).get(id, { useMasterKey: true });
     }));
   }
 
