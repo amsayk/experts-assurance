@@ -8,10 +8,10 @@ import messages from './messages';
 
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
-function NotifyVerificationPending({ intl, user, onResendPasswordVerification }) {
+function NotifyVerificationPending({ intl, user, onResendEmailVerification }) {
   const values = {
     email: <strong className={''}>{user.email}</strong>,
-    resendPasswordVerificationLink: <a onClick={onResendPasswordVerification} className={cx(style.resendLink, 'alert-link')}>{intl.formatMessage(messages.ResendVerification)}</a>,
+    resendEmailVerificationLink: <a onClick={onResendEmailVerification} className={cx(style.resendLink, 'alert-link')}>{intl.formatMessage(messages.ResendVerification)}</a>,
   };
   return (
     <div className={cx(style.notification, 'alert alert-warning fade active')}>
@@ -26,7 +26,7 @@ function NotifyVerificationPending({ intl, user, onResendPasswordVerification })
 NotifyVerificationPending.propTypes = {
   intl                         : intlShape.isRequired,
   user                         : T.object.isRequired,
-  onResendPasswordVerification : T.func.isRequired,
+  onResendEmailVerification    : T.func.isRequired,
 };
 
 export default injectIntl(NotifyVerificationPending);

@@ -19,7 +19,7 @@ import NotifyInvalidLink from 'components/notifications/NotifyInvalidLink';
 
 import selector from './selector';
 
-import MUTATION from './resendPasswordVerification.mutation.graphql';
+import MUTATION from './resendEmailVerification.mutation.graphql';
 import QUERY from './currentUser.query.graphql';
 
 import {
@@ -31,12 +31,12 @@ class LandingContainer extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.onResendPasswordVerification = this.onResendPasswordVerification.bind(this);
+    this.onResendEmailVerification = this.onResendEmailVerification.bind(this);
   }
-  async onResendPasswordVerification() {
+  async onResendEmailVerification() {
     const { data: { currentUser }  } = this.props;
 
-    const { data: { resendPasswordVerification: { errors } } } = await this.props.client.mutate({
+    const { data: { resendEmailVerification: { errors } } } = await this.props.client.mutate({
       mutation  : MUTATION,
       variables : { info: {
         email: currentUser.email,
@@ -54,7 +54,7 @@ class LandingContainer extends React.PureComponent {
     const { data: { loading, currentUser }, notify, actions } = this.props;
     let Notification = null;
     if (!loading && currentUser && !currentUser.emailVerified) {
-      Notification = () => <NotifyVerificationPending user={currentUser} onResendPasswordVerification={this.onResendPasswordVerification}/>; // eslint-disable-line
+      Notification = () => <NotifyVerificationPending user={currentUser} onResendEmailVerification={this.onResendEmailVerification}/>; // eslint-disable-line
     } else if (notify === PATH_INVALID_LINK) {
       Notification = NotifyInvalidLink;
     } else if (notify === PATH_EMAIL_VERIFICATION_SUCCESS) {

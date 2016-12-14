@@ -18,7 +18,7 @@ export default defineMessages({
 
   EmailVerificationPending: {
     id: 'notifications.email_verification_pending',
-    defaultMessage: 'Please activate your account. We sent an email to {email}. {resendPasswordVerificationLink}',
+    defaultMessage: 'Please activate your account. We sent an email to {email}. {resendEmailVerificationLink}',
   },
 
   ResendVerification: {

@@ -1,5 +1,5 @@
 import {
-  RESEND_PASSWORD_VERIFICATION,
+  RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
 } from './constants';
@@ -7,7 +7,7 @@ import {
 const debug = require('debug')('app:backend');
 const error = require('debug')('app:backend:error');
 
-import { signUp as doSignUp, resendPasswordVerification, passwordReset } from './ops/user';
+import { signUp as doSignUp, resendEmailVerification, passwordReset } from './ops/user';
 
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;
@@ -17,8 +17,8 @@ Parse.Cloud.define('routeOp', function (request, response) {
     case PASSWORD_RESET: {
       return passwordReset(req, response);
     }
-    case RESEND_PASSWORD_VERIFICATION: {
-      return resendPasswordVerification(req, response);
+    case RESEND_EMAIL_VERIFICATION: {
+      return resendEmailVerification(req, response);
     }
     case SIGN_UP: {
       return doSignUp(req, response);

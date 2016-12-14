@@ -1,7 +1,7 @@
 import Parse from 'parse/node';
 
 import {
-  RESEND_PASSWORD_VERIFICATION,
+  RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
 } from 'backend/constants';
@@ -26,10 +26,10 @@ export class Users {
     );
   }
 
-  resendPasswordVerification(info) {
+  resendEmailVerification(info) {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: RESEND_PASSWORD_VERIFICATION, args: info },
+      { __operationKey: RESEND_EMAIL_VERIFICATION, args: info },
       { sessionToken: this.user.getSessionToken() }
     );
   }

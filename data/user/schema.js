@@ -124,13 +124,13 @@ export const resolvers = {
       await context.Users.passwordReset(info);
       return { errors: {} };
     },
-    async resendPasswordVerification(_, { info }, context) {
+    async resendEmailVerification(_, { info }, context) {
       try {
         await resetValidations.asyncValidate(fromJS(info));
       } catch (errors) {
         return { errors };
       }
-      await context.Users.resendPasswordVerification(info);
+      await context.Users.resendEmailVerification(info);
       return { errors: {} };
     },
   },
