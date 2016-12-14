@@ -34,13 +34,13 @@ export const schema = [`
   }
 
   # ------------------------------------
-  # Resend verification email
+  # Resend email verification
   # ------------------------------------
-  input ResendVerificationPayload {
+  input ResendEmailVerificationPayload {
     email: String!
   }
 
-  type ResendVerificationResponse {
+  type ResendEmailVerificationResponse {
     errors: JSON!
   }
 
@@ -97,7 +97,7 @@ export const resolvers = {
     ])
   ),
 
-  ResendVerificationResponse : Object.assign(
+  ResendEmailVerificationResponse : Object.assign(
     {
     },
     parseGraphqlScalarFields([

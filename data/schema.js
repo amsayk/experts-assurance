@@ -26,7 +26,7 @@ const rootSchema = [`
     # Accounts
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
-    resendEmailVerification(info: ResendVerificationPayload!): ResendVerificationResponse!
+    resendEmailVerification(info: ResendEmailVerificationPayload!): ResendEmailVerificationResponse!
   }
 
   schema {
