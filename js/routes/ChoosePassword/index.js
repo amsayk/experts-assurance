@@ -1,4 +1,4 @@
-import { PATH_CHOOSE_PASSWORD } from 'env';
+import { PATH_CHOOSE_PASSWORD } from 'vars';
 
 let ChoosePassword;
 

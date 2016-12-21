@@ -11,7 +11,7 @@ import cx from 'classnames';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import { PATH_SIGNUP } from 'env';
+import { PATH_SIGNUP } from 'vars';
 
 function Header({ intl }) {
   return (

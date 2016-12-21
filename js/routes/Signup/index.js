@@ -1,4 +1,4 @@
-import { PATH_SIGNUP } from 'env';
+import { PATH_SIGNUP } from 'vars';
 
 let Signup;
 

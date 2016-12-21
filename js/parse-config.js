@@ -5,7 +5,7 @@ import {
   JAVASCRIPT_KEY,
   MASTER_KEY,
   SERVER_URL,
-} from 'env';
+} from 'vars';
 
 import CookieStorageController from 'utils/StorageController.cookie';
 

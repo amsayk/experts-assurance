@@ -8,7 +8,7 @@ import validationMessages from 'validation-messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import { PASSWORD_MIN_LENGTH } from 'env';
+import { PASSWORD_MIN_LENGTH } from 'vars';
 
 function PasswordField({ intl, placeholder, onKeyDown, input, meta: { touched, error } }) {
   return (

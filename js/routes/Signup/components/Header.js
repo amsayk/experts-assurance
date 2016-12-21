@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import { PATH_LOGIN } from 'env';
+import { PATH_LOGIN } from 'vars';
 
 import AppBrand from 'components/AppBrand';
 

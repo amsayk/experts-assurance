@@ -3,7 +3,7 @@ import Recaptcha from 'react-recaptcha';
 import nullthrows from 'nullthrows';
 import loadScript from 'loadScript';
 
-import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'env';
+import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'vars';
 
 export default class ReCAPTCHA extends React.Component {
   static propTypes = {

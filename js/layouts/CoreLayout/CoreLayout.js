@@ -22,7 +22,7 @@ import selector from './selector';
 
 import Title from 'components/Title';
 
-import { HOME_TITLE, APP_NAME } from 'env';
+import { HOME_TITLE, APP_NAME } from 'vars';
 
 import 'styles/core.scss';
 

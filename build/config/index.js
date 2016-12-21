@@ -11,7 +11,7 @@ const babelOptions = require('../../scripts/getBabelOptions')({
     'validation'            : 'common/validation',
     'validation-messages'   : 'common/messages/validation-messages',
     'getCurrentUser'        : 'common/getCurrentUser',
-    'env'                   : 'common/env',
+    'vars'                  : 'common/vars',
     'dataIdFromObject'      : 'common/dataIdFromObject',
   },
   plugins: [

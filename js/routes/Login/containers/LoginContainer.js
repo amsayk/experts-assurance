@@ -39,7 +39,7 @@ import {
   PATH_INVALID_LINK,
   PATH_PASSWORD_RESET_SUCCESS,
   PATH_PASSWORD_RESET,
-} from 'env';
+} from 'vars';
 
 class LoginContainer extends React.Component {
   static propTypes = {

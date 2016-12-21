@@ -1,4 +1,4 @@
-import { PATH_PASSWORD_RESET } from 'env';
+import { PATH_PASSWORD_RESET } from 'vars';
 
 let PasswordReset;
 

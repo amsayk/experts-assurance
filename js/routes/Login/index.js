@@ -1,4 +1,4 @@
-import { PATH_LOGIN } from 'env';
+import { PATH_LOGIN } from 'vars';
 
 let Login;
 

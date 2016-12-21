@@ -2,7 +2,7 @@ const Parse = require(process.env.PARSE_MODULE_PATH);
 
 import {
   isServer,
-} from 'env';
+} from 'vars';
 
 import cookie from 'react-cookie';
 

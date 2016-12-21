@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import { APP_NAME } from 'env';
+import { APP_NAME, BASENAME } from 'vars';
 
 import array from '../middleware/array';
 
@@ -25,8 +25,6 @@ import { updateLocation } from 'redux/reducers/routing/actions';
 import { applyWorker } from 'redux-worker';
 
 import { getBeforeUnloadMessage } from 'utils/onbeforeunload';
-
-import { BASENAME } from 'env';
 
 export const history = useQueries(
   useBeforeUnload(

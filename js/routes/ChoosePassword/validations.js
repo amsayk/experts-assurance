@@ -1,4 +1,4 @@
-import { PASSWORD_MIN_LENGTH } from 'env';
+import { PASSWORD_MIN_LENGTH } from 'vars';
 import { generateValidation } from 'validation';
 
 const validations = {

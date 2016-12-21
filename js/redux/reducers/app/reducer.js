@@ -5,7 +5,7 @@ import {
 
 import {
   isServer,
-} from 'env';
+} from 'vars';
 
 import Immutable from 'immutable';
 

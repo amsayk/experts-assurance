@@ -41,7 +41,7 @@ import ReCAPTCHAField from '../components/ReCAPTCHAField';
 
 import MUTATION from './signUp.mutation.graphql';
 
-import { APP_NAME } from 'env';
+import { APP_NAME } from 'vars';
 
 class SignupContainer extends React.Component {
   static propTypes = {

@@ -1,4 +1,4 @@
-import { PASSWORD_MIN_LENGTH } from 'env';
+import { PASSWORD_MIN_LENGTH } from 'vars';
 import { generateValidation } from 'validation';
 const Parse = require(process.env.PARSE_MODULE_PATH); // will be required on server side.
 

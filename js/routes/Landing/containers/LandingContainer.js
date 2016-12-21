@@ -25,7 +25,7 @@ import QUERY from './currentUser.query.graphql';
 import {
     PATH_INVALID_LINK,
     PATH_EMAIL_VERIFICATION_SUCCESS,
-} from 'env';
+} from 'vars';
 
 class LandingContainer extends React.PureComponent {
   constructor(props) {

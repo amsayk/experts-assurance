@@ -7,7 +7,7 @@ const babelOptions = require('../scripts/getBabelOptions')({
     'getLangFromReq'   : 'server/utils/getLangFromReq',
     'validation'       : 'common/validation',
     'getCurrentUser'   : 'common/getCurrentUser',
-    'env'              : 'common/env',
+    'vars'             : 'common/vars',
     'dataIdFromObject' : 'common/dataIdFromObject',
   },
   plugins: [

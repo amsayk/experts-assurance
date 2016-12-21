@@ -19,7 +19,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { APP_NAME } from 'env';
+import { APP_NAME } from 'vars';
 
 import messages from '../messages';
 

@@ -20,7 +20,7 @@ import {
   PATH_INVALID_LINK,
   PATH_EMAIL_VERIFICATION_SUCCESS,
   PATH_PASSWORD_RESET_SUCCESS,
-} from 'env';
+} from 'vars';
 
 export default (store) => (
   <Route path={'/'} component={CoreLayout}>

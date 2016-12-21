@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import { APP_NAME } from 'env';
+import { APP_NAME } from 'vars';
 
 export default function AppBrand({}) {
   return (

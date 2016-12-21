@@ -30,7 +30,7 @@ import NotifySuccess from '../components/NotifySuccess';
 
 import EmailField from '../components/EmailField';
 
-import { APP_NAME } from 'env';
+import { APP_NAME } from 'vars';
 
 class PasswordReset extends React.Component {
   static propTypes = {
