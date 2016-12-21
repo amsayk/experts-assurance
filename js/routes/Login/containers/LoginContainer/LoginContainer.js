@@ -14,7 +14,7 @@ import { login } from 'redux/reducers/user/actions';
 
 import cx from 'classnames';
 
-import style from '../Login.scss';
+import style from '../../Login.scss';
 
 import Title from 'components/Title';
 
@@ -27,9 +27,9 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import messages from '../messages';
+import messages from '../../messages';
 
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
 import NotifyPasswordResetSuccess from 'components/notifications/NotifyPasswordResetSuccess';
 import NotifyInvalidLink from 'components/notifications/NotifyInvalidLink';

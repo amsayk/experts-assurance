@@ -9,9 +9,9 @@ import { logOut } from 'redux/reducers/user/actions';
 
 import isEmpty from 'isEmpty';
 
-import style from '../Landing.scss';
+import style from '../../Landing.scss';
 
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
 import NotifyVerificationPending from 'components/notifications/NotifyVerificationPending';
 import NotifyVerificationSuccess from 'components/notifications/NotifyVerificationSuccess';

@@ -1,17 +1,14 @@
 import React, { PropTypes as T } from 'react';
 import { Link, withRouter } from 'react-router';
-import { withApollo } from 'react-apollo';
 
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import isEmpty from 'isEmpty';
-
 import selector from './selector';
 
-import validations from '../validations';
+import validations from '../../validations';
 
-import style from '../PasswordReset.scss';
+import style from '../../ChoosePassword.scss';
 
 import Title from 'components/Title';
 
@@ -22,33 +19,29 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import messages from '../messages';
-
-import MUTATION from './passwordReset.mutation.graphql';
-
-import NotifySuccess from '../components/NotifySuccess';
-
-import EmailField from '../components/EmailField';
-
 import { APP_NAME } from 'vars';
 
-class PasswordReset extends React.Component {
+import messages from '../../messages';
+
+import PasswordField from '../../components/PasswordField';
+import PasswordConfirmationField from '../../components/PasswordConfirmationField';
+
+class ChoosePasswordContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
-    intl            : intlShape.isRequired,
-    client          : T.shape({
-      mutate: T.func.isRequired,
-    }),
     isAuthenticated : T.bool.isRequired,
-    actions         : T.shape({
-    }).isRequired,
+    token           : T.string.isRequired,
+    action          : T.string.isRequired,
+    username        : T.string.isRequired,
+    intl            : intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit  = this.onSubmit.bind(this);
-    this.onKeyDown = this._onKeyDown.bind(this);
+    this.onSubmit     = this.onSubmit.bind(this);
+    this.onKeyDown    = this._onKeyDown.bind(this);
+    this._setFormRef  = this._setFormRef.bind(this);
   }
 
   componentWillMount() {
@@ -66,18 +59,13 @@ class PasswordReset extends React.Component {
   }
 
   async onSubmit(data) {
-    const { data: { passwordReset: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { info: {
-        email      : data.get('email'),
-      } },
-    });
-
-    if (!isEmpty(errors)) {
+    try {
+      await validations.asyncValidate(data);
+    } catch (errors) {
       throw new SubmissionError(errors);
     }
 
-    return;
+    this._form.submit();
   }
 
   _renderForm() {
@@ -90,33 +78,42 @@ class PasswordReset extends React.Component {
         <img src="/logo.svg" className={'d-inline-block align-top'} width="48" height="48" alt=""/>
       </Link>,
 
-      <h5 className={ style.heading }>{intl.formatMessage(messages.title)}</h5>,
-
-      <div className={ style.subheading }>{intl.formatMessage(messages.introText)}</div>,
+      <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
 
       <Field
-        name="email"
-        component={EmailField}
-        placeholder={intl.formatMessage(messages.email)}
+        name="new_password"
+        component={PasswordField}
+        placeholder={intl.formatMessage(messages.password)}
+        onKeyDown={this.onKeyDown} />,
+
+      <Field
+        name="passwordConfirmation"
+        component={PasswordConfirmationField}
+        placeholder={intl.formatMessage(messages.passwordConfirmation)}
         onKeyDown={this.onKeyDown} />,
 
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={ 'btn btn-primary btn-block' }>
-        {intl.formatMessage(messages.passwordReset)}
+        {intl.formatMessage(messages.choosePassword)}
       </button>,
 
     ];
   }
+  _setFormRef(form) {
+    this._form = form;
+  }
 
   render() {
-    const { intl, submitSucceeded, form } = this.props;
+    const { intl, action, username, token } = this.props;
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        {submitSucceeded ? <NotifySuccess form={form}/> : null}
         <div className="center-content">
-          <div className={style.form}>
+          <form ref={this._setFormRef} action={action} className={style.form} method={'POST'}>
+            <input name="utf-8" type="hidden" value="✓" />
+            <input name="username" value={username} type="hidden" />
+            <input name="token" value={token} type="hidden" />
             {this._renderForm()}
-          </div>
+          </form>
         </div>
         <footer>
           {/* © 2016 */}
@@ -137,15 +134,13 @@ function mapDispatchToProps(dispatch) {
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const WithForm = reduxForm({
-  form: 'passwordReset',
-  ...validations,
+  form: 'choosePassword',
 });
 
 export default compose(
   injectIntl,
   withRouter,
-  withApollo,
   Connect,
   WithForm,
-)(PasswordReset);
+)(ChoosePasswordContainer);
 

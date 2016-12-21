@@ -1,25 +1,17 @@
 import React, { PropTypes as T } from 'react';
-import { withRouter } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import cookie from 'react-cookie';
-
-import invariant from 'invariant';
-
-import Parse from 'parse';
-
 import isEmpty from 'isEmpty';
-
-import { login } from 'redux/reducers/user/actions';
 
 import selector from './selector';
 
-import validations from '../validations';
+import validations from '../../validations';
 
-import style from '../Signup.scss';
+import style from '../../PasswordReset.scss';
 
 import Title from 'components/Title';
 
@@ -30,20 +22,17 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import messages from '../messages';
+import messages from '../../messages';
 
-import Header from '../components/Header';
+import MUTATION from './passwordReset.mutation.graphql';
 
-import EmailField from '../components/EmailField';
-import PasswordField from '../components/PasswordField';
-import PasswordConfirmationField from '../components/PasswordConfirmationField';
-import ReCAPTCHAField from '../components/ReCAPTCHAField';
+import NotifySuccess from '../../components/NotifySuccess';
 
-import MUTATION from './signUp.mutation.graphql';
+import EmailField from '../../components/EmailField';
 
 import { APP_NAME } from 'vars';
 
-class SignupContainer extends React.Component {
+class PasswordReset extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,
@@ -77,15 +66,10 @@ class SignupContainer extends React.Component {
   }
 
   async onSubmit(data) {
-    const { intl } = this.props;
-
-    const { data: { signUp: { user, errors } } } = await this.props.client.mutate({
+    const { data: { passwordReset: { errors } } } = await this.props.client.mutate({
       mutation  : MUTATION,
       variables : { info: {
-        email                : data.get('email'),
-        password             : data.get('password'),
-        passwordConfirmation : data.get('passwordConfirmation'),
-        recaptcha            : data.get('recaptcha'),
+        email      : data.get('email'),
       } },
     });
 
@@ -93,21 +77,7 @@ class SignupContainer extends React.Component {
       throw new SubmissionError(errors);
     }
 
-    invariant(user, '`user` must be defined at this point.');
-
-    try {
-      const parseObject = await Parse.User.logIn(user.username, data.get('password'));
-      if (parseObject) {
-        const loggedInUser = { id: parseObject.id, ...parseObject.toJSON() };
-        cookie.save('app.login', loggedInUser.username);
-        this.props.actions.login(loggedInUser);
-        this.props.router.push('/');
-      } else {
-        throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
-      }
-    } catch (e) {
-      throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
-    }
+    return;
   }
 
   _renderForm() {
@@ -116,7 +86,13 @@ class SignupContainer extends React.Component {
     } = this.props;
 
     return [
-      <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
+      <Link className={ style.logo } to={'/'}>
+        <img src="/logo.svg" className={'d-inline-block align-top'} width="48" height="48" alt=""/>
+      </Link>,
+
+      <h5 className={ style.heading }>{intl.formatMessage(messages.title)}</h5>,
+
+      <div className={ style.subheading }>{intl.formatMessage(messages.introText)}</div>,
 
       <Field
         name="email"
@@ -124,35 +100,19 @@ class SignupContainer extends React.Component {
         placeholder={intl.formatMessage(messages.email)}
         onKeyDown={this.onKeyDown} />,
 
-      <Field
-        name="password"
-        component={PasswordField}
-        placeholder={intl.formatMessage(messages.password)}
-        onKeyDown={this.onKeyDown} />,
-
-      <Field
-        name="passwordConfirmation"
-        component={PasswordConfirmationField}
-        placeholder={intl.formatMessage(messages.passwordConfirmation)}
-        onKeyDown={this.onKeyDown} />,
-
-      <Field
-        name={'recaptcha'}
-        component={ReCAPTCHAField} />,
-
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={ 'btn btn-primary btn-block' }>
-        {intl.formatMessage(messages.signUp)}
+        {intl.formatMessage(messages.passwordReset)}
       </button>,
 
     ];
   }
 
   render() {
-    const { intl } = this.props;
+    const { intl, submitSucceeded, form } = this.props;
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        <Header/>
+        {submitSucceeded ? <NotifySuccess form={form}/> : null}
         <div className="center-content">
           <div className={style.form}>
             {this._renderForm()}
@@ -171,13 +131,13 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ login }, dispatch)};
+  return {actions: bindActionCreators({}, dispatch)};
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const WithForm = reduxForm({
-  form: 'signup',
+  form: 'passwordReset',
   ...validations,
 });
 
@@ -187,5 +147,5 @@ export default compose(
   withApollo,
   Connect,
   WithForm,
-)(SignupContainer);
+)(PasswordReset);
 
