@@ -58,7 +58,7 @@ const config = {
   parse_server_mount_point    : process.env.PARSE_MOUNT || '/parse',
   parse_server_url            : process.env.SERVER_URL,
   parse_database_uri          : process.env.DATABASE_URI,
-  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
+  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard.parse',
 
   // App config
   path_login                        : process.env.PATH_LOGIN || '/login',
