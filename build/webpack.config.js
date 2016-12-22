@@ -101,6 +101,7 @@ if (__DEV__) {
     }),
     new VendorChunkPlugin('vendor'),
     new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap : false,
