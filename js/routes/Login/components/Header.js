@@ -18,7 +18,7 @@ function Header({ intl }) {
     <nav className={cx(style.navbar, 'navbar navbar-full navbar-light')}>
       <AppBrand/>
       <form className="form-inline float-lg-right">
-        <span className="navbar-text">
+        <span className="navbar-text hint-block">
           {intl.formatMessage(messages.signupQuestion)}
         </span>{' '}
         <Link className={ 'btn btn-outline-danger align-top' } to={PATH_SIGNUP}>

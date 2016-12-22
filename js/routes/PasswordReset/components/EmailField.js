@@ -21,13 +21,13 @@ function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, erro
         className={cx('form-control', { 'form-control-danger': touched && error })}
       />
       <FormMessages errorCount={1} field={'email'}>
-        <div className={'form-control-feedback'} when={'required'}>
+        <div className={'form-control-feedback hint-block'} when={'required'}>
           {intl.formatMessage(validationMessages.emailRequired)}
         </div>
-        <div className={'form-control-feedback'} when={'email'}>
+        <div className={'form-control-feedback hint-block'} when={'email'}>
           {intl.formatMessage(validationMessages.emailInvalid)}
         </div>
-        <div className={'form-control-feedback'} when={'promise'}>
+        <div className={'form-control-feedback hint-block'} when={'promise'}>
           {intl.formatMessage(validationMessages.emailTaken)}
         </div>
       </FormMessages>

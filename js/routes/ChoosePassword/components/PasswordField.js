@@ -22,10 +22,10 @@ function PasswordField({ intl, placeholder, onKeyDown, input, meta: { touched, e
         autoFocus
       />
       <FormMessages errorCount={1} field={'new_password'}>
-        <div className={'form-control-feedback'} when={'required'}>
+        <div className={'form-control-feedback hint-block'} when={'required'}>
           {intl.formatMessage(validationMessages.passwordRequired)}
         </div>
-        <div className={'form-control-feedback'} when={'minLength'}>
+        <div className={'form-control-feedback hint-block'} when={'minLength'}>
           {intl.formatMessage(validationMessages.passwordMinLength, { minLength: PASSWORD_MIN_LENGTH })}
         </div>
       </FormMessages>

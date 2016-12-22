@@ -19,7 +19,7 @@ function PasswordConfirmationField({ intl, placeholder, onKeyDown, input, meta: 
         className={cx('form-control', { 'form-control-danger': touched && error })}
       />
       <FormMessages field={'passwordConfirmation'}>
-        <div className={'form-control-feedback'} when={'matchField'}>
+        <div className={'form-control-feedback hint-block'} when={'matchField'}>
           {intl.formatMessage(validationMessages.passwordMismatch)}
         </div>
       </FormMessages>

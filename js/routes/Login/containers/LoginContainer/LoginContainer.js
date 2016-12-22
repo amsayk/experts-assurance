@@ -132,7 +132,7 @@ class LoginContainer extends React.Component {
       <div className={cx({[style.error]: true, 'has-danger': true })}>
 
         {error && !submitting ?
-            <small className={'form-control-feedback'}>{intl.formatMessage(messages.error)}</small>
+            <small className={'form-control-feedback hint-block'}>{intl.formatMessage(messages.error)}</small>
             : null}
 
           </div>,
@@ -142,7 +142,7 @@ class LoginContainer extends React.Component {
       </button>,
 
       <div className={ style.password_reset }>
-        <Link className={ 'btn btn-link' } to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
+        <Link className={ 'btn btn-link hint-block' } to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
       </div>,
     ];
   }
