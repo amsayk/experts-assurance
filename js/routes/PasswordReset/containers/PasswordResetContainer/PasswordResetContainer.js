@@ -15,6 +15,8 @@ import style from '../../PasswordReset.scss';
 
 import Title from 'components/Title';
 
+import AppLogo from 'components/AppLogo';
+
 import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
 
 import {
@@ -87,7 +89,7 @@ class PasswordReset extends React.Component {
 
     return [
       <Link className={ style.logo } to={'/'}>
-        <img src="/logo.svg" className={'d-inline-block align-top'} width="48" height="48" alt=""/>
+        <AppLogo width={48} height={48}/>
       </Link>,
 
       <h5 className={ style.heading }>{intl.formatMessage(messages.title)}</h5>,

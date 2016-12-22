@@ -1,0 +1,9 @@
+@import  '_bootstrap-variables-override';
+
+.logo {
+  color: $brand-inverse;
+  &:hover {
+    color: $brand-primary;
+  }
+}
+
