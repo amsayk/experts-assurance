@@ -111,9 +111,9 @@ class LoginContainer extends React.Component {
       <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
 
       <Field
-        name="email"
+        name='email'
         component={'input'}
-        type="text"
+        type='text'
         placeholder={intl.formatMessage(messages.email)}
         className={'form-control'}
         autoComplete={'off'}
@@ -121,9 +121,9 @@ class LoginContainer extends React.Component {
         autoFocus />,
 
       <Field
-        name="password"
-        component="input"
-        type="password"
+        name='password'
+        component='input'
+        type='password'
         placeholder={intl.formatMessage(messages.password)}
         className={'form-control'}
         onKeyDown={this.onKeyDown}
@@ -161,7 +161,7 @@ class LoginContainer extends React.Component {
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {Notification ? <Notification/> : null}
         <Header/>
-        <div className="center-content">
+        <div className='center-content'>
           <div className={style.form}>
             {this._renderForm()}
           </div>

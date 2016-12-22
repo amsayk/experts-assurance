@@ -11,7 +11,11 @@ module.exports = {
     'graphql/template-strings': ['error', {
       env: 'apollo',
       schemaJsonFilepath: path.resolve(__dirname, 'data', 'schema.json')
-    }]
+    }],
+    'quotes': ['error', 'single', {
+      'allowTemplateLiterals': true,
+    }],
+    'jsx-quotes': ['error', 'prefer-single']
   },
   plugins: [
     'graphql'

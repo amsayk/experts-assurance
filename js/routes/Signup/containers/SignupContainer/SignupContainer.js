@@ -119,19 +119,19 @@ class SignupContainer extends React.Component {
       <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
 
       <Field
-        name="email"
+        name='email'
         component={EmailField}
         placeholder={intl.formatMessage(messages.email)}
         onKeyDown={this.onKeyDown} />,
 
       <Field
-        name="password"
+        name='password'
         component={PasswordField}
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
       <Field
-        name="passwordConfirmation"
+        name='passwordConfirmation'
         component={PasswordConfirmationField}
         placeholder={intl.formatMessage(messages.passwordConfirmation)}
         onKeyDown={this.onKeyDown} />,
@@ -153,7 +153,7 @@ class SignupContainer extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <Header/>
-        <div className="center-content">
+        <div className='center-content'>
           <div className={style.form}>
             {this._renderForm()}
           </div>

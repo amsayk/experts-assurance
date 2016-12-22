@@ -14,7 +14,7 @@ function Header({ intl, onLogOut }) {
   return (
     <nav className={cx(style.navbar, 'navbar navbar-full navbar-light')}>
       <AppBrand/>
-      <form className="form-inline float-lg-right">
+      <form className='form-inline float-lg-right'>
         <a className={'btn btn-link'} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
       </form>
     </nav>

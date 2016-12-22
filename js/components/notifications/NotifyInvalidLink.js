@@ -15,8 +15,8 @@ const onClose = () => history.replace({ state: {} });
 function NotifyInvalidLink({ intl }) {
   return (
     <div className={cx(style.notification, 'alert alert-danger alert-dismissible fade active')}>
-      <button type="button" onClick={onClose} className="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+      <button type='button' onClick={onClose} className='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
       </button>
       {intl.formatMessage(messages.InvalidLink)}
     </div>

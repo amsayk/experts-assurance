@@ -147,10 +147,10 @@ class Snackbar extends React.Component {
     const { snackbar: { action } } = this.props;
     return (action) ? (
       <button
-        type="button"
+        type='button'
         className={style['btn-snackbar']}
         onClick={ action.click }
-        ref="action">
+        ref='action'>
         { action.title }
       </button>
     ) : null;
@@ -163,7 +163,7 @@ class Snackbar extends React.Component {
   render() {
     const { message } = this.props.snackbar;
     return (
-      <div className={ this.getClass() } style={ this.getStyle() } ref="snackbar">
+      <div className={ this.getClass() } style={ this.getStyle() } ref='snackbar'>
         { message }
         { this.getAction() }
       </div>

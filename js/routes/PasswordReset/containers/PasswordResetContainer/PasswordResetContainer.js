@@ -97,7 +97,7 @@ class PasswordReset extends React.Component {
       <div className={ style.subheading }>{intl.formatMessage(messages.introText)}</div>,
 
       <Field
-        name="email"
+        name='email'
         component={EmailField}
         placeholder={intl.formatMessage(messages.email)}
         onKeyDown={this.onKeyDown} />,
@@ -115,7 +115,7 @@ class PasswordReset extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {submitSucceeded ? <NotifySuccess form={form}/> : null}
-        <div className="center-content">
+        <div className='center-content'>
           <div className={style.form}>
             {this._renderForm()}
           </div>

@@ -83,13 +83,13 @@ class ChoosePasswordContainer extends React.Component {
       <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
 
       <Field
-        name="new_password"
+        name='new_password'
         component={PasswordField}
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
       <Field
-        name="passwordConfirmation"
+        name='passwordConfirmation'
         component={PasswordConfirmationField}
         placeholder={intl.formatMessage(messages.passwordConfirmation)}
         onKeyDown={this.onKeyDown} />,
@@ -109,11 +109,11 @@ class ChoosePasswordContainer extends React.Component {
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        <div className="center-content">
+        <div className='center-content'>
           <form ref={this._setFormRef} action={action} className={style.form} method={'POST'}>
-            <input name="utf-8" type="hidden" value="✓" />
-            <input name="username" value={username} type="hidden" />
-            <input name="token" value={token} type="hidden" />
+            <input name='utf-8' type='hidden' value='✓' />
+            <input name='username' value={username} type='hidden' />
+            <input name='token' value={token} type='hidden' />
             {this._renderForm()}
           </form>
         </div>
