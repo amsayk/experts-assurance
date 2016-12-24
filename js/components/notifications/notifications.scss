@@ -1,17 +1,17 @@
 .notificationInvalidLink {
-  composes: notification notification-full alert alert-danger alert-dismissible fade active from 'styles/_base.scss';
+  composes: notification notification-full alert alert-danger alert-dismissible fade in from 'styles/_base.scss';
 }
 
 .notificationPasswordResetSuccess {
-  composes: notification alert alert-success fade active from 'styles/_base.scss';
+  composes: notification alert alert-success fade in from 'styles/_base.scss';
 }
 
 .notificationVerificationPending {
-  composes: notification alert alert-warning fade active from 'styles/_base.scss';
+  composes: notification alert alert-warning fade in from 'styles/_base.scss';
 }
 
 .notificationVerificationSuccess {
-  composes: notification alert alert-success alert-dismissible fade active from 'styles/_base.scss';
+  composes: notification alert alert-success alert-dismissible fade in from 'styles/_base.scss';
 }
 
 .resendLink {
