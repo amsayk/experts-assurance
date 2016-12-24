@@ -1,11 +1,21 @@
-.notification {
-  text-align: center;
-  margin-bottom: 0;
-  background-clip: padding-box;
-  border-radius: 0;
+.notificationInvalidLink {
+  composes: notification notification-full alert alert-danger alert-dismissible fade active from 'styles/_base.scss';
+}
+
+.notificationPasswordResetSuccess {
+  composes: notification alert alert-success fade active from 'styles/_base.scss';
+}
+
+.notificationVerificationPending {
+  composes: notification alert alert-warning fade active from 'styles/_base.scss';
+}
+
+.notificationVerificationSuccess {
+  composes: notification alert alert-success alert-dismissible fade active from 'styles/_base.scss';
 }
 
 .resendLink {
+  composes: alert-link from 'styles/_base.scss';
   text-decoration: underline!important;
   font-weight: normal;
   cursor: pointer;

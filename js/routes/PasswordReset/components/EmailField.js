@@ -6,11 +6,13 @@ import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
+import style from '../PasswordReset.scss';
+
 import { injectIntl, intlShape } from 'react-intl';
 
 function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, error } }) {
   return (
-    <div className={cx('form-group', { 'has-danger': touched && error })}>
+    <div className={cx(style.formGroup, { [style.formGroupHasDanger]: touched && error })}>
       <input
         {...input}
         placeholder={placeholder}
@@ -18,16 +20,16 @@ function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, erro
         autoFocus
         autoComplete={'off'}
         type={'text'}
-        className={cx('form-control', { 'form-control-danger': touched && error })}
+        className={cx(style.control, { [style.formControlDanger]: touched && error })}
       />
       <FormMessages errorCount={1} field={'email'}>
-        <div className={'form-control-feedback hint-block'} when={'required'}>
+        <div className={style.formControlFeedback} when={'required'}>
           {intl.formatMessage(validationMessages.emailRequired)}
         </div>
-        <div className={'form-control-feedback hint-block'} when={'email'}>
+        <div className={style.formControlFeedback} when={'email'}>
           {intl.formatMessage(validationMessages.emailInvalid)}
         </div>
-        <div className={'form-control-feedback hint-block'} when={'promise'}>
+        <div className={style.formControlFeedback} when={'promise'}>
           {intl.formatMessage(validationMessages.emailTaken)}
         </div>
       </FormMessages>

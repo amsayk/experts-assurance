@@ -12,8 +12,6 @@ import selector from './selector';
 
 import { login } from 'redux/reducers/user/actions';
 
-import cx from 'classnames';
-
 import style from '../../Login.scss';
 
 import Title from 'components/Title';
@@ -108,14 +106,14 @@ class LoginContainer extends React.Component {
     } = this.props;
 
     return [
-      <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
+      <h1 className={ style.heading }>{intl.formatMessage(messages.title, { appName: APP_NAME })}</h1>,
 
       <Field
         name='email'
         component={'input'}
         type='text'
         placeholder={intl.formatMessage(messages.email)}
-        className={'form-control'}
+        className={style.control}
         autoComplete={'off'}
         onKeyDown={this.onKeyDown}
         autoFocus />,
@@ -125,24 +123,24 @@ class LoginContainer extends React.Component {
         component='input'
         type='password'
         placeholder={intl.formatMessage(messages.password)}
-        className={'form-control'}
+        className={style.control}
         onKeyDown={this.onKeyDown}
       />,
 
-      <div className={cx({[style.error]: true, 'has-danger': true })}>
+      <div className={style.error}>
 
         {error && !submitting ?
-            <small className={'form-control-feedback hint-block'}>{intl.formatMessage(messages.error)}</small>
+            <small className={style.formControlFeedback}>{intl.formatMessage(messages.error)}</small>
             : null}
 
           </div>,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={ 'btn btn-primary btn-block' }>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn}>
         {intl.formatMessage(messages.login)}
       </button>,
 
       <div className={ style.password_reset }>
-        <Link className={ 'btn btn-link hint-block' } to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
+        <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
       </div>,
     ];
   }
@@ -161,7 +159,7 @@ class LoginContainer extends React.Component {
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {Notification ? <Notification/> : null}
         <Header/>
-        <div className='center-content'>
+        <div className={style.centerContent}>
           <div className={style.form}>
             {this._renderForm()}
           </div>

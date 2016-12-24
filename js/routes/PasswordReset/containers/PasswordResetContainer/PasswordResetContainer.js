@@ -88,7 +88,7 @@ class PasswordReset extends React.Component {
     } = this.props;
 
     return [
-      <Link className={ style.logo } to={'/'}>
+      <Link className={style.logo} to={'/'}>
         <AppLogo width={48} height={48}/>
       </Link>,
 
@@ -102,7 +102,7 @@ class PasswordReset extends React.Component {
         placeholder={intl.formatMessage(messages.email)}
         onKeyDown={this.onKeyDown} />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={ 'btn btn-primary btn-block' }>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.passwordResetButton}>
         {intl.formatMessage(messages.passwordReset)}
       </button>,
 
@@ -115,7 +115,7 @@ class PasswordReset extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {submitSucceeded ? <NotifySuccess form={form}/> : null}
-        <div className='center-content'>
+        <div className={style.centerContent}>
           <div className={style.form}>
             {this._renderForm()}
           </div>

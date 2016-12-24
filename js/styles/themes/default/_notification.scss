@@ -1,0 +1,14 @@
+.notification {
+  text-align: center;
+  margin-bottom: 0;
+  background-clip: padding-box;
+}
+
+.notification-full {
+  border-radius: 0;
+}
+
+.close {
+  composes: close;
+}
+

@@ -3,7 +3,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(fonts/MaterialIcons.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(#{$app-font-path}/MaterialIcons.woff2) format('woff2');
 }
 
 .material-icons {
@@ -53,3 +53,4 @@
 .material-icons.md-light.md-inactive {
   color: rgba(255, 255, 255, 0.3);
 }
+

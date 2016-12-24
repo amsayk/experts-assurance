@@ -116,7 +116,9 @@ class SignupContainer extends React.Component {
     } = this.props;
 
     return [
-      <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
+      <h1 className={ style.heading }>{intl.formatMessage(messages.title, { appName: APP_NAME })}</h1>,
+
+      <p className={style.tagLine}>{intl.formatMessage(messages.tagLine)}</p>,
 
       <Field
         name='email'
@@ -140,7 +142,7 @@ class SignupContainer extends React.Component {
         name={'recaptcha'}
         component={ReCAPTCHAField} />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={ 'btn btn-primary btn-block' }>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.join}>
         {intl.formatMessage(messages.signUp)}
       </button>,
 
@@ -153,7 +155,7 @@ class SignupContainer extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <Header/>
-        <div className='center-content'>
+        <div className={style.centerContent}>
           <div className={style.form}>
             {this._renderForm()}
           </div>

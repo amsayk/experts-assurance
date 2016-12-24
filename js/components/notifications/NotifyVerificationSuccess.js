@@ -2,8 +2,6 @@ import React from 'react';
 
 import { history } from 'redux/store';
 
-import cx from 'classnames';
-
 import messages from './messages';
 
 import style from './notifications.scss';
@@ -14,8 +12,8 @@ const onClose = () => history.replace({ state: {} });
 
 function NotifyVerificationSuccess({ intl }) {
   return (
-    <div className={cx(style.notification, 'alert alert-success alert-dismissible fade active')}>
-      <button type='button' onClick={onClose} className='close' data-dismiss='alert' aria-label='Close'>
+    <div className={style.notificationVerificationSuccess}>
+      <button type='button' onClick={onClose} className={style.close} data-dismiss='alert' aria-label='Close'>
         <span aria-hidden='true'>&times;</span>
       </button>
       {intl.formatMessage(messages.EmailVerificationSuccess)}

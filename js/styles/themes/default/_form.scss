@@ -1,0 +1,21 @@
+.formGroup{
+  composes: form-group;
+}
+
+.formGroupHasDanger {
+  composes: has-danger;
+}
+
+.formControlFeedback {
+  composes: hint-block;
+  composes: form-control-feedback;
+}
+
+.formControl {
+  composes: form-control;
+}
+
+.formControlDanger {
+  composes: form-control-danger;
+}
+

@@ -1,0 +1,26 @@
+.navbar {
+  composes: navbar navbar-full navbar-light;
+  background: $navbar-bg;
+  border-bottom: 1px solid rgba(0,0,0,0.075);
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  margin-bottom: -1px;
+  background-clip: padding-box;
+}
+
+.navbarRight {
+  composes: float-lg-right;
+}
+
+.navbarForm {
+  composes: form-inline;
+}
+
+.navLink {
+  composes: btn btn-link;
+}
+
+.navbarText {
+  composes: navbar-text;
+  composes: hint-block;
+}
+

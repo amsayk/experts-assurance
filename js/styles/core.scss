@@ -19,25 +19,3 @@ body {
   box-sizing: inherit;
 }
 
-:global {
-  .container {
-  }
-
-  .alert.alert-dismissible {
-    padding: 0.55em 1.25rem 0;
-  }
-
-  .center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-  }
-
-  .hint-block {
-    color: #999;
-    font-size: 13px;
-    font-weight: 300;
-  }
-}
-

@@ -2,13 +2,11 @@
 
 import React from 'react';
 
-import cx from 'classnames';
-
 import style from './AppLogo.scss';
 
-export default function AppLogo({ width, height, className }) {
+export default function AppLogo({ width, height }) {
   return (
-    <svg className={cx('align-top rounded-circle', style.logo, className)} baseProfile='tiny' xmlns='http://www.w3.org/2000/svg' version={'1.1'} width={`${width}px`} height={`${height}px`} viewBox={'0 0 179 179'}>
+    <svg className={style.logo} baseProfile='tiny' xmlns='http://www.w3.org/2000/svg' version={'1.1'} width={`${width}px`} height={`${height}px`} viewBox={'0 0 179 179'}>
 
       <path fill='currentColor' d='M36.57,116.471c-1.184,1.211-2.773,1.877-4.483,1.877c-1.652,0-3.204-0.632-4.383-1.784l-0.11-0.108
 

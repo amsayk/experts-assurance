@@ -165,6 +165,8 @@ webpackConfig.module.loaders.push({
 });
 
 webpackConfig.sassLoader = {
+  data         : '$env: ' + config.env + ';',
+  outputStyle  : 'expanded',
   includePaths : paths.client('styles'),
 };
 

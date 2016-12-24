@@ -109,7 +109,7 @@ class ChoosePasswordContainer extends React.Component {
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        <div className='center-content'>
+        <div className={style.centerContent}>
           <form ref={this._setFormRef} action={action} className={style.form} method={'POST'}>
             <input name='utf-8' type='hidden' value='✓' />
             <input name='username' value={username} type='hidden' />

@@ -3,14 +3,12 @@ import { Link } from 'react-router';
 
 import AppLogo from 'components/AppLogo';
 
-import { APP_NAME } from 'vars';
+import style from './AppBrand.scss';
 
 export default function AppBrand({}) {
   return (
-    <Link className={'navbar-brand mb-0'} to={'/'}>
+    <Link className={style.appBrand} to={'/'}>
       <AppLogo width={32} height={32}/>
-      {' '}
-      {APP_NAME}
     </Link>
   );
 }

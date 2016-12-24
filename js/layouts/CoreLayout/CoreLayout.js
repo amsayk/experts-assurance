@@ -12,8 +12,6 @@ import EventListener from 'EventListener';
 
 import throttle from 'lodash.throttle';
 
-import Center from 'components/Center';
-
 import { intlShape, injectIntl } from 'react-intl';
 
 import { resize } from 'redux/reducers/app/actions';
@@ -24,7 +22,7 @@ import Title from 'components/Title';
 
 import { HOME_TITLE, APP_NAME } from 'vars';
 
-import 'styles/core.scss';
+import style from 'styles/core.scss';
 
 class CoreLayout extends React.PureComponent {
   static propTypes = {
@@ -54,15 +52,15 @@ class CoreLayout extends React.PureComponent {
   render() {
     const { intl, displayMatches, onLine, children : body } = this.props;
     return (
-      <div className={'container'} style={{ height: '100%' }}>
+      <div style={{ height: '100%' }}>
         <Title title={HOME_TITLE + ' · ' + APP_NAME}/>
         {function () {
           if (!displayMatches) {
-            return (<Center>{intl.formatMessage(messages.UnsupportedDisplay)}</Center>);
+            return (<div className={style.centerContent}>{intl.formatMessage(messages.UnsupportedDisplay)}</div>);
           }
 
           if (!onLine) {
-            return (<Center>{intl.formatMessage(messages.NavigatorOffline)}</Center>);
+            return (<div className={style.centerContent}>{intl.formatMessage(messages.NavigatorOffline)}</div>);
           }
 
           return React.Children.only(body);

@@ -1,4 +1,45 @@
-@import '_bootstrap-variables-override';
+@import 'variables';
+
+.joinButton {
+  composes: btn btn-secondary align-top from 'styles/_base.scss';
+}
+
+.navbar {
+  composes: navbar from 'styles/_base.scss';
+}
+
+.centerContent {
+  composes: centerContent from 'styles/_base.scss';
+}
+
+.logIn {
+  composes: btn btn-primary btn-block from 'styles/_base.scss';
+}
+.navSignupWrapper {
+  composes: navbarForm navbarRight from 'styles/_base.scss';
+}
+.navbarText {
+  composes: navbarText from 'styles/_base.scss';
+}
+
+.control {
+  composes: formControl from 'styles/_base.scss';
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  width: 100%;
+
+  &:focus {
+    z-index: 2;
+  }
+}
+
+.navbarNav {
+  composes: container from 'styles/_base.scss';
+  padding-top: $navbar-vertical-spacing;
+  padding-bottom: $navbar-vertical-spacing;
+}
 
 .root {
   height: 100%;
@@ -9,20 +50,12 @@
     height: 150px
   }
 
-  .navbar {
-    background: $navbar-bg;
-    border-bottom: 1px solid rgba(0,0,0,0.075);
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    margin-bottom: -1px;
-    background-clip: padding-box;
-  }
-
   .form {
     border-radius: 4px;
 
     align-self: center;
 
-    width: 380px;
+    min-width: 380px;
     padding: 15px 35px 45px;
     margin: 0 auto;
     background-color: #fff;
@@ -31,18 +64,10 @@
       margin-bottom: 30px;
       text-align: center;
       margin-top: 9px;
-    }
 
-    .form-control {
-      position: relative;
-      font-size: 16px;
-      height: auto;
-      padding: 10px;
-      width: 100%;
-
-      &:focus {
-        z-index: 2;
-      }
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: -0.5px;
     }
 
     input[type='text'] {
@@ -67,10 +92,17 @@
       }
     }
 
-    .error {
-      text-align: center;
-      margin-bottom: 12px;
-    }
 
   }
 }
+
+.passwordResetButton {
+  composes: btn btn-link hint-block from 'styles/_base.scss';
+}
+
+.error {
+  composes: has-danger hint-block from 'styles/_base.scss';
+  text-align: center;
+  margin-bottom: 12px;
+}
+

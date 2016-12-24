@@ -1,57 +1,76 @@
-:global {
-  // Material icons
-  @import 'material-icons';
+// Variable overrides come first (without !default). Bootstrap default variables
+// come second because they use !default (they won't get set if set already) and
+// some of them depend on our overrides.
+@import 'variables';
 
-  // Variable overrides come first (without !default). Bootstrap default variables
-  // come second because they use !default (they won't get set if set already) and
-  // some of them depend on our overrides.
-  @import "bootstrap-variables-override";
+// Material icons
+@import 'material-icons';
 
-  // mixins
-  @import "~bootstrap/scss/mixins";
+// mixins
+@import '~bootstrap/scss/mixins';
 
-  // Reset and dependencies
-  @import "~bootstrap/scss/normalize";
-  // @import "~bootstrap/scss/print";
+// Reset and dependencies
+@import '~bootstrap/scss/normalize';
+// @import '~bootstrap/scss/print';
 
-  // Core CSS
-  @import "~bootstrap/scss/reboot";
-  @import "~bootstrap/scss/type";
-  // @import "~bootstrap/scss/code";
-  // @import "~bootstrap/scss/images";
-  // @import "~bootstrap/scss/grid";
-  // @import "~bootstrap/scss/tables";
-  @import "~bootstrap/scss/forms";
-  @import "~bootstrap/scss/buttons";
+// Core CSS
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+// @import '~bootstrap/scss/code';
+// @import '~bootstrap/scss/images';
+@import '~bootstrap/scss/grid';
+// @import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
 
-  // Components
-  @import "~bootstrap/scss/animation";
-  // @import "~bootstrap/scss/dropdown";
-  // @import "~bootstrap/scss/button-group";
-  // @import "~bootstrap/scss/input-group";
-  // @import "~bootstrap/scss/custom-forms";
-  // @import "~bootstrap/scss/nav";
-  @import "~bootstrap/scss/navbar";
-  // @import "~bootstrap/scss/card";
-  // @import "~bootstrap/scss/breadcrumb";
-  // @import "~bootstrap/scss/pagination";
-  // @import "~bootstrap/scss/tags";
-  // @import "~bootstrap/scss/jumbotron";
-  @import "~bootstrap/scss/alert";
-  // @import "~bootstrap/scss/progress";
-  // @import "~bootstrap/scss/media";
-  // @import "~bootstrap/scss/list-group";
-  // @import "~bootstrap/scss/responsive-embed";
-  @import "~bootstrap/scss/close";
+// Components
+@import '~bootstrap/scss/animation';
+// @import '~bootstrap/scss/dropdown';
+// @import '~bootstrap/scss/button-group';
+// @import '~bootstrap/scss/input-group';
+// @import '~bootstrap/scss/custom-forms';
+// @import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/navbar';
+// @import '~bootstrap/scss/card';
+// @import '~bootstrap/scss/breadcrumb';
+// @import '~bootstrap/scss/pagination';
+// @import '~bootstrap/scss/tags';
+// @import '~bootstrap/scss/jumbotron';
+@import '~bootstrap/scss/alert';
+// @import '~bootstrap/scss/progress';
+// @import '~bootstrap/scss/media';
+// @import '~bootstrap/scss/list-group';
+// @import '~bootstrap/scss/responsive-embed';
+@import '~bootstrap/scss/close';
 
-  // Components w/ JavaScript
-  // @import "~bootstrap/scss/modal";
-  // @import "~bootstrap/scss/tooltip";
-  // @import "~bootstrap/scss/popover";
-  // @import "~bootstrap/scss/carousel";
+// Components w/ JavaScript
+// @import '~bootstrap/scss/modal';
+// @import '~bootstrap/scss/tooltip';
+// @import '~bootstrap/scss/popover';
+// @import '~bootstrap/scss/carousel';
 
-  // Utility classes
-  @import "~bootstrap/scss/utilities";
+// Utility classes
+@import '~bootstrap/scss/utilities';
 
+.alert {
+  &.alert-dismissible {
+    padding: 0.55em 1.25rem 0;
+  }
 }
+
+.centerContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.hint-block {
+  color: #999;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+// Custom imports
+@import 'themes/default';
 

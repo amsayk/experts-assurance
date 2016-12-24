@@ -6,20 +6,22 @@ import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
+import style from '../Signup.scss';
+
 import { injectIntl, intlShape } from 'react-intl';
 
 function PasswordConfirmationField({ intl, placeholder, onKeyDown, input, meta: { touched, error } }) {
   return (
-    <div className={cx('form-group', { 'has-danger': touched && error })}>
+    <div className={cx(style.formGroup, { [style.formGroupHasDanger]: touched && error })}>
       <input
         {...input}
         placeholder={placeholder}
         onKeyDown={onKeyDown}
         type={'password'}
-        className={cx('form-control', { 'form-control-danger': touched && error })}
+        className={cx(style.control, { [style.formControlDanger]: touched && error })}
       />
       <FormMessages field={'passwordConfirmation'}>
-        <div className={'form-control-feedback hint-block'} when={'matchField'}>
+        <div className={style.formControlFeedback} when={'matchField'}>
           {intl.formatMessage(validationMessages.passwordMismatch)}
         </div>
       </FormMessages>

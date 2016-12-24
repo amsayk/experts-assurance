@@ -12,10 +12,10 @@ import { injectIntl, intlShape } from 'react-intl';
 
 function Header({ intl, onLogOut }) {
   return (
-    <nav className={cx(style.navbar, 'navbar navbar-full navbar-light')}>
+    <nav className={style.navbar}>
       <AppBrand/>
-      <form className='form-inline float-lg-right'>
-        <a className={'btn btn-link'} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
+      <form className={style.logoutWrapper}>
+        <a className={style.logout} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
       </form>
     </nav>
   );

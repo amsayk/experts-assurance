@@ -1,6 +1,7 @@
-@import  '_bootstrap-variables-override';
+@import 'variables';
 
 .logo {
+  composes: align-top rounded-circle from 'styles/_base.scss';
   color: $brand-inverse;
   &:hover {
     color: $brand-primary;

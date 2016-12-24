@@ -3,8 +3,6 @@ import { withApollo, graphql } from 'react-apollo';
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
-import Center from 'components/Center';
-
 import { logOut } from 'redux/reducers/user/actions';
 
 import isEmpty from 'isEmpty';
@@ -65,9 +63,9 @@ class LandingContainer extends React.PureComponent {
       <div className={style.root}>
         {Notification ? <Notification/> : null}
         <Header onLogOut={actions.logOut}/>
-        <Center>
+        <div className={style.centerContent}>
           Happy to get started 😎
-        </Center>
+        </div>
       </div>
     );
   }
