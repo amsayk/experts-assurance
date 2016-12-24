@@ -4,16 +4,22 @@ import { getFormValues } from 'redux-form/immutable';
 
 import { compose } from 'redux';
 
-import cx from 'classnames';
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
-import { injectIntl, intlShape } from 'react-intl';
+import messages from '../messages';
 
 import style from '../PasswordReset.scss';
 
 function NotifySuccess({ intl, email }) {
+  const values = {
+    email: <strong className={''}>{email}</strong>,
+  };
   return (
-    <div className={cx(style.notification, 'alert alert-warning')}>
-      We sent an email to <strong className={''}>{email}</strong>. Please check your mail.
+    <div className={style.notificationSuccess}>
+      <FormattedMessage
+        {...messages.emailSent}
+        values={values}
+      />
     </div>
   );
 }

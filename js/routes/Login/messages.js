@@ -10,7 +10,7 @@ export default defineMessages({
 
   title: {
     id: 'account.login-form.title',
-    defaultMessage: 'Please login',
+    defaultMessage: 'Sign in to {appName}',
   },
 
   email: {
@@ -30,17 +30,17 @@ export default defineMessages({
 
   login: {
     id: 'account.login-form.login-action',
-    defaultMessage: 'Login',
+    defaultMessage: 'Sign in',
   },
 
   signupQuestion: {
     id: 'account.login-form.signup-question',
-    defaultMessage: 'Don\'t have an account?',
+    defaultMessage: 'Not a member?',
   },
 
   signUp: {
     id: 'acccount.login-form.signup',
-    defaultMessage: 'Sign up',
+    defaultMessage: 'Join now!',
   },
 
   password_reset: {

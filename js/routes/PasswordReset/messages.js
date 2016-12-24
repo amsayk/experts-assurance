@@ -13,6 +13,11 @@ export default defineMessages({
     defaultMessage: 'Reset password',
   },
 
+  emailSent: {
+    id: 'account.password-reset-form.email-sent-successfully',
+    defaultMessage: 'We sent an email to {email}. Please check your mail.',
+  },
+
   introText: {
     id: 'account.password-reset-form.intro',
     defaultMessage: 'Enter your email address and we will send you a link to reset your password.',

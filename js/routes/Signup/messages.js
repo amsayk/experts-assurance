@@ -5,12 +5,17 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.signup-page.title',
-    defaultMessage: 'Sign up · {appName}',
+    defaultMessage: 'Join {appName} · {appName}',
   },
 
   title: {
     id: 'account.signup-form.title',
-    defaultMessage: 'Sign up',
+    defaultMessage: 'Join {appName}',
+  },
+
+  tagLine: {
+    id: 'account.signup-form.tagline',
+    defaultMessage: 'A meeting place for buyers and suppliers.',
   },
 
   displayName: {
@@ -40,17 +45,17 @@ export default defineMessages({
 
   loginQuestion: {
     id: 'account.signup-form.signup-question',
-    defaultMessage: 'Already registered?',
+    defaultMessage: 'Already a member?',
   },
 
   login: {
     id: 'acccount.signup-form.login',
-    defaultMessage: 'Login',
+    defaultMessage: 'Sign in',
   },
 
   signUp: {
     id: 'acccount.signup-form.signup-action',
-    defaultMessage: 'Sign up',
+    defaultMessage: 'Create an account',
   },
 
 });
