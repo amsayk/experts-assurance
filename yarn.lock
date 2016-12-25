@@ -2505,10 +2505,6 @@ express-locale@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/express-locale/-/express-locale-1.0.1.tgz#673b61ac0ae4ab45ec6eae9190ebb4c081813f90"
 
-express-useragent@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/express-useragent/-/express-useragent-1.0.4.tgz#0f74e1c458ed62c773a2b3629c0a6b240c104107"
-
 express@4.14.0, express@^4.13.3, express@^4.13.4, express@^4.14.0:
   version "4.14.0"
   resolved "https://registry.yarnpkg.com/express/-/express-4.14.0.tgz#c1ee3f42cdc891fb3dc650a8922d51ec847d0d66"

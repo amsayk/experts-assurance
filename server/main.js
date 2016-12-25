@@ -15,7 +15,6 @@ import compress from 'compression';
 
 import cookie from 'react-cookie';
 import createLocaleMiddleware from 'express-locale';
-import ua from 'express-useragent';
 import cors from 'cors';
 
 import { ParseServer } from 'parse-server';
@@ -66,9 +65,6 @@ app.use(cors());
 
 // Setup locale
 app.use(createLocaleMiddleware());
-
-// Useragent detection
-app.use(ua.express());
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
