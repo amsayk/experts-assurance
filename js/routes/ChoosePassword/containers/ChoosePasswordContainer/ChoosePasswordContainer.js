@@ -76,11 +76,11 @@ class ChoosePasswordContainer extends React.Component {
     } = this.props;
 
     return [
-      <Link className={ style.logo } to={'/'}>
+      <Link className={style.logo} to={'/'}>
         <AppLogo width={48} height={48}/>
       </Link>,
 
-      <h2 className={ style.heading }>{intl.formatMessage(messages.title)}</h2>,
+      <h1 className={style.heading}>{intl.formatMessage(messages.title)}</h1>,
 
       <Field
         name='new_password'
@@ -94,7 +94,7 @@ class ChoosePasswordContainer extends React.Component {
         placeholder={intl.formatMessage(messages.passwordConfirmation)}
         onKeyDown={this.onKeyDown} />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={ 'btn btn-primary btn-block' }>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.changePasswordButton}>
         {intl.formatMessage(messages.choosePassword)}
       </button>,
 

@@ -7,50 +7,54 @@
 }
 
 .material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
+  direction: ltr;
   display: inline-block;
+  font-family: 'Material Icons';
+  /* No matching css selector */
+  -webkit-font-feature-settings: 'liga'; // stylelint-disable-line property-no-vendor-prefix
+  font-size: 24px;
+  /* No matching css selector */
+  -webkit-font-smoothing: antialiased; // stylelint-disable-line property-no-vendor-prefix
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: 1;
+  text-transform: none;
   white-space: nowrap;
   word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-}
 
-.material-icons.md-18 {
-  font-size: 18px;
-}
+  /* This is ok stylelint. */
+  /* stylelint-disable selector-class-pattern */
+  &.md-18 {
+    font-size: 18px;
+  }
 
-.material-icons.md-24 {
-  font-size: 24px;
-}
+  &.md-24 {
+    font-size: 24px;
+  }
 
-.material-icons.md-36 {
-  font-size: 36px;
-}
+  &.md-36 {
+    font-size: 36px;
+  }
 
-.material-icons.md-48 {
-  font-size: 48px;
-}
+  &.md-48 {
+    font-size: 48px;
+  }
 
-.material-icons.md-dark {
-  color: rgba(0, 0, 0, 0.54);
-}
+  &.md-dark {
+    color: rgba(0, 0, 0, 0.54);
+  }
 
-.material-icons.md-dark.md-inactive {
-  color: rgba(0, 0, 0, 0.26);
-}
+  &.md-light {
+    color: rgba(255, 255, 255, 1);
+  }
 
-.material-icons.md-light {
-  color: rgba(255, 255, 255, 1);
-}
+  &.md-dark.mi-inactive {
+    color: rgba(0, 0, 0, 0.26);
+  }
 
-.material-icons.md-light.md-inactive {
-  color: rgba(255, 255, 255, 0.3);
+  &.md-light.mi-inactive {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  /* stylelint-enable selector-class-pattern */
 }
-

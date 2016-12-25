@@ -113,7 +113,7 @@ class LoginContainer extends React.Component {
         component={'input'}
         type='text'
         placeholder={intl.formatMessage(messages.email)}
-        className={style.control}
+        className={style.emailFieldControl}
         autoComplete={'off'}
         onKeyDown={this.onKeyDown}
         autoFocus />,
@@ -123,7 +123,7 @@ class LoginContainer extends React.Component {
         component='input'
         type='password'
         placeholder={intl.formatMessage(messages.password)}
-        className={style.control}
+        className={style.passwordFieldControl}
         onKeyDown={this.onKeyDown}
       />,
 
@@ -139,7 +139,7 @@ class LoginContainer extends React.Component {
         {intl.formatMessage(messages.login)}
       </button>,
 
-      <div className={ style.password_reset }>
+      <div className={ style.passwordReset }>
         <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
       </div>,
     ];

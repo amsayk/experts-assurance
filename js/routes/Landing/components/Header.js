@@ -6,8 +6,6 @@ import messages from '../messages';
 
 import style from '../Landing.scss';
 
-import cx from 'classnames';
-
 import { injectIntl, intlShape } from 'react-intl';
 
 function Header({ intl, onLogOut }) {

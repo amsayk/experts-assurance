@@ -1,0 +1,16 @@
+{
+  "extends": "stylelint-config-sass-guidelines",
+  "rules": {
+    "no-missing-end-of-source-newline": [true],
+    "selector-pseudo-class-no-unknown": [true, {
+      "ignorePseudoClasses": [
+      ]
+    }],
+    "property-no-unknown": [true, {
+      "ignoreProperties": [
+        "composes"
+      ]
+    }]
+  }
+}
+

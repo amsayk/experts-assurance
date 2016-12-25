@@ -16,8 +16,7 @@
 
 .resendLink {
   composes: alert-link from 'styles/_base.scss';
-  text-decoration: underline!important;
-  font-weight: normal;
   cursor: pointer;
+  font-weight: normal;
+  text-decoration: underline !important;
 }
-
