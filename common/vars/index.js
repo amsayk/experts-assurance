@@ -1,3 +1,8 @@
+import keyOf from 'keyOf';
+
+// Use this constant to initialize reducers
+export const INIT                             = keyOf({ INIT: null });
+
 export const isServer                         = process.env._ENV !== 'client';
 export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;

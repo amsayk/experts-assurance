@@ -1,0 +1,6 @@
+exports[`user actions login 1`] = `
+Object {
+  "payload": Object {},
+  "type": "USER_LOGGED_IN",
+}
+`;

@@ -3,7 +3,7 @@ import areIntlLocalesSupported from 'intl-locales-supported';
 const debug = require('debug')('app:server:intl');
 
 const localesMyAppSupports = [
-  'en'
+  'en',
 ];
 
 if (global.Intl) {

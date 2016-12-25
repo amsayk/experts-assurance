@@ -34,7 +34,7 @@ import EmailField from '../../components/EmailField';
 
 import { APP_NAME } from 'vars';
 
-class PasswordReset extends React.Component {
+export class PasswordResetContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,
@@ -149,5 +149,5 @@ export default compose(
   withApollo,
   Connect,
   WithForm,
-)(PasswordReset);
+)(PasswordResetContainer);
 

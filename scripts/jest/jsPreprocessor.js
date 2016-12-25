@@ -7,6 +7,10 @@ const jestPluginHoist = require('babel-plugin-jest-hoist');
 const babelOptions = require('../getBabelOptions')({
   env: 'test',
   moduleMap: {
+    'validation'            : 'common/validation',
+    'vars'                  : 'common/vars',
+    'validation-messages'   : 'common/messages/validation-messages',
+    'loadScript'            : 'utils/loadScript',
   },
   plugins: [
     jestPluginHoist,

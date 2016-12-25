@@ -1,22 +1,27 @@
 import getCurrentUser from 'getCurrentUser';
 
-import Immutable from 'immutable';
+import { fromJS } from 'immutable';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
+
+import { INIT } from 'vars';
 
 function maybeUser() {
   const user = getCurrentUser();
   return user ? { id: user.id } : {};
 }
 
-const initialState = Immutable.fromJS(maybeUser());
+const initialState = fromJS({});
 
 export default function userReducer(state = initialState, { type, payload }) {
   if (type === USER_LOGGED_IN) {
-    return Immutable.fromJS(payload);
+    return fromJS(payload);
   }
   if (type === USER_LOGGED_OUT) {
-    return Immutable.fromJS({});
+    return fromJS({});
+  }
+  if (type === INIT) {
+    return fromJS(maybeUser());
   }
   return state;
 }

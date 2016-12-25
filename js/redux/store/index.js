@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import { APP_NAME, BASENAME } from 'vars';
+import { APP_NAME, BASENAME, INIT } from 'vars';
 
 import array from '../middleware/array';
 
-import Immutable from 'immutable';
+import { fromJS } from 'immutable';
 
 import { client as apolloClient } from 'apollo';
 
@@ -72,13 +72,16 @@ const enhancer = composeEnhancers(
   ...enhancers
 );
 
-export const store = createStore(makeRootReducer(), Immutable.fromJS({}), enhancer);
+const store = createStore(makeRootReducer(), fromJS({}), enhancer);
 
 store.asyncReducers = {};
 store.injectReducers = (reducers) => injectReducers(store, reducers);
 
 // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
 store.unsubscribeHistory = history.listenBefore(updateLocation(store));
+
+// Initialize
+store.dispatch({ type: INIT });
 
 if (module.hot) {
   module.hot.accept('../reducers', () => {

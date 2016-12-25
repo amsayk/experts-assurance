@@ -152,6 +152,7 @@
     "assets-webpack-plugin": "^3.5.0",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
+    "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.10",
     "babel-plugin-check-es2015-constants": "^6.8.0",
     "babel-plugin-jest-hoist": "^18.0.0",
@@ -209,6 +210,7 @@
     "file-loader": "^0.9.0",
     "fs-extra": "^1.0.0",
     "html-webpack-plugin": "^2.24.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest-cli": "^18.0.0",
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
@@ -221,6 +223,8 @@
     "postcss-loader": "^1.2.1",
     "react-addons-perf": "^15.4.1",
     "react-addons-update": "^15.4.1",
+    "react-test-renderer": "^15.4.1",
+    "redux-mock-store": "^1.2.1",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
@@ -237,15 +241,20 @@
   },
   "jest": {
     "transform": {
-      ".*": "<rootDir>/scripts/jest/preprocessor"
+      "\\.graphql$": "<rootDir>/scripts/jest/graphqlPreprocessor",
+      "^.+\\.js$": "<rootDir>/scripts/jest/jsPreprocessor"
     },
     "setupFiles": [
+      "<rootDir>/node_modules/babel-polyfill",
       "node_modules/fbjs-scripts/jest/environment.js"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "./dist"
     ],
+    "moduleNameMapper": {
+      "\\.scss$": "identity-obj-proxy"
+    },
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/"
     ]

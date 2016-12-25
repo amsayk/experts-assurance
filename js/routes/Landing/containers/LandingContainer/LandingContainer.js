@@ -25,7 +25,7 @@ import {
     PATH_EMAIL_VERIFICATION_SUCCESS,
 } from 'vars';
 
-class LandingContainer extends React.PureComponent {
+export class LandingContainer extends React.PureComponent {
   constructor(props) {
     super(props);
 

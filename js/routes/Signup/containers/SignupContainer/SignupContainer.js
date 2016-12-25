@@ -43,7 +43,7 @@ import MUTATION from './signUp.mutation.graphql';
 
 import { APP_NAME } from 'vars';
 
-class SignupContainer extends React.Component {
+export class SignupContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,

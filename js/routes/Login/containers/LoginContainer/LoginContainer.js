@@ -39,7 +39,7 @@ import {
   PATH_PASSWORD_RESET,
 } from 'vars';
 
-class LoginContainer extends React.Component {
+export class LoginContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,

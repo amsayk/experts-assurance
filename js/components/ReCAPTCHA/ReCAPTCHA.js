@@ -2,6 +2,7 @@ import React, { PropTypes as T } from 'react';
 import Recaptcha from 'react-recaptcha';
 import nullthrows from 'nullthrows';
 import loadScript from 'loadScript';
+const error = require('debug')('app:client:recaptcha:error');
 
 import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'vars';
 
@@ -21,11 +22,17 @@ export default class ReCAPTCHA extends React.Component {
     this.onVerify       = this.onChange.bind(this, true);
     this.onExpired      = this.onChange.bind(this, false);
   }
-  componentWillMount() {
+  async componentWillMount() {
     if (!this.state.loaded) {
-      loadScript(nullthrows(RECAPCHA_JS_URL)).then(() => this.setState({
-        loaded: true,
-      }));
+      try {
+        await loadScript(nullthrows(RECAPCHA_JS_URL));
+        this.setState({
+          loaded: true,
+        });
+
+      } catch (e) {
+        error('Error loading recaptcha', e);
+      }
     }
   }
   onLoadCallback() {

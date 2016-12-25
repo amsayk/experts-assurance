@@ -1,0 +1,23 @@
+exports[`user reducer should handle \`INIT\` 1`] = `
+Object {
+  "id": "1",
+}
+`;
+
+exports[`user reducer should handle \`INIT\` 2`] = `Object {}`;
+
+exports[`user reducer should handle logOut 1`] = `Object {}`;
+
+exports[`user reducer should handle login 1`] = `
+Object {
+  "id": "myLoginId",
+}
+`;
+
+exports[`user reducer should mentain its state on unhandled action 1`] = `
+Object {
+  "id": "myId",
+}
+`;
+
+exports[`user reducer should return initialState on unhandled action 1`] = `Object {}`;

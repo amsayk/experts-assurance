@@ -28,7 +28,7 @@ import messages from '../../messages';
 import PasswordField from '../../components/PasswordField';
 import PasswordConfirmationField from '../../components/PasswordConfirmationField';
 
-class ChoosePasswordContainer extends React.Component {
+export class ChoosePasswordContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     isAuthenticated : T.bool.isRequired,
