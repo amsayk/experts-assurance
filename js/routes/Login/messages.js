@@ -35,7 +35,7 @@ export default defineMessages({
 
   signupQuestion: {
     id: 'account.login-form.signup-question',
-    defaultMessage: 'Not a member?',
+    defaultMessage: 'Not a member yet?',
   },
 
   signUp: {
@@ -43,7 +43,7 @@ export default defineMessages({
     defaultMessage: 'Join now!',
   },
 
-  password_reset: {
+  passwordReset: {
     id: 'account.login-form.password_reset',
     defaultMessage: 'Forgot password',
   },

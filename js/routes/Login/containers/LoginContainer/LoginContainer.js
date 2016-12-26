@@ -140,7 +140,7 @@ export class LoginContainer extends React.Component {
       </button>,
 
       <div className={ style.passwordReset }>
-        <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.password_reset)}</Link>
+        <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.passwordReset)}</Link>
       </div>,
     ];
   }
