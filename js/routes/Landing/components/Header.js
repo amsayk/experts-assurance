@@ -22,7 +22,7 @@ function Header({ intl, user, onLogOut }) {
     if (user.displayName) {
       ProfilePic = () => <Avatar round size={32} name={user.displayName} textSizeRatio={1.75}/>;
     } else {
-      ProfilePic = () => <Avatar round size={32} value={'@'}/>;
+      ProfilePic = () => <Avatar round size={32} value={'@'} textSizeRatio={1.75}/>;
     }
   }
   return (
