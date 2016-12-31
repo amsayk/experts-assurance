@@ -1,4 +1,4 @@
-import { formatError } from '../utils';
+import { formatError } from 'backend/utils';
 
 export default async function resendVerificationEmail(request, response) {
   const { email } = request.params;

@@ -9,7 +9,11 @@ import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 function NotifyVerificationPending({ intl, user, onResendEmailVerification }) {
   const values = {
     email: <strong className={''}>{user.email}</strong>,
-    resendEmailVerificationLink: <a onClick={onResendEmailVerification} className={style.resendLink}>{intl.formatMessage(messages.ResendVerification)}</a>,
+    resendEmailVerificationLink: (
+      <a onClick={onResendEmailVerification} className={style.resendLink}>
+        {intl.formatMessage(messages.ResendVerification)}
+      </a>
+    ),
   };
   return (
     <div className={style.notificationVerificationPending}>

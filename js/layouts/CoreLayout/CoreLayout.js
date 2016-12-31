@@ -50,21 +50,29 @@ class CoreLayout extends React.PureComponent {
     }
   }
   render() {
-    const { intl, displayMatches, onLine, children : body } = this.props;
+    const { intl, displayMatches, onLine, children } = this.props;
+    let body = React.Children.only(children);
+    if (!displayMatches) {
+      body = (
+        <div className={style.flex}>
+          <div className={style.center}>
+            {intl.formatMessage(messages.UnsupportedDisplay)}
+          </div>
+        </div>
+      );
+    } else if (!onLine) {
+      body = (
+        <div className={style.flex}>
+          <div className={style.center}>
+            {intl.formatMessage(messages.NavigatorOffline)}
+          </div>
+        </div>
+      );
+    }
     return (
       <div style={{ height: '100%' }}>
         <Title title={HOME_TITLE + ' · ' + APP_NAME}/>
-        {function () {
-          if (!displayMatches) {
-            return (<div className={style.centerContent}>{intl.formatMessage(messages.UnsupportedDisplay)}</div>);
-          }
-
-          if (!onLine) {
-            return (<div className={style.centerContent}>{intl.formatMessage(messages.NavigatorOffline)}</div>);
-          }
-
-          return React.Children.only(body);
-        }()}
+        {body}
       </div>
     );
   }

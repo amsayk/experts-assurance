@@ -1,12 +1,3 @@
-import React from 'react';
-import {
-  IndexRedirect,
-  Redirect,
-  Route,
-} from 'react-router';
-
-import emptyObject from 'emptyObject';
-
 import CoreLayout from 'layouts/CoreLayout';
 
 import LandingRoute from 'routes/Landing';
@@ -14,6 +5,7 @@ import LoginRoute from 'routes/Login';
 import SignupRoute from 'routes/Signup';
 import PasswordResetRoute from 'routes/PasswordReset';
 import ChoosePasswordRoute from 'routes/ChoosePassword';
+import SettingsRoute from 'routes/Settings';
 
 import {
   PATH_LOGIN,
@@ -22,34 +14,59 @@ import {
   PATH_PASSWORD_RESET_SUCCESS,
 } from 'vars';
 
-export default (store) => (
-  <Route path={'/'} component={CoreLayout}>
-    <IndexRedirect to={'/app'}/>
+export default (store) => [{
+  path          : '/',
+  component     : CoreLayout,
+  getIndexRoute : LandingRoute(store),
+  childRoutes   : [
+    LoginRoute(store),
+    SignupRoute(store),
+    PasswordResetRoute(store),
+    ChoosePasswordRoute(store),
+    SettingsRoute(store),
 
-    <Route {...LandingRoute(store)}/>
+    // On invalid activation or password reset link
+    {
+      path: PATH_INVALID_LINK,
+      onEnter(_, replace) {
+        replace({
+          pathname : '/',
+          query    : {},
+          state    : {
+            notify: PATH_INVALID_LINK,
+          },
+        });
+      },
+    },
 
-    <Route {...LoginRoute(store)}/>
-    <Route {...SignupRoute(store)}/>
-    <Route {...PasswordResetRoute(store)}/>
-    <Route {...ChoosePasswordRoute(store)}/>
+    {
+      path: PATH_EMAIL_VERIFICATION_SUCCESS,
+      onEnter(_, replace) {
+        replace({
+          pathname : '/',
+          query    : {},
+          state    : {
+            notify: PATH_EMAIL_VERIFICATION_SUCCESS,
+          },
+        });
+      },
+    },
 
-    <Redirect
-      from={PATH_INVALID_LINK}
-      to={'/'}
-      state={{notify: PATH_INVALID_LINK}}
-      query={emptyObject} />
-    <Redirect
-      from={PATH_EMAIL_VERIFICATION_SUCCESS}
-      to={'/'}
-      state={{notify: PATH_EMAIL_VERIFICATION_SUCCESS}}
-      query={emptyObject} />
-    <Redirect
-      from={PATH_PASSWORD_RESET_SUCCESS}
-      to={PATH_LOGIN}
-      state={{notify: PATH_PASSWORD_RESET_SUCCESS}}
-      query={emptyObject} />
+    {
+      path: PATH_PASSWORD_RESET_SUCCESS,
+      onEnter(_, replace) {
+        replace({
+          pathname : PATH_LOGIN,
+          query    : {},
+          state    : {
+            notify: PATH_PASSWORD_RESET_SUCCESS,
+          },
+        });
+      },
+    },
 
-    <Redirect from={'*'} to={'/'}/>
-  </Route>
-);
+    // TODO
+    // { path: '*', component: NotFound },
+  ],
+}];
 

@@ -1,17 +1,26 @@
-.centerContent {
-  composes: centerContent from 'styles/_base.scss';
+@import 'variables';
+
+.center {
+  composes: center from 'styles/_base.scss';
 }
 
 .navbar {
   composes: navbar from 'styles/_base.scss';
 }
 
-.logoutWrapper {
-  composes: navbarForm navbarRight from 'styles/_base.scss';
+.logoutNav {
+  composes: nav navbar-nav navbarRight from 'styles/_base.scss';
 }
 
-.logout {
-  composes: navLink from 'styles/_base.scss';
+.avatar {
+  composes: btn-link from 'styles/_base.scss';
+  padding: 0;
+}
+
+.navbarNav {
+  composes: container-fluid from 'styles/_base.scss';
+  padding-bottom: $navbar-vertical-spacing;
+  padding-top: $navbar-vertical-spacing;
 }
 
 .root {

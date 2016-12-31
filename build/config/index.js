@@ -69,7 +69,14 @@ const config = {
   path_password_reset_success       : process.env.PATH_PASSWORD_RESET_SUCCESS || '/password_reset_success',
   path_invalid_link                 : process.env.PATH_INVALID_LINK || '/invalid_link',
 
+  // settings
+  path_settings_base               : process.env.PATH_SETTINGS_BASE || '/settings',
+  path_settings_account            : process.env.PATH_SETTINGS_ACCOUNT || 'account',
+  path_settings_change_password    : process.env.PATH_SETTINGS_CHANGE_PASSWORD || 'change_password',
+  path_settings_business_details   : process.env.PATH_SETTINGS_BUSINESS_DETAILS || 'business',
+
   password_min_length : nullthrows(process.env.PASSWORD_MIN_LENGTH && parseInt(process.env.PASSWORD_MIN_LENGTH, 10)),
+  password_min_score  : nullthrows(process.env.PASSWORD_MIN_SCORE && parseInt(process.env.PASSWORD_MIN_SCORE, 10)),
 
   // ----------------------------------
   // Mailgun settings
@@ -160,7 +167,14 @@ config.globals = {
     PATH_PASSWORD_RESET_SUCCESS       : JSON.stringify(config.path_password_reset_success),
     PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
 
+    // Settings
+    PATH_SETTINGS_BASE            : JSON.stringify(config.path_settings_base),
+    PATH_SETTINGS_ACCOUNT         : JSON.stringify(config.path_settings_account),
+    PATH_SETTINGS_CHANGE_PASSWORD : JSON.stringify(config.path_settings_change_password),
+    PATH_SETTINGS_BUSINESS_DETAILS   : JSON.stringify(config.path_settings_business_details),
+
     PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
+    PASSWORD_MIN_SCORE    : JSON.stringify(config.password_min_score),
 
     RECAPCHA_SITE_KEY     : JSON.stringify(process.env.RECAPCHA_SITE_KEY),
     RECAPCHA_JS_URL       : JSON.stringify(process.env.RECAPCHA_JS_URL),

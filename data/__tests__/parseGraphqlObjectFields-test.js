@@ -52,11 +52,11 @@ describe('parseGraphqlObjectFields', () => {
         returnType: graphqlObjectType,
       };
 
-      it('resolves when object is not null', function () {
+      it('resolves when object is not null', async function () {
         const randomObj = toParseObject({ objectId: 'id', prop1: 'prop1' });
         const obj = objWhichReturns(randomObj);
         const expected = {id: randomObj.objectId, objectId: randomObj.objectId, prop1: randomObj.prop1};
-        expect(fieldResolver(obj, {}, {}, info)).toEqual(expected);
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(expected);
         expect(obj.get.mock.calls.length).toBe(1);
         expect(randomObj.toJSON.mock.calls.length).toBe(1);
       });
@@ -80,11 +80,11 @@ describe('parseGraphqlObjectFields', () => {
         returnType: new GraphQLNonNull(graphqlObjectType),
       };
 
-      it('resolves when object is not null', function () {
+      it('resolves when object is not null', async function () {
         const randomObj = toParseObject({ objectId: 'id', prop1: 'prop1' });
         const obj = objWhichReturns(randomObj);
         const expected = {id: randomObj.objectId, objectId: randomObj.objectId, prop1: randomObj.prop1};
-        expect(fieldResolver(obj, {}, {}, info)).toEqual(expected);
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(expected);
         expect(obj.get.mock.calls.length).toBe(1);
         expect(randomObj.toJSON.mock.calls.length).toBe(1);
       });
@@ -120,10 +120,10 @@ describe('parseGraphqlObjectFields', () => {
         returnType: graphqlObjectType,
       };
 
-      it('resolves when object is not null', function () {
+      it('resolves when object is not null', async function () {
         const randomObj = { objectId: 'id', prop1: 'prop1' };
         const obj = objWhichReturns(randomObj);
-        expect(fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
       });
 
       it('resolves when object is null', function () {
@@ -142,10 +142,10 @@ describe('parseGraphqlObjectFields', () => {
         returnType: new GraphQLNonNull(graphqlObjectType),
       };
 
-      it('resolves when object is not null', function () {
+      it('resolves when object is not null', async function () {
         const randomObj = { objectId: 'id', prop1: 'prop1' };
         const obj = objWhichReturns(randomObj);
-        expect(fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
       });
 
       it('throws when object is null', function () {

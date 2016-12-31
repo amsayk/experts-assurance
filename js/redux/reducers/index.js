@@ -33,6 +33,16 @@ const reducers = {
           return state;
       }
     },
+    changePassword: (state, action) => {
+      switch (action.type) {
+        case actionTypes.SET_SUBMIT_SUCCEEDED: // Clear passwords on success
+          return state ? state.merge({
+            values: {},
+          }) : state;
+        default:
+          return state;
+      }
+    },
   }),
 };
 

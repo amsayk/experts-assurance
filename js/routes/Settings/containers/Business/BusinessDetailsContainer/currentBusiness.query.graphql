@@ -1,0 +1,18 @@
+query getUserBusiness($userId: ID!) {
+
+  currentBusiness : getUserBusiness(userId: $userId) {
+    id
+    displayName
+    description
+
+    addressLine1
+    addressLine2
+    city
+    stateProvince
+    postalCode
+
+    phone
+    taxId
+  }
+}
+

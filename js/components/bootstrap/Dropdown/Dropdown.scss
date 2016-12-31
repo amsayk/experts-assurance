@@ -1,0 +1,28 @@
+.noCaret::after {
+  content: none;
+}
+
+.open {
+  composes: open from 'styles/_base.scss';
+}
+
+.dropdown {
+  composes: dropdown from 'styles/_base.scss';
+}
+
+.dropdown-toggle {
+  composes: noCaret;
+  composes: dropdown-toggle from 'styles/_base.scss';
+}
+
+.dropdown-menu {
+  composes: dropdown-menu from 'styles/_base.scss';
+}
+
+.dropdown-menu-right {
+  composes: dropdown-menu-right from 'styles/_base.scss';
+}
+
+.disabled {
+  composes: disabled from 'styles/_base.scss';
+}

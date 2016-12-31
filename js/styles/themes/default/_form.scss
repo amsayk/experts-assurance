@@ -18,3 +18,7 @@
 .formControlDanger {
   composes: form-control-danger;
 }
+
+.formControlStatic {
+  composes: form-control-static;
+}

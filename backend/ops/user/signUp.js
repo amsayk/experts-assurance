@@ -1,4 +1,4 @@
-import { formatError } from '../utils';
+import { formatError } from 'backend/utils';
 
 export default async function signUp(request, response) {
   const { email, password } = request.params;

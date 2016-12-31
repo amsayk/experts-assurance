@@ -13,6 +13,7 @@
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test:dev": "better-npm-run test --watch",
+    "test:coverage": "better-npm-run test --coverage",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
@@ -122,6 +123,7 @@
     "ip": "^1.1.4",
     "isomorphic-fetch": "^2.2.1",
     "jstimezonedetect": "^1.0.6",
+    "keycode": "^2.1.8",
     "lodash.isequal": "^4.4.0",
     "lodash.merge": "^4.6.0",
     "lodash.throttle": "^4.1.1",
@@ -131,10 +133,13 @@
     "parse-server": "^2.3.1",
     "react": "^15.4.1",
     "react-apollo": "^0.7.2",
+    "react-avatar": "^2.3.0",
     "react-cookie": "^1.0.4",
     "react-dom": "^15.4.1",
     "react-helmet": "^3.2.3",
     "react-intl": "^2.2.0",
+    "react-overlays": "^0.6.10",
+    "react-prop-types": "^0.4.0",
     "react-recaptcha": "^2.2.5",
     "react-redux": "^5.0.1",
     "react-router": "3.0.0",
@@ -146,7 +151,10 @@
     "redux-thunk": "^2.1.0",
     "remote-redux-devtools": "^0.5.7",
     "reselect": "^2.5.4",
-    "uuid": "^3.0.1"
+    "uncontrollable": "^4.0.3",
+    "uuid": "^3.0.1",
+    "warning": "^3.0.0",
+    "zxcvbn": "^4.4.1"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.5.0",
@@ -239,6 +247,13 @@
     "worker-loader": "^0.7.1"
   },
   "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "backend/**/*.js",
+      "data/**/*.js",
+      "common/**/*.js",
+      "js/**/*.js"
+    ],
     "transform": {
       "\\.graphql$": "<rootDir>/scripts/jest/graphqlPreprocessor",
       "^.+\\.js$": "<rootDir>/scripts/jest/jsPreprocessor"

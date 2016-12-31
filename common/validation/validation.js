@@ -35,7 +35,7 @@ export function generateAsyncValidation(validationConfig) {
       const validation = validationConfig[fieldName];
       if (typeof validation === 'object') {
         Object.keys(validation).map((validationType) => {
-          if (typeof validationStore[validationType] != 'function') {
+          if (typeof validationStore[validationType] !== 'function') {
             return;
           }
           const hasError = validationStore[validationType](fieldName, values.get(fieldName), validation[validationType], values.toJS(), validation); // eslint-disable-line max-len

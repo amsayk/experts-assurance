@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VendorChunkPlugin = require('webpack-vendor-chunk-plugin');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const config = require('../build/config');
+const config = require('build/config');
 const debug = require('debug')('app:webpack:config');
 
 const paths = config.utils_paths;

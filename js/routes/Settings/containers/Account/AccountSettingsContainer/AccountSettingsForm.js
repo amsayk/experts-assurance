@@ -1,0 +1,112 @@
+import React, { PropTypes as T } from 'react';
+import { compose } from 'redux';
+
+import { withApollo } from 'react-apollo';
+
+import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
+
+import isEmpty from 'isEmpty';
+
+import { intlShape } from 'react-intl';
+
+import messages from '../../../messages';
+
+import style from '../../../Settings.scss';
+
+import EmailField from '../../../components/EmailField';
+import FullNameField from '../../../components/FullNameField';
+
+import validations from './validations';
+
+import MUTATION from './updateAccountSettings.mutation.graphql';
+
+export class AccountSettingsForm extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.onKeyDown = this._onKeyDown.bind(this);
+    this.onSubmit  = this.onSubmit.bind(this);
+  }
+  _onKeyDown(e) {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      const submit = this.props.handleSubmit(this.onSubmit);
+      submit();
+    }
+  }
+
+  async onSubmit(data) {
+    const { data: { updateAccountSettings: { errors } } } = await this.props.client.mutate({
+      mutation  : MUTATION,
+      variables : { payload: {
+        displayName : data.get('displayName'),
+      } },
+    });
+
+    if (!isEmpty(errors)) {
+      throw new SubmissionError(errors);
+    }
+
+    const { intl } = this.props;
+    const { snackbar } = this.context;
+    if (snackbar) {
+      snackbar.notify({
+        message: intl.formatMessage(messages.accountSettingsChangeSuccessNotification),
+      });
+    }
+  }
+
+  render() {
+    const { intl, handleSubmit, pristine, submitting, invalid } = this.props;
+    return (
+      <div className={style.content}>
+        <h1 className={style.formHeading}>{intl.formatMessage(messages.linkAccountSettings)}</h1>
+        <div className={style.form}>
+          <Field
+            name='email'
+            component={EmailField}
+            label={intl.formatMessage(messages.labelEmail)} />
+          <Field
+            name='displayName'
+            component={FullNameField}
+            label={intl.formatMessage(messages.labelFullName)}
+            onKeyDown={this.onKeyDown} />
+          <button onClick={handleSubmit(this.onSubmit)} disabled={pristine || submitting || invalid} className={style.saveButton}>
+            {intl.formatMessage(messages.save)}
+          </button>
+        </div>
+      </div>
+    );
+
+  }
+}
+
+AccountSettingsForm.contextTypes = {
+  snackbar: T.shape({
+    notify: T.func.isRequired,
+  }),
+};
+
+AccountSettingsForm.defaultProps = {
+};
+
+AccountSettingsForm.propTypes = {
+  ...reduxFormPropTypes,
+  intl: intlShape.isRequired,
+  initialValues: T.shape({
+    displayName: T.string,
+    email: T.string.isRequired,
+  }).isRequired,
+};
+
+const Form = reduxForm({
+  form: 'account.settings',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+  ...validations,
+});
+
+export default compose(
+  withApollo,
+  Form,
+)(AccountSettingsForm);
+

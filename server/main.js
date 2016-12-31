@@ -9,8 +9,8 @@ import users from 'data/_User';
 import path from 'path';
 import express from 'express';
 import webpack from 'webpack';
-import webpackConfig from '../build/webpack.config';
-import config from '../build/config';
+import webpackConfig from 'build/webpack.config';
+import config from 'build/config';
 import compress from 'compression';
 
 import cookie from 'react-cookie';
@@ -28,9 +28,11 @@ import { schema as Schema, resolvers as Resolvers } from 'data/schema';
 
 // Connectors
 import { UserConnector } from 'data/user/connector';
+import { BusinessConnector } from 'data/business/connector';
 
 // Models
 import { Users } from 'data/user/models';
+import { Business } from 'data/business/models';
 
 import bodyParser from 'body-parser';
 
@@ -227,6 +229,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
     context: {
       user,
       Users: new Users({ user, connector: new UserConnector() }),
+      Business: new Business({ user, connector: new BusinessConnector() }),
     },
     logFunction: graphqlDebug,
     debug: __DEV__,

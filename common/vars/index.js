@@ -22,6 +22,7 @@ export const SERVER_URL                       = process.env.SERVER_URL;
 export const BASENAME                         = process.env.BASENAME;
 
 export const PASSWORD_MIN_LENGTH              = process.env.PASSWORD_MIN_LENGTH;
+export const PASSWORD_MIN_SCORE               = process.env.PASSWORD_MIN_SCORE;
 
 export const PATH_LOGIN                       = process.env.PATH_LOGIN;
 export const PATH_SIGNUP                      = process.env.PATH_SIGNUP;
@@ -30,4 +31,10 @@ export const PATH_CHOOSE_PASSWORD             = process.env.PATH_CHOOSE_PASSWORD
 export const PATH_EMAIL_VERIFICATION_SUCCESS  = process.env.PATH_EMAIL_VERIFICATION_SUCCESS;
 export const PATH_PASSWORD_RESET_SUCCESS      = process.env.PATH_PASSWORD_RESET_SUCCESS;
 export const PATH_INVALID_LINK                = process.env.PATH_INVALID_LINK;
+
+// Settings
+export const PATH_SETTINGS_BASE               = process.env.PATH_SETTINGS_BASE;
+export const PATH_SETTINGS_ACCOUNT            = process.env.PATH_SETTINGS_ACCOUNT;
+export const PATH_SETTINGS_CHANGE_PASSWORD    = process.env.PATH_SETTINGS_CHANGE_PASSWORD;
+export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
 

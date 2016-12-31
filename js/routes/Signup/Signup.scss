@@ -20,8 +20,8 @@
   composes: navbarText from 'styles/_base.scss';
 }
 
-.centerContent {
-  composes: centerContent from 'styles/_base.scss';
+.center {
+  composes: center from 'styles/_base.scss';
 }
 
 .control {

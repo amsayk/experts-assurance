@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const debug = require('debug')('app:bin:compile');
-const webpackConfig = require('../build/webpack.config');
+const webpackConfig = require('build/webpack.config');
 
-const config = require('../build/config');
+const config = require('build/config');
 const paths = config.utils_paths;
 
 // Wrapper around webpack to promisify its compiler and supply friendly logging

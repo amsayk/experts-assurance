@@ -11,10 +11,18 @@ export default function parseGraphqlObjectFields(fields) {
         invariant(!(value === null || value === undefined), 'NonNull field: ' + fieldName + ' returned nothing.');
       }
       return value
-        ? (value.toJSON ? { id: value.id, ...value.toJSON() } : value)
+        ? getParseOject(value)
         : null;
     };
     return fields;
   }, {});
+}
+
+async function getParseOject(object) {
+  if (object.fetch) {
+    const value = await object.fetch();
+    return { id: value.id, ...value.toJSON() };
+  }
+  return object.toJSON ? { id: object.id, ...object.toJSON() } : object;
 }
 

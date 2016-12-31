@@ -57,7 +57,7 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
     </div>
   </nav>
   <div
-    className="centerContent">
+    className="center">
     <div
       className="form">
       <h1
@@ -119,7 +119,7 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
           onDrop={[Function]}
           onFocus={[Function]}
           onKeyDown={[Function]}
-          placeholder="Confirm password"
+          placeholder="Password, again"
           type="password"
           value="" />
         <div

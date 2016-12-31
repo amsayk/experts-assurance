@@ -30,7 +30,9 @@ describe('login container', () => {
       <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
         <Provider store={store}>
           <Decorated
-            actions={{}}
+            actions={{
+              login: jest.fn(),
+            }}
             isAuthenticated={false}
           />
         </Provider>
@@ -51,7 +53,9 @@ describe('login container', () => {
           <Decorated
             redirect={redirect}
             router={router}
-            actions={{}}
+            actions={{
+              login: jest.fn(),
+            }}
             isAuthenticated={true}
           />
         </Provider>

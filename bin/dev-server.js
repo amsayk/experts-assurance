@@ -1,6 +1,6 @@
 import Parse from 'parse/node';
-import config from '../build/config';
-import server from '../server/main';
+import config from 'build/config';
+import server from 'server/main';
 
 const debug = require('debug')('app:bin:server');
 const error = require('debug')('app:bin:server:error');

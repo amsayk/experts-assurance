@@ -9,6 +9,10 @@ query getUser($id: ID!) {
 
     createdAt
     updatedAt
+
+    business {
+      id
+    }
   }
 }
 

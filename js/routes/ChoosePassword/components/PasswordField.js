@@ -23,7 +23,7 @@ function PasswordField({ intl, placeholder, onKeyDown, input, meta: { touched, e
         className={cx(style.control, { [style.formControlDanger]: touched && error })}
         autoFocus
       />
-      <FormMessages errorCount={1} field={'new_password'}>
+      <FormMessages errorCount={1} field={input.name}>
         <div className={style.formControlFeedback} when={'required'}>
           {intl.formatMessage(validationMessages.passwordRequired)}
         </div>

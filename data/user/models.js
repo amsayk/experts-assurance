@@ -1,6 +1,8 @@
 import Parse from 'parse/node';
 
 import {
+  SET_PASSWORD,
+  UPDATE_ACCOUNT_SETTINGS,
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
@@ -10,6 +12,21 @@ export class Users {
   constructor({ user, connector }) {
     this.user = user;
     this.connector = connector;
+  }
+
+  setPassword(payload) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_PASSWORD, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+  updateAccountSettings(payload) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: UPDATE_ACCOUNT_SETTINGS, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
   }
 
   signUp(info) {

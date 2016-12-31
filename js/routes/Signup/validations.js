@@ -21,10 +21,8 @@ const validations = {
                 reject(true);
                 return;
               }
-
               resolve();
             },
-
             function () {
               reject(true);
             }

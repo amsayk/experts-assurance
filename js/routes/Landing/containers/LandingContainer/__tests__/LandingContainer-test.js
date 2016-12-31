@@ -9,7 +9,11 @@ describe('landing container', () => {
   it('should render the snapshot when loading', () => {
     const tree = renderer.create(
       <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
-        <LandingContainer actions={{}}/>
+        <LandingContainer
+          data={{
+            loading: true,
+          }}
+          actions={{}}/>
       </IntlProvider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -21,7 +25,9 @@ describe('landing container', () => {
       const tree = renderer.create(
         <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
           <LandingContainer
-            actions={{}}
+            actions={{
+              logOut: jest.fn(),
+            }}
             data={{
               loading: false,
               currentUser: {
@@ -40,7 +46,9 @@ describe('landing container', () => {
       const tree = renderer.create(
         <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
           <LandingContainer
-            actions={{}}
+            actions={{
+              logOut: jest.fn(),
+            }}
             data={{
               loading: false,
               currentUser: {

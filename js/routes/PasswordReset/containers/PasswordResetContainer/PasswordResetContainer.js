@@ -115,7 +115,7 @@ export class PasswordResetContainer extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {submitSucceeded ? <NotifySuccess form={form}/> : null}
-        <div className={style.centerContent}>
+        <div className={style.center}>
           <div className={style.form}>
             {this._renderForm()}
           </div>

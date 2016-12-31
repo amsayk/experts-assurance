@@ -44,7 +44,7 @@ export class LoginContainer extends React.Component {
     ...formPropTypes,
     intl            : intlShape.isRequired,
     isAuthenticated : T.bool.isRequired,
-    redirect        : T.string.isRequired,
+    redirect        : T.string,
     actions         : T.shape({
       login : T.func.isRequired,
     }).isRequired,
@@ -81,7 +81,7 @@ export class LoginContainer extends React.Component {
   }
 
   async onSubmit(credentials) {
-    const { intl } = this.props;
+    const { intl, redirect } = this.props;
     const { email, password } = credentials.toJS();
 
     try {
@@ -91,7 +91,11 @@ export class LoginContainer extends React.Component {
         const user = { id: parseObject.id, ...parseObject.toJSON() };
         cookie.save('app.login', email);
         this.props.actions.login(user);
-        this.props.router.push('/');
+        if (redirect) {
+          this.props.router.replace(redirect);
+        } else {
+          this.props.router.push('/');
+        }
       } else {
         throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
       }
@@ -140,7 +144,9 @@ export class LoginContainer extends React.Component {
       </button>,
 
       <div className={ style.passwordReset }>
-        <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>{intl.formatMessage(messages.passwordReset)}</Link>
+        <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>
+          {intl.formatMessage(messages.passwordReset)}
+        </Link>
       </div>,
     ];
   }
@@ -159,7 +165,7 @@ export class LoginContainer extends React.Component {
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {Notification ? <Notification/> : null}
         <Header/>
-        <div className={style.centerContent}>
+        <div className={style.center}>
           <div className={style.form}>
             {this._renderForm()}
           </div>

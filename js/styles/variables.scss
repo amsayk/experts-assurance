@@ -3,10 +3,15 @@ $app-font-path: 'styles/fonts';
 // overrides here (do not use !default here)
 $body-bg: #eee;
 $navbar-bg: #fff;
-$navbar-vertical-spacing: 5px;
+$navbar-vertical-spacing: 0;
 
 // Enable shadows for form controls
 $enable-shadows: true;
+
+// Fonts
+$pixel-base: 16;
+$font-size-base: (14 / $pixel-base) * 1rem;
+$line-height-base: 1.42857142857143;
 
 // Core variables (do not put anything below this)
 @import '~bootstrap/scss/variables';

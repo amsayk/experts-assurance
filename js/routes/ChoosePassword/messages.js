@@ -20,7 +20,7 @@ export default defineMessages({
 
   passwordConfirmation: {
     id: 'account.choose-password-form.label.password-confirmation',
-    defaultMessage: 'Confirm password',
+    defaultMessage: 'Password, again',
   },
 
   error: {

@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   passwordRequired: {
     id: 'validation-messages.password-required',
-    defaultMessage: 'Password required',
+    defaultMessage: 'Password required.',
   },
 
   passwordMinLength: {
@@ -18,7 +18,7 @@ export default defineMessages({
 
   emailRequired: {
     id: 'validation-messages.email-required',
-    defaultMessage: 'Email required',
+    defaultMessage: 'Email required.',
   },
 
   emailInvalid: {
@@ -36,8 +36,32 @@ export default defineMessages({
     defaultMessage: 'Please verify you\'re a human.',
   },
 
+  fullNameRequired: {
+    id: 'validation-messages.fullname',
+    defaultMessage: 'Full name required.',
+  },
+
+  businessNameRequired: {
+    id: 'validation-messages.business-name',
+    defaultMessage: 'Please enter your business\'s name.',
+  },
+  currentPassword: {
+    id: 'validation-messages.current-password-error',
+    defaultMessage: 'You entered an invalid password.',
+  },
+  currentPasswordRequired: {
+    id: 'validation-messages.current-password-required-error',
+    defaultMessage: 'Please enter your current password.',
+  },
+
+  passwordMinScore: {
+    id: 'validation-messages.password-min-score',
+    defaultMessage: 'Please choose a stronger password.',
+  },
+  newPasswordRequired: {
+    id: 'validation-messages.new-password-required',
+    defaultMessage: 'Please enter your new password.',
+  },
+
 });
-
-
-
 

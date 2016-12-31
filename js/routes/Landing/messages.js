@@ -3,7 +3,12 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   logOut: {
     id: 'landing-page.logOut',
-    defaultMessage: 'Logout',
+    defaultMessage: 'Log out',
+  },
+
+  manageAccount: {
+    id: 'landing-page.menu.manage-account',
+    defaultMessage: 'Manage account settings',
   },
 
 });

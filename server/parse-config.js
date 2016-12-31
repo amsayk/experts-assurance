@@ -1,5 +1,5 @@
 import Parse from 'parse/node';
-import config from '../build/config';
+import config from 'build/config';
 
 Parse.initialize(
   process.env.APPLICATION_ID,

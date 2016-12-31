@@ -1,4 +1,7 @@
 import {
+  UPDATE_USER_BUSINESS,
+  SET_PASSWORD,
+  UPDATE_ACCOUNT_SETTINGS,
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
@@ -7,13 +10,32 @@ import {
 const debug = require('debug')('app:backend');
 const error = require('debug')('app:backend:error');
 
-import { signUp as doSignUp, resendEmailVerification, passwordReset } from './ops/user';
+import {
+  signUp as doSignUp,
+  resendEmailVerification,
+  passwordReset,
+  updateAccountSettings,
+  setPassword,
+} from './ops/user';
+
+import {
+  updateUserBusiness,
+} from './ops/business';
 
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;
   const req = { user: request.user, params: request.params.args };
 
   switch (operationKey) {
+    case UPDATE_USER_BUSINESS: {
+      return updateUserBusiness(req, response);
+    }
+    case SET_PASSWORD: {
+      return setPassword(req, response);
+    }
+    case UPDATE_ACCOUNT_SETTINGS: {
+      return updateAccountSettings(req, response);
+    }
     case PASSWORD_RESET: {
       return passwordReset(req, response);
     }

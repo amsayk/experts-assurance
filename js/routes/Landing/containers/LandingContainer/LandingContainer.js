@@ -1,4 +1,5 @@
 import React, { PropTypes as T } from 'react';
+import { withRouter } from 'react-router';
 import { withApollo, graphql } from 'react-apollo';
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -21,15 +22,41 @@ import MUTATION from './resendEmailVerification.mutation.graphql';
 import QUERY from './currentUser.query.graphql';
 
 import {
-    PATH_INVALID_LINK,
-    PATH_EMAIL_VERIFICATION_SUCCESS,
+  PATH_SETTINGS_BASE,
+  PATH_SETTINGS_BUSINESS_DETAILS,
+  PATH_INVALID_LINK,
+  PATH_EMAIL_VERIFICATION_SUCCESS,
 } from 'vars';
 
 export class LandingContainer extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      mounted: true,
+    };
 
     this.onResendEmailVerification = this.onResendEmailVerification.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.mounted) {
+      return;
+    }
+    const { data: { loading, currentUser }, router } = nextProps;
+    if (!loading) {
+      if (isEmpty(currentUser.business)) {
+        const pathBusinessDetails = PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_DETAILS;
+        this.setState({
+          mounted: false,
+        }, () => {
+          router.replace({
+            pathname: pathBusinessDetails,
+            state: {
+              notify: pathBusinessDetails,
+            },
+          });
+        });
+      }
+    }
   }
   async onResendEmailVerification() {
     const { data: { currentUser }  } = this.props;
@@ -51,8 +78,10 @@ export class LandingContainer extends React.PureComponent {
   render() {
     const { data: { loading, currentUser }, notify, actions } = this.props;
     let Notification = null;
-    if (!loading && currentUser && !currentUser.emailVerified) {
-      Notification = () => <NotifyVerificationPending user={currentUser} onResendEmailVerification={this.onResendEmailVerification}/>; // eslint-disable-line
+    if (!loading) {
+      if (!currentUser.emailVerified) {
+          Notification = () => <NotifyVerificationPending user={currentUser} onResendEmailVerification={this.onResendEmailVerification}/>; // eslint-disable-line
+      }
     } else if (notify === PATH_INVALID_LINK) {
       Notification = NotifyInvalidLink;
     } else if (notify === PATH_EMAIL_VERIFICATION_SUCCESS) {
@@ -62,8 +91,8 @@ export class LandingContainer extends React.PureComponent {
     return (
       <div className={style.root}>
         {Notification ? <Notification/> : null}
-        <Header onLogOut={actions.logOut}/>
-        <div className={style.centerContent}>
+        <Header user={currentUser} onLogOut={actions.logOut}/>
+        <div className={style.center}>
           Happy to get started 😎
         </div>
       </div>
@@ -76,12 +105,6 @@ LandingContainer.propTypes = {
     loading: T.bool.isRequired,
     currentUser: T.object,
   }).isRequired,
-};
-
-LandingContainer.defaultProps = {
-  data: {
-    loading: false,
-  },
 };
 
 function mapStateToProps(state, props) {
@@ -100,6 +123,7 @@ const withCurrentUser = graphql(QUERY, {
 });
 
 export default compose(
+  withRouter,
   withApollo,
   Connect,
   withCurrentUser,

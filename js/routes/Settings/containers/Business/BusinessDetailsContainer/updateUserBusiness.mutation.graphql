@@ -1,0 +1,21 @@
+mutation updateUserBusiness($userId: ID!, $payload: UpdateUserBusinessPayload!) {
+
+  updateUserBusiness(userId: $userId, payload: $payload) {
+    business {
+      id
+      displayName
+      description
+
+      addressLine1
+      addressLine2
+      city
+      stateProvince
+      postalCode
+
+      phone
+      taxId
+    }
+    errors
+  }
+}
+

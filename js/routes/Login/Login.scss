@@ -8,8 +8,8 @@
   composes: navbar from 'styles/_base.scss';
 }
 
-.centerContent {
-  composes: centerContent from 'styles/_base.scss';
+.center {
+  composes: center from 'styles/_base.scss';
 }
 
 .logIn {
@@ -99,6 +99,10 @@
 
 .passwordResetButton {
   composes: btn btn-link hint-block from 'styles/_base.scss';
+}
+
+.formControlFeedback {
+  composes: formControlFeedback from 'styles/_base.scss';
 }
 
 .error {

@@ -10,6 +10,7 @@ import invariant from 'invariant';
 import parseJSONLiteral from './parseJSONLiteral';
 
 import { schema as userSchema, resolvers as userResolvers } from './user/schema';
+import { schema as businessSchema, resolvers as businessResolves } from './business/schema';
 
 const rootSchema = [`
 
@@ -18,12 +19,20 @@ const rootSchema = [`
   scalar JSON
 
   type Query {
+    # Accounts
     getUser(id: ID!): User
+
+    # Business
+    getUserBusiness(userId: ID!): Business
   }
 
   type Mutation {
+    # Business
+    updateUserBusiness(userId: ID!, payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!
 
-    # Accounts
+    # Account
+    setPassword(payload: SetPasswordPayload!): SetPasswordResponse!
+    updateAccountSettings(payload: UpdateAccountSettingsPayload!): UpdateAccountSettingsResponse!
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
     resendEmailVerification(info: ResendEmailVerificationPayload!): ResendEmailVerificationResponse!
@@ -79,7 +88,8 @@ const rootResolvers = {
 export const schema = [
   ...rootSchema,
   ...userSchema,
+  ...businessSchema,
 ];
 
-export const resolvers = merge({}, rootResolvers, userResolvers);
+export const resolvers = merge({}, rootResolvers, userResolvers, businessResolves);
 

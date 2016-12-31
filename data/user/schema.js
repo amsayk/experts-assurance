@@ -1,11 +1,39 @@
 import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
+import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
 import signUpValidations from 'routes/Signup/validations';
 import resetValidations from 'routes/PasswordReset/validations';
+import accountSettingsValidations from 'routes/Settings/containers/Account/AccountSettingsContainer/validations';
+import passwordValidations from './passwordValidations';
 
 import { fromJS } from 'immutable';
 
 export const schema = [`
+
+  # ------------------------------------
+  # Set password
+  # ------------------------------------
+
+  input SetPasswordPayload {
+    currentPassword: String
+    newPassword: String
+  }
+
+  type SetPasswordResponse {
+    errors: JSON!
+  }
+
+  # ------------------------------------
+  # Update account settings
+  # ------------------------------------
+  input UpdateAccountSettingsPayload {
+    displayName: String!
+  }
+
+  type UpdateAccountSettingsResponse {
+    user: User,
+    errors: JSON!
+  }
 
   # ------------------------------------
   # Create account
@@ -59,6 +87,8 @@ export const schema = [`
 
     createdAt: Date!
     updatedAt: Date!
+
+    business: Business
   }
 
 `];
@@ -67,6 +97,9 @@ export const resolvers = {
 
   User: Object.assign(
     {
+      business(user, {}, context) {
+        return context.Business.getForUser(user.id);
+      },
     },
     parseGraphqlScalarFields([
       'id',
@@ -80,11 +113,32 @@ export const resolvers = {
     ])
   ),
 
-  CreateUserResponse : Object.assign(
+  SetPasswordResponse : Object.assign(
     {
     },
     parseGraphqlScalarFields([
+      'errors',
+    ])
+  ),
+
+  UpdateAccountSettingsResponse : Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
       'user',
+    ]),
+    parseGraphqlScalarFields([
+      'errors',
+    ])
+  ),
+
+  CreateUserResponse : Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'user',
+    ]),
+    parseGraphqlScalarFields([
       'errors',
     ])
   ),
@@ -106,6 +160,27 @@ export const resolvers = {
   ),
 
   Mutation: {
+    async updateAccountSettings(_, { payload }, context) {
+      try {
+        await accountSettingsValidations.asyncValidate(fromJS(payload));
+      } catch (errors) {
+        return { errors };
+      }
+      const user = await context.Users.updateAccountSettings(payload);
+      return { user, errors: {} };
+    },
+    async setPassword(_, { payload }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+      try {
+        await passwordValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+      } catch (errors) {
+        return { errors };
+      }
+      await context.Users.setPassword(payload);
+      return { errors: {} };
+    },
     async signUp(_, { info }, context) {
       try {
         await signUpValidations.asyncValidate(fromJS(info));

@@ -59,7 +59,7 @@ exports[`login container should render the snapshot when not logged in 1`] = `
         className="navSignupWrapper">
         <span
           className="navbarText">
-          Not a member?
+          Not a member yet?
         </span>
          
         <a
@@ -72,7 +72,7 @@ exports[`login container should render the snapshot when not logged in 1`] = `
     </div>
   </nav>
   <div
-    className="centerContent">
+    className="center">
     <div
       className="form">
       <h1

@@ -25,11 +25,11 @@
 
 // Components
 @import '~bootstrap/scss/animation';
-// @import '~bootstrap/scss/dropdown';
-// @import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
 // @import '~bootstrap/scss/input-group';
 // @import '~bootstrap/scss/custom-forms';
-// @import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/nav';
 @import '~bootstrap/scss/navbar';
 // @import '~bootstrap/scss/card';
 // @import '~bootstrap/scss/breadcrumb';
@@ -58,7 +58,11 @@
   }
 }
 
-.centerContent {
+.flex {
+  display: flex;
+}
+
+.center {
   align-items: center;
   display: flex;
   flex: 1;

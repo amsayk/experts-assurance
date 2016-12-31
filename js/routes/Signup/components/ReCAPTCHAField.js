@@ -18,7 +18,7 @@ export default injectIntl(function ReCAPTCHAField({ intl, input, meta: { error }
       <ReCAPTCHA
         input={input}
       />
-      <FormMessages field={'recaptcha'}>
+      <FormMessages field={input.name}>
         <div className={style.formControlFeedback} when={'equalTo'}>
           {intl.formatMessage(validationMessages.recaptchaRequired)}
         </div>

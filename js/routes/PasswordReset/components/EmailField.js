@@ -22,7 +22,7 @@ function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, erro
         type={'text'}
         className={cx(style.control, { [style.formControlDanger]: touched && error })}
       />
-      <FormMessages errorCount={1} field={'email'}>
+      <FormMessages errorCount={1} field={input.name}>
         <div className={style.formControlFeedback} when={'required'}>
           {intl.formatMessage(validationMessages.emailRequired)}
         </div>
