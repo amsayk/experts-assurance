@@ -13,7 +13,7 @@ const MEDIA_QUERY = '(min-width: 992px)';
 
 const initialState = Immutable.fromJS({
   displayMatches: isServer || matchMedia(MEDIA_QUERY).matches,
-  onLine: isServer || window.navigator.onLine,
+  onLine: true,
 });
 
 export default function reducer(state = initialState, action) {
@@ -28,7 +28,7 @@ export default function reducer(state = initialState, action) {
     case CONNECTION_STATE_CHANGE:
 
       return state.merge({
-        onLine: window.navigator.onLine,
+        onLine: action.isConnected,
       });
 
     default:

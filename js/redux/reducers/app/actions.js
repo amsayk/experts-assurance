@@ -6,9 +6,10 @@ export function resize() {
   };
 }
 
-export function connectionStateChange() {
+export function connectionStateChange(isConnected) {
   return {
     type: CONNECTION_STATE_CHANGE,
+    isConnected,
   };
 }
 

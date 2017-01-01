@@ -1,15 +1,14 @@
 import { connectionStateChange } from 'redux/reducers/app/actions';
-import EventListener from 'EventListener';
+import NetInfo from 'NetInfo';
 const debug = require('debug')('app:client:connectionStateChangeObserver');
 
 export default function connectionStateChangeObserver(store) {
-  function cb() {
-    debug(`[CONNECTION STATE CHANGED]: ${window.navigator.onLine}`);
-    store.dispatch(connectionStateChange());
+  function cb(isConnected) {
+    debug(`[CONNECTION STATE CHANGED]: ${isConnected}`);
+    store.dispatch(connectionStateChange(isConnected));
   }
 
   // subscribe
-  EventListener.listen(window, 'online', cb);
-  EventListener.listen(window, 'offline', cb);
+  return NetInfo.isConnected.addEventListener('change', cb);
 }
 

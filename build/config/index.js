@@ -13,6 +13,8 @@ const babelOptions = require('../../scripts/getBabelOptions')({
     'getCurrentUser'        : 'common/getCurrentUser',
     'vars'                  : 'common/vars',
     'dataIdFromObject'      : 'common/dataIdFromObject',
+    'NetInfo'               : 'utils/NetInfo',
+    'AppState'              : 'utils/AppState',
   },
   plugins: [
     'transform-runtime',

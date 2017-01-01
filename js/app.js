@@ -7,7 +7,7 @@ import { Router } from 'react-router';
 
 const log = require('debug')('app:client');
 
-import doSetupVisibilityChangeObserver from 'utils/visibilityChangeObserver';
+import doSetupAppStateChangeListener from 'utils/appStateChangeObserver';
 import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObserver';
 
 import getRoutes from './routes';
@@ -53,6 +53,14 @@ let render = async function render() {
       return {
         snackbar,
       };
+    }
+    componentWillMount() {
+      this._connectionStateListener = doSetupConnectionStateChangeObserver(store);
+      this._appStateListener = doSetupAppStateChangeListener(store);
+    }
+    componentWillUnmount() {
+      this._connectionStateListener && this._connectionStateListener.remove();
+      this._appStateListener && this._appStateListener.remove();
     }
     render() {
       const { routerProps } = this.props;
@@ -114,9 +122,6 @@ if (__DEV__) {
   window.Perf         = require('react-addons-perf');
   window.reduxHistory = history;
 } else {
-  doSetupVisibilityChangeObserver(store);
-  doSetupConnectionStateChangeObserver(store);
-
   require('offline-plugin/runtime').install({
     onInstalled: function () {
       log('[SW]: App is ready for offline usage');
