@@ -24,8 +24,6 @@ import { updateLocation } from 'redux/reducers/routing/actions';
 
 import { applyWorker } from 'redux-worker';
 
-import { getBeforeUnloadMessage } from 'utils/onbeforeunload';
-
 export const history = useQueries(
   useBeforeUnload(
     useRouterHistory(
@@ -33,10 +31,6 @@ export const history = useQueries(
     )
   )
 )({ basename: BASENAME });
-
-history.listenBeforeUnload(function () {
-  return getBeforeUnloadMessage();
-});
 
 // ======================================================
 // Webworker
