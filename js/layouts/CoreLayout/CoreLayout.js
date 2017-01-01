@@ -10,7 +10,7 @@ import messages from './messages';
 
 import EventListener from 'EventListener';
 
-import throttle from 'lodash.throttle';
+import debounce from 'debounce';
 
 import { intlShape, injectIntl } from 'react-intl';
 
@@ -84,7 +84,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {actions: {
-    resize: throttle(() => raf(() => dispatch(resize())), 50),
+    resize: debounce(() => raf(() => dispatch(resize()))),
   }};
 }
 
