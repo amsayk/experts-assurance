@@ -9,6 +9,7 @@ const babelOptions = require('../scripts/getBabelOptions')({
     'getCurrentUser'   : 'common/getCurrentUser',
     'vars'             : 'common/vars',
     'dataIdFromObject' : 'common/dataIdFromObject',
+    'log'              : 'common/log',
   },
   plugins: [
     'transform-runtime',

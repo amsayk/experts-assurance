@@ -36,13 +36,12 @@ import { Business } from 'data/business/models';
 
 import bodyParser from 'body-parser';
 
-const graphqlDebug = require('debug')('app:server:graphql');
-const debug = require('debug')('app:server');
-const error = require('debug')('app:server:error');
+const graphqlLogFunction = require('log')('app:server:graphql');
+const log = require('log')('app:server');
 
 const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
 if (!databaseUri) {
-  debug('DATABASE_URI not specified, falling back to localhost.');
+  log('DATABASE_URI not specified, falling back to localhost.');
 }
 
 const app = express();
@@ -56,7 +55,7 @@ app.enable('trust proxy');
 // rendering, you'll want to remove this middleware.
 app.use(require('connect-history-api-fallback')({
   verbose : __DEV__,
-  logger  : require('debug')('app:server:history'),
+  logger  : require('log')('app:server:history'),
 }));
 
 // Apply gzip compression
@@ -74,7 +73,7 @@ app.use(createLocaleMiddleware());
 if (config.env === 'development') {
   const compiler = webpack(webpackConfig);
 
-  debug('Enable webpack dev and HMR middleware');
+  log('Enable webpack dev and HMR middleware');
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath  : webpackConfig.output.publicPath,
     contentBase : paths.client(),
@@ -92,7 +91,7 @@ if (config.env === 'development') {
   // when the application is compiled.
   app.use(express.static(paths.public()));
 } else {
-  debug(
+  log(
     'Server is being run outside of live development mode, meaning it will ' +
     'only serve the compiled application bundle in ~/dist. Generally you ' +
     'do not need an application server for this and can instead use a web ' +
@@ -112,7 +111,7 @@ if (config.env === 'development') {
 // Parse server entrypoint
 // ------------------------------------
 if (!config.parse_database_uri) {
-  debug('DATABASE_URI not specified, falling back to localhost.');
+  log('DATABASE_URI not specified, falling back to localhost.');
 }
 const api = new ParseServer({
   appName                  : config.appName,
@@ -208,7 +207,7 @@ const executableSchema = makeExecutableSchema({
   typeDefs                : Schema,
   resolvers               : Resolvers,
   allowUndefinedInResolve : false,
-  logger                  : { log: (e) => error('[GRAPHQL ERROR]', e.stack) },
+  logger                  : { log: (e) => graphqlLogFunction.error('[GRAPHQL ERROR]', e.stack) },
 });
 
 app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
@@ -231,7 +230,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
       Users: new Users({ user, connector: new UserConnector() }),
       Business: new Business({ user, connector: new BusinessConnector() }),
     },
-    logFunction: graphqlDebug,
+    logFunction: graphqlLogFunction,
     debug: __DEV__,
   };
 }));

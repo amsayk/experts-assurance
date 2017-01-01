@@ -3,7 +3,7 @@ import AppState from 'AppState';
 import {
   INACTIVITY_TIMEOUT,
 } from 'vars';
-const debug = require('debug')('app:client:appStateChangeObserver');
+const log = require('log')('app:client:appStateChangeObserver');
 
 export default function appStateChangeObserver(store) {
   let timeout;
@@ -18,7 +18,7 @@ export default function appStateChangeObserver(store) {
   }
 
   function cb() {
-    debug(`[APP STATE CHANGED]: ${AppState.currentState}`);
+    log(`[APP STATE CHANGED]: ${AppState.currentState}`);
 
     // fires when user switches tabs, apps, goes to homescreen, etc.
     if (AppState.currentState === 'background') {

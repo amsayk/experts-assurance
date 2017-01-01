@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { Router } from 'react-router';
 
-const log = require('debug')('app:client');
+const log = require('log')('app:client');
 
 import doSetupAppStateChangeListener from 'utils/appStateChangeObserver';
 import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObserver';

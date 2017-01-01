@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client';
 import ResponseMiddlewareNetworkInterface from './response-middleware-network-interface';
-const error = require('debug')('app:client:error');
+const log = require('log')('app:client');
 
 import dataIdFromObject from 'dataIdFromObject';
 
@@ -21,7 +21,7 @@ responseMiddlewareNetworkInterface.use({
   applyResponseMiddleware: (response, next) => {
     if (response.errors) {
       if (typeof window !== 'undefined') {
-        error(JSON.stringify(response.errors));
+        log.error(JSON.stringify(response.errors));
         alert(`There was an error in your GraphQL request: ${response.errors[0].message}`);
       }
     }

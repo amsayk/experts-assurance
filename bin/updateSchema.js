@@ -6,18 +6,18 @@ import {
 } from 'graphql-tools';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
-const error = require('debug')('app:bin:graphql:error');
+const log = require('log')('app:bin:graphql');
 
 // Save JSON of full schema introspection
 const executableSchema = makeExecutableSchema({
   typeDefs                : Schema,
   resolvers               : Resolvers,
   allowUndefinedInResolve : false,
-  logger                  : { log: (e) => error('[GRAPHQL ERROR]', e.stack) },
+  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', e.stack) },
 });
 graphql(executableSchema, introspectionQuery).then(result => {
   if (result.errors) {
-    error(
+    log.error(
       'ERROR introspecting schema: ',
       JSON.stringify(result.errors, null, 2)
     );

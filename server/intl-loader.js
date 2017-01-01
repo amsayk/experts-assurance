@@ -1,6 +1,6 @@
 import { addLocaleData } from 'react-intl';
 import areIntlLocalesSupported from 'intl-locales-supported';
-const debug = require('debug')('app:server:intl');
+const log = require('log')('app:server:intl');
 
 const localesMyAppSupports = [
   'en',
@@ -31,7 +31,7 @@ const loaders = {
 module.exports = (locale) => {
   let fn = loaders[locale];
   if (!fn) {
-    debug(`No loader for locale: ${locale}, Falling back to default lang`);
+    log(`No loader for locale: ${locale}, Falling back to default lang`);
     fn = loaders.en;
   }
   return fn();

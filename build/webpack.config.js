@@ -7,11 +7,11 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = require('build/config');
-const debug = require('debug')('app:webpack:config');
+const log = require('log')('app:webpack:config');
 
 const paths = config.utils_paths;
 
-debug('Creating configuration.');
+log('Creating configuration.');
 const webpackConfig = {
   name    : 'client',
   target  : 'web',
@@ -108,14 +108,14 @@ webpackConfig.plugins = [
 ];
 
 if (__DEV__) {
-  debug('Enable plugins for live development (HMR, NoErrors).');
+  log('Enable plugins for live development (HMR, NoErrors).');
   webpackConfig.plugins.push(
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   );
 } else {
-  debug('Enable plugins for production (Offline, AggressiveMergingPlugin & UglifyJS).');
+  log('Enable plugins for production (Offline, AggressiveMergingPlugin & UglifyJS).');
   webpackConfig.plugins.push(
     new webpack.HashedModuleIdsPlugin(),
     new InlineManifestWebpackPlugin(),
@@ -230,7 +230,7 @@ webpackConfig.module.rules.push(
 // need to use the extractTextPlugin to fix this issue:
 // http://stackoverflow.com/questions/34133808/webpack-ots-parsing-error-loading-fonts/34133809#34133809
 if (!__DEV__) {
-  debug('Apply ExtractTextPlugin to CSS loaders.');
+  log('Apply ExtractTextPlugin to CSS loaders.');
   webpackConfig.module.rules.filter((loader) =>
     loader.loaders && loader.loaders.find(({ loader }) => /css/.test(loader))
   ).forEach((loader) => {

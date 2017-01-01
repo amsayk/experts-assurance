@@ -2,7 +2,7 @@ import React, { PropTypes as T } from 'react';
 import Recaptcha from 'react-recaptcha';
 import nullthrows from 'nullthrows';
 import loadScript from 'loadScript';
-const error = require('debug')('app:client:recaptcha:error');
+const log = require('log')('app:client:recaptcha');
 
 import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'vars';
 
@@ -31,7 +31,7 @@ export default class ReCAPTCHA extends React.Component {
         });
 
       } catch (e) {
-        error('Error loading recaptcha', e);
+        log.error('Error loading recaptcha', e);
       }
     }
   }

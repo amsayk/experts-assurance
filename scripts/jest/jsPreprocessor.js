@@ -11,6 +11,7 @@ const babelOptions = require('../getBabelOptions')({
     'vars'                  : 'common/vars',
     'validation-messages'   : 'common/messages/validation-messages',
     'loadScript'            : 'utils/loadScript',
+    'log'                   : 'common/log',
   },
   plugins: [
     jestPluginHoist,

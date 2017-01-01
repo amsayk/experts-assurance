@@ -2,8 +2,7 @@ import Parse from 'parse/node';
 import config from 'build/config';
 import server from 'server/main';
 
-const debug = require('debug')('app:bin:server');
-const error = require('debug')('app:bin:server:error');
+const log = require('log')('app:bin:server');
 
 const port = config.server_port;
 
@@ -18,12 +17,12 @@ server.listen(port, async (err) => {
       Parse.Cloud.run('initialization'),
       Parse.Cloud.run('initUsers'),
     ]);
-    debug('Server initialized.');
+    log('Server initialized.');
   } catch (e) {
-    error('Error initializing server:', e);
+    log.error('Error initializing server:', e);
     throw e;
   }
 
-  debug(`Server is now running at http://localhost:${port}.`);
+  log(`Server is now running at http://localhost:${port}.`);
 });
 

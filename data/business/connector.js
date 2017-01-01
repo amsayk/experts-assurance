@@ -6,7 +6,7 @@ import {
   BusinessType,
 } from 'data/types';
 
-const error = require('debug')('app:backend:business:error');
+const log = require('log')('app:backend:business');
 
 export class BusinessConnector {
   constructor() {
@@ -37,7 +37,7 @@ function fetchForUser(ids) {
         .equalTo('user', Parse.User.createWithoutData(id))
         .first({ useMasterKey: true });
     } catch (e) {
-      error(e);
+      log.error(e);
       return null;
     }
   }));

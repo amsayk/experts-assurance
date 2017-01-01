@@ -1,6 +1,6 @@
 /* eslint key-spacing:0 spaced-comment:0 */
 const path = require('path');
-const debug = require('debug')('app:config');
+const log = require('log')('app:config');
 const ip = require('ip');
 const objectAssign = require('object-assign');
 const nullthrows = require('nullthrows');
@@ -13,6 +13,7 @@ const babelOptions = require('../../scripts/getBabelOptions')({
     'getCurrentUser'        : 'common/getCurrentUser',
     'vars'                  : 'common/vars',
     'dataIdFromObject'      : 'common/dataIdFromObject',
+    'log'                   : 'common/log',
     'NetInfo'               : 'utils/NetInfo',
     'AppState'              : 'utils/AppState',
   },
@@ -26,7 +27,7 @@ const babelOptions = require('../../scripts/getBabelOptions')({
   ],
 });
 
-debug('Creating default configuration.');
+log('Creating default configuration.');
 // ========================================================
 // Default Configuration
 // ========================================================
@@ -200,7 +201,7 @@ config.compiler_vendors = config.compiler_vendors
   .filter((dep) => {
     if (pkg.dependencies[dep]) {return true;}
 
-    debug(
+    log(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
        Consider removing it from \`compiler_vendors\` in ~/build/config/index.js`
@@ -227,14 +228,14 @@ config.utils_paths = {
 // ========================================================
 // Environment Configuration
 // ========================================================
-debug(`Looking for environment overrides for NODE_ENV "${config.env}".`);
+log(`Looking for environment overrides for NODE_ENV "${config.env}".`);
 const environments = require('./environments');
 const overrides = environments[config.env];
 if (overrides) {
-  debug('Found overrides, applying to default configuration.');
+  log('Found overrides, applying to default configuration.');
   objectAssign(config, overrides(config));
 } else {
-  debug('No environment overrides found, defaults will be used.');
+  log('No environment overrides found, defaults will be used.');
 }
 
 module.exports = config;

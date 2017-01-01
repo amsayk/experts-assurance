@@ -1,5 +1,5 @@
 import { addLocaleData } from 'react-intl';
-const debug = require('debug')('app:client:intl');
+const log = require('log')('app:client:intl');
 
 const loaders = {
   en(callback, force) {
@@ -24,7 +24,7 @@ export default (locale, force = false) => {
   return new Promise((resolve) => {
     let fn = loaders[locale];
     if (!fn) {
-      debug(`No loader for locale: ${locale}, Falling back to default lang`);
+      log(`No loader for locale: ${locale}, Falling back to default lang`);
       fn = loaders.en;
     }
     fn(resolve, force);

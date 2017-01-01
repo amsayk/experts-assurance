@@ -7,8 +7,7 @@ import {
   SIGN_UP,
 } from './constants';
 
-const debug = require('debug')('app:backend');
-const error = require('debug')('app:backend:error');
+const log = require('log')('app:backend');
 
 import {
   signUp as doSignUp,
@@ -57,7 +56,7 @@ Parse.Cloud.define('initialization', function (request, response) {
 Parse.Cloud.define('initUsers', function (request, response) {
 
   function doAdd(obj) {
-    debug(obj.displayName + ' doesn\'t exist, creating now...');
+    log(obj.displayName + ' doesn\'t exist, creating now...');
 
     const p = new Parse.User();
 
@@ -70,10 +69,10 @@ Parse.Cloud.define('initUsers', function (request, response) {
     return p.signUp(null, {
       useMasterKey: true,
       success: function (user) {
-        debug('Successfully created user `', user.get('displayName'), '`');
+        log('Successfully created user `', user.get('displayName'), '`');
       },
       error: function (user, err) {
-        error('Error creating user `' + obj.displayName + '`: ', err);
+        log.error('Error creating user `' + obj.displayName + '`: ', err);
       },
     });
   }

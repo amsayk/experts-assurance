@@ -2,7 +2,7 @@ import { formatError } from 'backend/utils';
 
 import { BusinessType } from 'data/types';
 
-const error = require('debug')('app:backend:error');
+const log = require('log')('app:backend');
 
 export default async function updateUserBusiness(request, response) {
   const { userId, payload: {
@@ -46,7 +46,7 @@ export default async function updateUserBusiness(request, response) {
       .equalTo('user', Parse.User.createWithoutData(userId))
       .first();
   } catch (e) {
-    error(e);
+    log.error(e);
   }
 
   try {
