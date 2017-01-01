@@ -10,7 +10,7 @@ export default (store) => [{
       cb(null, UserIsAuthenticated(Component));
 
       /* Webpack named bundle   */
-    }, 'BusinessInfo');
+    }, 'BusinessDetails');
   },
 }];
 

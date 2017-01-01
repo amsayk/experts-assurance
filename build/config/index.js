@@ -95,6 +95,7 @@ const config = {
   // Compiler Configuration
   // ----------------------------------
   compiler_babel_query : {
+    babelrc        : false,
     cacheDirectory : true,
   },
   compiler_babel_options : objectAssign({}, babelOptions, {
@@ -108,7 +109,7 @@ const config = {
     retainLines: true,
   }),
   compiler_devtool         : 'source-map',
-  compiler_hash_type       : 'hash',
+  compiler_hash_type       : 'contenthash',
   compiler_fail_on_warning : false,
   compiler_quiet           : false,
   compiler_public_path     : '/',
@@ -122,6 +123,9 @@ const config = {
     'react-redux',
     'react-router',
     'redux',
+    'react-apollo',
+    'apollo-client',
+    'classnames',
   ],
   compiler_offline_assets : [
 

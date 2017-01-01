@@ -16,7 +16,7 @@ import { useRouterHistory } from 'react-router';
 
 import thunk from 'redux-thunk';
 
-import ReduxWorker from 'worker?inline!../worker.js';
+import ReduxWorker from 'worker-loader?inline!../worker.js';
 
 import makeRootReducer, { injectReducers } from '../reducers';
 
