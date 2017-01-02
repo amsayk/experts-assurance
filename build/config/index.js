@@ -62,7 +62,7 @@ const config = {
   parse_server_mount_point    : process.env.PARSE_MOUNT || '/parse',
   parse_server_url            : process.env.SERVER_URL,
   parse_database_uri          : process.env.DATABASE_URI,
-  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard.parse',
+  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard.html',
 
   // App config
   path_login                        : process.env.PATH_LOGIN || '/login',
@@ -94,7 +94,7 @@ const config = {
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
   graphql_subscriptions_endpoint : `ws://${ip.address()}:${process.env.WS_PORT || 8080}`,
-  graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
+  graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql.html',
 
   // ----------------------------------
   // Compiler Configuration
