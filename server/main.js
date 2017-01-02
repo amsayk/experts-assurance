@@ -21,10 +21,12 @@ import { ParseServer } from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
-import {
-  makeExecutableSchema,
-} from 'graphql-tools';
-import { schema as Schema, resolvers as Resolvers } from 'data/schema';
+
+import schema from 'data/schema';
+
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { subscriptionManager } from 'data/subscriptions';
 
 // Connectors
 import { UserConnector } from 'data/user/connector';
@@ -36,7 +38,6 @@ import { Business } from 'data/business/models';
 
 import bodyParser from 'body-parser';
 
-const graphqlLogFunction = require('log')('app:server:graphql');
 const log = require('log')('app:server');
 
 const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
@@ -203,13 +204,6 @@ app.use(config.parse_dashboard_mount_point, dashboard);
 // ------------------------------------
 // Graphql server entrypoint
 // ------------------------------------
-const executableSchema = makeExecutableSchema({
-  typeDefs                : Schema,
-  resolvers               : Resolvers,
-  allowUndefinedInResolve : false,
-  logger                  : { log: (e) => graphqlLogFunction.error('[GRAPHQL ERROR]', e.stack) },
-});
-
 app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
   // Get the query, the same way express-graphql does it
   // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
@@ -224,13 +218,13 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
 
   const user = getCurrentUser();
   return {
-    schema: executableSchema,
+    schema,
     context: {
       user,
       Users: new Users({ user, connector: new UserConnector() }),
-      Business: new Business({ user, connector: new BusinessConnector() }),
+      Business: new Business({ connector: new BusinessConnector() }),
     },
-    logFunction: graphqlLogFunction,
+    logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,
   };
 }));
@@ -241,5 +235,28 @@ if (__DEV__) {
   }));
 }
 
-module.exports = app;
+// WebSocket server for subscriptions
+const websocketServer = createServer((request, response) => {
+  response.writeHead(404);
+  response.end();
+});
+
+// eslint-disable-next-line
+new SubscriptionServer(
+  {
+    subscriptionManager,
+
+    // the obSubscribe function is called for every new subscription
+    // and we use it to set the GraphQL context for this subscription
+    onSubscribe: (msg, params) => {
+      return Object.assign({}, params, {
+        context: {
+          Business: new Business({ connector: new BusinessConnector() }),
+        },
+      });
+    },
+  },
+  websocketServer
+);
+module.exports = { app, websocketServer };
 

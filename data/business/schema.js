@@ -5,6 +5,8 @@ import { fromJS } from 'immutable';
 
 import businessValidations from 'routes/Settings/containers/Business/BusinessDetailsContainer/validations';
 
+import { pubsub } from '../subscriptions';
+
 export const schema = [`
 
   # ------------------------------------
@@ -95,6 +97,8 @@ export const resolvers = {
         return { errors };
       }
       const business = await context.Business.updateUserBusiness(userId, payload);
+      // publish subscription notification
+      pubsub.publish('businessChange', business);
       return { business, errors: {} };
     },
   },

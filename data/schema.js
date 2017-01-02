@@ -1,6 +1,10 @@
 import { GraphQLError } from 'graphql/error';
 import { Kind } from 'graphql/language';
 
+import {
+  makeExecutableSchema,
+} from 'graphql-tools';
+
 import merge from 'lodash.merge';
 
 import moment from 'moment';
@@ -11,6 +15,8 @@ import parseJSONLiteral from './parseJSONLiteral';
 
 import { schema as userSchema, resolvers as userResolvers } from './user/schema';
 import { schema as businessSchema, resolvers as businessResolves } from './business/schema';
+
+const log = require('log')('app:server:graphql');
 
 const rootSchema = [`
 
@@ -38,9 +44,15 @@ const rootSchema = [`
     resendEmailVerification(info: ResendEmailVerificationPayload!): ResendEmailVerificationResponse!
   }
 
+  type Subscription {
+    # Subscription fires every time a business changes
+    businessChange(id: ID!): Business
+  }
+
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 
 `];
@@ -85,11 +97,18 @@ const rootResolvers = {
 
 };
 
-export const schema = [
+const schema = [
   ...rootSchema,
   ...userSchema,
   ...businessSchema,
 ];
 
-export const resolvers = merge({}, rootResolvers, userResolvers, businessResolves);
+const resolvers = merge({}, rootResolvers, userResolvers, businessResolves);
+
+export default makeExecutableSchema({
+  typeDefs                : schema,
+  resolvers               : resolvers,
+  allowUndefinedInResolve : false,
+  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', e.stack) },
+});
 

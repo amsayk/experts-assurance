@@ -1,21 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { schema as Schema, resolvers as Resolvers } from 'data/schema';
-import {
-  makeExecutableSchema,
-} from 'graphql-tools';
+import schema from 'data/schema';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 const log = require('log')('app:bin:graphql');
 
 // Save JSON of full schema introspection
-const executableSchema = makeExecutableSchema({
-  typeDefs                : Schema,
-  resolvers               : Resolvers,
-  allowUndefinedInResolve : false,
-  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', e.stack) },
-});
-graphql(executableSchema, introspectionQuery).then(result => {
+graphql(schema, introspectionQuery).then(result => {
   if (result.errors) {
     log.error(
       'ERROR introspecting schema: ',
@@ -31,6 +22,6 @@ graphql(executableSchema, introspectionQuery).then(result => {
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
   path.join(__dirname, '../data/schema.graphql'),
-  printSchema(executableSchema)
+  printSchema(schema)
 );
 

@@ -54,6 +54,7 @@ const config = {
   // ----------------------------------
   server_host : ip.address(), // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || 5000,
+  ws_port     : process.env.WS_PORT || 8080,
 
   // ----------------------------------
   // Parse config
@@ -92,6 +93,7 @@ const config = {
   // graphql config
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
+  graphql_subscriptions_endpoint : `ws://${ip.address()}:${process.env.WS_PORT || 8080}`,
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
 
   // ----------------------------------
@@ -156,8 +158,10 @@ config.globals = {
     JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),
     MASTER_KEY            : JSON.stringify(process.env.MASTER_KEY),
 
-    SERVER_URL            : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
-    GRAPHQL_ENDPOINT      : JSON.stringify(config.graphql_endpoint),
+    SERVER_URL : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
+
+    GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
+    GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(config.graphql_subscriptions_endpoint),
 
     PARSE_MODULE_PATH     : JSON.stringify('parse'),
 

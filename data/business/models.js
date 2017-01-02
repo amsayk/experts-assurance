@@ -5,8 +5,7 @@ import {
 } from 'backend/constants';
 
 export class Business {
-  constructor({ user, connector }) {
-    this.user = user;
+  constructor({ connector }) {
     this.connector = connector;
   }
   updateUserBusiness(userId, payload) {

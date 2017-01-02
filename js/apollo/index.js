@@ -1,10 +1,15 @@
 import ApolloClient from 'apollo-client';
+import { Client } from 'subscriptions-transport-ws';
 import ResponseMiddlewareNetworkInterface from './response-middleware-network-interface';
 const log = require('log')('app:client');
 
 import dataIdFromObject from 'dataIdFromObject';
 
-import { GRAPHQL_ENDPOINT } from 'vars';
+import { GRAPHQL_ENDPOINT, GRAPHQL_SUBSCRIPTIONS_ENDPOINT } from 'vars';
+
+import addGraphQLSubscriptions from './subscriptions';
+
+const wsClient = new Client(GRAPHQL_SUBSCRIPTIONS_ENDPOINT);
 
 const responseMiddlewareNetworkInterface = new ResponseMiddlewareNetworkInterface(GRAPHQL_ENDPOINT, {
   credentials: 'same-origin',
@@ -29,8 +34,13 @@ responseMiddlewareNetworkInterface.use({
   },
 });
 
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  responseMiddlewareNetworkInterface,
+  wsClient,
+);
+
 export const client = new ApolloClient({
-  networkInterface: responseMiddlewareNetworkInterface,
+  networkInterface: networkInterfaceWithSubscriptions,
   addTypename: true,
   customResolvers: {
     Query: {

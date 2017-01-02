@@ -8,6 +8,7 @@ export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;
 export const INACTIVITY_TIMEOUT               = 10 * 60 * 1000; // 10 minutes
 
+export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT   = process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT;
 export const GRAPHQL_ENDPOINT                 = process.env.GRAPHQL_ENDPOINT;
 export const APOLLO_QUERY_BATCH_INTERVAL      = process.env.APOLLO_QUERY_BATCH_INTERVAL;
 
