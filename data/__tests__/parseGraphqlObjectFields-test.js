@@ -10,8 +10,8 @@ import {
 
 describe('parseGraphqlObjectFields', () => {
   const FIELD_NAME = 'field';
-  const ERR_MSG = new RegExp('NonNull field: ' + FIELD_NAME + ' returned nothing.');
-  const NO_PRIMITIVE_ERR_MSG = new RegExp('value for ' + FIELD_NAME + ' must be an object.');
+  const ERR_MSG = new RegExp('NonNull field: `' + FIELD_NAME + '` returned nothing.');
+  const NO_PRIMITIVE_ERR_MSG = new RegExp('value for `' + FIELD_NAME + '` must be an object.');
   const { [FIELD_NAME] : fieldResolver } = parseGraphqlObjectFields([
     FIELD_NAME,
   ]);
@@ -37,10 +37,10 @@ describe('parseGraphqlObjectFields', () => {
   describe('with parse objects', function () {
     function toParseObject(obj) {
       const ret = objectAssign({}, obj);
-      ret.toJSON = jest.fn().mockReturnValue({
-        ...obj,
+      Object.defineProperty(ret, 'id', {
+        value: obj.objectId,
       });
-      ret.id = obj.objectId;
+
       return ret;
     }
     const objWhichReturns = (returnValue) => ({
@@ -55,10 +55,28 @@ describe('parseGraphqlObjectFields', () => {
       it('resolves when object is not null', async function () {
         const randomObj = toParseObject({ objectId: 'id', prop1: 'prop1' });
         const obj = objWhichReturns(randomObj);
-        const expected = {id: randomObj.objectId, objectId: randomObj.objectId, prop1: randomObj.prop1};
-        expect(await fieldResolver(obj, {}, {}, info)).toEqual(expected);
+
+        // No fetch
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
         expect(obj.get.mock.calls.length).toBe(1);
-        expect(randomObj.toJSON.mock.calls.length).toBe(1);
+
+        const fetchFn = jest.fn()
+          .mockReturnValueOnce(Promise.resolve(randomObj))
+          .mockReturnValueOnce(Promise.resolve(toParseObject({ objectId: 'id', prop1: 'prop1' })));
+
+        Object.defineProperty(randomObj, 'fetch', {
+          get: () => fetchFn,
+        });
+
+        // same object
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(obj.get.mock.calls.length).toBe(2);
+        expect(fetchFn.mock.calls.length).toBe(1);
+
+        // new object
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(obj.get.mock.calls.length).toBe(3);
+        expect(fetchFn.mock.calls.length).toBe(2);
       });
 
       it('resolves when object is null', function () {
@@ -83,10 +101,28 @@ describe('parseGraphqlObjectFields', () => {
       it('resolves when object is not null', async function () {
         const randomObj = toParseObject({ objectId: 'id', prop1: 'prop1' });
         const obj = objWhichReturns(randomObj);
-        const expected = {id: randomObj.objectId, objectId: randomObj.objectId, prop1: randomObj.prop1};
-        expect(await fieldResolver(obj, {}, {}, info)).toEqual(expected);
+
+        // No fetch
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
         expect(obj.get.mock.calls.length).toBe(1);
-        expect(randomObj.toJSON.mock.calls.length).toBe(1);
+
+        const fetchFn = jest.fn()
+          .mockReturnValueOnce(Promise.resolve(randomObj))
+          .mockReturnValueOnce(Promise.resolve(toParseObject({ objectId: 'id', prop1: 'prop1' })));
+
+        Object.defineProperty(randomObj, 'fetch', {
+          get: () => fetchFn,
+        });
+
+        // same object
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(obj.get.mock.calls.length).toBe(2);
+        expect(fetchFn.mock.calls.length).toBe(1);
+
+        // new object
+        expect(await fieldResolver(obj, {}, {}, info)).toEqual(randomObj);
+        expect(obj.get.mock.calls.length).toBe(3);
+        expect(fetchFn.mock.calls.length).toBe(2);
       });
 
       it('throws when object is null', function () {

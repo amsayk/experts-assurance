@@ -10,7 +10,7 @@ export default async function signUp(request, response) {
         email,
         username: email,
       }).signUp(null, { useMasterKey: true });
-    response.success({ id: user.id, ...user.toJSON() });
+    response.success(user);
   } catch (e) {
     response.error(formatError(e));
   }

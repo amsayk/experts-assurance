@@ -14,7 +14,7 @@ export default async function updateAccountSettings(request, response) {
     const user = await request.user.set({
       displayName,
     }).save(null, { sessionToken: request.user.getSessionToken() });
-    response.success({ id: user.id, ...user.toJSON() });
+    response.success(user);
   } catch (e) {
     response.error(formatError(e));
   }
