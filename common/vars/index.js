@@ -17,7 +17,6 @@ export const RECAPCHA_SITE_KEY                = process.env.RECAPCHA_SITE_KEY;
 
 export const APPLICATION_ID                   = process.env.APPLICATION_ID;
 export const JAVASCRIPT_KEY                   = process.env.JAVASCRIPT_KEY;
-export const MASTER_KEY                       = process.env.MASTER_KEY;
 export const SERVER_URL                       = process.env.SERVER_URL;
 
 export const BASENAME                         = process.env.BASENAME;

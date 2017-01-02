@@ -156,7 +156,6 @@ config.globals = {
 
     APPLICATION_ID        : JSON.stringify(process.env.APPLICATION_ID),
     JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),
-    MASTER_KEY            : JSON.stringify(process.env.MASTER_KEY),
 
     SERVER_URL : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
 
