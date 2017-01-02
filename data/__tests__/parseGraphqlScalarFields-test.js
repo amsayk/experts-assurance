@@ -9,7 +9,7 @@ import {
 
 describe('parseGraphqlScalarFields', () => {
   const FIELD_NAME = 'field';
-  const ERR_MSG = new RegExp('NonNull field: ' + FIELD_NAME + ' returned nothing.');
+  const ERR_MSG = new RegExp('NonNull field: `' + FIELD_NAME + '` returned nothing.');
   const { [FIELD_NAME] : fieldResolver } = parseGraphqlScalarFields([
     FIELD_NAME,
   ]);

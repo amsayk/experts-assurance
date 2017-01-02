@@ -56,7 +56,7 @@ export default async function updateUserBusiness(request, response) {
       business = await saveOrUpdate(new BusinessType());
     }
 
-    response.success({ id: business.id, ...business.toJSON() });
+    response.success(business);
   } catch (e) {
     response.error(formatError(e));
   }
