@@ -21,6 +21,7 @@ import validationMessages from 'validation-messages';
 import BusinessNameField from '../../../components/BusinessNameField';
 import BusinessDescriptionField from '../../../components/BusinessDescriptionField';
 import OptionalTextInputField from '../../../components/OptionalTextInputField';
+import CountryField from '../../../components/CountryField';
 
 import MUTATION from './updateUserBusiness.mutation.graphql';
 
@@ -49,6 +50,7 @@ export class BusinessDetailsForm extends React.Component {
           displayName   : data.get('displayName'),
           description   : data.get('description'),
           url           : data.get('url'),
+          country       : data.get('country'),
           addressLine1  : data.get('addressLine1'),
           addressLine2  : data.get('addressLine2'),
           city          : data.get('city'),
@@ -96,6 +98,11 @@ export class BusinessDetailsForm extends React.Component {
               {intl.formatMessage(validationMessages.urlInvalid)}
             </div>
           </Field>
+          <Field
+            name='country'
+            component={CountryField}
+            label={intl.formatMessage(messages.labelCountry)}
+            onKeyDown={this.onKeyDown} />
           <Field
             name='addressLine1'
             component={OptionalTextInputField}

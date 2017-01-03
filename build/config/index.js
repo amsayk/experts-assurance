@@ -16,6 +16,7 @@ const babelOptions = require('../../scripts/getBabelOptions')({
     'log'                   : 'common/log',
     'NetInfo'               : 'utils/NetInfo',
     'AppState'              : 'utils/AppState',
+    'countries'             : 'common/countries',
   },
   plugins: [
     'transform-runtime',
@@ -39,6 +40,7 @@ const config = {
   // ----------------------------------
   appName : 'Trading',
   title   : process.env.HOME_TITLE,
+  country : nullthrows(process.env.COUNTRY),
 
   // ----------------------------------
   // Project Structure
@@ -192,6 +194,8 @@ config.globals = {
     RECAPCHA_JS_URL       : JSON.stringify(process.env.RECAPCHA_JS_URL),
 
     APP_NAME              : JSON.stringify(config.appName),
+
+    COUNTRY               : JSON.stringify(config.country),
 
     DEV_PASSWORD          : JSON.stringify(process.env.DEV_PASSWORD),
   },

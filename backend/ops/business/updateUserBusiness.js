@@ -10,6 +10,7 @@ export default async function updateUserBusiness(request, response) {
     description,
     url,
 
+    country,
     addressLine1,
     addressLine2,
     city,
@@ -30,6 +31,7 @@ export default async function updateUserBusiness(request, response) {
         description,
         url,
 
+        country,
         addressLine1,
         addressLine2,
         city,

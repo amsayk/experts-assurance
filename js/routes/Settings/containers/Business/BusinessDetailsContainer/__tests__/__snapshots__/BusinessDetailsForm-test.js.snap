@@ -89,6 +89,39 @@ exports[`business details form should render the snapshot 1`] = `
       className="formGroup">
       <label
         className="label"
+        htmlFor="country">
+        Country
+         
+        <span
+          className="iconRequired">
+          ⋆
+        </span>
+      </label>
+      <div
+        className="inputWrapper">
+        <select
+          className="control"
+          disabled={true}
+          name="country"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onDragStart={[Function]}
+          onDrop={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          value="">
+          <option
+            value="US">
+            United States
+          </option>
+        </select>
+        <div />
+      </div>
+    </div>
+    <div
+      className="formGroup">
+      <label
+        className="label"
         htmlFor="addressLine1">
         Address line 1
       </label>

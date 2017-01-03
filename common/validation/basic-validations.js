@@ -31,3 +31,7 @@ export function webSite(field, value, prop) {
   return prop && value ? !validUrl.isWebUri(value) : false;
 }
 
+export function country(field, value, prop) {
+  return value ? value !== prop : false;
+}
+

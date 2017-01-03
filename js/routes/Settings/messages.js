@@ -36,6 +36,10 @@ export default defineMessages({
     id: 'settings-page.save',
     defaultMessage: 'Save',
   },
+  labelCountry: {
+    id: 'settings-page.label-country',
+    defaultMessage: 'Country',
+  },
   labelURL: {
     id: 'settings-page.label-url',
     defaultMessage: 'Web site',

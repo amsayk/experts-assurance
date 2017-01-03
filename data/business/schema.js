@@ -9,6 +9,11 @@ import { pubsub } from '../subscriptions';
 
 export const schema = [`
 
+  # Country
+  enum Country {
+    US
+  }
+
   # ------------------------------------
   # Business type
   # ------------------------------------
@@ -19,6 +24,7 @@ export const schema = [`
     description: String
     url: String
 
+    country: Country!
     addressLine1: String
     addressLine2: String
     city: String
@@ -40,6 +46,7 @@ export const schema = [`
     description: String
     url: String
 
+    country: String
     addressLine1: String
     addressLine2: String
     city: String
@@ -68,6 +75,7 @@ export const resolvers = {
       'description',
       'url',
 
+      'country',
       'addressLine1',
       'addressLine2',
       'city',

@@ -20,6 +20,8 @@ import Title from 'components/Title';
 
 import { APP_NAME } from 'vars';
 
+import { COUNTRY } from 'vars';
+
 import QUERY from './currentBusiness.query.graphql';
 
 import BusinessDetailsForm from './BusinessDetailsForm';
@@ -35,6 +37,7 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness
           displayName   : currentBusiness ? currentBusiness.displayName   : null,
           description   : currentBusiness ? currentBusiness.description   : null,
           url           : currentBusiness ? currentBusiness.url           : null,
+          country       : currentBusiness ? currentBusiness.country       : COUNTRY,
           addressLine1  : currentBusiness ? currentBusiness.addressLine1  : null,
           addressLine2  : currentBusiness ? currentBusiness.addressLine2  : null,
           city          : currentBusiness ? currentBusiness.city          : null,

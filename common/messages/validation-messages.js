@@ -67,5 +67,14 @@ export default defineMessages({
     id: 'validation-messages.url-invalid',
     defaultMessage: 'Please enter a valid website.',
   },
+
+  countryInvalid: {
+    id: 'validation-messages.country-invalid',
+    defaultMessage: 'Only {country} is currently supported. Stay tuned!',
+  },
+  countryRequired: {
+    id: 'validation-messages.country-required',
+    defaultMessage: 'Please provide us with your country.',
+  },
 });
 
