@@ -63,5 +63,9 @@ export default defineMessages({
     defaultMessage: 'Please enter your new password.',
   },
 
+  urlInvalid: {
+    id: 'validation-messages.url-invalid',
+    defaultMessage: 'Please enter a valid website.',
+  },
 });
 

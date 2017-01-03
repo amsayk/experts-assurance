@@ -1,3 +1,5 @@
+import validUrl from 'valid-url';
+
 export function required(field, value, prop) {
   return prop ? !value : false;
 }
@@ -23,5 +25,9 @@ export function promise(field, value, prop, allValues) {
 
 export function equalTo(field, value, prop) {
   return !value ? false : prop !== value;
+}
+
+export function webSite(field, value, prop) {
+  return prop && value ? !validUrl.isWebUri(value) : false;
 }
 

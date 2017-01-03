@@ -4,6 +4,7 @@ query getUserBusiness($userId: ID!) {
     id
     displayName
     description
+    url
 
     addressLine1
     addressLine2

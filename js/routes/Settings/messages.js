@@ -36,6 +36,10 @@ export default defineMessages({
     id: 'settings-page.save',
     defaultMessage: 'Save',
   },
+  labelURL: {
+    id: 'settings-page.label-url',
+    defaultMessage: 'Web site',
+  },
   labelNewEmail: {
     id: 'settings-page.label-new-email',
     defaultMessage: 'New email address',

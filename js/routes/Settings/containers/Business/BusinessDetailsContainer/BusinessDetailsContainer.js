@@ -34,6 +34,7 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness
         {loading ? null : <BusinessDetailsForm user={user} intl={intl} initialValues={{
           displayName   : currentBusiness ? currentBusiness.displayName   : null,
           description   : currentBusiness ? currentBusiness.description   : null,
+          url           : currentBusiness ? currentBusiness.url           : null,
           addressLine1  : currentBusiness ? currentBusiness.addressLine1  : null,
           addressLine2  : currentBusiness ? currentBusiness.addressLine2  : null,
           city          : currentBusiness ? currentBusiness.city          : null,

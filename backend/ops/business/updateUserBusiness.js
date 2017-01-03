@@ -8,6 +8,7 @@ export default async function updateUserBusiness(request, response) {
   const { userId, payload: {
     displayName,
     description,
+    url,
 
     addressLine1,
     addressLine2,
@@ -27,6 +28,7 @@ export default async function updateUserBusiness(request, response) {
       .set({
         displayName,
         description,
+        url,
 
         addressLine1,
         addressLine2,

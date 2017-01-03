@@ -16,6 +16,8 @@ import style from '../../../Settings.scss';
 
 import validations from './validations';
 
+import validationMessages from 'validation-messages';
+
 import BusinessNameField from '../../../components/BusinessNameField';
 import BusinessDescriptionField from '../../../components/BusinessDescriptionField';
 import OptionalTextInputField from '../../../components/OptionalTextInputField';
@@ -46,6 +48,7 @@ export class BusinessDetailsForm extends React.Component {
         payload : {
           displayName   : data.get('displayName'),
           description   : data.get('description'),
+          url           : data.get('url'),
           addressLine1  : data.get('addressLine1'),
           addressLine2  : data.get('addressLine2'),
           city          : data.get('city'),
@@ -84,6 +87,15 @@ export class BusinessDetailsForm extends React.Component {
             name='description'
             component={BusinessDescriptionField}
             label={intl.formatMessage(messages.labelBusinessDescription)} />
+          <Field
+            name='url'
+            component={OptionalTextInputField}
+            label={intl.formatMessage(messages.labelURL)}
+            onKeyDown={this.onKeyDown}>
+            <div className={style.formControlFeedback} when={'webSite'}>
+              {intl.formatMessage(validationMessages.urlInvalid)}
+            </div>
+          </Field>
           <Field
             name='addressLine1'
             component={OptionalTextInputField}

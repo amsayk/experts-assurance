@@ -17,6 +17,7 @@ export const schema = [`
 
     displayName: String!
     description: String
+    url: String
 
     addressLine1: String
     addressLine2: String
@@ -37,6 +38,7 @@ export const schema = [`
   input UpdateUserBusinessPayload {
     displayName: String!
     description: String
+    url: String
 
     addressLine1: String
     addressLine2: String
@@ -64,6 +66,7 @@ export const resolvers = {
       'id',
       'displayName',
       'description',
+      'url',
 
       'addressLine1',
       'addressLine2',

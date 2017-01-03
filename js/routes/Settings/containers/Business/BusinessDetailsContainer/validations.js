@@ -5,6 +5,10 @@ const validations = {
     validateOnBlur : true,
     required       : true,
   },
+  url: {
+    validateOnBlur : true,
+    webSite        : true,
+  },
 };
 
 export default generateValidation(validations);

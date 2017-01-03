@@ -67,6 +67,28 @@ exports[`business details form should render the snapshot 1`] = `
       className="formGroup">
       <label
         className="label"
+        htmlFor="url">
+        Web site
+      </label>
+      <div
+        className="inputWrapper">
+        <input
+          className="control"
+          name="url"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onDragStart={[Function]}
+          onDrop={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          value="" />
+        <div />
+      </div>
+    </div>
+    <div
+      className="formGroup">
+      <label
+        className="label"
         htmlFor="addressLine1">
         Address line 1
       </label>
