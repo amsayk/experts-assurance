@@ -6,6 +6,7 @@ import {
   PATH_SETTINGS_ACCOUNT,
   PATH_SETTINGS_CHANGE_PASSWORD,
   PATH_SETTINGS_BUSINESS_DETAILS,
+  PATH_SETTINGS_CHANGE_EMAIL,
 } from 'vars';
 
 import { intlShape, injectIntl } from 'react-intl';
@@ -26,6 +27,11 @@ export function Sidebar({ intl, selectedMenuItem }) {
         <li className={cx({ [style.selected]: selectedMenuItem === 'account.settings' })}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_ACCOUNT}>
             {intl.formatMessage(messages.linkAccountSettings)}
+          </Link>
+        </li>
+        <li className={cx({ [style.selected]: selectedMenuItem === 'account.change_email' })}>
+          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
+            {intl.formatMessage(messages.linkChangeEmail)}
           </Link>
         </li>
       </ul>
@@ -61,6 +67,7 @@ Sidebar.propTypes = {
   intl             : intlShape.isRequired,
   selectedMenuItem : T.oneOf([
     'account.settings',
+    'account.change_email',
     'security.change_password',
     'business.settings',
   ]).isRequired,

@@ -1,6 +1,9 @@
 import React, { PropTypes as T } from 'react';
+import { Link } from 'react-router';
 
 import style from './notifications.scss';
+
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_CHANGE_EMAIL } from 'vars';
 
 import messages from './messages';
 
@@ -13,6 +16,11 @@ function NotifyVerificationPending({ intl, user, onResendEmailVerification }) {
       <a onClick={onResendEmailVerification} className={style.resendLink}>
         {intl.formatMessage(messages.ResendVerification)}
       </a>
+    ),
+    changeEmail: (
+      <Link className={style.changeEmailLink} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
+        {intl.formatMessage(messages.ChangeEmail)}
+      </Link>
     ),
   };
   return (

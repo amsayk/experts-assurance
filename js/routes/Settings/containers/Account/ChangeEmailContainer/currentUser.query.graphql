@@ -1,0 +1,9 @@
+query getUser($id: ID!) {
+
+  currentUser : getUser(id: $id) {
+    id
+    displayName
+    email
+  }
+}
+

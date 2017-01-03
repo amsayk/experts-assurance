@@ -20,7 +20,9 @@ export default function parseGraphqlObjectFields(fields) {
 
 async function getParseOject(object) {
   if (object.fetch) {
-    return await object.fetch();
+    return await object.fetch({
+      useMasterKey: true,
+    }); // Using master key is the only way to get email to be included!
   }
   return object;
 }

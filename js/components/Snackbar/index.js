@@ -76,7 +76,7 @@ export function createNotificationController(store) {
       if (!notification.persist) {
         this.timer = setTimeout(function () {
           this.slideOut();
-        }.bind(this), 3000);
+        }.bind(this), notification.duration || 3000);
       }
     },
 
@@ -94,12 +94,13 @@ export function createNotificationController(store) {
 
       this.timer = setTimeout(function () {
         store.dispatch(update({
-          active  : false,
-          type    : null,
-          animation: null,
-          message : null,
-          persist : false,
-          action  : null,
+          active    : false,
+          type      : null,
+          animation : null,
+          message   : null,
+          persist   : false,
+          action    : null,
+          duration  : null,
         }));
         if (done) {
           done();

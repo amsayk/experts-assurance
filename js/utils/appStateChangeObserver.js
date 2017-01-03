@@ -36,7 +36,7 @@ export default function appStateChangeObserver(store) {
   return {
     remove: () =>  {
       clearTimeout();
-      AppState.removeEventListener('change', cb)
+      AppState.removeEventListener('change', cb);
     },
   };
 }

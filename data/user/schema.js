@@ -4,11 +4,25 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 import signUpValidations from 'routes/Signup/validations';
 import resetValidations from 'routes/PasswordReset/validations';
 import accountSettingsValidations from 'routes/Settings/containers/Account/AccountSettingsContainer/validations';
+import emailValidations from './emailValidations';
 import passwordValidations from './passwordValidations';
 
 import { fromJS } from 'immutable';
 
 export const schema = [`
+
+  # ------------------------------------
+  # Change email
+  # ------------------------------------
+
+  input ChangeEmailPayload {
+    email: String
+  }
+
+  type ChangeEmailResponse {
+    user: User!
+    errors: JSON!
+  }
 
   # ------------------------------------
   # Set password
@@ -113,6 +127,17 @@ export const resolvers = {
     ])
   ),
 
+  ChangeEmailResponse : Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'user',
+    ]),
+    parseGraphqlScalarFields([
+      'errors',
+    ])
+  ),
+
   SetPasswordResponse : Object.assign(
     {
     },
@@ -167,6 +192,18 @@ export const resolvers = {
         return { errors };
       }
       const user = await context.Users.updateAccountSettings(payload);
+      return { user, errors: {} };
+    },
+    async changeEmail(_, { payload }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+      try {
+        await emailValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+      } catch (errors) {
+        return { errors };
+      }
+      const user = await context.Users.changeEmail(payload);
       return { user, errors: {} };
     },
     async setPassword(_, { payload }, context) {

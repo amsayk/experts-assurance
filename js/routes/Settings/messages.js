@@ -11,14 +11,34 @@ export default defineMessages({
     defaultMessage: 'Log out',
   },
 
+  linkChangeEmail: {
+    id: 'settings-page.sidebar.change-email-link',
+    defaultMessage: 'Change email address',
+  },
   linkAccountSettings: {
     id: 'settings-page.sidebar.account-settings-link',
     defaultMessage: 'Account settings',
   },
+  close: {
+    id: 'settings-page.close',
+    defaultMessage: 'Close',
+  },
 
+  currentEmailIntro: {
+    id: 'settings-page.change-email-intro',
+    defaultMessage: 'Your email address is currently {email}.',
+  },
+  changeEmail: {
+    id: 'settings-page.change-email-button',
+    defaultMessage: 'Change email',
+  },
   save: {
     id: 'settings-page.save',
     defaultMessage: 'Save',
+  },
+  labelNewEmail: {
+    id: 'settings-page.label-new-email',
+    defaultMessage: 'New email address',
   },
   labelEmail: {
     id: 'settings-page.label-email',
@@ -144,6 +164,10 @@ export default defineMessages({
     defaultMessage: 'Very strong',
   },
 
+  emailChangeSuccessNotification: {
+    id: 'settings-page.email-change-success-notification',
+    defaultMessage: 'We sent you an email. Please verify your account.',
+  },
   accountSettingsChangeSuccessNotification: {
     id: 'settings-page.account-settings-change-success-notification',
     defaultMessage: 'Your account was updated.',
