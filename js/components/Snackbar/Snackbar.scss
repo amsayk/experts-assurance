@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'animate';
 $app-color-black: #373a3c !default;
 
 .snackbar {
@@ -13,17 +14,6 @@ $app-color-black: #373a3c !default;
   min-height: 48px;
   padding: 15px 24px;
   position: fixed;
-
-  .btn-snackbar {
-    background: none;
-    border: 0;
-    font-weight: 600;
-    height: 100%;
-    line-height: 100%;
-    position: absolute;
-    right: 24px;
-    top: 0;
-  }
 
   &.primary {
     background: $brand-primary;
@@ -43,5 +33,28 @@ $app-color-black: #373a3c !default;
 
   &.danger {
     background: $brand-danger;
+  }
+}
+
+.btn-snackbar {
+  background: none;
+  border: 0;
+  color: #fff;
+  composes: btn btn-link from 'styles/_base.scss';
+  font-weight: 600;
+  height: 100%;
+  line-height: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 24px;
+  text-transform: uppercase;
+  top: 0;
+
+  &:focus,
+  &:hover {
+    color: darken(#fff, 0.3);
+    outline: 0;
+    text-decoration: none;
   }
 }

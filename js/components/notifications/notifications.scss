@@ -20,3 +20,8 @@
   font-weight: normal;
   text-decoration: underline !important;
 }
+
+.changeEmailLink,
+.resendLink {
+  composes: link;
+}

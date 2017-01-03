@@ -122,10 +122,10 @@ class Snackbar extends React.Component {
   getClass() {
     const { snackbar: { type, animation } } = this.props;
     return cx({
-      [style.snackbar] : true,
-      [style[type]]    : !!type,
-      animated         : !!animation,
-      [animation]      : !!animation,
+      [style.snackbar]    : true,
+      [style[type]]       : !!type,
+      [style.animated]    : !!animation,
+      [style[animation]]  : !!animation,
     });
   }
 
