@@ -26,10 +26,10 @@ class FormMessages extends React.Component {
   }
 
   render() {
-    const { children, getFieldMeta, errorCount, ...rest } = this.props;
+    const { children, getFieldMeta, errorCount } = this.props;
     const { _reduxForm: { form, getFormState } } = this.context;
     return (
-      <this.props.tagName {...rest}>
+      <this.props.tagName>
         {this.renderChildren(children, /* field = */ getFieldMeta(form, getFormState), errorCount)}
       </this.props.tagName>
     );

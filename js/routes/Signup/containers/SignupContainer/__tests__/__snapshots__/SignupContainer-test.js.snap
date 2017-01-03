@@ -84,10 +84,7 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
           placeholder="Email"
           type="text"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="email"
-          tagName="div" />
+        <div />
       </div>
       <div
         className="formGroup">
@@ -103,10 +100,7 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
           placeholder="Password"
           type="password"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="password"
-          tagName="div" />
+        <div />
       </div>
       <div
         className="formGroup">
@@ -122,17 +116,11 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
           placeholder="Password, again"
           type="password"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="passwordConfirmation"
-          tagName="div" />
+        <div />
       </div>
       <div
         className="formGroup">
-        <div
-          dispatch={[Function]}
-          field="recaptcha"
-          tagName="div" />
+        <div />
       </div>
       <button
         className="join"

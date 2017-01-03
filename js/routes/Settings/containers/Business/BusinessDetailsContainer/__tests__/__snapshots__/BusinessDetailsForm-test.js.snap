@@ -34,10 +34,7 @@ exports[`business details form should render the snapshot 1`] = `
           onKeyDown={[Function]}
           type="text"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="displayName"
-          tagName="div" />
+        <div />
       </div>
     </div>
     <div
@@ -85,6 +82,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -106,6 +104,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -127,6 +126,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -148,6 +148,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -169,6 +170,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -190,6 +192,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <div
@@ -211,6 +214,7 @@ exports[`business details form should render the snapshot 1`] = `
           onFocus={[Function]}
           onKeyDown={[Function]}
           value="" />
+        <div />
       </div>
     </div>
     <button

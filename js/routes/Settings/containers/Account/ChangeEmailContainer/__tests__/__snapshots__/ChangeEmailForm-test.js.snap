@@ -39,10 +39,7 @@ exports[`change email form should render the snapshot 1`] = `
           onKeyDown={[Function]}
           type="text"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="email"
-          tagName="div" />
+        <div />
       </div>
     </div>
     <button

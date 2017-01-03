@@ -59,10 +59,7 @@ exports[`account settings form should render the snapshot 1`] = `
           onKeyDown={[Function]}
           type="text"
           value="" />
-        <div
-          dispatch={[Function]}
-          field="displayName"
-          tagName="div" />
+        <div />
       </div>
     </div>
     <button
