@@ -82,6 +82,10 @@ export default defineMessages({
     defaultMessage: 'Business',
   },
 
+  labelBusinessId: {
+    id: 'settings-page.business.business-id-label',
+    defaultMessage: 'Business ID',
+  },
   labelBusinessName: {
     id: 'settings-page.business.business-name-label',
     defaultMessage: 'Business name',

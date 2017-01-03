@@ -24,6 +24,8 @@ import { COUNTRY } from 'vars';
 
 import QUERY from './currentBusiness.query.graphql';
 
+import update from 'react-addons-update';
+
 import BusinessDetailsForm from './BusinessDetailsForm';
 
 function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness }, actions }) {
@@ -34,6 +36,7 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness
       <div className={style.body}>
         <Sidebar selectedMenuItem={'business.settings'}/>
         {loading ? null : <BusinessDetailsForm user={user} intl={intl} initialValues={{
+          id            : currentBusiness ? currentBusiness.id            : null,
           displayName   : currentBusiness ? currentBusiness.displayName   : null,
           description   : currentBusiness ? currentBusiness.description   : null,
           url           : currentBusiness ? currentBusiness.url           : null,
@@ -66,7 +69,17 @@ function mapDispatchToProps(dispatch) {
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const withCurrentBusiness = graphql(QUERY, {
-  options: ({ user }) => ({ variables: { userId: user.get('id') } }),
+  options: ({ user }) => ({
+    variables: { userId: user.get('id') },
+    reducer: (previousResult, action, variables) => {
+      if (action.type === 'APOLLO_MUTATION_RESULT' && action.operationName === 'updateUserBusiness') {
+        return update(previousResult, {
+          currentBusiness: { $set: action.result.data.updateUserBusiness.business },
+        });
+      }
+      return previousResult;
+    },
+  }),
   skip: ({ user }) => user.isEmpty(),
 });
 

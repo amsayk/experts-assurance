@@ -22,6 +22,7 @@ import BusinessNameField from '../../../components/BusinessNameField';
 import BusinessDescriptionField from '../../../components/BusinessDescriptionField';
 import OptionalTextInputField from '../../../components/OptionalTextInputField';
 import CountryField from '../../../components/CountryField';
+import BusinessIdField from '../../../components/BusinessIdField';
 
 import MUTATION from './updateUserBusiness.mutation.graphql';
 
@@ -80,6 +81,10 @@ export class BusinessDetailsForm extends React.Component {
       <div className={style.content}>
         <h1 className={style.formHeading}>{intl.formatMessage(messages.linkBusinessDetails)}</h1>
         <div className={style.form}>
+          <Field
+            name='id'
+            component={BusinessIdField}
+            label={intl.formatMessage(messages.labelBusinessId)}/>
           <Field
             name='displayName'
             component={BusinessNameField}

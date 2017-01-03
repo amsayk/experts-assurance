@@ -5,6 +5,7 @@ mutation updateUserBusiness($userId: ID!, $payload: UpdateUserBusinessPayload!) 
       id
       displayName
       description
+      url
 
       country
       addressLine1
