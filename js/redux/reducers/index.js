@@ -43,6 +43,16 @@ const reducers = {
           return state;
       }
     },
+    changeEmail: (state, action) => {
+      switch (action.type) {
+        case actionTypes.SET_SUBMIT_SUCCEEDED: // Clear email on success
+          return state ? state.merge({
+            values: {},
+          }) : state;
+        default:
+          return state;
+      }
+    },
   }),
 };
 

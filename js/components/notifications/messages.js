@@ -18,12 +18,16 @@ export default defineMessages({
 
   EmailVerificationPending: {
     id: 'notifications.email_verification_pending',
-    defaultMessage: 'Please activate your account. We sent an email to {email}. {resendEmailVerificationLink}',
+    defaultMessage: 'Please activate your account. We sent an email to {email}. {resendEmailVerificationLink} {changeEmail}',
   },
 
   ResendVerification: {
     id: 'notifications.resend_verification',
     defaultMessage: 'Resend activation',
+  },
+  ChangeEmail: {
+    id: 'notifications.change_email',
+    defaultMessage: 'Change your email address',
   },
 });
 

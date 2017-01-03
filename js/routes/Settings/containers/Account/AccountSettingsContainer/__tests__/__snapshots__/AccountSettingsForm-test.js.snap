@@ -19,6 +19,16 @@ exports[`account settings form should render the snapshot 1`] = `
         <p
           className="email">
           
+           
+          <a
+            className="changeEmailButton"
+            onClick={[Function]}
+            style={Object {}}>
+            <i
+              className="changeEmailIcon">
+              edit
+            </i>
+          </a>
         </p>
       </div>
     </div>

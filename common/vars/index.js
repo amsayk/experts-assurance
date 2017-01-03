@@ -37,4 +37,5 @@ export const PATH_SETTINGS_BASE               = process.env.PATH_SETTINGS_BASE;
 export const PATH_SETTINGS_ACCOUNT            = process.env.PATH_SETTINGS_ACCOUNT;
 export const PATH_SETTINGS_CHANGE_PASSWORD    = process.env.PATH_SETTINGS_CHANGE_PASSWORD;
 export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
+export const PATH_SETTINGS_CHANGE_EMAIL       = process.env.PATH_SETTINGS_CHANGE_EMAIL;
 

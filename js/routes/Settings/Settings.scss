@@ -52,8 +52,8 @@
   max-width: 240px;
   padding: 10px;
   position: relative;
-
 }
+
 textarea.control {
   height: auto;
 }
@@ -185,6 +185,26 @@ textarea.control {
     color: #333;
     font-weight: 700;
   }
+}
+
+.changeEmailFormHeading {
+  composes: formHeading;
+  margin-bottom: 0;
+}
+
+.currentEmailIntro {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.changeEmailButton {
+  composes: btn btn-link align-middle from 'styles/_base.scss';
+  padding: 0;
+}
+
+.changeEmailIcon {
+  composes: material-icons from 'styles/_base.scss';
+  font-size: 15px;
 }
 
 // Password meter

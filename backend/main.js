@@ -5,6 +5,7 @@ import {
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
+  CHANGE_EMAIL,
 } from './constants';
 
 const log = require('log')('app:backend');
@@ -15,6 +16,7 @@ import {
   passwordReset,
   updateAccountSettings,
   setPassword,
+  changeEmail,
 } from './ops/user';
 
 import {
@@ -31,6 +33,9 @@ Parse.Cloud.define('routeOp', function (request, response) {
     }
     case SET_PASSWORD: {
       return setPassword(req, response);
+    }
+    case CHANGE_EMAIL: {
+      return changeEmail(req, response);
     }
     case UPDATE_ACCOUNT_SETTINGS: {
       return updateAccountSettings(req, response);

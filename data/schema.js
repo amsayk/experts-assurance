@@ -38,6 +38,7 @@ const rootSchema = [`
 
     # Account
     setPassword(payload: SetPasswordPayload!): SetPasswordResponse!
+    changeEmail(payload: ChangeEmailPayload!): ChangeEmailResponse!
     updateAccountSettings(payload: UpdateAccountSettingsPayload!): UpdateAccountSettingsResponse!
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!

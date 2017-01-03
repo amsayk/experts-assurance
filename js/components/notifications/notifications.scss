@@ -14,7 +14,7 @@
   composes: notification alert alert-success alert-dismissible fade in from 'styles/_base.scss';
 }
 
-.resendLink {
+.link {
   composes: alert-link from 'styles/_base.scss';
   cursor: pointer;
   font-weight: normal;

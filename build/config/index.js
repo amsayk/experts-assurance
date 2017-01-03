@@ -78,6 +78,7 @@ const config = {
   path_settings_account            : process.env.PATH_SETTINGS_ACCOUNT || 'account',
   path_settings_change_password    : process.env.PATH_SETTINGS_CHANGE_PASSWORD || 'change_password',
   path_settings_business_details   : process.env.PATH_SETTINGS_BUSINESS_DETAILS || 'business',
+  path_settings_change_email       : process.env.PATH_SETTINGS_CHANGE_EMAIL || 'change_email',
 
   password_min_length : nullthrows(process.env.PASSWORD_MIN_LENGTH && parseInt(process.env.PASSWORD_MIN_LENGTH, 10)),
   password_min_score  : nullthrows(process.env.PASSWORD_MIN_SCORE && parseInt(process.env.PASSWORD_MIN_SCORE, 10)),
@@ -178,10 +179,11 @@ config.globals = {
     PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
 
     // Settings
-    PATH_SETTINGS_BASE            : JSON.stringify(config.path_settings_base),
-    PATH_SETTINGS_ACCOUNT         : JSON.stringify(config.path_settings_account),
-    PATH_SETTINGS_CHANGE_PASSWORD : JSON.stringify(config.path_settings_change_password),
+    PATH_SETTINGS_BASE               : JSON.stringify(config.path_settings_base),
+    PATH_SETTINGS_ACCOUNT            : JSON.stringify(config.path_settings_account),
+    PATH_SETTINGS_CHANGE_PASSWORD    : JSON.stringify(config.path_settings_change_password),
     PATH_SETTINGS_BUSINESS_DETAILS   : JSON.stringify(config.path_settings_business_details),
+    PATH_SETTINGS_CHANGE_EMAIL       : JSON.stringify(config.path_settings_change_email),
 
     PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
     PASSWORD_MIN_SCORE    : JSON.stringify(config.password_min_score),

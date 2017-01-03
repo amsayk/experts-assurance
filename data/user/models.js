@@ -6,6 +6,7 @@ import {
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
+  CHANGE_EMAIL,
 } from 'backend/constants';
 
 export class Users {
@@ -18,6 +19,13 @@ export class Users {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_PASSWORD, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+  changeEmail(payload) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: CHANGE_EMAIL, args: { payload } },
       { sessionToken: this.user.getSessionToken() }
     );
   }
