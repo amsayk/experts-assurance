@@ -26,6 +26,8 @@ import QUERY from './currentBusiness.query.graphql';
 
 import update from 'react-addons-update';
 
+import isEmpty from 'isEmpty';
+
 import BusinessDetailsForm from './BusinessDetailsForm';
 
 function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness }, actions }) {
@@ -73,9 +75,10 @@ const withCurrentBusiness = graphql(QUERY, {
     variables: { userId: user.get('id') },
     reducer: (previousResult, action, variables) => {
       if (action.type === 'APOLLO_MUTATION_RESULT' && action.operationName === 'updateUserBusiness') {
-        return update(previousResult, {
-          currentBusiness: { $set: action.result.data.updateUserBusiness.business },
-        });
+        const { business, errors } = action.result.data.updateUserBusiness;
+        return isEmpty(errors) ? update(previousResult, {
+          currentBusiness: { $set: business },
+        }) : previousResult;
       }
       return previousResult;
     },
