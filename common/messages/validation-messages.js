@@ -63,6 +63,10 @@ export default defineMessages({
     defaultMessage: 'Please enter your new password.',
   },
 
+  zipInvalid: {
+    id: 'validation-messages.zipcode-invalid',
+    defaultMessage: 'Please enter a valid ZIP.',
+  },
   urlInvalid: {
     id: 'validation-messages.url-invalid',
     defaultMessage: 'Please enter a valid website.',

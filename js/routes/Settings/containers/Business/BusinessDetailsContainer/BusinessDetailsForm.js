@@ -134,7 +134,11 @@ export class BusinessDetailsForm extends React.Component {
             component={OptionalTextInputField}
             label={intl.formatMessage(messages.labelPostalCode)}
             onKeyDown={this.onKeyDown}
-            className={style.width15Percent} />
+            className={style.width15Percent}>
+            <div className={style.formControlFeedback} when={'zipCode'}>
+              {intl.formatMessage(validationMessages.zipInvalid)}
+            </div>
+          </Field>
           <Field
             name='phone'
             component={OptionalTextInputField}
