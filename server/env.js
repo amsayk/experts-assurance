@@ -35,3 +35,7 @@ babelRegister(objectAssign(babelOptions, {
 }
 ));
 
+require.ensure = function ensure(modules, callback) {
+  setImmediate(callback);
+};
+

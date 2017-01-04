@@ -259,6 +259,7 @@
       "^.+\\.js$": "<rootDir>/scripts/jest/jsPreprocessor"
     },
     "setupFiles": [
+      "<rootDir>/scripts/jest/setup",
       "<rootDir>/node_modules/babel-polyfill",
       "node_modules/fbjs-scripts/jest/environment.js"
     ],

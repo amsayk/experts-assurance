@@ -10,8 +10,6 @@ import { fromJS } from 'immutable';
 
 import { ChangePasswordForm } from '../ChangePasswordForm';
 
-jest.mock('../../../../utils/loadZxcvbn');
-
 const client = {};
 
 const Decorated = compose(
