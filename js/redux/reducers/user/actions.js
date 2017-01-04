@@ -9,13 +9,12 @@ export function login(payload) {
 }
 
 export function logOut() {
-  return async (dispatch, getState, { client, history }) => {
+  return async (dispatch, getState, { client }) => {
     try {
       await Parse.User.logOut();
     } finally {
       dispatch({ type: USER_LOGGED_OUT });
       client.resetStore();
-      history.push('/');
     }
   };
 }

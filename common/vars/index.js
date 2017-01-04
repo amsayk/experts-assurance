@@ -7,7 +7,7 @@ export const isServer                         = process.env._ENV !== 'client';
 export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;
 export const COUNTRY                          = process.env.COUNTRY;
-export const INACTIVITY_TIMEOUT               = 10 * 60 * 1000; // 10 minutes
+export const INACTIVITY_TIMEOUT               = 15 * 60 * 1000; // 15 minutes
 
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT   = process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT;
 export const GRAPHQL_ENDPOINT                 = process.env.GRAPHQL_ENDPOINT;

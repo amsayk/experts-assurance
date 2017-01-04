@@ -3,15 +3,11 @@ import { USER_LOGGED_IN, USER_LOGGED_OUT } from '../constants';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-const history = {
-  push: jest.fn(),
-};
-
 const client = {
   resetStore: jest.fn(),
 };
 
-const middlewares = [thunk.withExtraArgument({history, client})];
+const middlewares = [thunk.withExtraArgument({client})];
 const mockStore = configureStore(middlewares);
 
 describe('user actions', () => {
@@ -33,7 +29,6 @@ describe('user actions', () => {
     const actions = store.getActions();
     expect(actions[0].type).toBe(USER_LOGGED_OUT);
     expect(client.resetStore).toHaveBeenCalled();
-    expect(history.push).toBeCalledWith('/');
   });
 });
 
