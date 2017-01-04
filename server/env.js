@@ -4,7 +4,6 @@ const babelRegister = require('babel-core/register');
 
 const babelOptions = require('../scripts/getBabelOptions')({
   moduleMap: {
-    'getLangFromReq'   : 'server/utils/getLangFromReq',
     'validation'       : 'common/validation',
     'getCurrentUser'   : 'common/getCurrentUser',
     'vars'             : 'common/vars',
