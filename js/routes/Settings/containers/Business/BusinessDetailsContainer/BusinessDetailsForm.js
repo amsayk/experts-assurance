@@ -143,7 +143,11 @@ export class BusinessDetailsForm extends React.Component {
             name='phone'
             component={OptionalTextInputField}
             label={intl.formatMessage(messages.labelPhone)}
-            onKeyDown={this.onKeyDown} />
+            onKeyDown={this.onKeyDown}>
+            <div className={style.formControlFeedback} when={'phoneNumber'}>
+              {intl.formatMessage(validationMessages.phoneInvalid)}
+            </div>
+          </Field>
           <Field
             name='taxId'
             component={OptionalTextInputField}

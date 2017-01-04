@@ -4,6 +4,7 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 import { fromJS } from 'immutable';
 
 import businessValidations from 'routes/Settings/containers/Business/BusinessDetailsContainer/validations';
+import phoneNumberValidations from './phoneNumberValidations';
 
 import { pubsub } from '../subscriptions';
 
@@ -101,9 +102,10 @@ export const resolvers = {
   ),
 
   Mutation: {
-    async updateUserBusiness(_, { userId, payload }, context) {
+    async updateUserBusiness(obj, { userId, payload }, context) {
       try {
         await businessValidations.asyncValidate(fromJS(payload));
+        await phoneNumberValidations.asyncValidate(fromJS(payload));
       } catch (errors) {
         return { errors };
       }

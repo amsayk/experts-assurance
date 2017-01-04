@@ -71,6 +71,10 @@ export default defineMessages({
     id: 'validation-messages.url-invalid',
     defaultMessage: 'Please enter a valid website.',
   },
+  phoneInvalid: {
+    id: 'validation-messages.phone-invalid',
+    defaultMessage: 'Please enter a valid phone number.',
+  },
 
   countryInvalid: {
     id: 'validation-messages.country-invalid',
