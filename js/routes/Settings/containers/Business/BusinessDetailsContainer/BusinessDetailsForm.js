@@ -26,6 +26,8 @@ import BusinessIdField from '../../../components/BusinessIdField';
 
 import MUTATION from './updateUserBusiness.mutation.graphql';
 
+import update from 'react-addons-update';
+
 export class BusinessDetailsForm extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -60,7 +62,26 @@ export class BusinessDetailsForm extends React.Component {
           phone         : data.get('phone'),
           taxId         : data.get('taxId'),
 
-        } },
+        },
+      },
+      updateQueries: {
+        getUser: (prev, { mutationResult }) => {
+          const newOrUpdatedBusiness = mutationResult.data.updateUserBusiness.business;
+          return update(prev, {
+            currentUser: {
+              business: {
+                $set: newOrUpdatedBusiness,
+              },
+            },
+          });
+        },
+        getUserBusiness: (prev, { mutationResult }) => {
+          const { business, errors } = mutationResult.data.updateUserBusiness;
+          return isEmpty(errors) ? update(prev, {
+            currentBusiness: { $set: business },
+          }) : prev;
+        },
+      },
     });
 
     if (!isEmpty(errors)) {

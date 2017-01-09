@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import 'parse-config';
 
 import React, { PropTypes as T } from 'react';
