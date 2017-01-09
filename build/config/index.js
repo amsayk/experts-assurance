@@ -109,9 +109,19 @@ const config = {
   compiler_babel_options : objectAssign({}, babelOptions, {
     comments: false,
     compact: true,
+    babelrc: false,
     env: {
       development: {
         plugins: ['transform-react-jsx-source'],
+      },
+      production: {
+        minified: true,
+        plugins: [
+          'transform-react-remove-prop-types',
+          'transform-react-constant-elements',
+          // 'transform-react-inline-elements',
+          'transform-react-router-optimize',
+        ],
       },
     },
     retainLines: true,
@@ -134,6 +144,7 @@ const config = {
     'react-apollo',
     'apollo-client',
     'classnames',
+    'moment',
   ],
   compiler_offline_assets : [
 

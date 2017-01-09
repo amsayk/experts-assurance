@@ -202,6 +202,7 @@
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.2.11",
+    "babel-plugin-transform-react-router-optimize": "^1.0.1",
     "babel-plugin-transform-regenerator": "^6.21.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-fbjs": "^2.1.0",
