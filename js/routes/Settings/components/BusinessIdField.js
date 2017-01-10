@@ -9,7 +9,7 @@ function BusinessIdField({ intl, label, input }) {
     return null;
   }
   return (
-    <div className={style.emailField}>
+    <div className={style.idField}>
       <label htmlFor={input.name} className={style.label}>{label}</label>
       <div className={style.inputWrapper}>
         <p className={style.id}>{input.value}</p>

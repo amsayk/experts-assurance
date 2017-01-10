@@ -76,10 +76,6 @@ export class ChoosePasswordContainer extends React.Component {
     } = this.props;
 
     return [
-      <Link className={style.logo} to={'/'}>
-        <AppLogo width={48} height={48}/>
-      </Link>,
-
       <h1 className={style.heading}>{intl.formatMessage(messages.title)}</h1>,
 
       <Field
@@ -110,6 +106,9 @@ export class ChoosePasswordContainer extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <div className={style.center}>
+          <Link className={style.logo} to={'/'}>
+            <AppLogo width={52} height={52}/>
+          </Link>
           <form ref={this._setFormRef} action={action} className={style.form} method={'POST'}>
             <input name='utf-8' type='hidden' value='✓' />
             <input name='username' value={username} type='hidden' />

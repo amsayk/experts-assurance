@@ -10,7 +10,7 @@
 
 .content {
   flex: 1;
-  max-width: 800px;
+  overflow: auto;
   padding: 20px;
 }
 
@@ -80,9 +80,9 @@ textarea.control {
   margin-bottom: 0.5em;
 }
 
-.emailField {
+.emailField,
+.idField {
   composes: formGroup;
-  composes: mb-0 from 'styles/_base.scss';
 }
 
 .formGroupHasDanger {
@@ -117,8 +117,7 @@ textarea.control {
 }
 
 .root {
-  display: flex;
-  flex-direction: column;
+  composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
 }
 
@@ -134,22 +133,19 @@ textarea.control {
 // Header
 
 .navbar {
-  composes: navbar from 'styles/_base.scss';
+  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  padding-left: $navbar-horizontal-spacing;
+  padding-right: $navbar-horizontal-spacing
 }
 
-.logoutNav {
-  composes: nav navbar-nav navbarRight from 'styles/_base.scss';
+.menu {
+  composes: navbar-nav from 'styles/_base.scss';
+  justify-content: center;
 }
 
 .logoutLink {
   composes: nav-item nav-link from 'styles/_base.scss';
   cursor: pointer;
-}
-
-.navbarNav {
-  composes: container-fluid from 'styles/_base.scss';
-  padding-bottom: $navbar-vertical-spacing;
-  padding-top: $navbar-vertical-spacing;
 }
 
 // Sidebar

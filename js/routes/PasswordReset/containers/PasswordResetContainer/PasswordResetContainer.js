@@ -88,10 +88,6 @@ export class PasswordResetContainer extends React.Component {
     } = this.props;
 
     return [
-      <Link className={style.logo} to={'/'}>
-        <AppLogo width={48} height={48}/>
-      </Link>,
-
       <h5 className={ style.heading }>{intl.formatMessage(messages.title)}</h5>,
 
       <div className={ style.subheading }>{intl.formatMessage(messages.introText)}</div>,
@@ -116,6 +112,9 @@ export class PasswordResetContainer extends React.Component {
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {submitSucceeded ? <NotifySuccess form={form}/> : null}
         <div className={style.center}>
+          <Link className={style.logo} to={'/'}>
+            <AppLogo width={52} height={52}/>
+          </Link>
           <div className={style.form}>
             {this._renderForm()}
           </div>

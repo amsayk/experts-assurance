@@ -20,14 +20,14 @@ import isEmpty from 'isEmpty';
 
 import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
 
+import AppLogo from 'components/AppLogo';
+
 import {
   intlShape,
   injectIntl,
 } from 'react-intl';
 
 import messages from '../../messages';
-
-import Header from '../../components/Header';
 
 import NotifyPasswordResetSuccess from 'components/notifications/NotifyPasswordResetSuccess';
 import NotifyInvalidLink from 'components/notifications/NotifyInvalidLink';
@@ -37,6 +37,7 @@ import {
   PATH_INVALID_LINK,
   PATH_PASSWORD_RESET_SUCCESS,
   PATH_PASSWORD_RESET,
+  PATH_SIGNUP,
 } from 'vars';
 
 export class LoginContainer extends React.Component {
@@ -164,10 +165,20 @@ export class LoginContainer extends React.Component {
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         {Notification ? <Notification/> : null}
-        <Header/>
         <div className={style.center}>
+          <Link className={style.logo} to={'/'}>
+            <AppLogo width={52} height={52}/>
+          </Link>
           <div className={style.form}>
             {this._renderForm()}
+          </div>
+          <div className={style.navSignupWrapper}>
+            <span className={style.navbarText}>
+              {intl.formatMessage(messages.signupQuestion)}
+            </span>{' '}
+            <Link className={style.joinButton} to={PATH_SIGNUP}>
+              {intl.formatMessage(messages.signUp)}
+            </Link>
           </div>
         </div>
         <footer>

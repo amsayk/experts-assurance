@@ -17,7 +17,8 @@ exports[`account settings form should render the snapshot 1`] = `
       <div
         className="inputWrapper">
         <p
-          className="email">
+          className="email"
+          title="Change email">
           
            
           <a

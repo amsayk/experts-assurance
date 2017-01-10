@@ -30,7 +30,7 @@ export default defineMessages({
 
   login: {
     id: 'account.login-form.login-action',
-    defaultMessage: 'Sign in',
+    defaultMessage: 'Sign In',
   },
 
   signupQuestion: {
@@ -45,7 +45,7 @@ export default defineMessages({
 
   passwordReset: {
     id: 'account.login-form.password_reset',
-    defaultMessage: 'Forgot password',
+    defaultMessage: 'Forgot your password?',
   },
 
 });

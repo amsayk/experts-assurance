@@ -3,7 +3,7 @@
 }
 
 .open {
-  composes: open from 'styles/_base.scss';
+  composes: show from 'styles/_base.scss';
 }
 
 .dropdown {

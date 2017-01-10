@@ -27,24 +27,22 @@ function Header({ intl, user, onLogOut }) {
   }
   return (
     <nav className={style.navbar}>
-      <div className={style.navbarNav}>
-        <AppBrand/>
-        <div className={style.logoutNav}>
-          <Dropdown pullRight>
-            <Dropdown.Toggle className={style.avatar}>
-              {ProfilePic ? <ProfilePic/> : null}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
-                {intl.formatMessage(messages.manageAccount)}
-              </MenuItem>
-              <MenuItem divider/>
-              <MenuItem onClick={onLogOut}>
-                {intl.formatMessage(messages.logOut)}
-              </MenuItem>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+      <AppBrand/>
+      <div className={style.menu}>
+        <Dropdown pullRight>
+          <Dropdown.Toggle className={style.avatar} bsStyle={'link'}>
+            {ProfilePic ? <ProfilePic/> : null}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
+              {intl.formatMessage(messages.manageAccount)}
+            </MenuItem>
+            <MenuItem divider/>
+            <MenuItem onClick={onLogOut}>
+              {intl.formatMessage(messages.logOut)}
+            </MenuItem>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     </nav>
   );

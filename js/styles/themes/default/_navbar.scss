@@ -3,12 +3,12 @@
   background-clip: padding-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.075);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  composes: navbar navbar-full navbar-light;
+  composes: navbar navbar-light;
   margin-bottom: -1px;
 }
 
 .navbarRight {
-  composes: float-lg-right;
+  composes: justify-content-end;
 }
 
 .navbarForm {

@@ -11,11 +11,9 @@ import { injectIntl, intlShape } from 'react-intl';
 function Header({ intl, onLogOut }) {
   return (
     <nav className={style.navbar}>
-      <div className={style.navbarNav}>
-        <AppBrand/>
-        <div className={style.logoutNav}>
-          <a className={style.logoutLink} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
-        </div>
+      <AppBrand/>
+      <div className={style.menu}>
+        <a className={style.logoutLink} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
       </div>
     </nav>
   );

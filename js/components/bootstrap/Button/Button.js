@@ -60,8 +60,8 @@ class Button extends React.Component {
 
     const classes = {
       ...getClassSet(style, bsProps),
-      active,
-      [prefix(bsProps, 'block')]: block,
+      [getLocalCSSClassName(style, 'active')]: active,
+      [getLocalCSSClassName(style, prefix(bsProps, 'block'))]: block,
     };
     const fullClassName = classNames(className, classes);
 
@@ -80,7 +80,6 @@ export default bsClass('btn',
   bsSizes([Size.LARGE, Size.SMALL, Size.XSMALL],
     bsStyles(
       [...Object.values(State), Style.SECONDARY, Style.PRIMARY, Style.LINK],
-      Style.SECONDARY,
       Button
     )
   )

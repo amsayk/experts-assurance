@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { withRouter } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 
 import {compose, bindActionCreators} from 'redux';
@@ -32,8 +32,6 @@ import {
 
 import messages from '../../messages';
 
-import Header from '../../components/Header';
-
 import EmailField from '../../components/EmailField';
 import PasswordField from '../../components/PasswordField';
 import PasswordConfirmationField from '../../components/PasswordConfirmationField';
@@ -42,6 +40,12 @@ import ReCAPTCHAField from '../../components/ReCAPTCHAField';
 import MUTATION from './signUp.mutation.graphql';
 
 import { APP_NAME } from 'vars';
+
+import AppLogo from 'components/AppLogo';
+
+import {
+  PATH_LOGIN,
+} from 'vars';
 
 export class SignupContainer extends React.Component {
   static propTypes = {
@@ -154,10 +158,20 @@ export class SignupContainer extends React.Component {
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        <Header/>
         <div className={style.center}>
+          <Link className={style.logo} to={'/'}>
+            <AppLogo width={52} height={52}/>
+          </Link>
           <div className={style.form}>
             {this._renderForm()}
+          </div>
+          <div className={style.navLoginWrapper}>
+            <span className={style.navbarText}>
+              {intl.formatMessage(messages.loginQuestion)}
+            </span>{' '}
+            <Link className={style.logIn} to={PATH_LOGIN}>
+              {intl.formatMessage(messages.login)}
+            </Link>
           </div>
         </div>
         <footer>

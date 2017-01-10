@@ -5,26 +5,27 @@
 }
 
 .navbar {
-  composes: navbar from 'styles/_base.scss';
+  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  padding-left: $navbar-horizontal-spacing;
+  padding-right: $navbar-horizontal-spacing
 }
 
-.logoutNav {
-  composes: nav navbar-nav navbarRight from 'styles/_base.scss';
+.menu {
+  composes: navbar-nav from 'styles/_base.scss';
+  justify-content: center;
 }
 
 .avatar {
-  composes: btn-link from 'styles/_base.scss';
   padding: 0;
-}
 
-.navbarNav {
-  composes: container-fluid from 'styles/_base.scss';
-  padding-bottom: $navbar-vertical-spacing;
-  padding-top: $navbar-vertical-spacing;
+  &:hover,
+  &:focus {
+    box-shadow: none;
+    outline: 0;
+  }
 }
 
 .root {
-  display: flex;
-  flex-direction: column;
+  composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
 }

@@ -2,26 +2,33 @@
 
 .join {
   composes: btn btn-primary btn-block from 'styles/_base.scss';
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 11px 10px;
 }
 
 .logIn {
-  composes: btn btn-success align-top from 'styles/_base.scss';
-}
+  composes: btn btn-link from 'styles/_base.scss';
+  padding: 0;
+  font-size: 1rem;
 
-.navbar {
-  composes: navbar from 'styles/_base.scss';
+  &:focus,
+  &:hover {
+    box-shadow: none;
+    outline: 0;
+  }
 }
 
 .navLoginWrapper {
-  composes: navbarForm navbarRight from 'styles/_base.scss';
+  margin-top: 25px;
 }
 
 .navbarText {
-  composes: navbarText from 'styles/_base.scss';
+  composes: hint-text align-middle from 'styles/_base.scss';
 }
 
 .center {
-  composes: center from 'styles/_base.scss';
+  composes: center flex-column from 'styles/_base.scss';
 }
 
 .control {
@@ -56,9 +63,13 @@
 }
 
 .root {
-  display: flex;
-  flex-direction: column;
+  composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
+
+  .logo {
+    align-self: center;
+    margin-bottom: 25px;
+  }
 
   footer {
     height: 50px;
