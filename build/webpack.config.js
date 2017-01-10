@@ -6,6 +6,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const sassyImport = require('postcss-sassy-import');
 const config = require('build/config');
 const log = require('log')('app:webpack:config');
 
@@ -67,6 +68,7 @@ webpackConfig.plugins = [
     options  : {
       context: process.cwd(),
       postcss: [
+        sassyImport({}),
         cssnano({
           autoprefixer : {
             add      : true,

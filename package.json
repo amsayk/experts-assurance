@@ -233,6 +233,7 @@
     "offline-plugin": "^4.5.4",
     "parse-server-mailgun": "^2.3.2",
     "postcss-loader": "^1.2.1",
+    "postcss-sassy-import": "^1.2.3",
     "react-addons-perf": "^15.4.2",
     "react-addons-update": "^15.4.2",
     "react-test-renderer": "^15.4.2",

@@ -97,7 +97,9 @@
   a,
   a:hover,
   a:focus {
+    box-shadow: none;
     color: inherit;
+    outline: 0;
     text-decoration: none;
   }
 }

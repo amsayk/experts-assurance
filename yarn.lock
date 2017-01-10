@@ -5723,6 +5723,21 @@ postcss-resolve-nested-selector@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/postcss-resolve-nested-selector/-/postcss-resolve-nested-selector-0.1.1.tgz#29ccbc7c37dedfac304e9fff0bf1596b3f6a0e4e"
 
+postcss-sassy-import@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/postcss-sassy-import/-/postcss-sassy-import-1.2.3.tgz#02d96c25ae971ea6507389a93f40c7ab197f2160"
+  dependencies:
+    glob "^7.0.0"
+    minimatch "^3.0.0"
+    postcss "^5.0.17"
+    postcss-scss "^0.1.5"
+
+postcss-scss@^0.1.5:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/postcss-scss/-/postcss-scss-0.1.9.tgz#7606caff64bb4b34b7605ab749574cf78d886b08"
+  dependencies:
+    postcss "^5.1.0"
+
 postcss-scss@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/postcss-scss/-/postcss-scss-0.4.0.tgz#087c052c529b9270d9580bd1248a0f93d3b40d57"
@@ -5766,7 +5781,7 @@ postcss-zindex@^2.0.1:
     postcss "^5.0.4"
     uniqs "^2.0.0"
 
-postcss@^5.0.0, postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.18, postcss@^5.0.2, postcss@^5.0.20, postcss@^5.0.21, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.4, postcss@^5.2.5, postcss@^5.2.6, postcss@^5.2.8:
+postcss@^5.0.0, postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.17, postcss@^5.0.18, postcss@^5.0.2, postcss@^5.0.20, postcss@^5.0.21, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.1.0, postcss@^5.2.4, postcss@^5.2.5, postcss@^5.2.6, postcss@^5.2.8:
   version "5.2.9"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.9.tgz#282a644f92d4b871ade2d3ce8bd0ea46f18317b6"
   dependencies:
