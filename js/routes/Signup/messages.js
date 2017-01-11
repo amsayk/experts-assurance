@@ -50,7 +50,7 @@ export default defineMessages({
 
   login: {
     id: 'acccount.signup-form.login',
-    defaultMessage: 'Sign in',
+    defaultMessage: 'Sign In',
   },
 
   signUp: {

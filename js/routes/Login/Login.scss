@@ -28,7 +28,7 @@
 }
 
 .navbarText {
-  composes: hint-text align-middle from 'styles/_base.scss';
+  composes: hint-block align-middle from 'styles/_base.scss';
 }
 
 .control {
