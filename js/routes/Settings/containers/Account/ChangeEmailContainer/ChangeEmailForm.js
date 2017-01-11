@@ -46,7 +46,7 @@ export class ChangeEmailForm extends React.Component {
     const { intl } = this.props;
     const { snackbar } = this.context;
     if (snackbar) {
-      snackbar.notify({
+      snackbar.show({
         message  : intl.formatMessage(messages.emailChangeSuccessNotification),
         duration : 9000,
         action   : {
@@ -90,7 +90,7 @@ export class ChangeEmailForm extends React.Component {
 
 ChangeEmailForm.contextTypes = {
   snackbar: T.shape({
-    notify: T.func.isRequired,
+    show: T.func.isRequired,
   }),
 };
 

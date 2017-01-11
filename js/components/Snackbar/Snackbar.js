@@ -10,8 +10,8 @@ import style from './Snackbar.scss';
 
 class Snackbar extends React.Component {
 
-  constructor(...args) {
-    super(...args);
+  constructor(props) {
+    super(props);
     this._width = 0;
     this.state  = {};
 

@@ -51,7 +51,7 @@ export class AccountSettingsForm extends React.Component {
     const { intl } = this.props;
     const { snackbar } = this.context;
     if (snackbar) {
-      snackbar.notify({
+      snackbar.show({
         message: intl.formatMessage(messages.accountSettingsChangeSuccessNotification),
       });
     }
@@ -84,7 +84,7 @@ export class AccountSettingsForm extends React.Component {
 
 AccountSettingsForm.contextTypes = {
   snackbar: T.shape({
-    notify: T.func.isRequired,
+    show: T.func.isRequired,
   }),
 };
 

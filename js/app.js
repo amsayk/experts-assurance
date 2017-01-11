@@ -13,7 +13,7 @@ import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObs
 
 import getRoutes from './routes';
 
-import { createNotificationController } from 'components/Snackbar';
+import { createSnackbarController } from 'components/Snackbar';
 
 import { ApolloProvider } from 'react-apollo';
 
@@ -29,8 +29,8 @@ import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
 
-const APP_MOUNT_NODE = document.querySelector('#app');
-const NOTIFICATIONS_MOUNT_NODE = document.querySelector('#notifications');
+const APP_MOUNT_NODE = document.querySelector('main');
+const SNACKBAR_MOUNT_NODE = document.querySelector('snackbar');
 
 let render = async function render() {
   const locale = window.navigator.language.split(/-/)[0];
@@ -41,12 +41,12 @@ let render = async function render() {
   };
 
   const routes = getRoutes(store);
-  const snackbar = createNotificationController(store);
+  const snackbar = createSnackbarController(store);
 
   class Application extends React.Component {
     static childContextTypes = {
       snackbar: T.shape({
-        notify  : T.func.isRequired,
+        show    : T.func.isRequired,
         dismiss : T.func.isRequired,
       }).isRequired,
     };
@@ -85,7 +85,7 @@ let render = async function render() {
     <Provider store={store}>
       {snackbar.render()}
     </Provider>,
-    NOTIFICATIONS_MOUNT_NODE
+    SNACKBAR_MOUNT_NODE
   );
 };
 
@@ -112,7 +112,7 @@ if (__DEV__) {
     module.hot.accept('./routes', () =>
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(APP_MOUNT_NODE);
-        ReactDOM.unmountComponentAtNode(NOTIFICATIONS_MOUNT_NODE);
+        ReactDOM.unmountComponentAtNode(SNACKBAR_MOUNT_NODE);
         render();
       })
     );

@@ -52,7 +52,7 @@ export class ChangePasswordForm extends React.Component {
     const { intl } = this.props;
     const { snackbar } = this.context;
     if (snackbar) {
-      snackbar.notify({
+      snackbar.show({
         message: intl.formatMessage(messages.passwordChangeSuccessNotification),
       });
     }
@@ -92,7 +92,7 @@ export class ChangePasswordForm extends React.Component {
 
 ChangePasswordForm.contextTypes = {
   snackbar: T.shape({
-    notify: T.func.isRequired,
+    show: T.func.isRequired,
   }),
 };
 

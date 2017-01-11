@@ -6,7 +6,7 @@ import {
   update,
 } from 'redux/reducers/snackbar/actions';
 
-export function createNotificationController(store) {
+export function createSnackbarController(store) {
   function getState() {
     return store.getState().get('snackbar').toJS();
   }
@@ -18,7 +18,7 @@ export function createNotificationController(store) {
      * @method notify
      * @param {Object} notification
      */
-    notify(notification) {
+    show(notification) {
       let { active } = getState();
 
       // ### Timer
