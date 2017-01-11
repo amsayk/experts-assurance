@@ -5,7 +5,7 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.passwordReset-page.title',
-    defaultMessage: 'Reset your password? · {appName}',
+    defaultMessage: 'Reset your password · {appName}',
   },
 
   title: {
@@ -15,7 +15,7 @@ export default defineMessages({
 
   emailSent: {
     id: 'account.password-reset-form.email-sent-successfully',
-    defaultMessage: 'We sent an email to {email}. Please check your mail.',
+    defaultMessage: 'Thank you. We sent an email to {email}. Please check your mail.',
   },
 
   introText: {

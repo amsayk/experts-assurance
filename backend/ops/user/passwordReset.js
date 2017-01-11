@@ -1,12 +1,12 @@
-import { formatError } from 'backend/utils';
+const log = require('log')('app:backend:passwordReset');
 
 export default async function passwordReset(request, response) {
-  const { email } = request.params;
+  response.success({}); // success always.
   try {
+    const { email } = request.params;
     await Parse.User.requestPasswordReset(email);
-    response.success({});
   } catch (e) {
-    response.error(formatError(e));
+    log.error(e);
   }
 }
 
