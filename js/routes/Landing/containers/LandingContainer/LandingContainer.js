@@ -28,9 +28,19 @@ import {
   PATH_EMAIL_VERIFICATION_SUCCESS,
 } from 'vars';
 
+import messages from '../../messages';
+
+import { intlShape } from 'react-intl';
+
 export class LandingContainer extends React.PureComponent {
-  constructor(props) {
-    super(props);
+  static contextTypes = {
+    intl     : intlShape.isRequired,
+    snackbar : T.shape({
+      show: T.func.isRequired,
+    }),
+  };
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       mounted: true,
     };
@@ -59,21 +69,20 @@ export class LandingContainer extends React.PureComponent {
     }
   }
   async onResendEmailVerification() {
-    const { data: { currentUser }  } = this.props;
-
     const { data: { resendEmailVerification: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { info: {
-        email: currentUser.email,
-      } },
+      mutation : MUTATION,
     });
 
     if (!isEmpty(errors)) {
       // TODO: handle error.
     }
 
-    // TODO: snackbar notify?
-    return;
+    const { snackbar, intl } = this.context;
+    if (snackbar) {
+      snackbar.show({
+        message: intl.formatMessage(messages.emailSent),
+      });
+    }
   }
   render() {
     const { data: { loading, currentUser }, notify, actions } = this.props;
