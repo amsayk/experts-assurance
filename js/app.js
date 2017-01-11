@@ -82,9 +82,11 @@ let render = async function render() {
   );
 
   ReactDOM.render(
-    <Provider store={store}>
-      {snackbar.render()}
-    </Provider>,
+    <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>
+      <Provider store={store}>
+        {snackbar.render()}
+      </Provider>
+    </IntlProvider>,
     SNACKBAR_MOUNT_NODE
   );
 };

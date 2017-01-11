@@ -22,19 +22,24 @@ import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'r
 import {
   intlShape,
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
 
 import messages from '../../messages';
 
 import MUTATION from './passwordReset.mutation.graphql';
 
-import NotifySuccess from '../../components/NotifySuccess';
-
 import EmailField from '../../components/EmailField';
 
 import { APP_NAME } from 'vars';
 
 export class PasswordResetContainer extends React.Component {
+  static contextTypes = {
+    snackbar: T.shape({
+      show: T.func.isRequired,
+    }),
+  };
+
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,
@@ -46,8 +51,8 @@ export class PasswordResetContainer extends React.Component {
     }).isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.onSubmit  = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
@@ -79,7 +84,21 @@ export class PasswordResetContainer extends React.Component {
       throw new SubmissionError(errors);
     }
 
-    return;
+    const { snackbar } = this.context;
+    if (snackbar) {
+      const values = {
+        email: <strong className={''}>{data.get('email')}</strong>,
+      };
+      snackbar.show({
+        message: (
+          <FormattedMessage
+            {...messages.emailSent}
+            values={values}
+          />
+        ),
+        duration: 9 * 1000,
+      });
+    }
   }
 
   _renderForm() {
@@ -106,11 +125,10 @@ export class PasswordResetContainer extends React.Component {
   }
 
   render() {
-    const { intl, submitSucceeded, form } = this.props;
+    const { intl } = this.props;
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        {submitSucceeded ? <NotifySuccess form={form}/> : null}
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
             <AppLogo width={52} height={52}/>
