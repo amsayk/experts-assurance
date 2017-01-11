@@ -4,7 +4,6 @@ const Parse = require(process.env.PARSE_MODULE_PATH); // will be required on ser
 
 const validations = {
   email: {
-    validateOnBlur : true,
     required       : true,
     email          : true,
     promise        : function (fieldName, fieldValue, { email }, dispatch) {
@@ -32,13 +31,11 @@ const validations = {
   },
 
   password: {
-    validateOnBlur : true,
     required       : true,
     minLength      : PASSWORD_MIN_LENGTH,
   },
 
   passwordConfirmation: {
-    validateOnBlur : true,
     matchField     : 'password',
   },
 

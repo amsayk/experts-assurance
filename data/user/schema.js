@@ -58,9 +58,9 @@ export const schema = [`
   }
 
   input CreateUserPayload {
-    email: String!
-    password: String!
-    passwordConfirmation: String!
+    email: String
+    password: String
+    passwordConfirmation: String
     recaptcha: Boolean!
   }
 

@@ -81,6 +81,12 @@ export class SignupContainer extends React.Component {
   }
 
   async onSubmit(data) {
+    try {
+      await validations.asyncValidate(data);
+    } catch (errors) {
+      throw new SubmissionError(errors);
+    }
+
     const { intl } = this.props;
 
     const { data: { signUp: { user, errors } } } = await this.props.client.mutate({
@@ -194,7 +200,6 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const WithForm = reduxForm({
   form: 'signup',
-  ...validations,
 });
 
 export default compose(
