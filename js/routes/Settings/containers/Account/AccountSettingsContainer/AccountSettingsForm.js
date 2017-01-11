@@ -5,6 +5,8 @@ import { withApollo } from 'react-apollo';
 
 import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
 
+import ImmutablePropTypes from 'react-immutable-proptypes';
+
 import isEmpty from 'isEmpty';
 
 import { intlShape } from 'react-intl';
@@ -92,7 +94,7 @@ AccountSettingsForm.defaultProps = {
 AccountSettingsForm.propTypes = {
   ...reduxFormPropTypes,
   intl: intlShape.isRequired,
-  initialValues: T.shape({
+  initialValues: ImmutablePropTypes.contains({
     displayName: T.string,
     email: T.string.isRequired,
   }).isRequired,

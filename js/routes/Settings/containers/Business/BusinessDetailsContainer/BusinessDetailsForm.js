@@ -6,6 +6,8 @@ import { withApollo } from 'react-apollo';
 
 import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
 
+import ImmutablePropTypes from 'react-immutable-proptypes';
+
 import isEmpty from 'isEmpty';
 
 import { intlShape } from 'react-intl';
@@ -196,10 +198,23 @@ BusinessDetailsForm.defaultProps = {
 BusinessDetailsForm.propTypes = {
   ...reduxFormPropTypes,
   intl: intlShape.isRequired,
-  user: T.shape({
+  user: ImmutablePropTypes.contains({
     id: T.string.isRequired,
   }).isRequired,
-  initialValues: T.object.isRequired,
+  initialValues: ImmutablePropTypes.contains({
+    id            : T.string,
+    displayName   : T.string,
+    description   : T.string,
+    url           : T.string,
+    country       : T.string,
+    addressLine1  : T.string,
+    addressLine2  : T.string,
+    city          : T.string,
+    stateProvince : T.string,
+    postalCode    : T.string,
+    phone         : T.string,
+    taxId         : T.string,
+  }).isRequired,
 };
 
 const Form = reduxForm({
