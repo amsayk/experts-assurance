@@ -120,7 +120,7 @@ exports[`signup container should render the snapshot when not logged in 1`] = `
         className="logIn"
         onClick={[Function]}
         style={Object {}}>
-        Sign in
+        Sign In
       </a>
     </div>
   </div>
