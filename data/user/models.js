@@ -51,10 +51,10 @@ export class Users {
     );
   }
 
-  resendEmailVerification(info) {
+  resendEmailVerification() {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: RESEND_EMAIL_VERIFICATION, args: info },
+      { __operationKey: RESEND_EMAIL_VERIFICATION, args: {} },
       { sessionToken: this.user.getSessionToken() }
     );
   }

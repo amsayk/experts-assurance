@@ -1,6 +1,6 @@
-mutation resendEmailVerification($info: ResendEmailVerificationPayload!) {
+mutation resendEmailVerification {
 
-  resendEmailVerification(info: $info) {
+  resendEmailVerification {
     errors
   }
 }

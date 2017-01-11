@@ -2,7 +2,7 @@ import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
 import signUpValidations from 'routes/Signup/validations';
-import resetValidations from 'routes/PasswordReset/validations';
+import passwordResetValidations from 'routes/PasswordReset/validations';
 import accountSettingsValidations from 'routes/Settings/containers/Account/AccountSettingsContainer/validations';
 import emailValidations from './emailValidations';
 import passwordValidations from './passwordValidations';
@@ -78,10 +78,6 @@ export const schema = [`
   # ------------------------------------
   # Resend email verification
   # ------------------------------------
-  input ResendEmailVerificationPayload {
-    email: String!
-  }
-
   type ResendEmailVerificationResponse {
     errors: JSON!
   }
@@ -229,20 +225,15 @@ export const resolvers = {
     },
     async passwordReset(_, { info }, context) {
       try {
-        await resetValidations.asyncValidate(fromJS(info));
+        await passwordResetValidations.asyncValidate(fromJS(info));
       } catch (errors) {
         return { errors };
       }
       await context.Users.passwordReset(info);
       return { errors: {} };
     },
-    async resendEmailVerification(_, { info }, context) {
-      try {
-        await resetValidations.asyncValidate(fromJS(info));
-      } catch (errors) {
-        return { errors };
-      }
-      await context.Users.resendEmailVerification(info);
+    async resendEmailVerification(_, {}, context) {
+      await context.Users.resendEmailVerification();
       return { errors: {} };
     },
   },

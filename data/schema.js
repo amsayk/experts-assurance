@@ -42,7 +42,7 @@ const rootSchema = [`
     updateAccountSettings(payload: UpdateAccountSettingsPayload!): UpdateAccountSettingsResponse!
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
-    resendEmailVerification(info: ResendEmailVerificationPayload!): ResendEmailVerificationResponse!
+    resendEmailVerification: ResendEmailVerificationResponse!
   }
 
   type Subscription {
