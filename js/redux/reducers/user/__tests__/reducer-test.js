@@ -6,6 +6,8 @@ import reducer from '../reducer';
 
 import { fromJS } from 'immutable';
 
+import Parse from 'parse/node';
+
 import { INIT } from 'vars';
 
 import getCurrentUser from 'getCurrentUser';
@@ -32,10 +34,17 @@ describe('user reducer', () => {
   });
 
   it('should handle `INIT`', () => {
-    getCurrentUser._setCurrentUser({ id: '1' });
+    getCurrentUser._setCurrentUser(
+      Parse.User.fromJSON({
+        objectId: '1',
+        email: 'email',
+        className: '_User',
+      }));
+
     expect(reducer(undefined, { type: INIT }))
       .toEqual(fromJS({
         id: '1',
+        email: 'email',
       }));
 
     expect(reducer(undefined, { type: INIT }))

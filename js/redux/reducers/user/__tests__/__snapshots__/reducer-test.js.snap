@@ -1,5 +1,6 @@
 exports[`user reducer should handle \`INIT\` 1`] = `
 Object {
+  "email": "email",
   "id": "1",
 }
 `;
