@@ -22,11 +22,12 @@ import { APP_NAME } from 'vars';
 
 import { COUNTRY } from 'vars';
 
-import QUERY from './currentBusiness.query.graphql';
+import QUERY from './currentUser.query.graphql';
 
 import BusinessDetailsForm from './BusinessDetailsForm';
 
-function BusinessDetailsContainer({ intl, user, data: { loading, currentBusiness }, actions }) {
+function BusinessDetailsContainer({ intl, user, data: { loading, currentUser }, actions }) {
+  const currentBusiness = currentUser && currentUser.business;
   return (
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
@@ -66,9 +67,9 @@ function mapDispatchToProps(dispatch) {
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-const withCurrentBusiness = graphql(QUERY, {
+const withCurrentUserAndBusiness = graphql(QUERY, {
   options: ({ user }) => ({
-    variables: { userId: user.get('id') },
+    variables: { id: user.get('id') },
   }),
   skip: ({ user }) => user.isEmpty(),
 });
@@ -76,6 +77,6 @@ const withCurrentBusiness = graphql(QUERY, {
 export default compose(
   injectIntl,
   Connect,
-  withCurrentBusiness,
+  withCurrentUserAndBusiness,
 )(BusinessDetailsContainer);
 

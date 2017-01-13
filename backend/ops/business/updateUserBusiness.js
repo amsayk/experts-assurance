@@ -2,10 +2,13 @@ import { formatError } from 'backend/utils';
 
 import { BusinessType } from 'data/types';
 
-const log = require('log')('app:backend');
-
 export default async function updateUserBusiness(request, response) {
-  const { userId, payload: {
+  if (!request.user) {
+    response.error(new Error('A user is required.'));
+    return;
+  }
+
+  const { payload: {
     displayName,
     description,
     url,
@@ -22,9 +25,6 @@ export default async function updateUserBusiness(request, response) {
   } } = request.params;
 
   function saveOrUpdate(business) {
-    if (business.isNew()) {
-      business.set('user', Parse.User.createWithoutData(userId));
-    }
     return business
       .set({
         displayName,
@@ -43,15 +43,7 @@ export default async function updateUserBusiness(request, response) {
       }).save(null, { useMasterKey: true });
   }
 
-  let business;
-
-  try {
-    business = await new Parse.Query(BusinessType)
-      .equalTo('user', Parse.User.createWithoutData(userId))
-      .first();
-  } catch (e) {
-    log.error(e);
-  }
+  let business = request.user.get('business');
 
   try {
     if (business) {
@@ -59,6 +51,9 @@ export default async function updateUserBusiness(request, response) {
     } else {
       business = await saveOrUpdate(new BusinessType());
     }
+
+    await request.user.set('business', business)
+      .save(null, { useMasterKey: true });
 
     response.success(business);
   } catch (e) {

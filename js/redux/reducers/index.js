@@ -1,6 +1,7 @@
 import user from './user/reducer';
 import app from './app/reducer';
 import snackbar from './snackbar/reducer';
+import notification from './notification/reducer';
 
 import { USER_LOGGED_OUT } from './user/constants';
 
@@ -14,6 +15,7 @@ import { reducer as formReducer, actionTypes } from 'redux-form/immutable';
 
 const reducers = {
   app,
+  notification,
   user,
   snackbar,
   form: formReducer.plugin({

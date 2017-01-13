@@ -1,4 +1,4 @@
 import keyOf from 'keyOf';
 
-export const UPDATE = keyOf({UPDATE: null});
+export const UPDATE_SNACKBAR = keyOf({UPDATE_SNACKBAR: null});
 

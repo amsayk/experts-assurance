@@ -15,6 +15,8 @@ import messages from '../../../messages';
 
 import style from '../../../Settings.scss';
 
+import refreshCurrentUser from 'utils/refreshCurrentUser';
+
 import EmailField from '../../../components/EmailField';
 import FullNameField from '../../../components/FullNameField';
 
@@ -55,6 +57,9 @@ export class AccountSettingsForm extends React.Component {
         message: intl.formatMessage(messages.accountSettingsChangeSuccessNotification),
       });
     }
+
+    // currentUser has changed, refresh.
+    await refreshCurrentUser();
   }
 
   render() {

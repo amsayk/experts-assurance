@@ -29,12 +29,11 @@ const rootSchema = [`
     getUser(id: ID!): User
 
     # Business
-    getUserBusiness(userId: ID!): Business
   }
 
   type Mutation {
     # Business
-    updateUserBusiness(userId: ID!, payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!
+    updateUserBusiness(payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!
 
     # Account
     setPassword(payload: SetPasswordPayload!): SetPasswordResponse!

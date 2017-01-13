@@ -1,10 +1,10 @@
 import {
-  UPDATE,
+  UPDATE_SNACKBAR,
 } from './constants';
 
 export function update(payload) {
   return {
-    type: UPDATE,
+    type: UPDATE_SNACKBAR,
     payload,
   };
 }

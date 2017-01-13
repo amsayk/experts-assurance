@@ -1,0 +1,25 @@
+query getUser($id: ID!) {
+
+  currentUser : getUser(id: $id) {
+    id
+
+    business {
+      id
+      displayName
+      description
+      url
+
+      country
+      addressLine1
+      addressLine2
+      city
+      stateProvince
+      postalCode
+
+      phone
+      taxId
+    }
+  }
+}
+
+

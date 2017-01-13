@@ -1,6 +1,8 @@
 @import 'variables';
 @import 'animate';
 $app-color-black: #373a3c !default;
+$snackbar-action-color: #a1c2fa !default;
+$snackbar-action-hover-color: #bbdefb !default;
 
 .snackbar {
   animation-duration: 0.5s;
@@ -8,6 +10,7 @@ $app-color-black: #373a3c !default;
   border-radius: 4px;
   box-shadow: 0 0 5px rgba($app-color-black, 0.1);
   color: #fff;
+  composes: flex-row align-content-between from 'styles/_base.scss';
   font-size: 14px;
   line-height: 1.65em;
   max-width: 568px;
@@ -36,25 +39,32 @@ $app-color-black: #373a3c !default;
   }
 }
 
+.snackbar > *:not(:first-child) {
+  margin-left: 12px;
+}
+
 .btn-snackbar {
   background: none;
   border: 0;
-  color: #fff;
-  composes: btn btn-link from 'styles/_base.scss';
-  font-weight: 600;
+  color: $snackbar-action-color;
+  composes: btn btn-link align-self-center from 'styles/_base.scss';
+  cursor: pointer;
+  font-weight: bold;
   height: 100%;
   line-height: 100%;
   margin: 0;
   padding: 0;
-  position: absolute;
-  right: 24px;
   text-transform: uppercase;
-  top: 0;
 
   &:focus,
   &:hover {
-    color: darken(#fff, 0.3);
+    box-shadow: none;
+    color: $snackbar-action-hover-color;
     outline: 0;
     text-decoration: none;
   }
+}
+
+.close {
+  composes: close justify-content-end from 'styles/_base.scss';
 }

@@ -1,6 +1,6 @@
-mutation updateUserBusiness($userId: ID!, $payload: UpdateUserBusinessPayload!) {
+mutation updateUserBusiness($payload: UpdateUserBusinessPayload!) {
 
-  updateUserBusiness(userId: $userId, payload: $payload) {
+  updateUserBusiness(payload: $payload) {
     business {
       id
       displayName

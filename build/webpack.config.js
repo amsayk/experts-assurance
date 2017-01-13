@@ -199,7 +199,7 @@ webpackConfig.module.rules.push({
     loader: 'css-loader',
     query: {
       modules           : true,
-      sourceMap         : true,
+      sourceMap         : __DEV__,
       minimize          : false,
       discardDuplicates : !__DEV__,
       importLoaders     : 2,

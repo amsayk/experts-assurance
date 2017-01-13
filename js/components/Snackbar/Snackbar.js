@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, { PropTypes as T } from 'react';
 
 import {connect} from 'react-redux';
 
@@ -9,6 +9,9 @@ import selector from './selector';
 import style from './Snackbar.scss';
 
 class Snackbar extends React.Component {
+  static propTypes = {
+    dismiss: T.func.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -88,7 +91,7 @@ class Snackbar extends React.Component {
    */
   align() {
     const cWidth = this.refs.snackbar.offsetWidth;
-    const aWidth = this.refs.action ? this.refs.action.offsetWidth + 48 : 24;
+    // const aWidth = this.refs.action ? this.refs.action.offsetWidth + 48 : 24;
 
     // ### Re-Align
     // Check if we need to re-align the element, since it can be somewhat
@@ -105,7 +108,7 @@ class Snackbar extends React.Component {
       style : {
         ...this.state.style,
         marginLeft   : -(cWidth / 2),
-        paddingRight : aWidth,
+        // paddingRight : aWidth,
       },
     });
 
@@ -135,7 +138,7 @@ class Snackbar extends React.Component {
   getStyle() {
     const style = Object.assign({}, this.state.style);
     if (this.props.snackbar.active) {
-      style.display = 'inline-block';
+      style.display = 'inline-flex';
     }
     return style;
   }
@@ -157,6 +160,22 @@ class Snackbar extends React.Component {
   }
 
   /**
+   * @return {button}
+   */
+  getCloseButton() {
+    const { dismiss } = this.props;
+    return (
+      <button
+        type='button'
+        className={style.close}
+        aria-label={'Close'}
+        onClick={ dismiss }>
+        <span aria-hidden={true}>&times;</span>
+      </button>
+    );
+  }
+
+  /**
    * Renders the snackbar components.
    * @return {Object}
    */
@@ -164,8 +183,9 @@ class Snackbar extends React.Component {
     const { message } = this.props.snackbar;
     return (
       <div className={ this.getClass() } style={ this.getStyle() } ref='snackbar'>
-        { message }
+        <span>{ message }</span>
         { this.getAction() }
+        { this.getCloseButton() }
       </div>
     );
   }

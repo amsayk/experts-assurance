@@ -24,6 +24,8 @@ import { HOME_TITLE, APP_NAME } from 'vars';
 
 import style from 'styles/core.scss';
 
+import Notification from 'components/Notification';
+
 class CoreLayout extends React.PureComponent {
   static propTypes = {
     children       : T.element.isRequired,
@@ -54,7 +56,7 @@ class CoreLayout extends React.PureComponent {
     let body = React.Children.only(children);
     if (!displayMatches) {
       body = (
-        <div className={style.flex}>
+        <div className={style.root}>
           <div className={style.center}>
             {intl.formatMessage(messages.UnsupportedDisplay)}
           </div>
@@ -62,7 +64,7 @@ class CoreLayout extends React.PureComponent {
       );
     } else if (!onLine) {
       body = (
-        <div className={style.flex}>
+        <div className={style.root}>
           <div className={style.center}>
             {intl.formatMessage(messages.NavigatorOffline)}
           </div>
@@ -70,8 +72,9 @@ class CoreLayout extends React.PureComponent {
       );
     }
     return (
-      <div style={{ height: '100%' }}>
+      <div className={style.root}>
         <Title title={HOME_TITLE + ' · ' + APP_NAME}/>
+        <Notification/>
         {body}
       </div>
     );

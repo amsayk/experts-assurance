@@ -107,10 +107,10 @@ export const resolvers = {
 
   User: Object.assign(
     {
-      business(user, {}, context) {
-        return context.Business.getForUser(user.id);
-      },
     },
+    parseGraphqlObjectFields([
+      'business',
+    ]),
     parseGraphqlScalarFields([
       'id',
       'displayName',

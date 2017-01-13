@@ -5,21 +5,20 @@ import {
 } from 'backend/constants';
 
 export class Business {
-  constructor({ connector }) {
+  constructor({ connector, user }) {
     this.connector = connector;
+    this.user = user;
   }
-  updateUserBusiness(userId, payload) {
+  updateUserBusiness(payload) {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: UPDATE_USER_BUSINESS, args: { userId, payload } }
+      { __operationKey: UPDATE_USER_BUSINESS, args: { payload } },
+      { sessionToken: this.user.getSessionToken() },
     );
   }
   get(id) {
     return this.connector.get(id);
   }
 
-  getForUser(userId) {
-    return this.connector.getForUser(userId);
-  }
 }
 

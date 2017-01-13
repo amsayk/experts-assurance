@@ -83,8 +83,8 @@ export class SignupContainer extends React.Component {
   async onSubmit(data) {
     try {
       await validations.asyncValidate(data);
-    } catch (errors) {
-      throw new SubmissionError(errors);
+    } catch (e) {
+      throw new SubmissionError(e);
     }
 
     const { intl } = this.props;

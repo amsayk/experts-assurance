@@ -14,7 +14,7 @@ export default /* StorageController = */ {
 
   setItem(path: string, value: string) {
     try {
-      cookie.save(path, value);
+      cookie.save(path, value, { path: '/' });
     } catch (e) {
       // Quota exceeded, possibly due to Safari Private Browsing mode
     }

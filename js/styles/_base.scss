@@ -59,13 +59,13 @@
 }
 
 .flex {
-  display: flex;
+  composes: d-flex;
   height: 100%;
 }
 
 .center {
   align-items: center;
-  display: flex;
+  composes: d-flex;
   flex: 1;
   justify-content: center;
 }

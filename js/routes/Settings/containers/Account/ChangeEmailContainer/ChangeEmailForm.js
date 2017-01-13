@@ -1,6 +1,8 @@
 import React, { PropTypes as T } from 'react';
 import { compose } from 'redux';
 
+import refreshCurrentUser from 'utils/refreshCurrentUser';
+
 import { withApollo } from 'react-apollo';
 
 import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
@@ -48,15 +50,12 @@ export class ChangeEmailForm extends React.Component {
     if (snackbar) {
       snackbar.show({
         message  : intl.formatMessage(messages.emailChangeSuccessNotification),
-        duration : 9000,
-        action   : {
-          title: intl.formatMessage(messages.close),
-          click: function () {
-            this.dismiss();
-          },
-        },
+        duration : 9 * 1000,
       });
     }
+
+    // emailVerified has changed, refresh user.
+    await refreshCurrentUser();
   }
 
   render() {

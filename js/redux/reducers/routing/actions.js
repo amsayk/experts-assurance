@@ -5,7 +5,7 @@ import {
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function locationChange(location = '/') {
+export function locationChange(location = { pathname: '/' }) {
   return {
     type    : LOCATION_CHANGE,
     payload : location,

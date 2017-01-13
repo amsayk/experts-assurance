@@ -112,7 +112,7 @@ export function createSnackbarController(store) {
      * @return {Component}
      */
     render() {
-      return <Component />;
+      return <Component dismiss={this.dismiss.bind(this)} />;
     },
   };
 }

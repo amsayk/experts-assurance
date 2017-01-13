@@ -4,7 +4,7 @@ export default (store) => [{
   path         : PATH_SETTINGS_BUSINESS_DETAILS,
   getComponent : (nextState, cb) => {
     require.ensure([], (require) => {
-      const { default : UserIsAuthenticated } = require('utils/UserIsAuthenticated');
+      const { default : UserIsAuthenticated } = require('utils/auth/authWrappers/UserIsAuthenticated');
       const { default : Component } = require('./BusinessDetailsContainer');
 
       cb(null, UserIsAuthenticated(Component));

@@ -102,14 +102,14 @@ export const resolvers = {
   ),
 
   Mutation: {
-    async updateUserBusiness(obj, { userId, payload }, context) {
+    async updateUserBusiness(obj, { payload }, context) {
       try {
         await businessValidations.asyncValidate(fromJS(payload));
         await phoneNumberValidations.asyncValidate(fromJS(payload));
       } catch (errors) {
         return { errors };
       }
-      const business = await context.Business.updateUserBusiness(userId, payload);
+      const business = await context.Business.updateUserBusiness(payload);
       // publish subscription notification
       pubsub.publish('businessChange', business);
       return { business, errors: {} };
@@ -117,9 +117,6 @@ export const resolvers = {
   },
 
   Query: {
-    getUserBusiness(_, { userId }, context) {
-      return context.Business.getForUser(userId);
-    },
   },
 
 };

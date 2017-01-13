@@ -1,5 +1,5 @@
 import {
-  UPDATE,
+  UPDATE_SNACKBAR,
 } from './constants';
 
 import Immutable from 'immutable';
@@ -15,11 +15,8 @@ const initialState = Immutable.fromJS({
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-
-    case UPDATE:
-
+    case UPDATE_SNACKBAR:
       return state.merge(action.payload);
-
     default:
       return state;
   }

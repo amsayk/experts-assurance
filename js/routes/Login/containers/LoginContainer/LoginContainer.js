@@ -29,13 +29,8 @@ import {
 
 import messages from '../../messages';
 
-import NotifyPasswordResetSuccess from 'components/notifications/NotifyPasswordResetSuccess';
-import NotifyInvalidLink from 'components/notifications/NotifyInvalidLink';
-
 import {
   APP_NAME,
-  PATH_INVALID_LINK,
-  PATH_PASSWORD_RESET_SUCCESS,
   PATH_PASSWORD_RESET,
   PATH_SIGNUP,
 } from 'vars';
@@ -153,18 +148,10 @@ export class LoginContainer extends React.Component {
   }
 
   render() {
-    const { intl, notify } = this.props;
-
-    let Notification = null;
-    if (notify === PATH_INVALID_LINK) {
-      Notification = NotifyInvalidLink;
-    } else if (notify === PATH_PASSWORD_RESET_SUCCESS) {
-      Notification = NotifyPasswordResetSuccess;
-    }
+    const { intl } = this.props;
     return (
       <div className={style.root}>
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        {Notification ? <Notification/> : null}
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
             <AppLogo width={52} height={52}/>

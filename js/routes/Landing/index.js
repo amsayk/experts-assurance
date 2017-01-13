@@ -1,7 +1,7 @@
 export default (store) => (partialNextState, cb) => {
   require.ensure([], (require) => {
     const { default : Component } = require('./containers/LandingContainer');
-    const { default : UserIsAuthenticated } = require('utils/UserIsAuthenticated');
+    const { default : UserIsAuthenticated } = require('utils/auth/authWrappers/UserIsAuthenticated');
 
     /* Return Component */
     cb(null, { component: UserIsAuthenticated(Component) });

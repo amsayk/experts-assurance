@@ -14,6 +14,8 @@ import {
   PATH_PASSWORD_RESET_SUCCESS,
 } from 'vars';
 
+import { post as addNotification } from 'redux/reducers/notification/actions';
+
 export default (store) => [{
   path          : '/',
   component     : CoreLayout,
@@ -32,10 +34,8 @@ export default (store) => [{
         replace({
           pathname : '/',
           query    : {},
-          state    : {
-            notify: PATH_INVALID_LINK,
-          },
         });
+        store.dispatch(addNotification('InvalidLink', {}));
       },
     },
 
@@ -45,10 +45,8 @@ export default (store) => [{
         replace({
           pathname : '/',
           query    : {},
-          state    : {
-            notify: PATH_EMAIL_VERIFICATION_SUCCESS,
-          },
         });
+        store.dispatch(addNotification('VerificationSuccess', {}));
       },
     },
 
@@ -58,10 +56,8 @@ export default (store) => [{
         replace({
           pathname : PATH_LOGIN,
           query    : {},
-          state    : {
-            notify: PATH_PASSWORD_RESET_SUCCESS,
-          },
         });
+        store.dispatch(addNotification('PasswordResetSuccess', {}));
       },
     },
 

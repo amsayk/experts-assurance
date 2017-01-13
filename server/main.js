@@ -222,7 +222,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
     context: {
       user,
       Users: new Users({ user, connector: new UserConnector() }),
-      Business: new Business({ connector: new BusinessConnector() }),
+      Business: new Business({ user, connector: new BusinessConnector() }),
     },
     logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,

@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 
 import { APP_NAME, BASENAME, INIT } from 'vars';
 
-import array from '../middleware/array';
+import array from 'redux/middleware/array';
 
 import { fromJS } from 'immutable';
 
@@ -18,7 +18,7 @@ import thunk from 'redux-thunk';
 
 import ReduxWorker from 'worker-loader?inline!../worker.js';
 
-import makeRootReducer, { injectReducers } from '../reducers';
+import makeRootReducer, { injectReducers } from 'redux/reducers';
 
 import { updateLocation } from 'redux/reducers/routing/actions';
 

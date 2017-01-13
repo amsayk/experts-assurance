@@ -8,7 +8,10 @@ import { INIT } from 'vars';
 
 function maybeUser() {
   const user = getCurrentUser();
-  return user ? { id: user.id } : {};
+  return user ? {
+    id: user.id,
+    email: user.get('email'),
+  } : {};
 }
 
 const initialState = fromJS({});

@@ -4,6 +4,8 @@ import { compose } from 'redux';
 
 import { withApollo } from 'react-apollo';
 
+import refreshCurrentUser from 'utils/refreshCurrentUser';
+
 import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -45,12 +47,17 @@ export class BusinessDetailsForm extends React.Component {
   }
 
   async onSubmit(data) {
-    const { intl, user } = this.props;
+    try {
+      await validations.asyncValidate(data);
+    } catch (e) {
+      throw new SubmissionError(e);
+    }
+
+    const { intl } = this.props;
 
     const { data: { updateUserBusiness: { errors } } } = await this.props.client.mutate({
       mutation: MUTATION,
       variables: {
-        userId  : user.get('id'),
         payload : {
           displayName   : data.get('displayName'),
           description   : data.get('description'),
@@ -69,18 +76,12 @@ export class BusinessDetailsForm extends React.Component {
       updateQueries: {
         getUser: (prev, { mutationResult }) => {
           const newOrUpdatedBusiness = mutationResult.data.updateUserBusiness.business;
-          return update(prev, {
+          return isEmpty(errors) ? update(prev, {
             currentUser: {
               business: {
                 $set: newOrUpdatedBusiness,
               },
             },
-          });
-        },
-        getUserBusiness: (prev, { mutationResult }) => {
-          const { business, errors } = mutationResult.data.updateUserBusiness;
-          return isEmpty(errors) ? update(prev, {
-            currentBusiness: { $set: business },
           }) : prev;
         },
       },
@@ -96,6 +97,9 @@ export class BusinessDetailsForm extends React.Component {
         message: intl.formatMessage(messages.businessUpdateSuccessNotification),
       });
     }
+
+    // currentUser.business has changed, refresh notification.
+    await refreshCurrentUser();
   }
 
   render() {
@@ -221,7 +225,6 @@ const Form = reduxForm({
   form: 'business.details',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  ...validations,
 });
 
 export default compose(

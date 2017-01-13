@@ -1,6 +1,8 @@
 import 'whatwg-fetch';
 import 'parse-config';
 
+import refreshCurrentUser from 'utils/refreshCurrentUser';
+
 import React, { PropTypes as T } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -33,6 +35,8 @@ const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('snackbar');
 
 let render = async function render() {
+  await refreshCurrentUser();
+
   const locale = window.navigator.language.split(/-/)[0];
 
   const { messages : translations } = await intlLoader(locale);
@@ -68,9 +72,7 @@ let render = async function render() {
       return (
         <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>
           <ApolloProvider store={store} client={apolloClient} immutable>
-            <div style={{ height: '100%' }}>
-              <Router {...routerProps}/>
-            </div>
+            <Router {...routerProps}/>
           </ApolloProvider>
         </IntlProvider>
       );
@@ -119,6 +121,9 @@ if (__DEV__) {
       })
     );
   }
+
+  // Show all debug messages.
+  localStorage.debug = '*';
 
   window.reduxStore   = store;
   window.Parse        = require('parse');

@@ -2,8 +2,8 @@
 
 .joinButton {
   composes: btn btn-link from 'styles/_base.scss';
-  padding: 0;
   font-size: 1rem;
+  padding: 0;
 
   &:focus,
   &:hover {

@@ -18,3 +18,12 @@ body {
 *::after {
   box-sizing: inherit;
 }
+
+.root {
+  composes: d-flex flex-column;
+  height: 100%;
+}
+
+.root > div:nth-child(2) {
+  flex: 1;
+}

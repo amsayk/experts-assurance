@@ -4,7 +4,7 @@
 
 .body {
   background-color: #fff;
-  composes: flex from 'styles/_base.scss';
+  composes: d-flex from 'styles/_base.scss';
   flex: 1;
 }
 
