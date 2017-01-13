@@ -1,4 +1,24 @@
 
+0.1.1 / 2017-01-13
+==================
+
+  * Site notifications, many improvements and bug fixes.
+  * Partially resolve Issue #4.
+  * Improve sign up process.
+  * Improve linting.
+  * Add notification after resending email verification.
+  * Partially resolve Issue #4.
+  * Fix: Issue #3.
+  * Use snackbar in password reset.
+  * Revamp snackbar. Prepare for site notifications.
+  * Add immutable proptypes.
+  * Small fix.
+  * Small fix.
+  * Dedupe style imports.
+  * Update bootstrap.
+  * A few optimizations.
+  * Update deps.
+
 0.1.0 / 2017-01-04
 ==================
 
