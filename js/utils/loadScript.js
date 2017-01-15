@@ -1,4 +1,8 @@
-export default function loadScript(url) {
+import { isServer } from 'vars';
+
+import emptyFunction from 'emptyFunction';
+
+export default isServer ? emptyFunction.thatReturns(Promise.reject()) : function loadScript(url) {
   return new Promise((resolve, reject) => {
     const scriptElm = document.createElement('script');
     scriptElm.type = 'application/javascript';
@@ -8,5 +12,5 @@ export default function loadScript(url) {
     scriptElm.onerror = reject;
     document.body.appendChild(scriptElm);
   });
-}
+};
 

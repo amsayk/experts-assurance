@@ -39,7 +39,6 @@ export class LoginContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,
-    isAuthenticated : T.bool.isRequired,
     redirect        : T.string,
     actions         : T.shape({
       login : T.func.isRequired,
@@ -51,22 +50,6 @@ export class LoginContainer extends React.Component {
 
     this.onSubmit  = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
-  }
-
-  componentWillMount() {
-    const { isAuthenticated, redirect, router } = this.props;
-    if (isAuthenticated) {
-      router.replace(redirect);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { isAuthenticated, redirect } = nextProps;
-    const { isAuthenticated: wasAuthenticated, router } = this.props;
-
-    if (!wasAuthenticated && isAuthenticated) {
-      router.replace(redirect);
-    }
   }
 
   _onKeyDown(e) {

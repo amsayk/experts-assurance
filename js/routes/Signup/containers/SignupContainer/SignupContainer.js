@@ -54,7 +54,6 @@ export class SignupContainer extends React.Component {
     client          : T.shape({
       mutate: T.func.isRequired,
     }),
-    isAuthenticated : T.bool.isRequired,
     actions         : T.shape({
     }).isRequired,
   };
@@ -64,13 +63,6 @@ export class SignupContainer extends React.Component {
 
     this.onSubmit  = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
-  }
-
-  componentWillMount() {
-    const { isAuthenticated, router } = this.props;
-    if (isAuthenticated) {
-      router.replace('/');
-    }
   }
 
   _onKeyDown(e) {
@@ -108,8 +100,11 @@ export class SignupContainer extends React.Component {
     try {
       const parseObject = await Parse.User.logIn(user.username, data.get('password'));
       if (parseObject) {
-        const loggedInUser = { id: parseObject.id, ...parseObject.toJSON() };
-        cookie.save('app.login', loggedInUser.username);
+        const loggedInUser = {
+          id: parseObject.id,
+          email: parseObject.get('email'),
+        };
+        cookie.save('app.login', parseObject.get('username'));
         this.props.actions.login(loggedInUser);
         this.props.router.push('/');
       } else {

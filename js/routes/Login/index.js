@@ -18,8 +18,9 @@ export default (store) => ({
       /*  Webpack - use require callback to define
           dependencies for bundling   */
       const { default : Component } = require('./containers/LoginContainer');
+      const { default : NotAuthenticated } = require('authWrappers/NotAuthenticated');
 
-      Login = Component;
+      Login = NotAuthenticated(Component);
 
       /*  Return getComponent   */
       cb(null, Login);

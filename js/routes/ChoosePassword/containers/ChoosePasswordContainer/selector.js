@@ -1,7 +1,6 @@
 import Parse from 'parse';
 import { createSelector } from 'utils/reselect';
 
-const isAuthenticatedSelector = state => !state.get('user').isEmpty();
 const queryParamsSelector = (_, { location }) => ({
   error    : location.query.error,
   token    : location.query.token,
@@ -10,8 +9,7 @@ const queryParamsSelector = (_, { location }) => ({
 });
 
 export default createSelector(
-  isAuthenticatedSelector,
   queryParamsSelector,
-  (isAuthenticated, params) => ({ isAuthenticated, ...params })
+  (params) => params,
 );
 

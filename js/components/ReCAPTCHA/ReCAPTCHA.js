@@ -1,4 +1,9 @@
 import React, { PropTypes as T } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
+import { createSelector } from 'utils/reselect';
+
 import Recaptcha from 'react-recaptcha';
 import nullthrows from 'nullthrows';
 import loadScript from 'loadScript';
@@ -6,7 +11,7 @@ const log = require('log')('app:client:recaptcha');
 
 import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'vars';
 
-export default class ReCAPTCHA extends React.Component {
+class ReCAPTCHA extends React.Component {
   static propTypes = {
     input: T.shape({
       onChange: T.func.isRequired,
@@ -41,7 +46,7 @@ export default class ReCAPTCHA extends React.Component {
     this.props.input.onChange(value);
   }
   render() {
-    if (this.state.loaded) {
+    if (this.props.isReady && this.state.loaded) {
       return (
         <Recaptcha
           sitekey={nullthrows(RECAPCHA_SITE_KEY)}
@@ -55,4 +60,21 @@ export default class ReCAPTCHA extends React.Component {
     return null;
   }
 }
+
+const isReadySelector = (state) => state.getIn(['app', 'isReady']);
+
+const selector = createSelector(
+  isReadySelector,
+  (isReady) => ({ isReady })
+);
+
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+const Connect = connect(mapStateToProps);
+
+export default compose(
+  Connect,
+)(ReCAPTCHA);
 

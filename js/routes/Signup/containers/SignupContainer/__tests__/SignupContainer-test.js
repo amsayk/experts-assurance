@@ -27,7 +27,7 @@ describe('signup container', () => {
     },
   }));
 
-  it('should render the snapshot when not logged in', () => {
+  it('should render the snapshot', () => {
     const tree = renderer.create(
       <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
         <Provider store={store}>
@@ -36,34 +36,11 @@ describe('signup container', () => {
               mutate: () => {},
             }}
             actions={{}}
-            isAuthenticated={false}
           />
         </Provider>
       </IntlProvider>
     ).toJSON();
     expect(tree).toMatchSnapshot();
-  });
-
-  it('should redirect when logged in', () => {
-    const router = {
-      replace: jest.fn(),
-    };
-
-    renderer.create(
-      <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
-        <Provider store={store}>
-          <Decorated
-            router={router}
-            client={{
-              mutate: () => {},
-            }}
-            actions={{}}
-            isAuthenticated={true}
-          />
-        </Provider>
-      </IntlProvider>
-    );
-    expect(router.replace).toBeCalledWith('/');
   });
 
   afterAll(() => {

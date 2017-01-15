@@ -17,6 +17,8 @@ import cookie from 'react-cookie';
 import createLocaleMiddleware from 'express-locale';
 import cors from 'cors';
 
+import createSSRRoute from './utils/createSSRRoute';
+
 import { ParseServer } from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 
@@ -51,14 +53,6 @@ const paths = config.utils_paths;
 // Don't rate limit heroku
 app.enable('trust proxy');
 
-// This rewrites all routes requests to the root /index.html file
-// (ignoring file requests). If you want to implement universal
-// rendering, you'll want to remove this middleware.
-app.use(require('connect-history-api-fallback')({
-  verbose : __DEV__,
-  logger  : require('log')('app:server:history'),
-}));
-
 // Apply gzip compression
 app.use(compress());
 
@@ -68,12 +62,45 @@ app.use(cors());
 // Setup locale
 app.use(createLocaleMiddleware());
 
+// webpack compiler in devMode
+const compiler = config.env === 'development' && webpack(webpackConfig);
+
+// These are the current endpoints
+// New endpoints must be added here in order for them to work.
+const APP_PATHS = [
+  '/',
+
+  config.path_login,
+  config.path_signup,
+  config.path_choose_password,
+  config.path_password_reset,
+
+  config.path_email_verification_success,
+  config.path_password_reset_success,
+  config.path_invalid_link,
+
+  config.path_settings_base + '*',
+];
+
+if (config.ssrEnabled) {
+  // Setup SSR
+  log('Initializing server side rendering');
+  const ssrRoute = createSSRRoute(app, compiler);
+  app.get(APP_PATHS, ssrRoute);
+} else {
+  // This rewrites all routes requests to the root /index.html file
+  // (ignoring file requests). If you want to implement universal
+  // rendering, you'll want to remove this middleware.
+  app.use(APP_PATHS, require('connect-history-api-fallback')({
+    verbose : __DEV__,
+    logger  : require('log')('app:server:history'),
+  }));
+}
+
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
 if (config.env === 'development') {
-  const compiler = webpack(webpackConfig);
-
   log('Enable webpack dev and HMR middleware');
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath  : webpackConfig.output.publicPath,
@@ -104,7 +131,12 @@ if (config.env === 'development') {
   // the web server and not the app server, but this helps to demo the
   // server in production.
   if (config.serve_assets) {
-    app.use(express.static(paths.dist()));
+    const options = {};
+
+    if (config.ssrEnabled) {
+      options.index = false;
+    }
+    app.use(express.static(paths.dist(), options));
   }
 }
 

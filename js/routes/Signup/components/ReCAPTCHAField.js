@@ -27,4 +27,3 @@ export default injectIntl(function ReCAPTCHAField({ intl, input, meta: { error }
   );
 });
 
-

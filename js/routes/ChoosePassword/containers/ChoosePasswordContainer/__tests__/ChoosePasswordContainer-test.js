@@ -19,7 +19,6 @@ const middlewares = [];
 const mockStore = configureMockStore(middlewares);
 
 describe('choose password container', () => {
-  const isAuthenticated = false;
   const token = 'token';
   const username = 'username';
   const action = 'http://action';
@@ -35,7 +34,6 @@ describe('choose password container', () => {
       <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
         <Provider store={store}>
           <Decorated
-            isAuthenticated={isAuthenticated}
             token={token}
             username={username}
             action={action}

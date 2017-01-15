@@ -3,7 +3,7 @@ import keyOf from 'keyOf';
 // Use this constant to initialize reducers
 export const INIT                             = keyOf({ INIT: null });
 
-export const isServer                         = process.env._ENV !== 'client';
+export const isServer                         = process.env.BROWSER !== true;
 export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;
 export const COUNTRY                          = process.env.COUNTRY;
@@ -39,4 +39,6 @@ export const PATH_SETTINGS_ACCOUNT            = process.env.PATH_SETTINGS_ACCOUN
 export const PATH_SETTINGS_CHANGE_PASSWORD    = process.env.PATH_SETTINGS_CHANGE_PASSWORD;
 export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
 export const PATH_SETTINGS_CHANGE_EMAIL       = process.env.PATH_SETTINGS_CHANGE_EMAIL;
+
+export const SSR                              = process.env.SSR;
 

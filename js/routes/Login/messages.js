@@ -5,12 +5,12 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.login-page.title',
-    defaultMessage: 'Sign in to {appName} · {appName}',
+    defaultMessage: 'Log In to {appName} · {appName}',
   },
 
   title: {
     id: 'account.login-form.title',
-    defaultMessage: 'Sign in to {appName}',
+    defaultMessage: 'Log In to {appName}',
   },
 
   email: {
@@ -30,7 +30,7 @@ export default defineMessages({
 
   login: {
     id: 'account.login-form.login-action',
-    defaultMessage: 'Sign In',
+    defaultMessage: 'Log In',
   },
 
   signupQuestion: {

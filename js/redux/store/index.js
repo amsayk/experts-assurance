@@ -66,7 +66,7 @@ const enhancer = composeEnhancers(
   ...enhancers
 );
 
-export const store = createStore(makeRootReducer(), fromJS({}), enhancer);
+export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || {}), enhancer);
 
 store.asyncReducers = {};
 store.injectReducers = (reducers) => injectReducers(store, reducers);

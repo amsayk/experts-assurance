@@ -10,7 +10,10 @@ addValidation('phoneNumber', (field, value, prop) => {
   if (value && prop) {
     try {
       const potentialPhoneNumber = phoneUtil.parse(value, config.country);
-      return !(phoneUtil.isPossibleNumberWithReason(potentialPhoneNumber) === ValidationResult.IS_POSSIBLE && phoneUtil.isValidNumber(potentialPhoneNumber));
+      return !(
+        phoneUtil.isPossibleNumberWithReason(potentialPhoneNumber) === ValidationResult.IS_POSSIBLE &&
+        phoneUtil.isValidNumber(potentialPhoneNumber)
+      );
     } catch (e) {
       log.error(e);
       return true;

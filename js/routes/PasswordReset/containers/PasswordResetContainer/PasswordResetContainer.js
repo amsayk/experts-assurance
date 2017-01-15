@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { Link, withRouter } from 'react-router';
+import { Link } from 'react-router';
 import { withApollo } from 'react-apollo';
 
 import {compose, bindActionCreators} from 'redux';
@@ -46,7 +46,6 @@ export class PasswordResetContainer extends React.Component {
     client          : T.shape({
       mutate: T.func.isRequired,
     }),
-    isAuthenticated : T.bool.isRequired,
     actions         : T.shape({
     }).isRequired,
   };
@@ -56,13 +55,6 @@ export class PasswordResetContainer extends React.Component {
 
     this.onSubmit  = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
-  }
-
-  componentWillMount() {
-    const { isAuthenticated, router } = this.props;
-    if (isAuthenticated) {
-      router.replace('/');
-    }
   }
 
   _onKeyDown(e) {
@@ -162,7 +154,6 @@ const WithForm = reduxForm({
 
 export default compose(
   injectIntl,
-  withRouter,
   withApollo,
   Connect,
   WithForm,

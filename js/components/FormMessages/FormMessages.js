@@ -27,10 +27,10 @@ class FormMessages extends React.Component {
 
   render() {
     const { children, getFieldMeta, errorCount } = this.props;
-    const { _reduxForm: { form, getFormState } } = this.context;
+    const { _reduxForm: { getFormState } } = this.context;
     return (
       <this.props.tagName>
-        {this.renderChildren(children, /* field = */ getFieldMeta(form, getFormState), errorCount)}
+        {this.renderChildren(children, /* field = */ getFieldMeta(getFormState), errorCount)}
       </this.props.tagName>
     );
   }
@@ -53,14 +53,14 @@ FormMessages.contextTypes = {
 
 function mapStateToProps(state, { field }) {
   return {
-    getFieldMeta: (form, getFormState) => {
+    getFieldMeta: (getFormState) => {
       const formState = getFormState(state);
       return {
         name    : field,
         touched : getIn(formState, ['fields', field, 'touched'], false),
         errors  : merge(
-          getIn(formState, ['asyncErrors', field]),
-          getIn(formState, ['submitErrors', field]),
+          getIn(formState, ['asyncErrors', field], {}),
+          getIn(formState, ['submitErrors', field], {}),
         ),
       };
     },
@@ -68,7 +68,7 @@ function mapStateToProps(state, { field }) {
 }
 
 const getIn = (obj, prop, notSetValue) => {
-  return obj.getIn(prop, notSetValue);
+  return obj ? obj.getIn(prop, notSetValue) : notSetValue;
 };
 
 const merge = (...args) => args.reduce((memo, arg) => arg ? memo.mergeDeep(arg) : memo, fromJS({}));

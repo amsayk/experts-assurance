@@ -8,6 +8,7 @@ const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const sassyImport = require('postcss-sassy-import');
 const config = require('build/config');
+const merge = require('lodash.merge');
 const log = require('log')('app:webpack:config');
 
 const paths = config.utils_paths;
@@ -88,12 +89,21 @@ webpackConfig.plugins = [
       sassLoader: {
         data         : '$env: ' + config.env + ';',
         outputStyle  : 'expanded',
-        includePaths : paths.client('styles'),
+        includePaths : [
+          paths.base('node_modules'),
+          paths.client('styles'),
+        ],
       },
       babel: config.compiler_babel_options,
     },
   }),
-  new webpack.DefinePlugin(config.globals),
+  new webpack.DefinePlugin(merge(config.globals, {
+    'process.env' : {
+      PARSE_MODULE_PATH : JSON.stringify('parse'),
+      BROWSER           : JSON.stringify(true),
+      SSR               : JSON.stringify(config.ssrEnabled),
+    },
+  })),
   new HtmlWebpackPlugin({
     template : paths.client('index.html'),
     hash     : false,
@@ -101,7 +111,7 @@ webpackConfig.plugins = [
     filename : 'index.html',
     inject   : 'body',
     minify   : {
-      collapseWhitespace : true,
+      collapseWhitespace : __DEV__,
     },
 
     // local variables

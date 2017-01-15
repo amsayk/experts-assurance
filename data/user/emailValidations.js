@@ -6,7 +6,6 @@ const validations = {
     required : true,
     email    : true,
     promise  : function (fieldName, fieldValue, { email, user }, dispatch) {
-      console.log('DDDDD', user.id);
       return new Promise((resolve, reject) => {
         if (!email) {
           return resolve();

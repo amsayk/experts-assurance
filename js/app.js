@@ -6,7 +6,7 @@ import refreshCurrentUser from 'utils/refreshCurrentUser';
 import React, { PropTypes as T } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Router } from 'react-router';
+import { Router, match } from 'react-router';
 
 const log = require('log')('app:client');
 
@@ -30,6 +30,8 @@ import intlLoader from 'utils/intl-loader';
 import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
+
+import { SSR } from 'vars';
 
 const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('snackbar');
@@ -79,9 +81,18 @@ let render = async function render() {
     }
   }
 
-  ReactDOM.render(
-    <Application routerProps={{history, routes}}/>, APP_MOUNT_NODE, () => store.dispatch(ready())
-  );
+  if (SSR) {
+    match({ history, routes }, (error, redirectLocation, renderProps) => {
+      ReactDOM.render(
+        <Application routerProps={renderProps}/>, APP_MOUNT_NODE, () => store.dispatch(ready())
+      );
+    });
+  } else {
+    ReactDOM.render(
+      <Application routerProps={{ history, routes }}/>, APP_MOUNT_NODE, () => store.dispatch(ready())
+    );
+
+  }
 
   ReactDOM.render(
     <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>

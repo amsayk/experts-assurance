@@ -25,7 +25,7 @@ describe('password reset container', () => {
     },
   }));
 
-  it('should render the snapshot when not logged in', () => {
+  it('should render the snapshot', () => {
     const tree = renderer.create(
       <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
         <Provider store={store}>
@@ -34,7 +34,6 @@ describe('password reset container', () => {
               mutate: () => {},
             }}
             actions={{}}
-            isAuthenticated={false}
           />
         </Provider>
       </IntlProvider>
@@ -42,26 +41,5 @@ describe('password reset container', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should redirect when logged in', () => {
-    const router = {
-      replace: jest.fn(),
-    };
-
-    renderer.create(
-      <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
-        <Provider store={store}>
-          <Decorated
-            router={router}
-            client={{
-              mutate: () => {},
-            }}
-            actions={{}}
-            isAuthenticated={true}
-          />
-        </Provider>
-      </IntlProvider>
-    );
-    expect(router.replace).toBeCalledWith('/');
-  });
 });
 

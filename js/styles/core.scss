@@ -27,3 +27,7 @@ body {
 .root > div:nth-child(2) {
   flex: 1;
 }
+
+:global .pageload-overlay {
+  display: none;
+}

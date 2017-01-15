@@ -7,16 +7,18 @@ const nullthrows = require('nullthrows');
 
 const babelOptions = require('../../scripts/getBabelOptions')({
   moduleMap: {
-    'loadScript'            : 'utils/loadScript',
-    'validation'            : 'common/validation',
-    'validation-messages'   : 'common/messages/validation-messages',
-    'getCurrentUser'        : 'common/getCurrentUser',
-    'vars'                  : 'common/vars',
-    'dataIdFromObject'      : 'common/dataIdFromObject',
-    'log'                   : 'common/log',
-    'NetInfo'               : 'utils/NetInfo',
-    'AppState'              : 'utils/AppState',
-    'countries'             : 'common/countries',
+    'loadScript'                         : 'utils/loadScript',
+    'validation'                         : 'common/validation',
+    'validation-messages'                : 'common/messages/validation-messages',
+    'getCurrentUser'                     : 'common/getCurrentUser',
+    'vars'                               : 'common/vars',
+    'dataIdFromObject'                   : 'common/dataIdFromObject',
+    'log'                                : 'common/log',
+    'NetInfo'                            : 'utils/NetInfo',
+    'AppState'                           : 'utils/AppState',
+    'countries'                          : 'common/countries',
+    'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
+    'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
   },
   plugins: [
     'transform-runtime',
@@ -34,6 +36,9 @@ log('Creating default configuration.');
 // ========================================================
 const config = {
   env : process.env.NODE_ENV || 'development',
+
+  // SSR
+  ssrEnabled : process.env.SSR !== 'no',
 
   // ----------------------------------
   // Site info
@@ -176,10 +181,6 @@ config.globals = {
     GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
     GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(config.graphql_subscriptions_endpoint),
 
-    PARSE_MODULE_PATH     : JSON.stringify('parse'),
-
-
-    _ENV                  : JSON.stringify('client'),
     BASENAME              : JSON.stringify(process.env.BASENAME || ''),
     HOME_TITLE            : JSON.stringify(process.env.HOME_TITLE),
 

@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { Link, withRouter } from 'react-router';
+import { Link } from 'react-router';
 
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -31,7 +31,6 @@ import PasswordConfirmationField from '../../components/PasswordConfirmationFiel
 export class ChoosePasswordContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
-    isAuthenticated : T.bool.isRequired,
     token           : T.string.isRequired,
     action          : T.string.isRequired,
     username        : T.string.isRequired,
@@ -44,13 +43,6 @@ export class ChoosePasswordContainer extends React.Component {
     this.onSubmit     = this.onSubmit.bind(this);
     this.onKeyDown    = this._onKeyDown.bind(this);
     this._setFormRef  = this._setFormRef.bind(this);
-  }
-
-  componentWillMount() {
-    const { isAuthenticated, router } = this.props;
-    if (isAuthenticated) {
-      router.replace('/');
-    }
   }
 
   _onKeyDown(e) {
@@ -140,7 +132,6 @@ const WithForm = reduxForm({
 
 export default compose(
   injectIntl,
-  withRouter,
   Connect,
   WithForm,
 )(ChoosePasswordContainer);
