@@ -1,4 +1,10 @@
 
+0.1.2 / 2017-01-15
+==================
+
+  * [EXPERIMENTAL]: Add support for SSR.
+  * Update failing tests.
+
 0.1.1 / 2017-01-13
 ==================
 
