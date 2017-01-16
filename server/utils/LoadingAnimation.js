@@ -50,8 +50,9 @@ const STYLESHEET = `
 .pageload-loading.pageload-overlay::before {
   opacity: 1;
   visibility: visible;
-    transition: opacity 0.3s linear 1s;
-  }
+  transition: visibility;
+  transition-delay: 2s;
+}
 `;
 
 export default minify(`
