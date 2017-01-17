@@ -111,7 +111,7 @@ webpackConfig.plugins = [
     filename : 'index.html',
     inject   : 'body',
     minify   : {
-      collapseWhitespace : __DEV__,
+      collapseWhitespace : !__DEV__,
     },
 
     // local variables
