@@ -104,7 +104,7 @@ exports[`landing container should render the snapshot when finished loading 1`] 
             onKeyDown={[Function]}
             role="menuitem"
             tabIndex="-1">
-            Log out
+            Log Out
           </a>
         </div>
       </div>
@@ -195,7 +195,7 @@ exports[`landing container should render the snapshot when loading 1`] = `
             onKeyDown={[Function]}
             role="menuitem"
             tabIndex="-1">
-            Log out
+            Log Out
           </a>
         </div>
       </div>
