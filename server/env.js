@@ -65,12 +65,10 @@ if (config.ssrEnabled) {
   });
 
   // Graphql require hook
-  const { StringDecoder } = require('string_decoder');
-  const decoder = new StringDecoder('utf8');
   const graphqlProcessor = require('scripts/jest/graphqlPreprocessor');
   require.extensions['.graphql'] = function graphqlModulesHook(m, filename) {
-    const data = require('fs').readFileSync(filename);
-    return m._compile(graphqlProcessor.process(decoder.write(data), filename), filename);
+    const data = require('fs').readFileSync(filename, 'utf8');
+    return m._compile(graphqlProcessor.process(data, filename), filename);
   };
 }
 
