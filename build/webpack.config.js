@@ -9,6 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const sassyImport = require('postcss-sassy-import');
 const config = require('build/config');
 const merge = require('lodash.merge');
+const objectAssign = require('object-assign');
 const log = require('log')('app:webpack:config');
 
 const paths = config.utils_paths;
@@ -24,9 +25,11 @@ const webpackConfig = {
       paths.base('node_modules'),
       paths.client(),
     ],
-    alias: {
-
-    },
+    alias: objectAssign({},
+      require('fbjs-scripts/third-party-module-map'),
+      require('fbjs/module-map'),
+      config.compiler_babel_options_module_map,
+    ),
     extensions : ['.js', '.json'],
   },
   module : {},

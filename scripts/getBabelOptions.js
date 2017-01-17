@@ -7,8 +7,9 @@ module.exports = function (options) {
     env: 'production',
     moduleMap: {},
     plugins: [],
+    modules: false,
   }, options);
-  let { passPerPreset, presets } = require('babel-preset-fbjs/configure')({
+  let { passPerPreset, presets } = require('build/babel-preset/configure')({
     autoImport: true,
     inlineRequires: true,
     rewriteModules: {
@@ -20,6 +21,7 @@ module.exports = function (options) {
       prefix: '',
     },
     stripDEV: options.env === 'production',
+    modules: options.modules,
   });
 
   // Ugly hack!!!

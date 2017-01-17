@@ -17,6 +17,7 @@ const babelOptions = require('../getBabelOptions')({
   plugins: [
     jestPluginHoist,
   ],
+  modules: true,
 });
 
 module.exports = {

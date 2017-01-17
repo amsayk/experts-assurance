@@ -5,21 +5,22 @@ const ip = require('ip');
 const objectAssign = require('object-assign');
 const nullthrows = require('nullthrows');
 
+const moduleMap = {
+  'loadScript'                         : 'utils/loadScript',
+  'validation'                         : 'common/validation',
+  'validation-messages'                : 'common/messages/validation-messages',
+  'getCurrentUser'                     : 'common/getCurrentUser',
+  'vars'                               : 'common/vars',
+  'dataIdFromObject'                   : 'common/dataIdFromObject',
+  'log'                                : 'common/log',
+  'NetInfo'                            : 'utils/NetInfo',
+  'AppState'                           : 'utils/AppState',
+  'countries'                          : 'common/countries',
+  'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
+  'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
+};
+
 const babelOptions = require('../../scripts/getBabelOptions')({
-  moduleMap: {
-    'loadScript'                         : 'utils/loadScript',
-    'validation'                         : 'common/validation',
-    'validation-messages'                : 'common/messages/validation-messages',
-    'getCurrentUser'                     : 'common/getCurrentUser',
-    'vars'                               : 'common/vars',
-    'dataIdFromObject'                   : 'common/dataIdFromObject',
-    'log'                                : 'common/log',
-    'NetInfo'                            : 'utils/NetInfo',
-    'AppState'                           : 'utils/AppState',
-    'countries'                          : 'common/countries',
-    'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
-    'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
-  },
   plugins: [
     'transform-runtime',
     'transform-export-extensions',
@@ -107,6 +108,7 @@ const config = {
   // ----------------------------------
   // Compiler Configuration
   // ----------------------------------
+  compiler_babel_options_module_map : moduleMap,
   compiler_babel_query : {
     babelrc        : false,
     cacheDirectory : true,

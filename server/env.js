@@ -22,6 +22,7 @@ const babelOptions = require('../scripts/getBabelOptions')({
     'transform-runtime',
     'transform-export-extensions',
   ],
+  modules: true,
 });
 
 babelRegister(objectAssign(babelOptions, {
