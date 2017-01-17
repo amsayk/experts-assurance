@@ -139,12 +139,14 @@ if (__DEV__) {
         events: true,
       },
       caches: {
-        main    : [
+        main: [
           ...config.compiler_offline_assets,
           ':rest:',
         ],
       },
-      excludes  : [],
+      excludes: [
+        'index.html',
+      ],
       externals : config.compiler_offline_assets,
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
