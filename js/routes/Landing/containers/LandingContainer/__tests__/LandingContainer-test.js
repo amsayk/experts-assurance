@@ -21,47 +21,24 @@ describe('landing container', () => {
 
   it('should render the snapshot when finished loading', () => {
 
-    it('and email is verified', () => {
-      const tree = renderer.create(
-        <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
-          <LandingContainer
-            actions={{
-              logOut: jest.fn(),
-            }}
-            data={{
-              loading: false,
-              currentUser: {
-                email: 'email',
-                username: 'username',
-                emailVerified: true,
-              },
-            }}
-          />
-        </IntlProvider>
-      ).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
+    const tree = renderer.create(
+      <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
+        <LandingContainer
+          actions={{
+            logOut: jest.fn(),
+          }}
+          data={{
+            loading: false,
+            currentUser: {
+              email: 'email',
+              username: 'username',
+            },
+          }}
+        />
+      </IntlProvider>
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
 
-    it('and email is not verified', () => {
-      const tree = renderer.create(
-        <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
-          <LandingContainer
-            actions={{
-              logOut: jest.fn(),
-            }}
-            data={{
-              loading: false,
-              currentUser: {
-                email: 'email',
-                username: 'username',
-                emailVerified: false,
-              },
-            }}
-          />
-        </IntlProvider>
-      ).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
   });
 });
 
