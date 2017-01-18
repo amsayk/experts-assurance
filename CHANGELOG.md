@@ -1,4 +1,14 @@
 
+0.1.3 / 2017-01-18
+==================
+
+  * Improved scrolling.
+  * Simplify graphql loader hook.
+  * Implement webpack tree shaking.
+  * Fix offline plugin cache error in production mode.
+  * Correctly minify html.
+  * Delay load animation
+
 0.1.2 / 2017-01-15
 ==================
 
