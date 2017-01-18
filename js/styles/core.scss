@@ -31,3 +31,8 @@ body {
 :global .pageload-overlay {
   display: none;
 }
+
+main {
+  height: 100%;
+  overflow: hidden;
+}
