@@ -9,6 +9,8 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import messages from '../messages';
 
+import Icon from 'components/icons/MaterialIcons';
+
 function EmailField({ intl, label, input }) {
   return (
     <div className={style.emailField}>
@@ -18,7 +20,7 @@ function EmailField({ intl, label, input }) {
           {input.value}
           {' '}
           <Link className={style.changeEmailButton} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
-            <i className={style.changeEmailIcon}>edit</i>
+            <Icon className={style.changeEmailIcon} name={'edit'} size={18}/>
           </Link>
         </p>
       </div>

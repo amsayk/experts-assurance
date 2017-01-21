@@ -25,10 +25,20 @@ exports[`account settings form should render the snapshot 1`] = `
             className="changeEmailButton"
             onClick={[Function]}
             style={Object {}}>
-            <i
-              className="changeEmailIcon">
-              edit
-            </i>
+            <span
+              allowFontScaling={false}
+              className="changeEmailIcon"
+              style={
+                Object {
+                  "color": undefined,
+                  "fontFamily": "Material Icons",
+                  "fontSize": 18,
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                }
+              }>
+              
+            </span>
           </a>
         </p>
       </div>

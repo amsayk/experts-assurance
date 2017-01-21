@@ -209,11 +209,16 @@ textarea.control {
 .changeEmailButton {
   composes: btn btn-link align-middle from 'styles/_base.scss';
   padding: 0;
+
+  &:focus,
+  &:hover {
+    box-shadow: none;
+    outline: 0;
+    text-decoration: none;
+  }
 }
 
 .changeEmailIcon {
-  composes: material-icons from 'styles/_base.scss';
-  font-size: 15px;
 }
 
 // Password meter
