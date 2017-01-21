@@ -20,9 +20,9 @@ function Header({ intl, user, onLogOut }) {
   let ProfilePic;
   if (user) {
     if (user.displayName) {
-      ProfilePic = () => <Avatar round size={32} name={user.displayName} textSizeRatio={1.75}/>;
+      ProfilePic = (props) => <Avatar round size={32} name={user.displayName} textSizeRatio={1.75} {...props}/>;
     } else {
-      ProfilePic = () => <Avatar round size={32} value={'@'} textSizeRatio={1.75}/>;
+      ProfilePic = (props) => <Avatar round size={32} value={'@'} textSizeRatio={1.75} {...props}/>;
     }
   }
   return (
@@ -34,6 +34,7 @@ function Header({ intl, user, onLogOut }) {
             {ProfilePic ? <ProfilePic/> : null}
           </Dropdown.Toggle>
           <Dropdown.Menu>
+            <MenuItem componentClass={Profile} user={user} ProfilePic={ProfilePic}/>
             <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
               {intl.formatMessage(messages.manageAccount)}
             </MenuItem>
@@ -55,6 +56,22 @@ Header.propTypes = {
     displayName: T.string,
   }),
 };
+
+const Profile = ({ user, ProfilePic }) => (
+  <div className={style.profile}>
+    <div className={style.profileAvatar}>
+      {ProfilePic ? <ProfilePic round={false} size={48}/> : null}
+    </div>
+    <div className={ style.profileInfo }>
+      <div className={ style.profileName }>
+        {user && user.displayName}
+      </div>
+      <div className={ style.profileEmail }>
+        {user && user.email}
+      </div>
+    </div>
+  </div>
+);
 
 export default injectIntl(Header);
 

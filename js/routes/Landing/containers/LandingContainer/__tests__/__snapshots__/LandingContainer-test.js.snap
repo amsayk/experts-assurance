@@ -84,6 +84,48 @@ exports[`landing container should render the snapshot when finished loading 1`] 
           aria-labelledby={undefined}
           className="dropdown-menu dropdown-menu-right"
           role="menu">
+          <div
+            className="profile">
+            <div
+              className="profileAvatar">
+              <div
+                className="sb-avatar"
+                style={
+                  Object {
+                    "borderRadius": 0,
+                    "display": "inline-block",
+                    "height": 48,
+                    "width": 48,
+                  }
+                }>
+                <div
+                  style={
+                    Object {
+                      "background": "#d61a7f",
+                      "borderRadius": 0,
+                      "color": "#FFF",
+                      "font": "27px Helvetica, Arial, sans-serif",
+                      "height": 48,
+                      "lineHeight": "48px",
+                      "textAlign": "center",
+                      "textTransform": "uppercase",
+                      "width": 48,
+                    }
+                  }>
+                  @
+                </div>
+              </div>
+            </div>
+            <div
+              className="profileInfo">
+              <div
+                className="profileName" />
+              <div
+                className="profileEmail">
+                email
+              </div>
+            </div>
+          </div>
           <a
             className="dropdown-item"
             onClick={[Function]}
@@ -175,6 +217,18 @@ exports[`landing container should render the snapshot when loading 1`] = `
           aria-labelledby={undefined}
           className="dropdown-menu dropdown-menu-right"
           role="menu">
+          <div
+            className="profile">
+            <div
+              className="profileAvatar" />
+            <div
+              className="profileInfo">
+              <div
+                className="profileName" />
+              <div
+                className="profileEmail" />
+            </div>
+          </div>
           <a
             className="dropdown-item"
             onClick={[Function]}

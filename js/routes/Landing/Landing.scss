@@ -7,7 +7,7 @@
 .navbar {
   composes: navbar flex-row justify-content-between from 'styles/_base.scss';
   padding-left: $navbar-horizontal-spacing;
-  padding-right: $navbar-horizontal-spacing
+  padding-right: $navbar-horizontal-spacing;
 }
 
 .menu {
@@ -28,4 +28,36 @@
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
+}
+
+// Profile line
+.profile {
+  composes: d-flex flex-row align-content-center from 'styles/_base.scss';
+
+  .profile-info-line {
+    max-width: 420px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.profileAvatar {
+  margin: 10px;
+}
+
+.profileInfo {
+  align-self: center;
+  margin-right: 10px;
+}
+
+.profileName {
+  composes: profile-info-line;
+  font-weight: 700;
+}
+
+.profileEmail {
+  color: #707070;
+  composes: profile-info-line;
+  font-size: 13px;
 }
