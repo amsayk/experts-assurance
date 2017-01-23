@@ -1,7 +1,6 @@
-import config from 'build/config';
-import webpackConfig from 'build/webpack.config';
-
 import path from 'path';
+
+import config from 'build/config';
 
 import createStore from 'server/store';
 import getRoutes from 'server/routes';
@@ -30,7 +29,8 @@ export default function createSSRRoute(app, compiler) {
     if (config.env === 'development') {
       compiler.plugin('done', function () {
         // Webpack is done compiling
-        compiler.outputFileSystem.readFile(path.resolve(webpackConfig.output.path, 'index.html'), 'utf8', function (err, data) {
+        const filename = path.join(compiler.outputPath, 'index.html');
+        compiler.outputFileSystem.readFile(filename, 'utf8', function (err, data) {
           if (err) {
             reject(err);
           } else {
@@ -54,19 +54,22 @@ export default function createSSRRoute(app, compiler) {
     const index = await indexHtml;
 
     const store = createStore();
-    match({ routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    match({ routes: getRoutes(store), location: req.originalUrl }, async (error, redirectLocation, renderProps) => {
       if (error) {
         res.status(500).send();
       } else if (redirectLocation) {
         res.status(302).redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
+        res.set('content-type', 'text/html');
         res.write(loading);
-        renderEngine({
-          renderProps,
-          req,
-          res,
-          store,
-        }).then(function ({ html, appState, apolloState }) {
+        try {
+          const { html, appState, apolloState } = await renderEngine({
+            renderProps,
+            req,
+            res,
+            store,
+          });
+
           const head = [
             `<script>window.__APOLLO_STATE__=${apolloState};</script>`,
             `<script>window.__APP_STATE__=${appState};</script>`,
@@ -83,10 +86,10 @@ export default function createSSRRoute(app, compiler) {
           });
 
           res.status(200).end(body);
-        }, function (error2) {
+        } catch(error2)  {
           log.error('failed to load', error2);
           res.status(500).send();
-        });
+        }
       } else {
         res.status(404).send();
       }
