@@ -1,4 +1,12 @@
 
+0.1.4 / 2017-01-23
+==================
+
+  * Improve login form.
+  * Add profile info to header.
+  * Icon component.
+  * Don't let body overflow.
+
 0.1.3 / 2017-01-18
 ==================
 
