@@ -39,7 +39,7 @@ const config = {
   env : process.env.NODE_ENV || 'development',
 
   // SSR
-  ssrEnabled : process.env.SSR !== 'no',
+  ssrEnabled : process.env.SSR === 'yes',
 
   // ----------------------------------
   // Site info
