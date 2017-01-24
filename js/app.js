@@ -34,7 +34,7 @@ import { ready } from 'redux/reducers/app/actions';
 import { SSR } from 'vars';
 
 const APP_MOUNT_NODE = document.querySelector('main');
-const SNACKBAR_MOUNT_NODE = document.querySelector('snackbar');
+const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
 
 let render = async function render() {
   await refreshCurrentUser();

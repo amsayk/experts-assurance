@@ -270,7 +270,7 @@
     "setupFiles": [
       "<rootDir>/scripts/jest/setup",
       "<rootDir>/node_modules/babel-polyfill",
-      "node_modules/fbjs-scripts/jest/environment.js"
+      "<rootDir>/node_modules/fbjs-scripts/jest/environment"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

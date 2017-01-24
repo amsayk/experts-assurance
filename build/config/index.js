@@ -19,7 +19,7 @@ const moduleMap = {
   'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
 };
 
-const babelOptions = require('../../scripts/getBabelOptions')({
+const babelOptions = require('scripts/getBabelOptions')({
   plugins: [
     'transform-runtime',
     'transform-export-extensions',
@@ -217,7 +217,7 @@ config.globals = {
 // ------------------------------------
 // Validate Vendor Dependencies
 // ------------------------------------
-const pkg = require('../../package.json');
+const pkg = require('package.json');
 
 config.compiler_vendors = config.compiler_vendors
   .filter((dep) => {

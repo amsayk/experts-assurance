@@ -24,7 +24,7 @@ import { HOME_TITLE, APP_NAME } from 'vars';
 
 import style from 'styles/core.scss';
 
-import Notification from 'components/Notification';
+import Notification from 'components/notification';
 
 class CoreLayout extends React.PureComponent {
   static propTypes = {
