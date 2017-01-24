@@ -1,7 +1,6 @@
 /* eslint key-spacing:0 spaced-comment:0 */
 const path = require('path');
 const log = require('log')('app:config');
-const ip = require('ip');
 const objectAssign = require('object-assign');
 const nullthrows = require('nullthrows');
 
@@ -60,7 +59,7 @@ const config = {
   // ----------------------------------
   // Server Configuration
   // ----------------------------------
-  server_host : ip.address(), // use string 'localhost' to prevent exposure on local network
+  server_host : process.env.HOST || 'localhost', // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || 5000,
   ws_port     : process.env.WS_PORT || 8080,
 
@@ -102,7 +101,7 @@ const config = {
   // graphql config
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
-  graphql_subscriptions_endpoint : `ws://${ip.address()}:${process.env.WS_PORT || 8080}`,
+  graphql_subscriptions_endpoint : `ws://${process.env.HOST || 'localhost'}:${process.env.WS_PORT || 8080}`,
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
 
   // ----------------------------------
