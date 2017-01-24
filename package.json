@@ -3,6 +3,10 @@
   "version": "0.1.5",
   "description": "B2B Trading Platform",
   "private": true,
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "precompile": "npm run clean",
@@ -20,7 +24,8 @@
     "deploy:dev": "bnr deploy:dev",
     "deploy:prod": "bnr deploy:prod",
     "translate": "NODE_PATH=.:./js bnr translate",
-    "update-schema": "NODE_PATH=.:./js bnr update-schema"
+    "update-schema": "NODE_PATH=.:./js bnr update-schema",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "betterScripts": {
     "update-schema": {
@@ -240,6 +245,7 @@
     "parse-server-mailgun": "^2.3.2",
     "postcss-loader": "^1.2.1",
     "postcss-sassy-import": "^1.2.3",
+    "pre-commit": "^1.2.2",
     "react-addons-perf": "^15.4.2",
     "react-addons-update": "^15.4.2",
     "react-test-renderer": "^15.4.2",
