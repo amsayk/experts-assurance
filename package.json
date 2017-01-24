@@ -5,21 +5,22 @@
   "private": true,
   "scripts": {
     "clean": "rimraf dist",
-    "compile": "better-npm-run compile",
+    "precompile": "npm run clean",
+    "compile": "NODE_PATH=.:./js bnr compile",
     "lint": "npm run stylelint && npm run jslint",
     "jslint": "npm run update-schema && eslint bin build backend server js common data scripts",
     "jslint:fix": "npm run jslint -- --fix",
     "stylelint": "stylelint 'js/**/*.scss'; exit 0",
-    "start": "better-npm-run start",
-    "dev": "better-npm-run dev",
-    "test": "better-npm-run test",
-    "test:dev": "better-npm-run test --watch",
-    "test:coverage": "better-npm-run test --coverage",
-    "deploy": "better-npm-run deploy",
-    "deploy:dev": "better-npm-run deploy:dev",
-    "deploy:prod": "better-npm-run deploy:prod",
-    "translate": "better-npm-run translate",
-    "update-schema": "better-npm-run update-schema"
+    "start": "NODE_PATH=.:./js bnr start",
+    "dev": "NODE_PATH=.:./js bnr dev",
+    "test": "NODE_PATH=.:./js bnr test",
+    "test:dev": "NODE_PATH=.:./js bnr test --watch",
+    "test:coverage": "NODE_PATH=.:./js bnr test --coverage",
+    "deploy": "bnr deploy",
+    "deploy:dev": "bnr deploy:dev",
+    "deploy:prod": "bnr deploy:prod",
+    "translate": "NODE_PATH=.:./js bnr translate",
+    "update-schema": "NODE_PATH=.:./js bnr update-schema"
   },
   "betterScripts": {
     "update-schema": {
