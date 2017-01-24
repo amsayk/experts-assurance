@@ -1,4 +1,16 @@
 
+0.1.6 / 2017-01-24
+==================
+
+  * Merge branch 'bug/Issue7': Add support for standalone node.
+  * Add git pre-commit hook to lint and test
+  * Fix `NODE_PATH`.
+  * By default, enable SSR in production mode.
+  * Revert "Replace `NODE_PATH` with `app-module-path`"
+  * Fix minor issue.
+  * Make `HOST` an env to easily use `localhost`;
+  * For now, turn off SSR by default.
+
 0.1.5 / 2017-01-23
 ==================
 

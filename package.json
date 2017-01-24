@@ -1,6 +1,6 @@
 {
   "name": "b2b-trading-platform",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "B2B Trading Platform",
   "private": true,
   "pre-commit": [
