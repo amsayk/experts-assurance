@@ -38,7 +38,9 @@ const config = {
   env : process.env.NODE_ENV || 'development',
 
   // SSR
-  ssrEnabled : process.env.SSR === 'yes',
+  ssrEnabled : typeof process.env.SSR !== 'undefined'
+    ? process.env.SSR === 'yes'
+    : process.env.NODE_ENV === 'production',
 
   // ----------------------------------
   // Site info
