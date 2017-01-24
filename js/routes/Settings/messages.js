@@ -8,7 +8,7 @@ export default defineMessages({
 
   logOut: {
     id: 'settings-page.logOut',
-    defaultMessage: 'Log out',
+    defaultMessage: 'Log Out',
   },
 
   linkChangeEmail: {

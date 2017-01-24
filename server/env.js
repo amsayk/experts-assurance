@@ -2,7 +2,7 @@ const objectAssign = require('object-assign');
 
 const babelRegister = require('babel-core/register');
 
-const babelOptions = require('../scripts/getBabelOptions')({
+const babelOptions = require('scripts/getBabelOptions')({
   moduleMap: {
     'validation'                         : 'common/validation',
     'getCurrentUser'                     : 'common/getCurrentUser',

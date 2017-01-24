@@ -86,7 +86,7 @@ export default function createSSRRoute(app, compiler) {
           });
 
           res.status(200).end(body);
-        } catch(error2)  {
+        } catch (error2)  {
           log.error('failed to load', error2);
           res.status(500).send();
         }
