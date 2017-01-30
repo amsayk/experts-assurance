@@ -25,7 +25,7 @@ export default defineMessages({
 
   email: {
     id: 'account.signup-form.label.email',
-    defaultMessage: 'Email',
+    defaultMessage: 'Email address',
   },
 
   password: {
@@ -56,6 +56,25 @@ export default defineMessages({
   signUp: {
     id: 'acccount.signup-form.signup-action',
     defaultMessage: 'Create an account',
+  },
+
+  emailNote: {
+    id: 'account.signup-form.email-note',
+    defaultMessage: 'You will occasionally receive account related emails. We promise not to share your email with anyone.',
+  },
+  termsOfService: {
+    id: 'account.signup-form.terms-of-service',
+    defaultMessage: 'Terms of Service',
+  },
+
+  privacyPolicy: {
+    id: 'account.signup-form.privacy-policy',
+    defaultMessage: 'Privacy Policy',
+  },
+
+  tos: {
+    id: 'account.signup-form.tos',
+    defaultMessage: 'By clicking on \"{action}\" below, you are agreeing to the {termsOfService} and the {privacyPolicy}.',
   },
 
 });

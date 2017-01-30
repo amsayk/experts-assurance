@@ -6,6 +6,8 @@ import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
+import messages from '../messages';
+
 import style from '../Signup.scss';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -33,6 +35,7 @@ function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, erro
           {intl.formatMessage(validationMessages.emailTaken)}
         </div>
       </FormMessages>
+      {error || <p className={style.note}>{intl.formatMessage(messages.emailNote)}</p>}
     </div>
   );
 }

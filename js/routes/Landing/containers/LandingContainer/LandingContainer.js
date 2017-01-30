@@ -8,7 +8,7 @@ import { logOut } from 'redux/reducers/user/actions';
 
 import style from '../../Landing.scss';
 
-import Header from '../../components/Header';
+import Header from '../Header';
 
 import selector from './selector';
 
@@ -46,7 +46,7 @@ function mapDispatchToProps(dispatch) {
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const withCurrentUser = graphql(QUERY, {
-  options: ({ user }) => ({ variables: { id: user.get('id') } }),
+  options: ({ user }) => ({ variables: { id: user.id } }),
   skip: ({ user }) => user.isEmpty(),
 });
 

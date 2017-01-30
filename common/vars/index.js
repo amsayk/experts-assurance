@@ -40,5 +40,15 @@ export const PATH_SETTINGS_CHANGE_PASSWORD    = process.env.PATH_SETTINGS_CHANGE
 export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
 export const PATH_SETTINGS_CHANGE_EMAIL       = process.env.PATH_SETTINGS_CHANGE_EMAIL;
 
+// Product catalog
+export const PATH_PRODUCT_CATALOG_BASE        = process.env.PATH_PRODUCT_CATALOG_BASE;
+
+// Search
+export const PATH_SEARCH                      = process.env.PATH_SEARCH;
+
 export const SSR                              = process.env.SSR;
+
+export const LINK_TERMS_OF_SERVICE            = process.env.LINK_TERMS_OF_SERVICE;
+export const LINK_PRIVACY_POLICY              = process.env.LINK_PRIVACY_POLICY;
+export const LINK_SUPPORT                     = process.env.LINK_SUPPORT;
 

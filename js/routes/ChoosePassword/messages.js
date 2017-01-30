@@ -33,5 +33,18 @@ export default defineMessages({
     defaultMessage: 'Change password',
   },
 
+  support: {
+    id: 'account.login-form.support',
+    defaultMessage: 'Support',
+  },
+  termsOfService: {
+    id: 'account.choose-password-form.terms-of-service',
+    defaultMessage: 'Terms of Service',
+  },
+
+  privacyPolicy: {
+    id: 'account.choose-password-form.privacy-policy',
+    defaultMessage: 'Privacy Policy',
+  },
 });
 

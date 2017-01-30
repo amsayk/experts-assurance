@@ -1,10 +1,16 @@
 import getCurrentUser from 'getCurrentUser';
 
-import { fromJS } from 'immutable';
+import { Record } from 'immutable';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
 import { INIT } from 'vars';
+
+class User extends Record({ id: undefined, email: undefined }) {
+  isEmpty() {
+    return typeof this.id === 'undefined';
+  }
+}
 
 function maybeUser() {
   const user = getCurrentUser();
@@ -14,17 +20,17 @@ function maybeUser() {
   } : {};
 }
 
-const initialState = fromJS({});
+const initialState = new User();
 
 export default function userReducer(state = initialState, { type, payload }) {
   if (type === USER_LOGGED_IN) {
-    return fromJS(payload);
+    return new User(payload);
   }
   if (type === USER_LOGGED_OUT) {
-    return fromJS({});
+    return initialState;
   }
   if (type === INIT) {
-    return fromJS(maybeUser());
+    return new User(maybeUser());
   }
   return state;
 }

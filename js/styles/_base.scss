@@ -73,5 +73,9 @@
   font-weight: 300;
 }
 
+.disable-selection {
+  user-select: none;
+}
+
 // Custom imports
 @import 'themes/default';

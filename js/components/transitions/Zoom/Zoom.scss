@@ -1,0 +1,55 @@
+@mixin effect() {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.enter {
+  @include effect();
+  animation-play-state: paused;
+  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  opacity: 0;
+}
+
+.leave {
+  @include effect();
+  animation-play-state: paused;
+  animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+}
+
+.enter.active {
+  animation-name: ZoomIn;
+  animation-play-state: running;
+}
+
+.leave.active {
+  animation-name: ZoomOut;
+  animation-play-state: running;
+}
+
+@keyframes ZoomIn {
+  0% {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform-origin: 50% 50%;
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes ZoomOut {
+  0% {
+    opacity: 1;
+    transform-origin: 50% 50%;
+    transform: scale(1, 1);
+  }
+
+  100% {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0, 0);
+  }
+}

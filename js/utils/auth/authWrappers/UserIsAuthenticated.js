@@ -3,7 +3,8 @@ import { UserAuthWrapper } from 'redux-auth-wrapper';
 
 const UserIsAuthenticated = UserAuthWrapper({
   wrapperDisplayName     : 'UserIsAuthenticated',
-  authSelector           : state => state.get('user').toJS(),
+  authSelector           : state => state.get('user'),
+  predicate              : (user) => !user.isEmpty(),
   failureRedirectPath    : PATH_LOGIN,
 });
 

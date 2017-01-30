@@ -9,6 +9,8 @@ import {
   combineReducers,
 } from 'redux-immutable';
 
+import { INIT } from 'vars';
+
 import routerReducer from './routing/reducer';
 
 import { reducer as formReducer, actionTypes } from 'redux-form/immutable';
@@ -75,6 +77,8 @@ export const injectReducers = (store, reducers) => {
   });
   if (changed) {
     store.replaceReducer(makeRootReducer(store.asyncReducers));
+    // Reinitialize
+    store.dispatch({ type: INIT });
   }
 };
 

@@ -1,0 +1,66 @@
+:global {
+  .#{$triggerPrefixCls} {
+    &-mask {
+      background-color: rgb(55, 55, 55);
+      background-color: rgba(55, 55, 55, 0.6);
+      bottom: 0;
+      filter: alpha(opacity=50);
+      height: 100%;
+      left: 0;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 1050;
+
+      &-hidden {
+        display: none;
+      }
+    }
+    @mixin fade-effect() {
+      animation-duration: 0.3s;
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+    }
+
+    &-fade-enter,
+    &-fade-appear {
+      @include fade-effect();
+      animation-play-state: paused;
+      opacity: 0;
+    }
+
+    &-fade-leave {
+      @include fade-effect();
+      animation-play-state: paused;
+    }
+
+    &-fade-enter.#{$triggerPrefixCls}-fade-enter-active,
+    &-fade-appear.#{$triggerPrefixCls}-fade-appear-active {
+      animation-name: TriggerMaskFadeIn;
+      animation-play-state: running;
+    }
+
+    &-fade-leave.#{$triggerPrefixCls}-fade-leave-active {
+      animation-name: TriggerMaskFadeOut;
+      animation-play-state: running;
+    }
+    @keyframes :global(TriggerMaskFadeIn) {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes :global(TriggerMaskFadeOut) {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+  }
+}

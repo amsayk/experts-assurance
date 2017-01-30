@@ -37,6 +37,18 @@ export default defineMessages({
     id: 'acccount.password-reset-form.passwordReset-action',
     defaultMessage: 'Send password reset email',
   },
+  support: {
+    id: 'account.password-reset-form.support',
+    defaultMessage: 'Support',
+  },
+  termsOfService: {
+    id: 'account.password-reset-form.terms-of-service',
+    defaultMessage: 'Terms of Service',
+  },
 
+  privacyPolicy: {
+    id: 'account.password-reset-form.privacy-policy',
+    defaultMessage: 'Privacy Policy',
+  },
 });
 

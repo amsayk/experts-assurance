@@ -65,15 +65,13 @@
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
+  overflow: auto;
 
   .logo {
     align-self: center;
     margin-bottom: 25px;
   }
 
-  footer {
-    height: 50px;
-  }
 }
 
 .form {
@@ -81,8 +79,8 @@
   background-color: #fff;
   border-radius: 4px;
   margin: 0 auto;
-  min-width: 380px;
-  padding: 15px 35px 45px;
+  padding: 15px 35px 25px;
+  width: 445px;
 
   .heading {
     font-size: 45px;
@@ -93,6 +91,10 @@
     margin-top: 0;
   }
 
+  input:not(:focus) {
+    background-color: #fafafa;
+  }
+
   .tagLine {
     color: #555;
     font-weight: 300;
@@ -100,7 +102,6 @@
   }
 
   button {
-    margin-top: 30px;
   }
 }
 
@@ -108,4 +109,18 @@
   composes: has-danger hint-block from 'styles/_base.scss';
   margin-bottom: 12px;
   text-align: center;
+}
+
+.tos {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+  margin: 15px 0;
+}
+
+.note {
+  color: #767676;
+  font-size: 12px;
+  margin: 4px 0 2px;
+  min-height: 17px;
 }

@@ -2,19 +2,20 @@ import {
   READY,
   RESIZE,
   CONNECTION_STATE_CHANGE,
+  TOGGLE_ALERTS,
 } from './constants';
+
+import { INIT } from 'vars';
 
 import { isServer } from 'vars';
 
-import Immutable from 'immutable';
+import { Record } from 'immutable';
 
 const MEDIA_QUERY = '(min-width: 992px)';
 
-const initialState = Immutable.fromJS({
-  displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
-  onLine         : true,
-  isReady        : false,
-});
+class AppState extends Record(maybeAppState()) {}
+
+const initialState = new AppState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -30,8 +31,24 @@ export default function reducer(state = initialState, action) {
       return state.merge({
         isReady: true,
       });
+    case TOGGLE_ALERTS:
+      return state.merge({
+        alertsOpen: !state.alertsOpen,
+      });
+    case INIT: {
+      return new AppState(maybeAppState());
+    }
     default:
       return state;
   }
+}
+
+function maybeAppState() {
+  return {
+    displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
+    onLine         : true,
+    isReady        : false,
+    alertsOpen     : false,
+  };
 }
 

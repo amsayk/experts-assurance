@@ -89,6 +89,12 @@ const config = {
   path_settings_business_details   : process.env.PATH_SETTINGS_BUSINESS_DETAILS || 'business',
   path_settings_change_email       : process.env.PATH_SETTINGS_CHANGE_EMAIL || 'change_email',
 
+  // product catalog
+  path_product_catalog_base        : process.env.PATH_PRODUCT_CATALOG_BASE || '/catalog',
+
+  // search
+  path_search                      : process.env.PATH_SEARCH || '/search',
+
   password_min_length : nullthrows(process.env.PASSWORD_MIN_LENGTH && parseInt(process.env.PASSWORD_MIN_LENGTH, 10)),
   password_min_score  : nullthrows(process.env.PASSWORD_MIN_SCORE && parseInt(process.env.PASSWORD_MIN_SCORE, 10)),
 
@@ -151,6 +157,7 @@ const config = {
     'redux',
     'react-apollo',
     'apollo-client',
+    'redux-immutable',
     'classnames',
     'moment',
   ],
@@ -202,6 +209,12 @@ config.globals = {
     PATH_SETTINGS_BUSINESS_DETAILS   : JSON.stringify(config.path_settings_business_details),
     PATH_SETTINGS_CHANGE_EMAIL       : JSON.stringify(config.path_settings_change_email),
 
+    // Product catalog
+    PATH_PRODUCT_CATALOG_BASE        : JSON.stringify(config.path_product_catalog_base),
+
+    // Search
+    PATH_SEARCH           : JSON.stringify(config.path_search),
+
     PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
     PASSWORD_MIN_SCORE    : JSON.stringify(config.password_min_score),
 
@@ -213,6 +226,10 @@ config.globals = {
     COUNTRY               : JSON.stringify(config.country),
 
     DEV_PASSWORD          : JSON.stringify(process.env.DEV_PASSWORD),
+
+    LINK_TERMS_OF_SERVICE : JSON.stringify(process.env.LINK_TERMS_OF_SERVICE || 'https://www.trading.com/legal/privacy-policy'),
+    LINK_PRIVACY_POLICY   : JSON.stringify(process.env.PRIVACY_POLICY || 'https://www.trading.com/legal/customer-agreement'),
+    LINK_SUPPORT          : JSON.stringify(process.env.SUPPORT || 'https://support.trading.com'),
   },
 };
 

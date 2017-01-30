@@ -28,6 +28,7 @@ import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'r
 import {
   intlShape,
   injectIntl,
+  FormattedMessage,
 } from 'react-intl';
 
 import messages from '../../messages';
@@ -39,13 +40,14 @@ import ReCAPTCHAField from '../../components/ReCAPTCHAField';
 
 import MUTATION from './signUp.mutation.graphql';
 
-import { APP_NAME } from 'vars';
-
-import AppLogo from 'components/AppLogo';
-
 import {
   PATH_LOGIN,
+  APP_NAME,
+  LINK_PRIVACY_POLICY,
+  LINK_TERMS_OF_SERVICE,
 } from 'vars';
+
+import AppLogo from 'components/AppLogo';
 
 export class SignupContainer extends React.Component {
   static propTypes = {
@@ -147,6 +149,21 @@ export class SignupContainer extends React.Component {
         name={'recaptcha'}
         component={ReCAPTCHAField} />,
 
+      <p className={style.tos}>
+        <FormattedMessage
+          {...messages.tos}
+          values={{
+            action: intl.formatMessage(messages.signUp),
+            termsOfService: (
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+            ),
+            privacyPolicy: (
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+            ),
+          }}
+        />
+      </p>,
+
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.join}>
         {intl.formatMessage(messages.signUp)}
       </button>,
@@ -175,9 +192,6 @@ export class SignupContainer extends React.Component {
             </Link>
           </div>
         </div>
-        <footer>
-          {/* © 2016 */}
-        </footer>
       </div>
     );
   }

@@ -69,7 +69,7 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const withCurrentUserAndBusiness = graphql(QUERY, {
   options: ({ user }) => ({
-    variables: { id: user.get('id') },
+    variables: { id: user.id },
   }),
   skip: ({ user }) => user.isEmpty(),
 });

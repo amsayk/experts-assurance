@@ -1,11 +1,9 @@
 import { UserAuthWrapper } from 'redux-auth-wrapper';
 
-import isEmpty from 'isEmpty';
-
 const NotAuthenticated = UserAuthWrapper({
   wrapperDisplayName     : 'NotAuthenticated',
-  authSelector           : state => state.get('user').toJS(),
-  predicate              : (user) => isEmpty(user),
+  authSelector           : state => state.get('user'),
+  predicate              : (user) => user.isEmpty(),
   failureRedirectPath    : (_, { redirect }) => redirect || '/',
   allowRedirectBack      : false,
 });

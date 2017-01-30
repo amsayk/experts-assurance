@@ -79,7 +79,14 @@ const APP_PATHS = [
   config.path_password_reset_success,
   config.path_invalid_link,
 
+  // settings
   config.path_settings_base + '*',
+
+  // product catalog
+  config.path_product_catalog_base + '*',
+
+  // search
+  config.path_search,
 ];
 
 if (config.ssrEnabled) {

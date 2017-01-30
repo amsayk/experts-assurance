@@ -1,0 +1,194 @@
+@import 'variables';
+
+.center {
+  composes: center flex-column from 'styles/_base.scss';
+}
+
+// Header
+
+.navbar {
+  composes: navbar flex-row justify-content-between align-items-center from 'styles/_base.scss';
+  padding-left: $navbar-horizontal-spacing;
+  padding-right: $navbar-horizontal-spacing;
+}
+
+.logoutLink {
+  composes: nav-item nav-link from 'styles/_base.scss';
+  cursor: pointer;
+}
+
+.root {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  height: 100%;
+}
+
+.leftNav {
+  composes: leftNav from 'styles/_base.scss';
+  flex: 1;
+}
+
+.middleNav {
+  composes: middleNav from 'styles/_base.scss';
+  flex: 1;
+}
+
+.rightNav {
+  composes: rightNav from 'styles/_base.scss';
+  flex: 1;
+}
+
+.addProductBtn {
+  composes: btn btn-primary disable-selection from 'styles/_base.scss';
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 11px 10px;
+
+  &:focus,
+  &:hover {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.viewType,
+.search {
+  composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
+}
+
+.searchBtn {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.viewTypeBtn,
+.searchBtn {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  cursor: pointer;
+  padding: 0;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  span {
+    opacity: 0.5;
+
+    &:focus,
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.viewTypeBtn {
+  padding: 4px;
+
+  span {
+    font-weight: 600 !important;
+  }
+}
+
+// Search
+
+.searchFieldWrapper {
+  flex: 1;
+  composes: rightNavItem from 'styles/_base.scss';
+  height: 44px;
+}
+
+.searchField {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  max-width: 720px;
+  position: relative;
+  transition: background 100ms ease-in, width 100ms ease-out;
+  composes: d-flex flex-row from 'styles/_base.scss';
+}
+
+.searchField.active {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+}
+
+.searchField.hasContent {
+  border-bottom: none;
+}
+
+.inputWrapper {
+  cursor: default;
+  transition: opacity 250ms ease-out;
+}
+
+.inputWrapper {
+  flex: 1;
+  composes: d-flex flex-row from 'styles/_base.scss';
+}
+
+.input {
+  border: none;
+  font-size: 16px;
+  font-weight: normal;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.searchField button,
+.searchField input {
+  color: #212121;
+}
+
+.searchField button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  span {
+    opacity: 0.54;
+
+    &:focus,
+    &:hover {
+      opacity: 0.8;
+      color: $black;
+    }
+  }
+}
+
+.searchBoxMenu {
+  width: 100%;
+  max-height: 90vh;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+  background-clip: initial;
+
+  &,
+  *:first-child {
+  }
+}
+
+// Popups
+
+.popupProductForm {
+  background-color: #edeff0;
+  border-radius: 3px;
+  border: 1px solid #d6dadc;
+  border-bottom-color: #c4c9cc;
+}
+
+.popupProductForm {
+  composes: center;
+}

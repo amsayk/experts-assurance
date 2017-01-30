@@ -1,0 +1,173 @@
+$tooltip-prefix-cls: tp-tooltip;
+
+//
+// Tooltips
+// --------------------------------------------------
+$font-size-base: 12px;
+$line-height-base: 1.5;
+$border-radius-base: 6px;
+$overlay-shadow: 0 0 4px rgba(0, 0, 0, 0.17);
+//** Tooltip text color
+$tooltip-color: #fff;
+//** Tooltip background color
+$tooltip-bg: #373737;
+$tooltip-opacity: 0.9;
+
+//** Tooltip arrow width
+$tooltip-arrow-width: 5px;
+//** Tooltip distance with trigger
+$tooltip-distance: $tooltip-arrow-width + 4;
+//** Tooltip arrow color
+$tooltip-arrow-color: $tooltip-bg;
+
+:global {
+  // Base class
+  .#{$tooltip-prefix-cls} {
+    // remove left/top by yiminghe
+    // left: -9999px;
+    // top: -9999px;
+    display: block;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    opacity: $tooltip-opacity;
+    position: absolute;
+    visibility: visible;
+    z-index: 1070;
+
+    &-hidden {
+      display: none;
+    }
+
+    &-placement-top,
+    &-placement-topLeft,
+    &-placement-topRight {
+      padding: $tooltip-arrow-width 0 $tooltip-distance 0;
+    }
+
+    &-placement-right,
+    &-placement-rightTop,
+    &-placement-rightBottom {
+      padding: 0 $tooltip-arrow-width 0 $tooltip-distance;
+    }
+
+    &-placement-bottom,
+    &-placement-bottomLeft,
+    &-placement-bottomRight {
+      padding: $tooltip-distance 0 $tooltip-arrow-width 0;
+    }
+
+    &-placement-left,
+    &-placement-leftTop,
+    &-placement-leftBottom {
+      padding: 0 $tooltip-distance 0 $tooltip-arrow-width;
+    }
+  }
+  // Wrapper for the tooltip content
+  .#{$tooltip-prefix-cls}-inner {
+    background-color: $tooltip-bg;
+    border-radius: $border-radius-base;
+    box-shadow: $overlay-shadow;
+    color: $tooltip-color;
+    min-height: 34px;
+    padding: 8px 10px;
+    text-align: left;
+    text-decoration: none;
+  }
+  // Arrows
+  .#{$tooltip-prefix-cls}-arrow {
+    border-color: transparent;
+    border-style: solid;
+    height: 0;
+    position: absolute;
+    width: 0;
+  }
+
+  .#{$tooltip-prefix-cls} {
+    &-placement-top &-arrow,
+    &-placement-topLeft &-arrow,
+    &-placement-topRight &-arrow {
+      border-top-color: $tooltip-arrow-color;
+      border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
+      bottom: $tooltip-distance - $tooltip-arrow-width;
+      margin-left: -$tooltip-arrow-width;
+    }
+
+    &-placement-top &-arrow {
+      left: 50%;
+    }
+
+    &-placement-topLeft &-arrow {
+      left: 15%;
+    }
+
+    &-placement-topRight &-arrow {
+      right: 15%;
+    }
+
+    &-placement-right &-arrow,
+    &-placement-rightTop &-arrow,
+    &-placement-rightBottom &-arrow {
+      border-right-color: $tooltip-arrow-color;
+      border-width: $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
+      left: $tooltip-distance - $tooltip-arrow-width;
+      margin-top: -$tooltip-arrow-width;
+    }
+
+    &-placement-right &-arrow {
+      top: 50%;
+    }
+
+    &-placement-rightTop &-arrow {
+      top: 15%;
+      margin-top: 0;
+    }
+
+    &-placement-rightBottom &-arrow {
+      bottom: 15%;
+    }
+
+    &-placement-left &-arrow,
+    &-placement-leftTop &-arrow,
+    &-placement-leftBottom &-arrow {
+      border-left-color: $tooltip-arrow-color;
+      border-width: $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
+      margin-top: -$tooltip-arrow-width;
+      right: $tooltip-distance - $tooltip-arrow-width;
+    }
+
+    &-placement-left &-arrow {
+      top: 50%;
+    }
+
+    &-placement-leftTop &-arrow {
+      top: 15%;
+      margin-top: 0;
+    }
+
+    &-placement-leftBottom &-arrow {
+      bottom: 15%;
+    }
+
+    &-placement-bottom &-arrow,
+    &-placement-bottomLeft &-arrow,
+    &-placement-bottomRight &-arrow {
+      border-bottom-color: $tooltip-arrow-color;
+      border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
+      margin-left: -$tooltip-arrow-width;
+      top: $tooltip-distance - $tooltip-arrow-width;
+    }
+
+    &-placement-bottom &-arrow {
+      left: 50%;
+    }
+
+    &-placement-bottomLeft &-arrow {
+      left: 15%;
+    }
+
+    &-placement-bottomRight &-arrow {
+      right: 15%;
+    }
+  }
+}
+@import 'anim';

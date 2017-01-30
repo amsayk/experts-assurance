@@ -21,7 +21,12 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { APP_NAME } from 'vars';
+import {
+  APP_NAME,
+  LINK_PRIVACY_POLICY,
+  LINK_TERMS_OF_SERVICE,
+  LINK_SUPPORT,
+} from 'vars';
 
 import messages from '../../messages';
 
@@ -109,7 +114,17 @@ export class ChoosePasswordContainer extends React.Component {
           </form>
         </div>
         <footer>
-          {/* © 2016 */}
+          <ul>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+            </li>
+          </ul>
         </footer>
       </div>
     );

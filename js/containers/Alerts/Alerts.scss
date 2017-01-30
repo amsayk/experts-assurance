@@ -1,0 +1,144 @@
+@import 'variables';
+
+.alerts {
+  composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
+}
+
+.searchBtn {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.alertsBtn {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  cursor: pointer;
+  padding: 0;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  .alertsWrapper > span:not(.jewelCount) {
+    opacity: 0.5;
+
+    &:focus,
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.alertsBtn {
+  padding: 4px;
+
+  span {
+    font-weight: 600 !important;
+  }
+}
+
+// Popups
+
+.popupAlerts {
+  background-color: #edeff0;
+  border-radius: 3px;
+  border: 1px solid #d6dadc;
+  border-bottom-color: #c4c9cc;
+}
+
+.popupAlerts {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+.popupAlertsHeader {
+  height: 36px;
+  position: relative;
+  margin-bottom: 8px;
+  text-align: center;
+
+  .popupAlertsHeaderTitle {
+    box-sizing: border-box;
+    color: #8c8c8c;
+    display: block;
+    line-height: 36px;
+    border-bottom: 1px solid #d6dadc;
+    margin: 0 10px;
+    overflow: hidden;
+    padding: 0 2pc;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  .popupAlertsHeaderCloseButton {
+    padding: 10px 10px 10px 4px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+    color: $black;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $black;
+    }
+
+    span {
+      opacity: 0.5;
+
+      &:focus,
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.popupAlertsContent {
+  padding: 0 10px 10px;
+  max-height: 70vh;
+
+  .emptyList {
+    background: #e2e4e6;
+    border: 1px dashed #c4c9cc;
+    border-radius: 3px;
+    color: #8c8c8c;
+    display: block;
+    padding: 24px 6px;
+    margin: 0;
+    text-align: center;
+  }
+}
+
+// Alerts
+
+.alertsWrapper {
+  position: relative;
+}
+
+.jewelCount {
+  position: absolute;
+  right: 1px;
+  top: -5px;
+
+  .number {
+    opacity: 1;
+    background-color: #fa3e3e;
+    border-radius: 2px;
+    color: #fff;
+    padding: 1px 3px;
+    display: inline-block;
+    font-family: 'helvetica neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    -webkit-font-smoothing: subpixel-antialiased;
+    line-height: 1.3;
+    min-height: 13px;
+  }
+
+}

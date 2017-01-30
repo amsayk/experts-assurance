@@ -1,0 +1,55 @@
+:global {
+  .#{$tooltip-prefix-cls} {
+    @mixin effect() {
+      animation-duration: 0.3s;
+      animation-fill-mode: both;
+    }
+
+    @mixin fade-effect() {
+      animation-duration: 0.3s;
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+    }
+
+    &-fade-enter,
+    &-fade-appear {
+      @include fade-effect();
+      animation-play-state: paused;
+      opacity: 0;
+    }
+
+    &-fade-leave {
+      @include fade-effect();
+      animation-play-state: paused;
+    }
+
+    &-fade-enter.#{$tooltip-prefix-cls}-fade-enter-active,
+    &-fade-appear.#{$tooltip-prefix-cls}-fade-appear-active {
+      animation-name: TooltipFadeIn;
+      animation-play-state: running;
+    }
+
+    &-fade-leave.#{$tooltip-prefix-cls}-fade-leave-active {
+      animation-name: TooltipFadeOut;
+      animation-play-state: running;
+    }
+    @keyframes :global(TooltipFadeIn) {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes :global(TooltipFadeOut) {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+  }
+}

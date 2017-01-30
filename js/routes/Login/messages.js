@@ -47,7 +47,19 @@ export default defineMessages({
     id: 'account.login-form.password_reset',
     defaultMessage: 'Forgot your password?',
   },
+  support: {
+    id: 'account.login-form.support',
+    defaultMessage: 'Support',
+  },
+  termsOfService: {
+    id: 'account.login-form.terms-of-service',
+    defaultMessage: 'Terms of Service',
+  },
 
+  privacyPolicy: {
+    id: 'account.login-form.privacy-policy',
+    defaultMessage: 'Privacy Policy',
+  },
 });
 
 

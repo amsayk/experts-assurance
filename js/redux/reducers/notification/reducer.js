@@ -16,9 +16,9 @@ import {
   PATH_SETTINGS_BUSINESS_DETAILS,
 } from 'vars';
 
-import { fromJS } from 'immutable';
+import { Record } from 'immutable';
 
-const initialState = fromJS({
+class NotificationState extends Record({
   id: null,
   options: {
     active    : false,
@@ -26,18 +26,20 @@ const initialState = fromJS({
     persist   : false,
     duration  : null,
   },
-});
+}) {}
+
+const initialState = new NotificationState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_NOTIFICATION: {
-      if (typeof action.id === 'undefined' || action.id === state.get('id')) {
+      if (typeof action.id === 'undefined' || action.id === state.id) {
         return state.merge(action.payload);
       }
       return state;
     }
     case REMOVE_NOTIFICATION: {
-      if (typeof action.id === 'undefined' || action.id === state.get('id')) { // Clear all but required.
+      if (typeof action.id === 'undefined' || action.id === state.id) { // Clear all but required.
         return maybeRequiredNotification(state);
       }
       return state;
@@ -49,7 +51,7 @@ export default function reducer(state = initialState, action) {
     case USER_LOGGED_OUT:
       return initialState;
     case LOCATION_CHANGE: {
-      switch (state.get('id')) {
+      switch (state.id) {
         case 'BusinessRequired':
           return state.merge({
             options: {
@@ -69,7 +71,7 @@ function maybeRequiredNotification(state) {
   const user = getCurrentUser();
   if (user) {
     if (!user.get('emailVerified')) { // Email verification takes precedence.
-      return fromJS({
+      return new NotificationState({
         id: 'VerificationPending',
         options: {
           persist: true,
@@ -77,7 +79,7 @@ function maybeRequiredNotification(state) {
         },
       });
     } else if (!user.has('business')) {
-      return fromJS({
+      return new NotificationState({
         id: 'BusinessRequired',
         options: {
           persist: true,

@@ -7,6 +7,10 @@ import PasswordResetRoute from 'routes/PasswordReset';
 import ChoosePasswordRoute from 'routes/ChoosePassword';
 import SettingsRoute from 'routes/Settings';
 
+import ProductCatalogRoute from 'routes/ProductCatalog';
+
+import SearchRoute from 'routes/Search';
+
 import {
   PATH_LOGIN,
   PATH_INVALID_LINK,
@@ -26,6 +30,8 @@ export default (store) => [{
     PasswordResetRoute(store),
     ChoosePasswordRoute(store),
     SettingsRoute(store),
+    ProductCatalogRoute(store),
+    SearchRoute(store),
 
     // On invalid activation or password reset link
     {

@@ -11,6 +11,11 @@ export default defineMessages({
     defaultMessage: 'Manage account settings',
   },
 
+  productCatalog: {
+    id: 'landing-page.menu.product-catalog',
+    defaultMessage: 'Product catalog',
+  },
+
   emailSent: {
     id: 'landing-page.email-sent-successfully',
     defaultMessage: 'Thank you. We sent an email to the provided address.',

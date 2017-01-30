@@ -2,18 +2,19 @@ import {
   UPDATE_SNACKBAR,
 } from './constants';
 
-import Immutable from 'immutable';
+import { Record } from 'immutable';
 
-const initialState = Immutable.fromJS({
+class SnackState extends Record({
   active    : false,
   type      : null,
   message   : null,
   animation : null,
   persist   : false,
   action    : null,
-});
+  duration  : undefined,
+}) {}
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = new SnackState(), action) {
   switch (action.type) {
     case UPDATE_SNACKBAR:
       return state.merge(action.payload);

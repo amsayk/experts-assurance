@@ -5,24 +5,24 @@
 }
 
 .navbar {
-  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  composes: navbar flex-row from 'styles/_base.scss';
   padding-left: $navbar-horizontal-spacing;
   padding-right: $navbar-horizontal-spacing;
 }
 
-.menu {
-  composes: navbar-nav from 'styles/_base.scss';
-  justify-content: center;
+.leftNav {
+  composes: leftNav from 'styles/_base.scss';
+  flex: 0;
 }
 
-.avatar {
-  padding: 0;
+.middleNav {
+  composes: middleNav from 'styles/_base.scss';
+  flex: 1;
+}
 
-  &:hover,
-  &:focus {
-    box-shadow: none;
-    outline: 0;
-  }
+.rightNav {
+  composes: rightNav from 'styles/_base.scss';
+  flex: 0;
 }
 
 .root {
@@ -30,34 +30,112 @@
   height: 100%;
 }
 
-// Profile line
-.profile {
-  composes: d-flex flex-row align-content-center from 'styles/_base.scss';
+.buyButton {
+  composes: btn btn-primary rightNavItem disable-selection from 'styles/_base.scss';
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 11px 10px;
 
-  .profile-info-line {
-    max-width: 420px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  &:focus,
+  &:hover {
+    color: $white;
+    text-decoration: none;
   }
 }
 
-.profileAvatar {
-  margin: 10px;
+// Search
+
+.searchFieldWrapper {
+  flex: 1;
+  margin-left: 17px;
+  margin-right: 17px;
 }
 
-.profileInfo {
-  align-self: center;
-  margin-right: 10px;
+.searchField {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  max-width: 720px;
+  position: relative;
+  transition: background 100ms ease-in, width 100ms ease-out;
+  composes: d-flex flex-row from 'styles/_base.scss';
 }
 
-.profileName {
-  composes: profile-info-line;
-  font-weight: 700;
+.searchField.active {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
 }
 
-.profileEmail {
-  color: #707070;
-  composes: profile-info-line;
-  font-size: 13px;
+.searchField.hasContent {
+  border-bottom: none;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.inputWrapper {
+  cursor: default;
+  transition: opacity 250ms ease-out;
+}
+
+.inputWrapper {
+  flex: 1;
+  composes: d-flex flex-row from 'styles/_base.scss';
+}
+
+.input {
+  border: none;
+  font-size: 16px;
+  font-weight: normal;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.searchField button,
+.searchField input {
+  color: #212121;
+}
+
+.searchField button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    box-shadow: none;
+  }
+
+  span {
+    opacity: 0.54;
+
+    &:focus,
+    &:hover {
+      opacity: 0.8;
+      color: $black;
+    }
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+.searchBoxMenu {
+  width: 100%;
+  top: 98%;
+  max-height: 90vh;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+  background-clip: initial;
+
+  &,
+  *:first-child {
+    border-top: none;
+  }
 }

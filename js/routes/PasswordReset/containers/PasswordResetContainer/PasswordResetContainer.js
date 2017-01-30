@@ -31,7 +31,12 @@ import MUTATION from './passwordReset.mutation.graphql';
 
 import EmailField from '../../components/EmailField';
 
-import { APP_NAME } from 'vars';
+import {
+  APP_NAME,
+  LINK_PRIVACY_POLICY,
+  LINK_TERMS_OF_SERVICE,
+  LINK_SUPPORT,
+} from 'vars';
 
 export class PasswordResetContainer extends React.Component {
   static contextTypes = {
@@ -130,7 +135,17 @@ export class PasswordResetContainer extends React.Component {
           </div>
         </div>
         <footer>
-          {/* © 2016 */}
+          <ul>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+            </li>
+          </ul>
         </footer>
       </div>
     );

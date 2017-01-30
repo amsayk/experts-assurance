@@ -1,4 +1,9 @@
-import { RESIZE, CONNECTION_STATE_CHANGE, READY } from './constants';
+import {
+  RESIZE,
+  CONNECTION_STATE_CHANGE,
+  READY,
+  TOGGLE_ALERTS,
+} from './constants';
 
 export function resize() {
   return {
@@ -16,6 +21,12 @@ export function connectionStateChange(isConnected) {
 export function ready() {
   return {
     type: READY,
+  };
+}
+
+export function toggleAlerts() {
+  return {
+    type: TOGGLE_ALERTS,
   };
 }
 

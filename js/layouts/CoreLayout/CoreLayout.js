@@ -8,7 +8,7 @@ import raf from 'requestAnimationFrame';
 
 import messages from './messages';
 
-import EventListener from 'EventListener';
+import addEventListener from 'utils/lib/DOM/addEventListener';
 
 import debounce from 'debounce';
 
@@ -43,7 +43,7 @@ class CoreLayout extends React.PureComponent {
     this.props.actions.resize();
   }
   componentDidMount() {
-    this._resizeEventListener = EventListener.listen(window, 'resize', this.onResize);
+    this._resizeEventListener = addEventListener(window, 'resize', this.onResize);
   }
   componentWillUnmount() {
     try {

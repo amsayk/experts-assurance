@@ -1,0 +1,51 @@
+@mixin effect() {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+@mixin fade-effect() {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+
+.enter {
+  @include fade-effect();
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+.leave {
+  @include fade-effect();
+  animation-play-state: paused;
+}
+
+.enter.active {
+  animation-name: FadeIn;
+  animation-play-state: running;
+}
+
+.leave.active {
+  animation-name: FadeOut;
+  animation-play-state: running;
+}
+
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes FadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

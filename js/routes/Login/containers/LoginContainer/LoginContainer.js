@@ -33,6 +33,9 @@ import {
   APP_NAME,
   PATH_PASSWORD_RESET,
   PATH_SIGNUP,
+  LINK_PRIVACY_POLICY,
+  LINK_TERMS_OF_SERVICE,
+  LINK_SUPPORT,
 } from 'vars';
 
 export class LoginContainer extends React.Component {
@@ -152,7 +155,17 @@ export class LoginContainer extends React.Component {
           </div>
         </div>
         <footer>
-          {/* © 2016 */}
+          <ul>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+            </li>
+            <li className={style.footerLink}>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+            </li>
+          </ul>
         </footer>
       </div>
     );

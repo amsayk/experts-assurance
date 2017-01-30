@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Textarea from 'react-textarea-autosize';
+
 import style from '../Settings.scss';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -9,10 +11,10 @@ function BusinessDescriptionField({ intl, label, input }) {
     <div className={style.formGroup}>
       <label htmlFor={input.name} className={style.label}>{label}</label>
       <div className={style.inputWrapper}>
-        <textarea
+        <Textarea
           {...input}
           rows={5}
-          style={{ resize: 'none' }}
+          maxRows={5}
           className={style.control}/>
       </div>
     </div>

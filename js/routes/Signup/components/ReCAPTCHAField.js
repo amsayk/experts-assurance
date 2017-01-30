@@ -14,7 +14,7 @@ import ReCAPTCHA from 'components/ReCAPTCHA';
 
 export default injectIntl(function ReCAPTCHAField({ intl, input, meta: { error } }) {
   return (
-    <div className={cx(style.formGroup, { [style.formGroupHasDanger]: error })}>
+    <div style={{ minHeight: 78 }} className={cx(style.formGroup, { [style.formGroupHasDanger]: error })}>
       <ReCAPTCHA
         input={input}
       />

@@ -1,0 +1,70 @@
+$triggerPrefixCls: tp-trigger-popup;
+
+:global {
+  .#{$triggerPrefixCls} {
+    left: -9999px;
+    position: absolute;
+    top: -9999px;
+    z-index: 1050;
+
+    &-hidden {
+      display: none;
+    }
+    @mixin effect() {
+      animation-duration: 0.3s;
+      animation-fill-mode: both;
+    }
+
+    &-zoom-enter,
+    &-zoom-appear {
+      @include effect();
+      animation-play-state: paused;
+      animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      opacity: 0;
+    }
+
+    &-zoom-leave {
+      @include effect();
+      animation-play-state: paused;
+      animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+    }
+
+    &-zoom-enter.#{$triggerPrefixCls}-zoom-enter-active,
+    &-zoom-appear.#{$triggerPrefixCls}-zoom-appear-active {
+      animation-name: TriggerZoomIn;
+      animation-play-state: running;
+    }
+
+    &-zoom-leave.#{$triggerPrefixCls}-zoom-leave-active {
+      animation-name: TriggerZoomOut;
+      animation-play-state: running;
+    }
+    @keyframes :global(TriggerZoomIn) {
+      0% {
+        opacity: 0;
+        transform-origin: 50% 50%;
+        transform: scale(0, 0);
+      }
+
+      100% {
+        opacity: 1;
+        transform-origin: 50% 50%;
+        transform: scale(1, 1);
+      }
+    }
+    @keyframes :global(TriggerZoomOut) {
+      0% {
+        opacity: 1;
+        transform-origin: 50% 50%;
+        transform: scale(1, 1);
+      }
+
+      100% {
+        opacity: 0;
+        transform-origin: 50% 50%;
+        transform: scale(0, 0);
+      }
+    }
+  }
+}
+@import 'mask';
