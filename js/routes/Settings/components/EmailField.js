@@ -7,21 +7,30 @@ import style from '../Settings.scss';
 
 import { injectIntl, intlShape } from 'react-intl';
 
+import Tooltip from 'components/react-components/Tooltip';
+
 import messages from '../messages';
 
-import Icon from 'components/icons/MaterialIcons';
+import { PencilIcon } from 'components/icons/MaterialIcons';
+
+const tooltipAlign = {
+  points: ['tc', 'bc'],
+  offset: [0, -4],
+};
 
 function EmailField({ intl, label, input }) {
   return (
     <div className={style.emailField}>
       <label htmlFor={input.name} className={style.label}>{label}</label>
       <div className={style.inputWrapper}>
-        <p title={intl.formatMessage(messages.changeEmail)} className={style.email}>
+        <p className={style.email}>
           {input.value}
           {' '}
-          <Link className={style.changeEmailButton} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
-            <Icon className={style.changeEmailIcon} name={'edit'} size={18}/>
-          </Link>
+          <Tooltip align={tooltipAlign} overlay={intl.formatMessage(messages.changeEmail)}>
+            <Link className={style.changeEmailButton} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
+              <PencilIcon className={style.changeEmailIcon} size={18}/>
+            </Link>
+          </Tooltip>
         </p>
       </div>
     </div>

@@ -8,11 +8,11 @@ import AppBrand from 'components/AppBrand';
 
 import messages from '../../../messages';
 
+import DataLoader from '../../../utils/DataLoader';
+
 import style from '../../../ProductCatalog.scss';
 
 import { injectIntl, intlShape } from 'react-intl';
-
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import {
   VIEW_TYPE_GRID,
@@ -21,10 +21,13 @@ import {
 
 import Alerts from 'containers/Alerts';
 
-import ProductForm from './ProductForm';
-import SearchBox from './SearchBox';
+import ProductFormButton from './ProductFormButton';
+import SearchBox from '../../../components/SearchBox';
 import ViewTypeButton from './ViewTypeButton';
-import SearchButton from './SearchButton';
+import SearchButton from '../../../components/SearchButton';
+import SideMenuButton from './SideMenuButton';
+
+import Actions from '../Actions';
 
 import ProfileButton, { MenuItem as ProfileMenuItem } from 'components/Profile';
 
@@ -34,6 +37,7 @@ import {
   toggleSearch,
   viewTypeGrid,
   viewTypeList,
+  toggleSideMenu,
 } from 'redux/reducers/catalog/actions';
 
 import { toggleAlerts } from 'redux/reducers/app/actions';
@@ -44,8 +48,8 @@ import { PATH_SETTINGS_BASE } from 'vars';
 
 import selector from './selector';
 
-function Header({ intl, user, onLogOut, catalog, app, actions }) {
-  const { selection, searchOpen, adding, viewType } = catalog;
+function Header({ intl, recent, user, onLogOut, catalog, app, actions }) {
+  const { selection, searchOpen, sideMenuOpen, adding, viewType } = catalog;
   const { alertsOpen } = app;
   const {
     startAdding,
@@ -54,43 +58,33 @@ function Header({ intl, user, onLogOut, catalog, app, actions }) {
     viewTypeList,
     toggleAlerts,
     toggleSearch,
+    toggleSideMenu,
   } = actions;
 
-  let menus = [
+  const menus = searchOpen ? [
+    <SearchBox key='searchBox' recent={recent} intl={intl} onClose={toggleSearch}/>,
+  ] : [
+    <Actions key='actions'/>,
+    <ViewTypeButton intl={intl} viewType={viewType} viewTypeList={viewTypeList} viewTypeGrid={viewTypeGrid}/>,
+    <SearchButton key='searchButton' intl={intl} toggleSearch={toggleSearch}/>,
+    <Alerts key='alerts' toggleAlerts={toggleAlerts} intl={intl} alertsOpen={alertsOpen}/>,
+    <ProfileButton key='userProfile' user={user}>
+      <MenuItem componentClass={ProfileMenuItem} user={user}/>
+      <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
+        {intl.formatMessage(messages.manageAccount)}
+      </MenuItem>
+      <MenuItem divider/>
+      <MenuItem onClick={actions.logOut}>
+        {intl.formatMessage(messages.logOut)}
+      </MenuItem>
+    </ProfileButton>,
   ];
 
-  if (searchOpen) {
-    menus = [
-      <SearchBox onClose={toggleSearch}/>,
-    ];
-  } else {
-    if (!selection.keys.isEmpty()) {
-      menus = [
-        // actions
-      ];
-    } else {
-      menus = [
-        <ViewTypeButton intl={intl} viewType={viewType} viewTypeList={viewTypeList} viewTypeGrid={viewTypeGrid}/>,
-        <SearchButton intl={intl} toggleSearch={toggleSearch}/>,
-        <Alerts toggleAlerts={toggleAlerts} intl={intl} alertsOpen={alertsOpen}/>,
-        <ProfileButton user={user}>
-          <MenuItem componentClass={ProfileMenuItem} user={user}/>
-          <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
-            {intl.formatMessage(messages.manageAccount)}
-          </MenuItem>
-          <MenuItem divider/>
-          <MenuItem onClick={onLogOut}>
-            {intl.formatMessage(messages.logOut)}
-          </MenuItem>
-        </ProfileButton>,
-      ];
-    }
-  }
-
   return (
-    <nav className={style.navbar}>
+    <nav data-root-close-ignore className={style.navbar}>
       <div className={style.leftNav}>
-        <ProductForm
+        <SideMenuButton open={sideMenuOpen} toggleSideMenu={toggleSideMenu}/>
+        <ProductFormButton
           intl={intl}
           startAdding={startAdding}
           stopAdding={stopAdding}
@@ -122,12 +116,10 @@ Header.propTypes = {
       VIEW_TYPE_LIST,
       VIEW_TYPE_GRID,
     ]).isRequired,
-    selection: T.shape({
-      keys: ImmutablePropTypes.set.isRequired,
-    }).isRequired,
   }),
   app  : T.shape({
     alertsOpen: T.bool.isRequired,
+    isReady: T.bool.isRequired,
   }),
 
 };
@@ -145,6 +137,7 @@ function mapDispatchToProps(dispatch) {
       viewTypeGrid,
       toggleSearch,
       toggleAlerts,
+      toggleSideMenu,
     }, dispatch),
   };
 }
@@ -154,5 +147,6 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 export default compose(
   injectIntl,
   Connect,
+  DataLoader.catalogRecent,
 )(Header);
 

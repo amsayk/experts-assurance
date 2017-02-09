@@ -46,6 +46,12 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
+"@types/ws@0.0.37":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-0.0.37.tgz#71d26d7bdc40e75e7d325cf9511648c518ad6fd5"
+  dependencies:
+    "@types/node" "*"
+
 JSONStream@^0.8.4:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-0.8.4.tgz#91657dfe6ff857483066132b4618b62e8f4887bd"
@@ -795,9 +801,9 @@ babel-plugin-transform-react-jsx@^6.22.0, babel-plugin-transform-react-jsx@^6.8.
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-react-remove-prop-types@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.2.11.tgz#05eb7cc4670d6506d801680576589c7abcd51b00"
+babel-plugin-transform-react-remove-prop-types@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.3.1.tgz#e59f281d06617eb93453dbb066d3f737f3299326"
 
 babel-plugin-transform-react-router-optimize@^1.0.1:
   version "1.0.1"
@@ -2382,10 +2388,6 @@ es6-set@~0.1.3:
     es6-symbol "3"
     event-emitter "~0.3.4"
 
-es6-shim@^0.35.3:
-  version "0.35.3"
-  resolved "https://registry.yarnpkg.com/es6-shim/-/es6-shim-0.35.3.tgz#9bfb7363feffff87a6cdb6cd93e405ec3c4b6f26"
-
 es6-symbol@3, es6-symbol@^3.0.2, es6-symbol@~3.1, es6-symbol@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/es6-symbol/-/es6-symbol-3.1.0.tgz#94481c655e7a7cad82eba832d97d5433496d7ffa"
@@ -2567,6 +2569,10 @@ event-stream@~3.3.0:
     split "0.3"
     stream-combiner "~0.0.4"
     through "~2.3.1"
+
+eventemitter3@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-2.0.2.tgz#20ce4891909ce9f35b088c94fab40e2c96f473ac"
 
 events@^1.0.0:
   version "1.1.1"
@@ -3103,31 +3109,35 @@ graphql-anywhere@^2.0.0, graphql-anywhere@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-2.1.0.tgz#888c0a1718db3ff866b313070747777380560f69"
 
-graphql-server-core@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-0.5.2.tgz#7e23fc516cb754e42c16f92928b595c354d6c8a7"
-  dependencies:
-    es6-shim "^0.35.3"
+graphql-server-core@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-0.6.0.tgz#468625cba4a00f80275c065432faa481985f5a65"
   optionalDependencies:
     "@types/graphql" "^0.8.5"
 
-graphql-server-express@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-0.5.2.tgz#c358110ddb2f82939b4d4c9d97ffb5afded7944a"
+graphql-server-express@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-0.6.0.tgz#516090b4add82e6ed2c4a70dd2d925031fdcc289"
   dependencies:
-    graphql-server-core "^0.5.2"
-    graphql-server-module-graphiql "^0.5.2"
+    graphql-server-core "^0.6.0"
+    graphql-server-module-graphiql "^0.6.0"
   optionalDependencies:
     "@types/express" "^4.0.35"
     "@types/graphql" "^0.8.6"
 
-graphql-server-module-graphiql@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-0.5.2.tgz#7e2a0c78b0267e784f8483ce5633810baf558dee"
+graphql-server-module-graphiql@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-0.6.0.tgz#e37634b05f000731981e8ed13103f9a5861e5da0"
 
-graphql-subscriptions@^0.2.0, graphql-subscriptions@^0.2.3:
+graphql-subscriptions@^0.2.0:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.2.3.tgz#75f9a02cb6d2b456b1703ce95670f793dacee607"
+  dependencies:
+    es6-promise "^3.2.1"
+
+graphql-subscriptions@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.3.0.tgz#5c25673f6e1570c8474ac31b6505a3d0b07b4371"
   dependencies:
     es6-promise "^3.2.1"
 
@@ -3135,9 +3145,9 @@ graphql-tag@^1.1.1, graphql-tag@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-1.2.3.tgz#74c62443fbf3e693647426d7359f7e3e6ce7dace"
 
-graphql-tools@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-0.9.2.tgz#c3f42d0b78d2d6c57cea5ef2894863de34af9a11"
+graphql-tools@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-0.10.0.tgz#9c56c8cc69f319049c02ffe9a0a138df30571761"
   dependencies:
     deprecated-decorator "^0.1.6"
     lodash "^4.3.0"
@@ -3713,7 +3723,7 @@ is-symbol@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-symbol/-/is-symbol-1.0.1.tgz#3cc59f00025194b6ab2e38dbae6689256b660572"
 
-is-typedarray@^1.0.0, is-typedarray@~1.0.0:
+is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
 
@@ -4234,8 +4244,8 @@ load-json-file@^1.0.0:
     strip-bom "^2.0.0"
 
 loader-runner@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.2.0.tgz#824c1b699c4e7a2b6501b85902d5b862bf45b3fa"
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.0.tgz#f482aea82d543e07921700d5a46ef26fdac6b8a2"
 
 loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.15, loader-utils@^0.2.16, loader-utils@^0.2.3, loader-utils@^0.2.7, loader-utils@~0.2.2, loader-utils@~0.2.5:
   version "0.2.16"
@@ -4811,7 +4821,7 @@ mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
 
-nan@2.5.0, nan@^2.3.0, nan@^2.3.2, nan@^2.3.3:
+nan@2.5.0, nan@^2.3.0, nan@^2.3.2:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.5.0.tgz#aa8f1e34531d807e9e27755b234b4a6ec0c152a8"
 
@@ -6127,9 +6137,9 @@ react-addons-update@^15.4.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-apollo@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-0.9.0.tgz#a95d05ccf2f92b16a21fd41795e2876c9ea28d6e"
+react-apollo@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-0.10.0.tgz#8f53a94fbd89210dde38d66f72df3f0f9c6a3810"
   dependencies:
     graphql-anywhere "^2.0.0"
     hoist-non-react-statics "^1.2.0"
@@ -6187,12 +6197,6 @@ react-intl@^2.2.3:
     intl-messageformat "^1.3.0"
     intl-relativeformat "^1.3.0"
     invariant "^2.1.1"
-
-react-lazy-cache@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-lazy-cache/-/react-lazy-cache-3.0.1.tgz#0dc64d38df1767ef77678c5c94190064cb11b0cd"
-  dependencies:
-    deep-equal "^1.0.1"
 
 react-overlays@^0.6.10:
   version "0.6.10"
@@ -6420,9 +6424,9 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-auth-wrapper@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/redux-auth-wrapper/-/redux-auth-wrapper-0.10.0.tgz#5e51776566f1698526e74c6197917478027cd238"
+redux-auth-wrapper@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/redux-auth-wrapper/-/redux-auth-wrapper-1.0.0.tgz#9aa16f8934563efe92f684b2ab201b4f01f50381"
   dependencies:
     hoist-non-react-statics "1.2.0"
     lodash.isempty "4.4.0"
@@ -6992,6 +6996,10 @@ spdx-license-ids@^1.0.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-1.2.2.tgz#c9df7a3424594ade6bd11900d596696dc06bac57"
 
+speakingurl@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/speakingurl/-/speakingurl-11.0.0.tgz#20e5cefc09b32fcfe39ee0b2e97893fb392819b3"
+
 specificity@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/specificity/-/specificity-0.3.0.tgz#332472d4e5eb5af20821171933998a6bc3b1ce6f"
@@ -7272,15 +7280,18 @@ stylelint@^7.0.0, stylelint@^7.0.3, stylelint@^7.7.1:
     svg-tags "^1.0.0"
     table "^4.0.1"
 
-subscriptions-transport-ws@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.4.0.tgz#71acf074d4e5ef84b6a0432e999a97b284d2f3f5"
+subscriptions-transport-ws@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.5.0.tgz#0198e8408c654aa6efc38a3329393d95ed97bbf5"
   dependencies:
+    "@types/ws" "0.0.37"
     backo2 "^1.0.2"
+    eventemitter3 "^2.0.2"
     graphql-subscriptions "^0.2.0"
+    graphql-tag "^1.2.3"
     lodash.isobject "^3.0.2"
     lodash.isstring "^4.0.1"
-    websocket "^1.0.23"
+    ws "^1.1.1"
 
 sugarss@^0.2.0:
   version "0.2.0"
@@ -7517,12 +7528,6 @@ type-is@^1.6.4, type-is@~1.6.13, type-is@~1.6.14:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.13"
-
-typedarray-to-buffer@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/typedarray-to-buffer/-/typedarray-to-buffer-3.1.2.tgz#1017b32d984ff556eba100f501589aba1ace2e04"
-  dependencies:
-    is-typedarray "^1.0.0"
 
 typedarray@^0.0.6:
   version "0.0.6"
@@ -7780,7 +7785,7 @@ webpack-sources@^0.1.0:
     source-list-map "~0.1.0"
     source-map "~0.5.3"
 
-webpack@beta:
+webpack@2.2.0-rc.3:
   version "2.2.0-rc.3"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.2.0-rc.3.tgz#ac072c06c88aae75abdfd33510e7c5fd965f843f"
   dependencies:
@@ -7805,15 +7810,6 @@ webpack@beta:
     watchpack "^1.0.0"
     webpack-sources "^0.1.0"
     yargs "^6.0.0"
-
-websocket@^1.0.23:
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/websocket/-/websocket-1.0.24.tgz#74903e75f2545b6b2e1de1425bc1c905917a1890"
-  dependencies:
-    debug "^2.2.0"
-    nan "^2.3.3"
-    typedarray-to-buffer "^3.1.2"
-    yaeti "^0.0.6"
 
 whatwg-encoding@^1.0.1:
   version "1.0.1"
@@ -7933,7 +7929,7 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@1.1.1, ws@^1.0.1:
+ws@1.1.1, ws@^1.0.1, ws@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.1.tgz#082ddb6c641e85d4bb451f03d52f06eabdb1f018"
   dependencies:
@@ -7982,10 +7978,6 @@ xregexp@2.0.0:
 y18n@^3.2.0, y18n@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-
-yaeti@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/yaeti/-/yaeti-0.0.6.tgz#f26f484d72684cf42bedfb76970aa1608fbf9577"
 
 yallist@^2.0.0:
   version "2.0.0"

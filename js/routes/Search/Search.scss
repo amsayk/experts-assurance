@@ -31,6 +31,7 @@
 }
 
 .backButton {
+  composes: align-middle from 'styles/_base.scss';
   margin: 0 auto;
   padding: 0;
   font-weight: 600;
@@ -40,14 +41,12 @@
     box-shadow: none;
   }
 
-    span {
-    opacity: 0.54;
+  opacity: 0.54;
 
-    &:focus,
-    &:hover {
-      opacity: 0.8;
-      color: $black;
-    }
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+    color: $black;
   }
 }
 
@@ -116,14 +115,12 @@
     box-shadow: none;
   }
 
-  span {
-    opacity: 0.54;
+  opacity: 0.54;
 
-    &:focus,
-    &:hover {
-      opacity: 0.8;
-      color: $black;
-    }
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+    color: $black;
   }
 }
 
@@ -140,7 +137,7 @@
   background-clip: initial;
 
   &,
-  *:first-child {
-    border-top: none;
+    *:first-child {
+      border-top: none;
+    }
   }
-}

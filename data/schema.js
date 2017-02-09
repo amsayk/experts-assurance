@@ -14,7 +14,8 @@ import invariant from 'invariant';
 import parseJSONLiteral from './parseJSONLiteral';
 
 import { schema as userSchema, resolvers as userResolvers } from './user/schema';
-import { schema as businessSchema, resolvers as businessResolves } from './business/schema';
+import { schema as businessSchema, resolvers as businessResolvers } from './business/schema';
+import { schema as catalogSchema, resolvers as catalogResolvers } from './catalog/schema';
 
 const log = require('log')('app:server:graphql');
 
@@ -29,6 +30,13 @@ const rootSchema = [`
     getUser(id: ID!): User
 
     # Business
+    # ...
+
+    # Catalog
+    getProduct(id: ID!): Product
+    getProducts(query: ProductsFetchQuery!): ProductsFetchResponse!
+    catalogRecent(query: String): RecentProductsQueryResponse!
+    labels: [Label!]!
   }
 
   type Mutation {
@@ -42,6 +50,9 @@ const rootSchema = [`
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
     resendEmailVerification: ResendEmailVerificationResponse!
+
+    # Catalog
+    addProduct(info: CreateProductPayload!): CreateProductResponse!
   }
 
   type Subscription {
@@ -101,14 +112,15 @@ const schema = [
   ...rootSchema,
   ...userSchema,
   ...businessSchema,
+  ...catalogSchema,
 ];
 
-const resolvers = merge({}, rootResolvers, userResolvers, businessResolves);
+const resolvers = merge({}, rootResolvers, userResolvers, businessResolvers, catalogResolvers);
 
 export default makeExecutableSchema({
   typeDefs                : schema,
   resolvers               : resolvers,
   allowUndefinedInResolve : false,
-  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', e.stack) },
+  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', require('util').inspect(e.stack)) },
 });
 

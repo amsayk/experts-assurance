@@ -1,20 +1,23 @@
 import {
   ACTION,
-  TOGGLE_KEY,
+  SET,
+  ADD,
 } from './constants';
 
-function dispatchSelectionAction(id, action) {
+function dispatchSelectionAction(category, action) {
   return {
-    selectionKey : id,
-    type         : ACTION,
-    payload      : action,
+    type     : `${ACTION}/${category}`,
+    payload  : action,
   };
 }
 
-export const toggleKey = (id) => (key) => {
-  return dispatchSelectionAction(id, {
-    type: TOGGLE_KEY,
-    key,
-  });
-};
+export const set = (category) => (keyOrKeys) => dispatchSelectionAction(category, {
+  type : SET,
+  keys : Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys],
+});
+
+export const add = (category) => (keyOrKeys) => dispatchSelectionAction(category, {
+  type : ADD,
+  keys : Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys],
+});
 

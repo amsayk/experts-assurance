@@ -103,7 +103,6 @@ webpackConfig.plugins = [
   new webpack.DefinePlugin(merge(config.globals, {
     'process.env' : {
       PARSE_MODULE_PATH : JSON.stringify('parse'),
-      BROWSER           : JSON.stringify(true),
       SSR               : JSON.stringify(config.ssrEnabled),
     },
   })),
@@ -262,9 +261,10 @@ if (!__DEV__) {
 
   webpackConfig.plugins.push(
     new ExtractTextPlugin({
-      filename  : '[name].[contenthash].css',
-      disable   : false,
-      allChunks : true,
+      filename    : '[name].[contenthash].css',
+      disable     : false,
+      ignoreOrder : true,
+      allChunks   : true,
     })
   );
 }

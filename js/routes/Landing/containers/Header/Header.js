@@ -40,7 +40,7 @@ function Header({ intl, user, onLogOut, app, actions }) {
 
       <div className={style.rightNav}>
         <Button className={style.buyButton}>
-          Buy anything
+          Create RFQ
         </Button>
         <Alerts toggleAlerts={actions.toggleAlerts} intl={intl} alertsOpen={app.alertsOpen}/>
         <ProfileButton user={user}>

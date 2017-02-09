@@ -26,6 +26,14 @@ export default defineMessages({
     defaultMessage: 'Please enter a valid email address.',
   },
 
+  productNameRequired: {
+    id: 'validation-messages.product-name-required',
+    defaultMessage: 'Product name is required.',
+  },
+  productNameTaken: {
+    id: 'validation-messages.product-name-taken',
+    defaultMessage: 'This product already exists in your catalog.',
+  },
   emailTaken: {
     id: 'validation-messages.email-taken',
     defaultMessage: 'This email is already in our system. Please login.',

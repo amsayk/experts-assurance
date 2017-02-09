@@ -10,6 +10,7 @@ const babelOptions = require('scripts/getBabelOptions')({
     'dataIdFromObject'                   : 'common/dataIdFromObject',
     'log'                                : 'common/log',
     'libphonenumber'                     : 'common/libphonenumber',
+    'slug'                               : 'common/slug',
 
     // For SSR use
     'loadScript'                         : 'utils/loadScript',

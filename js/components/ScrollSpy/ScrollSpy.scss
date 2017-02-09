@@ -1,0 +1,32 @@
+.scroll {
+  opacity: 0.54;
+  flex-basis: 100%;
+  margin: 25px auto;
+  background: transparent;
+  min-height: 61px;
+
+  &.done {
+    margin: 0;
+    height: auto;
+  }
+
+  &:hover,
+  &:focus {
+  }
+}
+
+.scrollIdle {
+  composes: center from 'styles/_base.scss';
+  composes: scroll;
+}
+
+.scrollSpy {
+  composes: center from 'styles/_base.scss';
+  composes: scroll;
+
+  &.done {
+  }
+
+  .info {
+  }
+}

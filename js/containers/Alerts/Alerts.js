@@ -1,9 +1,11 @@
 import React, { PropTypes as T } from 'react';
 
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import Button from 'components/bootstrap/Button';
 
-import SimpleLineIcon from 'components/icons/SimpleLineIcons';
-import MaterialIcon from 'components/icons/MaterialIcons';
+import { BellIcon, CloseIcon } from 'components/icons/MaterialIcons';
 
 import style from './Alerts.scss';
 
@@ -14,20 +16,18 @@ import { intlShape } from 'react-intl';
 
 import Zoom from 'components/transitions/Zoom';
 
-const bellIcon = <SimpleLineIcon name={'bell'} size={24}/>;
-const closeIcon = <MaterialIcon name={'close'} size={18}/>;
-
 const WIDTH = 300;
 
 const popupAlign = {
   points: ['tc', 'bc'],
-  offset: [-55, 12],
+  offset: [-55, 8],
 };
 
 const tooltipAlign = {
-  points: ['tc', 'bc'],
   offset: [0, -4],
 };
+
+import selector from './selector';
 
 function AlertsPopup({ onClose }) {
   return (
@@ -36,7 +36,7 @@ function AlertsPopup({ onClose }) {
         <div className={style.popupAlertsHeader}>
           <span className={style.popupAlertsHeaderTitle}>Notifications</span>
           <Button onClick={onClose} className={style.popupAlertsHeaderCloseButton}>
-            {closeIcon}
+            <CloseIcon size={18}/>
           </Button>
         </div>
         <div>
@@ -51,20 +51,43 @@ function AlertsPopup({ onClose }) {
   );
 }
 
-export default class Alerts extends React.Component {
-  render() {
-    const { alertsOpen, number, toggleAlerts } = this.props;
+class Alerts extends React.Component {
+  state = {
+    open: false,
+  }
+  componentDidMount() {
+    const self = this;
+    setImmediate(function () {
+      self.setState({
+        open: self.props.alertsOpen,
+      });
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      open: nextProps.alertsOpen,
+    });
 
-    const count = (
-      <Zoom transitionAppear in>
-        <span className={style.jewelCount}>
-          <span className={style.number}>{number}</span>
-        </span>
-      </Zoom>
+  }
+  render() {
+    const { number, isReady, toggleAlerts } = this.props;
+
+    let count = (
+      <span className={style.jewelCount}>
+        <span className={style.number}>{number}</span>
+      </span>
     );
 
+    if (isReady) {
+      count = (
+        <Zoom transitionAppear in>
+          {count}
+        </Zoom>
+      );
+    }
+
     let content;
-    if (alertsOpen) {
+    if (this.state.open) {
       content = (
         <Trigger
           onPopupVisibleChange={toggleAlerts}
@@ -76,16 +99,16 @@ export default class Alerts extends React.Component {
           popup={() => <AlertsPopup onClose={toggleAlerts}/>}
         >
           <div className={style.alertsWrapper}>
-            {bellIcon}
+            <BellIcon.Empty size={32}/>
             {count}
           </div>
         </Trigger>
       );
     } else {
       content = (
-        <Tooltip align={tooltipAlign} overlay={'Notifications'}>
+        <Tooltip align={tooltipAlign} placement='bottom' overlay={'Notifications'}>
           <div className={style.alertsWrapper}>
-            {bellIcon}
+            <BellIcon.Empty size={32}/>
             {count}
           </div>
         </Tooltip>
@@ -111,6 +134,23 @@ Alerts.propTypes = {
   intl         : intlShape.isRequired,
   toggleAlerts : T.func.isRequired,
   alertsOpen   : T.bool.isRequired,
-  count        : T.number.isRequired,
+  number       : T.number.isRequired,
 };
+
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({
+    }, dispatch),
+  };
+}
+
+const Connect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(
+  Connect,
+)(Alerts);
 

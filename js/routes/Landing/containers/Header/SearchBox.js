@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import Dropdown from 'components/bootstrap/Dropdown';
 import Button from 'components/bootstrap/Button';
 
-import Icon from 'components/icons/MaterialIcons';
+import { SearchIcon, CloseIcon } from 'components/icons/MaterialIcons';
 
 import { intlShape } from 'react-intl';
 
@@ -20,9 +20,6 @@ const tooltipAlign = {
   points: ['tc', 'bc'],
   offset: [0, -4],
 };
-
-const searchIcon = <Icon name={'search'} size={22}/>;
-const closeIcon = <Icon name={'close'} size={22}/>;
 
 class SearchBox extends React.Component {
   constructor(props) {
@@ -53,11 +50,11 @@ class SearchBox extends React.Component {
     return (
       <Dropdown componentClass={'div'} open onToggle={onClose} className={style.searchFieldWrapper} role='search'>
         <div className={cx(style.searchField, { [style.active]: this.state.hasFocus })}>
-          <Button onClick={this.onSearch} bsStyle={'link'} className={style.showResultsButton} role='button'>
-            <Tooltip align={tooltipAlign} overlay={'Search'}>
-              {searchIcon}
-            </Tooltip>
-          </Button>
+          <Tooltip align={tooltipAlign} overlay={'Search'}>
+            <Button onClick={this.onSearch} bsStyle={'link'} className={style.showResultsButton} role='button'>
+              <SearchIcon size={22}/>
+            </Button>
+          </Tooltip>
           <div className={style.inputWrapper}>
             <input
               onFocus={this.onFocus}
@@ -71,11 +68,11 @@ class SearchBox extends React.Component {
               style={{ outline: 'none' }}
             />
           </div>
-          <Button onClick={onClose} bsStyle={'link'} className={cx(style.clearSearch, style.hidden)} role='button'>
-            <Tooltip align={tooltipAlign} overlay={'Clear search'}>
-              {closeIcon}
-            </Tooltip>
-          </Button>
+          <Tooltip align={tooltipAlign} overlay={'Clear search'}>
+            <Button onClick={onClose} bsStyle={'link'} className={cx(style.clearSearch, style.hidden)} role='button'>
+              <CloseIcon size={22}/>
+            </Button>
+          </Tooltip>
         </div>
         <Dropdown.Menu className={cx(style.searchBoxMenu, style.hidden)}>
         </Dropdown.Menu>
@@ -85,9 +82,9 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  onClose : T.func.isRequired,
-  onSeach : T.func.isRequired,
-  intl    : intlShape.isRequired,
+  onClose  : T.func.isRequired,
+  onSearch : T.func.isRequired,
+  intl     : intlShape.isRequired,
 };
 
 export default withRouter(SearchBox);

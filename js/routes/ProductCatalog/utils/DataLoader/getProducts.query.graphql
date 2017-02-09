@@ -1,0 +1,20 @@
+query getProducts($query: ProductsFetchQuery!) {
+  getProducts(query: $query) {
+    cursor
+    length
+    products {
+      id
+      displayName
+      brandName
+      labels {
+        slug
+        displayName
+        color
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+

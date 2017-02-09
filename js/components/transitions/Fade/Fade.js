@@ -68,8 +68,6 @@ Fade.propTypes = {
    * Callback fired after the component has faded out
    */
   onExited: T.func,
-
-  transitionName: T.string.isRequired,
 };
 Fade.defaultProps =  {
   in: false,

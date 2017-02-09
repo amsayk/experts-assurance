@@ -1,34 +1,68 @@
 import React, { PropTypes as T } from 'react';
 import { withRouter } from 'react-router';
-import { withApollo, graphql } from 'react-apollo';
+import { withApollo } from 'react-apollo';
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
+import Title from 'components/Title';
+
 import { logOut } from 'redux/reducers/user/actions';
+
+import {
+  VIEW_TYPE_GRID,
+  VIEW_TYPE_LIST,
+} from 'redux/reducers/catalog/constants';
+
+import {
+  APP_NAME,
+  PATH_PRODUCT_CATALOG_LABEL_PARAM,
+} from 'vars';
 
 import style from '../../../ProductCatalog.scss';
 
+import messages from '../../../messages';
+
+import { injectIntl, intlShape } from 'react-intl';
+
+import DataLoader from '../../../utils/DataLoader';
+
+import cx from 'classnames';
+
 import Header from '../Header';
+import List from '../List';
+import Grid from '../Grid';
 
 import selector from './selector';
 
-import QUERY from './currentUser.query.graphql';
-
 export class ProductCatalogContainer extends React.PureComponent {
   render() {
-    const { data: { currentUser }, actions } = this.props;
+    const {
+      intl,
+      data: { currentUser },
+      viewType,
+      params : { [PATH_PRODUCT_CATALOG_LABEL_PARAM]: label } = {},
+      sortConfig,
+      actions,
+    } = this.props;
+    const isListView = viewType === VIEW_TYPE_LIST;
     return (
-      <div className={style.root}>
+      <div className={cx(style.root, { [style.listView]: isListView })}>
+        <Title title={label ? intl.formatMessage(messages.labelTitle, { label, appName: APP_NAME }) : intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <Header user={currentUser} onLogOut={actions.logOut}/>
-        <div className={style.center}>
-          <div>Product catalog.</div>
-        </div>
+        {isListView
+            ? <List sortConfig={sortConfig} label={label}/>
+            : <Grid sortConfig={sortConfig} label={label}/>}
       </div>
     );
   }
 }
 
 ProductCatalogContainer.propTypes = {
+  intl: intlShape.isRequired,
+  viewType: T.oneOf([
+    VIEW_TYPE_LIST,
+    VIEW_TYPE_GRID,
+  ]).isRequired,
   data: T.shape({
     loading: T.bool.isRequired,
     currentUser: T.object,
@@ -45,15 +79,11 @@ function mapDispatchToProps(dispatch) {
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-const withCurrentUser = graphql(QUERY, {
-  options: ({ user }) => ({ variables: { id: user.id } }),
-  skip: ({ user }) => user.isEmpty(),
-});
-
 export default compose(
+  injectIntl,
   withRouter,
   withApollo,
   Connect,
-  withCurrentUser,
+  DataLoader.currentUser,
 )(ProductCatalogContainer);
 

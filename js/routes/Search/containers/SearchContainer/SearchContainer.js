@@ -4,9 +4,17 @@ import { withApollo, graphql } from 'react-apollo';
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
+import Title from 'components/Title';
+
+import { APP_NAME } from 'vars';
+
+import { injectIntl, intlShape } from 'react-intl';
+
 import { logOut } from 'redux/reducers/user/actions';
 
 import style from '../../Search.scss';
+
+import messages from '../../messages';
 
 import Header from '../Header';
 
@@ -16,9 +24,10 @@ import QUERY from './currentUser.query.graphql';
 
 export class SearchContainer extends React.PureComponent {
   render() {
-    const { data: { currentUser }, actions } = this.props;
+    const { intl, data: { currentUser }, actions } = this.props;
     return (
       <div className={style.root}>
+        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <Header user={currentUser} onLogOut={actions.logOut}/>
         <div className={style.center}>
           Search results will appear here.
@@ -29,6 +38,7 @@ export class SearchContainer extends React.PureComponent {
 }
 
 SearchContainer.propTypes = {
+  intl: intlShape.isRequired,
   data: T.shape({
     loading: T.bool.isRequired,
     currentUser: T.object,
@@ -51,6 +61,7 @@ const withCurrentUser = graphql(QUERY, {
 });
 
 export default compose(
+  injectIntl,
   withRouter,
   withApollo,
   Connect,

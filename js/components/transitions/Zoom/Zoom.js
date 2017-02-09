@@ -68,8 +68,6 @@ Zoom.propTypes = {
    * Callback fired after the component has faded out
    */
   onExited: T.func,
-
-  transitionName: T.string.isRequired,
 };
 Zoom.defaultProps =  {
   in: false,

@@ -18,7 +18,7 @@ import {
 
 import { Record } from 'immutable';
 
-class NotificationState extends Record({
+export class NotificationState extends Record({
   id: null,
   options: {
     active    : false,

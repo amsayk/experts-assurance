@@ -111,14 +111,12 @@
     box-shadow: none;
   }
 
-  span {
-    opacity: 0.54;
+  opacity: 0.54;
 
-    &:focus,
-    &:hover {
-      opacity: 0.8;
-      color: $black;
-    }
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+    color: $black;
   }
 }
 

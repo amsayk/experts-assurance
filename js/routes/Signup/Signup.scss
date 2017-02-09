@@ -92,7 +92,7 @@
   }
 
   input:not(:focus) {
-    background-color: #fafafa;
+    background-color: $input-blur-color;
   }
 
   .tagLine {

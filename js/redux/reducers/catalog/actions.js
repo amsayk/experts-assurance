@@ -4,11 +4,19 @@ import {
   START_ADDING,
   STOP_ADDING,
   TOGGLE_SEARCH,
+  TOGGLE_SIDE_MENU,
 } from './constants';
 
-import { toggleKey } from 'redux/reducers/selection/actions';
+// Selection
+import { set, add } from 'redux/reducers/selection/actions';
+export const setSelection = set('catalog');
+export const addToSelection = add('catalog');
 
-export const toggleProductSelection = toggleKey('catalog');
+// Sorting
+import { sort, sortKey, sortDirection } from 'redux/reducers/sorting/actions';
+export const sortProducts = sort('catalog');
+export const sortProductsByKey = sortKey('catalog');
+export const sortProductsByDirection = sortDirection('catalog');
 
 export function viewTypeGrid() {
   return {
@@ -36,6 +44,12 @@ export function startAdding() {
 export function stopAdding() {
   return {
     type: STOP_ADDING,
+  };
+}
+
+export function toggleSideMenu() {
+  return {
+    type : TOGGLE_SIDE_MENU,
   };
 }
 

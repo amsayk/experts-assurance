@@ -4,7 +4,7 @@ import dataIdFromObject from 'dataIdFromObject';
 
 import { IntlProvider } from 'react-intl';
 
-import ApolloClient from 'apollo-client';
+import ApolloClient, { toIdValue } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import { renderToStringWithData } from 'react-apollo';
@@ -18,10 +18,12 @@ import getCurrentUser from 'getCurrentUser';
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
+import { ProductConnector } from 'data/catalog/connector';
 
 // Models
 import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
+import { Products } from 'data/catalog/models';
 
 const graphql = require('graphql');
 
@@ -35,6 +37,7 @@ export default function createRenderEngine(app) {
         user,
         Users: new Users({ user, connector: new UserConnector() }),
         Business: new Business({ user, connector: new BusinessConnector() }),
+        Products: new Products({ user, connector: new ProductConnector() }),
       },
     });
     const client = new ApolloClient({
@@ -45,6 +48,9 @@ export default function createRenderEngine(app) {
       networkInterface,
       customResolvers: {
         Query: {
+          Query: {
+            getProduct: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Product', id })),
+          },
         },
       },
       dataIdFromObject,

@@ -13,7 +13,12 @@ import { Record } from 'immutable';
 
 const MEDIA_QUERY = '(min-width: 992px)';
 
-class AppState extends Record(maybeAppState()) {}
+export class AppState extends Record({
+  displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
+  onLine         : true,
+  isReady        : false,
+  alertsOpen     : false,
+}) {}
 
 const initialState = new AppState();
 
@@ -36,19 +41,12 @@ export default function reducer(state = initialState, action) {
         alertsOpen: !state.alertsOpen,
       });
     case INIT: {
-      return new AppState(maybeAppState());
+      return state.merge({
+        displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
+      });
     }
     default:
       return state;
   }
-}
-
-function maybeAppState() {
-  return {
-    displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
-    onLine         : true,
-    isReady        : false,
-    alertsOpen     : false,
-  };
 }
 

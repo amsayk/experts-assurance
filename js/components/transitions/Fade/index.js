@@ -1,5 +1,2 @@
-import { isServer } from 'vars';
+export { default } from './Fade';
 
-export default isServer
-  ? ({ children }) => children
-  : require('./Fade').default;

@@ -1,9 +1,12 @@
 import keyOf from 'keyOf';
 
+import ExecutionEnvironment from 'ExecutionEnvironment';
+
 // Use this constant to initialize reducers
 export const INIT                             = keyOf({ INIT: null });
 
-export const isServer                         = process.env.BROWSER !== true;
+export const isServer                         = !ExecutionEnvironment.canUseDOM;
+
 export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;
 export const COUNTRY                          = process.env.COUNTRY;
@@ -41,7 +44,11 @@ export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINE
 export const PATH_SETTINGS_CHANGE_EMAIL       = process.env.PATH_SETTINGS_CHANGE_EMAIL;
 
 // Product catalog
-export const PATH_PRODUCT_CATALOG_BASE        = process.env.PATH_PRODUCT_CATALOG_BASE;
+export const PATH_PRODUCT_CATALOG_BASE          = process.env.PATH_PRODUCT_CATALOG_BASE;
+export const PATH_PRODUCT_CATALOG_LABEL_BASE    = process.env.PATH_PRODUCT_CATALOG_LABEL_BASE;
+export const PATH_PRODUCT_CATALOG_LABEL_PARAM   = process.env.PATH_PRODUCT_CATALOG_LABEL_PARAM;
+export const PATH_PRODUCT_CATALOG_PRODUCT_BASE  = process.env.PATH_PRODUCT_CATALOG_PRODUCT_BASE;
+export const PATH_PRODUCT_CATALOG_PRODUCT_PARAM = process.env.PATH_PRODUCT_CATALOG_PRODUCT_PARAM;
 
 // Search
 export const PATH_SEARCH                      = process.env.PATH_SEARCH;

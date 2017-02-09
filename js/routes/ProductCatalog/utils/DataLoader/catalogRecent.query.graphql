@@ -1,0 +1,24 @@
+query catalogRecent($query: String) {
+  catalogRecent(query: $query) {
+    labels {
+      slug
+      displayName
+      color
+    }
+
+    products {
+      id
+      displayName
+      brandName
+      labels {
+        slug
+        displayName
+        color
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+

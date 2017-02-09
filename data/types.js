@@ -1,4 +1,6 @@
-import Parse from 'parse/node';
+const Parse = require(process.env.PARSE_MODULE_PATH); // will be required on both server and client.
 
 export const BusinessType = Parse.Object.extend('Business');
+
+export const ProductType = Parse.Object.extend('Product');
 

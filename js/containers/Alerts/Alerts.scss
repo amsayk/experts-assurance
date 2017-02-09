@@ -20,19 +20,17 @@
     text-decoration: none;
   }
 
-  .alertsWrapper > span:not(.jewelCount) {
-    opacity: 0.5;
+  svg {
+    opacity: 0.54;
 
-    &:focus,
-    &:hover {
-      opacity: 0.8;
-    }
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+  }
   }
 }
 
 .alertsBtn {
-  padding: 4px;
-
   span {
     font-weight: 600 !important;
   }
@@ -89,13 +87,11 @@
       color: $black;
     }
 
-    span {
-      opacity: 0.5;
+    opacity: 0.54;
 
-      &:focus,
-      &:hover {
-        opacity: 0.8;
-      }
+    &:focus,
+    &:hover {
+      opacity: 0.8;
     }
   }
 }

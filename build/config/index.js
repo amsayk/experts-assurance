@@ -12,6 +12,7 @@ const moduleMap = {
   'vars'                               : 'common/vars',
   'dataIdFromObject'                   : 'common/dataIdFromObject',
   'log'                                : 'common/log',
+  'slug'                               : 'common/slug',
   'NetInfo'                            : 'utils/NetInfo',
   'AppState'                           : 'utils/AppState',
   'countries'                          : 'common/countries',
@@ -90,7 +91,11 @@ const config = {
   path_settings_change_email       : process.env.PATH_SETTINGS_CHANGE_EMAIL || 'change_email',
 
   // product catalog
-  path_product_catalog_base        : process.env.PATH_PRODUCT_CATALOG_BASE || '/catalog',
+  path_product_catalog_base           : process.env.PATH_PRODUCT_CATALOG_BASE || '/catalog',
+  path_product_catalog_label_base     : process.env.PATH_PRODUCT_CATALOG_LABEL_BASE || 'label',
+  path_product_catalog_label_param    : process.env.PATH_PRODUCT_CATALOG_LABEL_PARAM || 'slug',
+  path_product_catalog_product_base   : process.env.PATH_PRODUCT_CATALOG_PRODUCT_BASE || 'item',
+  path_product_catalog_product_param  : process.env.PATH_PRODUCT_CATALOG_PRODUCT_PARAM || 'id',
 
   // search
   path_search                      : process.env.PATH_SEARCH || '/search',
@@ -210,7 +215,11 @@ config.globals = {
     PATH_SETTINGS_CHANGE_EMAIL       : JSON.stringify(config.path_settings_change_email),
 
     // Product catalog
-    PATH_PRODUCT_CATALOG_BASE        : JSON.stringify(config.path_product_catalog_base),
+    PATH_PRODUCT_CATALOG_BASE          : JSON.stringify(config.path_product_catalog_base),
+    PATH_PRODUCT_CATALOG_LABEL_BASE    : JSON.stringify(config.path_product_catalog_label_base),
+    PATH_PRODUCT_CATALOG_LABEL_PARAM   : JSON.stringify(config.path_product_catalog_label_param),
+    PATH_PRODUCT_CATALOG_PRODUCT_BASE  : JSON.stringify(config.path_product_catalog_product_base),
+    PATH_PRODUCT_CATALOG_PRODUCT_PARAM : JSON.stringify(config.path_product_catalog_product_param),
 
     // Search
     PATH_SEARCH           : JSON.stringify(config.path_search),

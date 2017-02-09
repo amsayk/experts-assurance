@@ -6,7 +6,7 @@ import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
 import { INIT } from 'vars';
 
-class User extends Record({ id: undefined, email: undefined }) {
+export class User extends Record({ id: undefined, email: undefined }) {
   isEmpty() {
     return typeof this.id === 'undefined';
   }

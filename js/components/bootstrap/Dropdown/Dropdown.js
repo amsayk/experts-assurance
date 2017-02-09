@@ -111,6 +111,17 @@ const propTypes = {
    * @private
    */
   onMouseLeave: React.PropTypes.func,
+
+   /**
+   * A callback fired when a menu item is selection by the arrow keys.
+   *
+   * ```js
+   * (activeIndex: number, event: Object) => any
+   * ```
+   */
+  onNext: React.PropTypes.func,
+  onPrevious: React.PropTypes.func,
+
 };
 
 const defaultProps = {
@@ -301,6 +312,8 @@ class Dropdown extends React.Component {
       className,
       rootCloseEvent,
       children,
+      onNext,
+      onPrevious,
       ...props
     } = this.props;
 
@@ -333,7 +346,7 @@ class Dropdown extends React.Component {
               });
             case MENU_ROLE:
               return this.renderMenu(child, {
-                id, open, pullRight, bsClass, onClose, onSelect, rootCloseEvent,
+                id, open, pullRight, bsClass, onClose, onSelect, rootCloseEvent, onNext, onPrevious,
               });
             default:
               return child;

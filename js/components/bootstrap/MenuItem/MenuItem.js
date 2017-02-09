@@ -125,12 +125,13 @@ class MenuItem extends React.Component {
     }
 
     if (header) {
+      const Header = Component === defaultProps.componentClass ? 'h6' : Component;
       return (
-        <h6
+        <Header
           {...elementProps}
           role='heading'
           className={classNames(className, getLocalCSSClassName(style, prefix(bsProps, 'header')))}
-        ></h6>
+        ></Header>
       );
     }
 

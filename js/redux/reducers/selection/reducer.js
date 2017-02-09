@@ -1,10 +1,11 @@
 import {
-  TOGGLE_KEY,
+  SET,
+  ADD,
 } from './constants';
 
 import { Record, Set } from 'immutable';
 
-class SelectionState extends Record({
+export class SelectionState extends Record({
   keys : Set.of(),
 }) {}
 
@@ -12,11 +13,12 @@ export const initialState = new SelectionState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case TOGGLE_KEY: {
+    case SET: {
+      return state.set('keys', Set.of(...action.keys));
+    }
+    case ADD: {
       return state.update('keys', (keys) => {
-        return keys.includes(action.key)
-          ?  keys.delete(action.key)
-          :  keys.add(action.key);
+        return keys.union(action.keys);
       });
     }
     default:

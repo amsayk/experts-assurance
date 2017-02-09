@@ -17,7 +17,7 @@ import Button from 'components/bootstrap/Button';
 
 import Tooltip from 'components/react-components/Tooltip';
 
-import Icon from 'components/icons/MaterialIcons';
+import { BackIcon } from 'components/icons/MaterialIcons';
 
 import { PATH_SETTINGS_BASE, PATH_PRODUCT_CATALOG_BASE } from 'vars';
 
@@ -34,8 +34,6 @@ const tooltipAlign = {
   offset: [0, -4],
 };
 
-const backIcon = <Icon name={'keyboard-backspace'} size={32}/>;
-
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -51,11 +49,11 @@ class Header extends React.Component {
     return (
       <nav className={style.navbar}>
         <div className={style.leftNav}>
+          <Tooltip align={tooltipAlign} overlay={'Back'}>
           <Button onClick={this.onBack} className={style.backButton} role={'button'}>
-            <Tooltip align={tooltipAlign} overlay={'Back'}>
-              {backIcon}
-            </Tooltip>
+              <BackIcon size={32}/>
           </Button>
+        </Tooltip>
         </div>
 
         <div className={style.middleNav}>

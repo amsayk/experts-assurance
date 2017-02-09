@@ -33,10 +33,12 @@ import { subscriptionManager } from 'data/subscriptions';
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
+import { ProductConnector } from 'data/catalog/connector';
 
 // Models
 import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
+import { Products } from 'data/catalog/models';
 
 import bodyParser from 'body-parser';
 
@@ -264,6 +266,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
       user,
       Users: new Users({ user, connector: new UserConnector() }),
       Business: new Business({ user, connector: new BusinessConnector() }),
+      Products: new Products({ user, connector: new ProductConnector() }),
     },
     logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,
@@ -285,6 +288,9 @@ const websocketServer = createServer((request, response) => {
 // eslint-disable-next-line
 new SubscriptionServer(
   {
+    onConnect: async (connectionParams) => {
+      // Implement if you need to handle and manage connection
+    },
     subscriptionManager,
 
     // the obSubscribe function is called for every new subscription
@@ -297,7 +303,11 @@ new SubscriptionServer(
       });
     },
   },
-  websocketServer
+  {
+    server: websocketServer,
+    path: '/',
+  },
 );
+
 module.exports = { app, websocketServer };
 

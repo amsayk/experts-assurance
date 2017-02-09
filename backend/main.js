@@ -6,6 +6,9 @@ import {
   PASSWORD_RESET,
   SIGN_UP,
   CHANGE_EMAIL,
+
+  // Catalog
+  ADD_PRODUCT,
 } from './constants';
 
 const log = require('log')('app:backend');
@@ -18,6 +21,10 @@ import {
   setPassword,
   changeEmail,
 } from './ops/user';
+
+import {
+  addProduct,
+} from './ops/catalog';
 
 import {
   updateUserBusiness,
@@ -48,6 +55,9 @@ Parse.Cloud.define('routeOp', function (request, response) {
     }
     case SIGN_UP: {
       return doSignUp(req, response);
+    }
+    case ADD_PRODUCT: {
+      return addProduct(req, response);
     }
     default:
       response.error(new Error('OperationNotFound', operationKey));

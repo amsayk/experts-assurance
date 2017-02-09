@@ -1,0 +1,17 @@
+mutation addProduct($info: CreateProductPayload!) {
+
+  addProduct(info: $info) {
+    product {
+      id
+      displayName
+      brandName
+      labels
+
+      createdAt
+      updatedAt
+    }
+
+    errors
+  }
+}
+

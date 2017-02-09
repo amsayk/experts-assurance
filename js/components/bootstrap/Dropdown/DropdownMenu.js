@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import keycode from 'keycode';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
+import RootCloseWrapper from 'components/bootstrap/RootCloseWrapper';
 
 import { bsClass, getClassSet, prefix, splitBsProps } from '../utils/bootstrapUtils';
 import createChainedFunction from '../utils/createChainedFunction';
@@ -20,6 +20,8 @@ const propTypes = {
   ]),
   onSelect: React.PropTypes.func,
   rootCloseEvent: React.PropTypes.oneOf(['click', 'mousedown']),
+  onNext: React.PropTypes.func,
+  onPrevious: React.PropTypes.func,
 };
 
 const defaultProps = {
@@ -37,12 +39,12 @@ class DropdownMenu extends React.Component {
   handleKeyDown(event) {
     switch (event.keyCode) {
       case keycode.codes.down:
-        this.focusNext();
-        event.preventDefault();
+        this.focusNext(event);
+        this.props.onNext || event.preventDefault();
         break;
       case keycode.codes.up:
-        this.focusPrevious();
-        event.preventDefault();
+        this.focusPrevious(event);
+        this.props.onPrevious || event.preventDefault();
         break;
       case keycode.codes.esc:
       case keycode.codes.tab:
@@ -68,7 +70,7 @@ class DropdownMenu extends React.Component {
     return Array.from(node.querySelectorAll('[tabIndex="-1"]'));
   }
 
-  focusNext() {
+  focusNext(event) {
     const { items, activeIndex } = this.getItemsAndActiveIndex();
     if (items.length === 0) {
       return;
@@ -76,9 +78,11 @@ class DropdownMenu extends React.Component {
 
     const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
     items[nextIndex].focus();
+
+    this.props.onNext && this.props.onNext(activeIndex, event);
   }
 
-  focusPrevious() {
+  focusPrevious(event) {
     const { items, activeIndex } = this.getItemsAndActiveIndex();
     if (items.length === 0) {
       return;
@@ -86,6 +90,8 @@ class DropdownMenu extends React.Component {
 
     const prevIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
     items[prevIndex].focus();
+
+    this.props.onPrevious && this.props.onPrevious(activeIndex, event);
   }
 
   render() {

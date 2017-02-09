@@ -4,7 +4,7 @@ import {
 
 import { Record } from 'immutable';
 
-class SnackState extends Record({
+export class SnackState extends Record({
   active    : false,
   type      : null,
   message   : null,
