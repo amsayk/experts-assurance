@@ -40,6 +40,10 @@ import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
 import { Products } from 'data/catalog/models';
 
+// persisted queries
+import queryMap from 'extracted_queries';
+import invert from 'lodash.invert';
+
 import bodyParser from 'body-parser';
 
 const log = require('log')('app:server');
@@ -247,6 +251,20 @@ app.use(config.parse_dashboard_mount_point, dashboard);
 // ------------------------------------
 // Graphql server entrypoint
 // ------------------------------------
+const invertedMap = invert(queryMap);
+
+app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
+  if (config.persistedQueries) {
+    if (Array.isArray(req.body)) {
+      // eslint-disable-next-line no-param-reassign
+      req.body = req.body.map(({ id, ...otherParams }) => ({ query: invertedMap[id], ...otherParams }));
+    } else {
+      req.body.query = invertedMap[req.body.id] // eslint-disable-line no-param-reassign
+    }
+  }
+  next();
+});
+
 app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
   // Get the query, the same way express-graphql does it
   // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257

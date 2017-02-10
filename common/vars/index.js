@@ -15,6 +15,7 @@ export const INACTIVITY_TIMEOUT               = 15 * 60 * 1000; // 15 minutes
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT   = process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT;
 export const GRAPHQL_ENDPOINT                 = process.env.GRAPHQL_ENDPOINT;
 export const APOLLO_QUERY_BATCH_INTERVAL      = process.env.APOLLO_QUERY_BATCH_INTERVAL;
+export const PERSISTED_QUERIES                = process.env.PERSISTED_QUERIES;
 
 export const RECAPCHA_JS_URL                  = process.env.RECAPCHA_JS_URL;
 export const RECAPCHA_SITE_KEY                = process.env.RECAPCHA_SITE_KEY;

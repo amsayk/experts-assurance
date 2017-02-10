@@ -116,6 +116,7 @@ const config = {
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
   graphql_subscriptions_endpoint : `ws://${process.env.HOST || 'localhost'}:${process.env.WS_PORT || 8080}`,
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
+  persistedQueries  : process.env.PERSISTED_QUERIES !== 'no',
 
   // ----------------------------------
   // Compiler Configuration
@@ -195,6 +196,7 @@ config.globals = {
 
     GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
     GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(config.graphql_subscriptions_endpoint),
+    PERSISTED_QUERIES               : JSON.stringify(config.persistedQueries),
 
     BASENAME              : JSON.stringify(process.env.BASENAME || ''),
     HOME_TITLE            : JSON.stringify(process.env.HOME_TITLE),

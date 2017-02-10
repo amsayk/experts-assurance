@@ -1,6 +1,6 @@
 import ApolloClient, { toIdValue } from 'apollo-client';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
-import ResponseMiddlewareNetworkInterface from './response-middleware-network-interface';
+import getNetworkInterface from './transport';
 const log = require('log')('app:client');
 
 import dataIdFromObject from 'dataIdFromObject';
@@ -19,8 +19,7 @@ const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTIONS_ENDPOINT, {
   connectionCallback: (error) => {},
 });
 
-const responseMiddlewareNetworkInterface = new ResponseMiddlewareNetworkInterface(GRAPHQL_ENDPOINT, {
-  credentials: 'same-origin',
+const responseMiddlewareNetworkInterface = getNetworkInterface(GRAPHQL_ENDPOINT, {
 });
 
 // Sample error handling middleware
@@ -31,7 +30,7 @@ responseMiddlewareNetworkInterface.use({
     }
     next();
   },
-  applyResponseMiddleware: (response, next) => {
+  applyAfterware: (response, next) => {
     if (response.errors) {
       if (typeof window !== 'undefined') {
         log.error(JSON.stringify(response.errors));

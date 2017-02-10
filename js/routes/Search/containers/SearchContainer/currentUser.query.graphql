@@ -1,4 +1,4 @@
-query getUser($id: ID!) {
+query search__getUser($id: ID!) {
 
   currentUser : getUser(id: $id) {
     id
