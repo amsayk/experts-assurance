@@ -18,7 +18,7 @@ module.exports = {
   // ======================================================
   production : (config) => ({
     serve_assets             : process.env.SERVE_ASSETS !== 'no',
-    compiler_public_path     : '/',
+    compiler_public_path     : process.env.PUBLIC_PATH || '/',
     compiler_fail_on_warning : false,
     compiler_hash_type       : 'chunkhash',
     compiler_devtool         : 'nosources-source-map',

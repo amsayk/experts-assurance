@@ -96,25 +96,25 @@ class Notification extends React.Component {
    * @return {Object}
    */
   render() {
-    const { id, hidden, options: { active } } = this.props.notification;
-    if (active && !hidden) {
-      switch (id) {
-        case 'SessionExpired':
-          return <SessionExpired className={this.getClass()}/>;
-        case 'BusinessRequired':
-          return <BusinessRequired className={this.getClass()}/>;
-        case 'InvalidLink':
-          return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
-        case 'PasswordResetSuccess':
-          return <PasswordResetSuccess className={this.getClass()}/>;
-        case 'VerificationPending':
-          return <VerificationPending className={this.getClass()}/>;
-        case 'VerificationSuccess':
-          return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
-        default:
-          return null;
-      }
-    }
+    // const { id, hidden, options: { active } } = this.props.notification;
+    // if (active && !hidden) {
+    //   switch (id) {
+    //     case 'SessionExpired':
+    //       return <SessionExpired className={this.getClass()}/>;
+    //     case 'BusinessRequired':
+    //       return <BusinessRequired className={this.getClass()}/>;
+    //     case 'InvalidLink':
+    //       return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
+    //     case 'PasswordResetSuccess':
+    //       return <PasswordResetSuccess className={this.getClass()}/>;
+    //     case 'VerificationPending':
+    //       return <VerificationPending className={this.getClass()}/>;
+    //     case 'VerificationSuccess':
+    //       return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
+    //     default:
+    //       return null;
+    //   }
+    // }
     return null;
   }
 

@@ -42,6 +42,9 @@ log('Creating default configuration.');
 const config = {
   env : process.env.NODE_ENV || 'development',
 
+  // HTTPS
+  secure : process.env.IS_SECURE === 'yes',
+
   // SSR
   ssrEnabled : process.env.NODE_ENV === 'production' || (process.env.SSR_DEV === 'yes'),
 
@@ -124,7 +127,7 @@ const config = {
   // graphql config
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
-  graphql_subscriptions_endpoint : `ws://${process.env.HOST || 'localhost'}:${process.env.WS_PORT || 8080}`,
+  graphql_subscriptions_endpoint : `${process.env.IS_SECURE === 'yes' ? 'wss' : 'ws'}://${process.env.HOST || 'localhost'}:${process.env.WS_PORT || 8080}`,
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
   persistedQueries  : process.env.PERSISTED_QUERIES !== 'no',
 
@@ -204,7 +207,7 @@ config.globals = {
     APPLICATION_ID        : JSON.stringify(process.env.APPLICATION_ID),
     JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),
 
-    SERVER_URL : JSON.stringify(config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
+    SERVER_URL : JSON.stringify(config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
 
     GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
     GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(config.graphql_subscriptions_endpoint),

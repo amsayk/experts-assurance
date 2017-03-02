@@ -1,7 +1,7 @@
 {
-  "name": "b2b-trading-platform",
+  "name": "fikrat",
   "version": "0.1.6",
-  "description": "B2B Trading Platform",
+  "description": "Experts d'assurance",
   "private": true,
   "pre-commit": [
     "lint",

@@ -94,6 +94,7 @@ const APP_PATHS = [
 
   // config.paths_cases
   config.path_cases + '*',
+  config.path_cases_case + '*',
 
   // search
   config.path_search,
@@ -172,8 +173,8 @@ const api = new ParseServer({
   appId                    : process.env.APPLICATION_ID,
   javascriptKey            : process.env.JAVASCRIPT_KEY,
   masterKey                : process.env.MASTER_KEY,
-  serverURL                : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
-  publicServerURL                : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  serverURL                : config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  publicServerURL                : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
   enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
   allowClientClassCreation : true,
   maxUploadSize            : '25mb',
@@ -215,10 +216,10 @@ const api = new ParseServer({
   ],
 
   customPages: {
-    invalidLink          : `http://${config.server_host}:${config.server_port}` + config.path_invalid_link,
-    verifyEmailSuccess   : `http://${config.server_host}:${config.server_port}` + config.path_email_verification_success,
-    choosePassword       : `http://${config.server_host}:${config.server_port}` + config.path_choose_password,
-    passwordResetSuccess : `http://${config.server_host}:${config.server_port}` + config.path_password_reset_success,
+    invalidLink          : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_invalid_link,
+    verifyEmailSuccess   : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_email_verification_success,
+    choosePassword       : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_choose_password,
+    passwordResetSuccess : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_password_reset_success,
   },
 });
 
@@ -234,7 +235,7 @@ const dashboard = new ParseDashboard({
       'appId'         : process.env.APPLICATION_ID,
       'javascriptKey' : process.env.JAVASCRIPT_KEY,
       'masterKey'     : process.env.MASTER_KEY,
-      'serverURL'     : config.parse_server_url || `http://${config.server_host}:${config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
+      'serverURL'     : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
       'appName'       : config.appName,
       'production'    : !__DEV__,
     },

@@ -9,6 +9,7 @@ import { DocType } from 'data/types';
 import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
 const LIMIT_PER_PAGE = 45;
+const LIMIT_PER_NEXT_PAGE = 15;
 const SEARCH_LIMIT = 15;
 
 export class DocConnector {
@@ -96,7 +97,7 @@ export class DocConnector {
 
     function doFetch() {
       const q = getQuery()
-        .limit(LIMIT_PER_PAGE);
+        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
 
 
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](

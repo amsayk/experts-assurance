@@ -81,6 +81,10 @@ if (config.ssrEnabled) {
 // Set envs for `vars`
 const vars = config.globals['process.env'];
 Object.keys(vars).forEach((key) => {
-  Object.defineProperty(process.env, key, { value: JSON.parse(vars[key]) });
+  Object.defineProperty(process.env, key, {
+    value: key === 'SERVER_URL'
+      ? config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`
+      : JSON.parse(vars[key])
+  });
 });
 

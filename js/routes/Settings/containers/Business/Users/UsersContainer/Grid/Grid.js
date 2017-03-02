@@ -87,7 +87,10 @@ class Grid extends React.Component {
 
   componentDidMount() {
     raf(() => {
-      Scroll.setTop(ReactDOM.findDOMNode(this.dropdown), NAVBAR_HEIGHT);
+      try {
+        const dropdown = ReactDOM.findDOMNode(this.dropdown);
+        dropdown && Scroll.setTop(dropdown, NAVBAR_HEIGHT);
+      } catch(e) {}
     });
   }
 
