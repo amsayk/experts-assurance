@@ -1,0 +1,112 @@
+// Actions
+
+.actions {
+  composes: d-flex rightNavItem from 'styles/_base.scss';
+  // composes: animated slideInLeft from 'styles/_animate.scss';
+  min-height: $toolbar-height;
+  // animation-duration: 0.1s;
+  // animation-timing-function: linear;
+}
+
+.deleteButton,
+.refreshButton,
+.moreActionsButton {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  padding: 0;
+  transition: none;
+  padding: 4px;
+
+  span {
+    font-weight: 600 !important;
+  }
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+  opacity: 0.5;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.back,
+.delete,
+.refresh,
+.more {
+  composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
+}
+
+.userMoreMenu {
+  left: -375%;
+  top: 118%;
+}
+
+.moreMenu {
+  left: -150%;
+  top: 115%;
+  z-index: 2;
+}
+
+.viewType,
+.search {
+  composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
+}
+
+.searchBtn {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.backButton {
+  composes: d-flex flex-row justify-content-center align-items-center from 'styles/_base.scss';
+}
+
+.backText {
+  margin-left: 5px;
+}
+
+.backButton {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  padding: 0;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+  opacity: 0.7;
+
+  &:focus,
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.viewTypeBtn,
+.searchBtn {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  padding: 0;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+  opacity: 0.5;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.viewTypeBtn {
+  padding: 4px;
+
+  span {
+    font-weight: 600 !important;
+  }
+}

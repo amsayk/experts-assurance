@@ -7,8 +7,9 @@ const babelOptions = require('scripts/getBabelOptions')({
     'validation'                         : 'common/validation',
     'getCurrentUser'                     : 'common/getCurrentUser',
     'vars'                               : 'common/vars',
+    'roles'                              : 'common/roles',
     'dataIdFromObject'                   : 'common/dataIdFromObject',
-    'log'                                : 'common/log',
+    'log'                                : 'common/log/server',
     'libphonenumber'                     : 'common/libphonenumber',
     'slug'                               : 'common/slug',
 
@@ -55,10 +56,14 @@ if (config.ssrEnabled) {
   cssRequireHook({
     extensions: ['.scss'],
     generateScopedName: config.env === 'production' ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]',
+    prepend: [
+      // adding CSS Next plugin
+    ],
     preprocessCss: (data) => sass.renderSync({
-      data,
+      data         : '$env: ' + config.env + ';\n' + data,
       outputStyle  : 'expanded',
       includePaths : [
+        config.utils_paths.client(),
         config.utils_paths.base('node_modules'),
         config.utils_paths.client('styles'),
       ],
@@ -66,10 +71,10 @@ if (config.ssrEnabled) {
   });
 
   // Graphql require hook
-  const graphqlProcessor = require('scripts/jest/graphqlPreprocessor');
+  const graphqlTransform = require('scripts/jest/transform/graphql');
   require.extensions['.graphql'] = function graphqlModulesHook(m, filename) {
     const data = require('fs').readFileSync(filename, 'utf8');
-    return m._compile(graphqlProcessor.process(data, filename), filename);
+    return m._compile(graphqlTransform.process(data, filename), filename);
   };
 }
 

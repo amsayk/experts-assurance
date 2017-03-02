@@ -3,51 +3,50 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   InvalidLink: {
     id: 'notification.invalid_link',
-    defaultMessage: 'This link has expired. Please restart the process. Thank you.',
+    defaultMessage: 'Ce lien a expiré. Veuillez recommencer le processus. Merci.',
   },
 
   PasswordResetSuccess: {
     id: 'notification.password_reset_success',
-    defaultMessage: 'Your password was updated!',
+    defaultMessage: 'Succès',
   },
 
   EmailVerificationSuccess: {
     id: 'notification.email_verification_success',
-    defaultMessage: 'Success. Thank you for verifying your email!',
+    defaultMessage: 'Succès. Merci d’avoir vérifié votre adresse e-mail!',
   },
 
   EmailVerificationPending: {
     id: 'notification.email_verification_pending',
-    defaultMessage: 'Please activate your account. We sent an email to {email}. {resendEmailVerificationLink} {changeEmail}',
+    defaultMessage: 'Vous devez activer votre compte avant de continue. Nous avons envoyé un e-mail à {email}. {resendEmailVerificationLink} {changeEmail}',
   },
 
   ResendVerification: {
     id: 'notification.resend_verification',
-    defaultMessage: 'Resend activation',
+    defaultMessage: 'Renvoyer l’e-mail d’activation',
   },
   ChangeEmail: {
     id: 'notification.change_email',
-    defaultMessage: 'Change your email address',
+    defaultMessage: 'Changer votre adresse e-mail',
   },
 
   emailSent: {
     id: 'notification.email-sent-successfully',
-    defaultMessage: 'Thank you. We sent an email to the provided address.',
+    defaultMessage: 'Merci. Nous avons envoyé un e-mail à l’adresse fournie.',
   },
 
   BusinessRequired: {
     id: 'notification.business-required',
-    defaultMessage: 'Thank you for using {appName}. The next step is to add your business details. Please {link} to get started.',
+    defaultMessage: 'Merci d’avoir utilisé {appName}. Veuillez {link} pour ajouter les détails de votre entreprise.',
   },
   AddBusinessLink: {
     id: 'notification.add-business-link',
-    defaultMessage: 'click here',
+    defaultMessage: 'cliquez ici',
   },
 
   SessionExpired: {
     id: 'notification.session-expired',
-    defaultMessage: 'Your session expired. Please login again.',
+    defaultMessage: 'Votre session a expiré. Veuillez vous connecter à nouveau.',
   },
 });
-
 

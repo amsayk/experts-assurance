@@ -1,6 +1,6 @@
 import { PATH_SETTINGS_ACCOUNT, PATH_SETTINGS_CHANGE_PASSWORD, PATH_SETTINGS_CHANGE_EMAIL } from 'vars';
 
-import { onEnter } from 'authWrappers/UserIsAuthenticated';
+import { UserIsAuthenticated } from 'authWrappers/UserIsAuthenticated';
 
 import AccountSettingsContainer from 'routes/Settings/containers/Account/AccountSettingsContainer';
 import ChangeEmailContainer from 'routes/Settings/containers/Account/ChangeEmailContainer';
@@ -11,25 +11,25 @@ export default (store) => [{
   getComponent(nextState, cb) {
     cb(null, AccountSettingsContainer);
   },
-  onEnter: onEnter(store),
+  onEnter: UserIsAuthenticated.onEnter(store),
 }, {
   path: PATH_SETTINGS_CHANGE_EMAIL,
   getComponent(nextState, cb) {
     cb(null, ChangeEmailContainer);
   },
-  onEnter: onEnter(store),
+  onEnter: UserIsAuthenticated.onEnter(store),
 }, {
   path: PATH_SETTINGS_CHANGE_PASSWORD,
   getComponent(nextState, cb) {
     cb(null, ChangePasswordContainer);
   },
-  onEnter: onEnter(store),
+  onEnter: UserIsAuthenticated.onEnter(store),
 }];
 
 export const getIndexRoute = (store) => (partialNextState, cb) => cb(null, {
   getComponent(nextState, cb) {
     cb(null, AccountSettingsContainer);
   },
-  onEnter: onEnter(store),
+  onEnter: UserIsAuthenticated.onEnter(store),
 });
 

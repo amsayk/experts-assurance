@@ -7,16 +7,19 @@ export const INIT                             = keyOf({ INIT: null });
 
 export const isServer                         = !ExecutionEnvironment.canUseDOM;
 
-export const HOME_TITLE                       = process.env.HOME_TITLE;
 export const APP_NAME                         = process.env.APP_NAME;
 export const COUNTRY                          = process.env.COUNTRY;
+export const BUSINESS_KEY                     = process.env.BUSINESS_KEY;
 export const INACTIVITY_TIMEOUT               = 15 * 60 * 1000; // 15 minutes
+
+export const DEFAULT_LANG                     = process.env.DEFAULT_LANG;
 
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT   = process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT;
 export const GRAPHQL_ENDPOINT                 = process.env.GRAPHQL_ENDPOINT;
 export const APOLLO_QUERY_BATCH_INTERVAL      = process.env.APOLLO_QUERY_BATCH_INTERVAL;
 export const PERSISTED_QUERIES                = process.env.PERSISTED_QUERIES;
 
+export const ENABLE_RECAPTCHA                 = process.env.ENABLE_RECAPTCHA;
 export const RECAPCHA_JS_URL                  = process.env.RECAPCHA_JS_URL;
 export const RECAPCHA_SITE_KEY                = process.env.RECAPCHA_SITE_KEY;
 
@@ -36,20 +39,22 @@ export const PATH_CHOOSE_PASSWORD             = process.env.PATH_CHOOSE_PASSWORD
 export const PATH_EMAIL_VERIFICATION_SUCCESS  = process.env.PATH_EMAIL_VERIFICATION_SUCCESS;
 export const PATH_PASSWORD_RESET_SUCCESS      = process.env.PATH_PASSWORD_RESET_SUCCESS;
 export const PATH_INVALID_LINK                = process.env.PATH_INVALID_LINK;
+export const PATH_ACTIVATION                  = process.env.PATH_ACTIVATION;
+
+// Cases
+export const PATH_CASES                       = process.env.PATH_CASES;
+export const PATH_CASES_CASE                  = process.env.PATH_CASES_CASE;
+export const PATH_CASES_CASE_PARAM            = process.env.PATH_CASES_CASE_PARAM;
 
 // Settings
-export const PATH_SETTINGS_BASE               = process.env.PATH_SETTINGS_BASE;
-export const PATH_SETTINGS_ACCOUNT            = process.env.PATH_SETTINGS_ACCOUNT;
-export const PATH_SETTINGS_CHANGE_PASSWORD    = process.env.PATH_SETTINGS_CHANGE_PASSWORD;
-export const PATH_SETTINGS_BUSINESS_DETAILS   = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
-export const PATH_SETTINGS_CHANGE_EMAIL       = process.env.PATH_SETTINGS_CHANGE_EMAIL;
-
-// Product catalog
-export const PATH_PRODUCT_CATALOG_BASE          = process.env.PATH_PRODUCT_CATALOG_BASE;
-export const PATH_PRODUCT_CATALOG_LABEL_BASE    = process.env.PATH_PRODUCT_CATALOG_LABEL_BASE;
-export const PATH_PRODUCT_CATALOG_LABEL_PARAM   = process.env.PATH_PRODUCT_CATALOG_LABEL_PARAM;
-export const PATH_PRODUCT_CATALOG_PRODUCT_BASE  = process.env.PATH_PRODUCT_CATALOG_PRODUCT_BASE;
-export const PATH_PRODUCT_CATALOG_PRODUCT_PARAM = process.env.PATH_PRODUCT_CATALOG_PRODUCT_PARAM;
+export const PATH_SETTINGS_BASE                 = process.env.PATH_SETTINGS_BASE;
+export const PATH_SETTINGS_ACCOUNT              = process.env.PATH_SETTINGS_ACCOUNT;
+export const PATH_SETTINGS_CHANGE_PASSWORD      = process.env.PATH_SETTINGS_CHANGE_PASSWORD;
+export const PATH_SETTINGS_BUSINESS_DETAILS     = process.env.PATH_SETTINGS_BUSINESS_DETAILS;
+export const PATH_SETTINGS_CHANGE_EMAIL         = process.env.PATH_SETTINGS_CHANGE_EMAIL;
+export const PATH_SETTINGS_BUSINESS_USERS       = process.env.PATH_SETTINGS_BUSINESS_USERS;
+export const PATH_SETTINGS_BUSINESS_USER        = process.env.PATH_SETTINGS_BUSINESS_USER;
+export const PATH_SETTINGS_BUSINESS_USER_PARAM  = process.env.PATH_SETTINGS_BUSINESS_USER_PARAM;
 
 // Search
 export const PATH_SEARCH                      = process.env.PATH_SEARCH;

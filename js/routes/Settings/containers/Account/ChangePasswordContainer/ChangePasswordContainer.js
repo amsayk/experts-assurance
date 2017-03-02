@@ -21,13 +21,13 @@ import { APP_NAME } from 'vars';
 
 import ChangePasswordForm from './ChangePasswordForm';
 
-function ChangePasswordContainer({ intl, actions }) {
+function ChangePasswordContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       <div className={style.body}>
-        <Sidebar selectedMenuItem={'security.change_password'}/>
+        <Sidebar user={user} selectedMenuItem={'security.change_password'}/>
         <ChangePasswordForm intl={intl}/>
       </div>
     </div>

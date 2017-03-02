@@ -1,6 +1,7 @@
 import {
   RESIZE,
   CONNECTION_STATE_CHANGE,
+  APP_STATE_CHANGE,
   READY,
   TOGGLE_ALERTS,
 } from './constants';
@@ -15,6 +16,13 @@ export function connectionStateChange(isConnected) {
   return {
     type: CONNECTION_STATE_CHANGE,
     isConnected,
+  };
+}
+
+export function appStateChange(currentState) {
+  return {
+    type: APP_STATE_CHANGE,
+    currentState,
   };
 }
 

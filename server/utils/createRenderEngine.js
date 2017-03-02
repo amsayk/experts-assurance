@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Helmet from 'react-helmet';
+
 import dataIdFromObject from 'dataIdFromObject';
 
 import { IntlProvider } from 'react-intl';
@@ -18,12 +20,14 @@ import getCurrentUser from 'getCurrentUser';
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
-import { ProductConnector } from 'data/catalog/connector';
+import { DocConnector } from 'data/doc/connector';
+import { ActivityConnector } from 'data/activity/connector';
 
 // Models
 import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
-import { Products } from 'data/catalog/models';
+import { Docs } from 'data/doc/models';
+import { Activities } from 'data/activity/models';
 
 const graphql = require('graphql');
 
@@ -37,7 +41,8 @@ export default function createRenderEngine(app) {
         user,
         Users: new Users({ user, connector: new UserConnector() }),
         Business: new Business({ user, connector: new BusinessConnector() }),
-        Products: new Products({ user, connector: new ProductConnector() }),
+        Docs: new Docs({ user, connector: new DocConnector() }),
+        Activities: new Activities({ user, connector: new ActivityConnector() }),
       },
     });
     const client = new ApolloClient({
@@ -48,9 +53,8 @@ export default function createRenderEngine(app) {
       networkInterface,
       customResolvers: {
         Query: {
-          Query: {
-            getProduct: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Product', id })),
-          },
+          getUser: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
+          getDoc: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
         },
       },
       dataIdFromObject,
@@ -66,12 +70,14 @@ export default function createRenderEngine(app) {
 
     try {
       const content = await renderToStringWithData(app);
+      const { title } = Helmet.rewind();
       const apolloState = client.store.getState()[client.reduxRootKey];
 
       return {
-        html: content,
-        appState: JSON.stringify(store.getState().toJS()),
-        apolloState: JSON.stringify({ [client.reduxRootKey]: { data: apolloState.data } }),
+        title       : title.toString(),
+        html        : content,
+        appState    : JSON.stringify(store.getState().toJS()),
+        apolloState : JSON.stringify({ [client.reduxRootKey]: { data: apolloState.data } }),
       };
     } catch (e) {
       log.error('RENDERING ERROR:', e);

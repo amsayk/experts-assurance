@@ -30,7 +30,7 @@ export class SearchContainer extends React.PureComponent {
         <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
         <Header user={currentUser} onLogOut={actions.logOut}/>
         <div className={style.center}>
-          Search results will appear here.
+          Les résultats de la recherche apparaîtront ici.
         </div>
       </div>
     );
@@ -57,7 +57,7 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const withCurrentUser = graphql(QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
-  skip: ({ user }) => user.isEmpty(),
+  skip: ({ user }) => user.isEmpty,
 });
 
 export default compose(

@@ -1,0 +1,45 @@
+query getDoc($id: ID!) {
+  getDoc(id: $id) {
+    id
+    refNo
+    date
+    state
+    vehicle {
+      model
+      plateNumber
+    }
+    client {
+      id
+    }
+    insurer {
+      id
+    }
+
+    validation {
+      date
+      user {
+        id
+        displayName
+      }
+    }
+
+    closure {
+      date
+      state
+      user {
+        id
+        displayName
+      }
+    }
+
+    user {
+      id
+      displayName
+    }
+
+    createdAt
+    updatedAt
+  }
+
+}
+

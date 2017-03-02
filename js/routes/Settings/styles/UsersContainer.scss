@@ -1,0 +1,47 @@
+.root {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  height: 100%;
+}
+
+.body {
+  background-color: #fff;
+  composes: d-flex from 'styles/_base.scss';
+  flex: 1;
+}
+
+// users
+
+.usersContainer, .userContainer {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+}
+
+// List
+
+.listContainer {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+
+  .listItemsWrapper {
+    border-width: 0;
+    box-shadow: none;
+  }
+}
+
+.root:not(.listView) .body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+// toolbar
+
+.toolbar {
+  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  padding-left: 16px;
+  padding-right: 16px;
+  box-shadow: none;
+  height: 49px;
+  border-top-color: transparent;
+  margin-top: 1px;
+  border-top-width: 0;
+  margin-bottom: 0;
+}

@@ -1,0 +1,101 @@
+
+.timeline {
+  position: absolute;
+  composes: sticky-top from 'styles/_base.scss';
+  width: calc(100% - #{$content-width});
+  right: 0;
+  left: auto;
+  top: calc(#{$navbar-height} + #{$toolbar-height} + 20px);
+  // min-height: calc(100% - #{$navbar-height} - #{$toolbar-height} - 20px);
+  z-index: 0;
+  padding: 0 10px;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .feed {
+    margin-top: 25px;
+  }
+
+  .feed:after {
+    content: ' ';
+    background-color: #eee;
+    position: absolute;
+    display: block;
+    width: 2px;
+    top: 45px;
+    left: 21px;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.54;
+  }
+
+  .feedItem:first-child {
+    margin-top: 0;
+  }
+
+  .feedItem {
+    margin-top: 18px;
+  }
+}
+
+.DOCUMENT_STATE_CHANGED,
+.DOCUMENT_CREATED {
+  composes: feedItem;
+  composes: d-flex flex-row from 'styles/_base.scss';
+
+  .entry {
+    display: inherit;
+    flex-direction: column;
+    flex: 1;
+    margin-left: calc(34px - 24px);
+  }
+
+  .profilePic {
+    z-index: 100;
+  }
+
+  .profilePic a:hover,
+  .profilePic a:focus {
+    text-decoration: none;
+  }
+
+  .entry > .title {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .entry > .desc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .entry > .desc .docStateToggle svg {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  .entry > .info {
+    color: #707070;
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  .entry > .info a {
+    color: #707070;
+  }
+
+  .entry > .info time {
+    color: #707070;
+    font-size: 12px;
+  }
+}
+

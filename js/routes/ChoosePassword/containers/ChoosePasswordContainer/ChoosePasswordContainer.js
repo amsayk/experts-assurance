@@ -31,7 +31,6 @@ import {
 import messages from '../../messages';
 
 import PasswordField from '../../components/PasswordField';
-import PasswordConfirmationField from '../../components/PasswordConfirmationField';
 
 export class ChoosePasswordContainer extends React.Component {
   static propTypes = {
@@ -79,12 +78,6 @@ export class ChoosePasswordContainer extends React.Component {
         name='new_password'
         component={PasswordField}
         placeholder={intl.formatMessage(messages.password)}
-        onKeyDown={this.onKeyDown} />,
-
-      <Field
-        name='passwordConfirmation'
-        component={PasswordConfirmationField}
-        placeholder={intl.formatMessage(messages.passwordConfirmation)}
         onKeyDown={this.onKeyDown} />,
 
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.changePasswordButton}>

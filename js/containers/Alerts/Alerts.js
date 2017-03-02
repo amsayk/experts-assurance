@@ -14,7 +14,7 @@ import Trigger from 'components/react-components/Trigger';
 
 import { intlShape } from 'react-intl';
 
-import Zoom from 'components/transitions/Zoom';
+// import Zoom from 'components/transitions/Zoom';
 
 const WIDTH = 300;
 
@@ -42,7 +42,7 @@ function AlertsPopup({ onClose }) {
         <div>
           <div className={style.popupAlertsContent}>
             <p className={style.emptyList}>
-              <span>You don’t have any notifications yet</span>
+              <span>Vous n'avez encore aucune notification</span>
             </p>
           </div>
         </div>
@@ -79,11 +79,11 @@ class Alerts extends React.Component {
     );
 
     if (isReady) {
-      count = (
-        <Zoom transitionAppear in>
-          {count}
-        </Zoom>
-      );
+      // count = (
+      //   <Zoom transitionAppear in>
+      //     {count}
+      //   </Zoom>
+      // );
     }
 
     let content;

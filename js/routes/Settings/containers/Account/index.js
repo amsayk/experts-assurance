@@ -4,7 +4,7 @@ export default (store) => [{
   path         : PATH_SETTINGS_ACCOUNT,
   getComponent : (nextState, cb) => {
     require.ensure([], (require) => {
-      const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
       const { default : Component } = require('./AccountSettingsContainer');
 
       cb(null, UserIsAuthenticated(Component));
@@ -16,7 +16,7 @@ export default (store) => [{
   path         : PATH_SETTINGS_CHANGE_EMAIL,
   getComponent : (nextState, cb) => {
     require.ensure([], (require) => {
-      const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
       const { default : Component } = require('./ChangeEmailContainer');
 
       cb(null, UserIsAuthenticated(Component));
@@ -28,7 +28,7 @@ export default (store) => [{
   path         : PATH_SETTINGS_CHANGE_PASSWORD,
   getComponent : (nextState, cb) => {
     require.ensure([], (require) => {
-      const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
       const { default : Component } = require('./ChangePasswordContainer');
 
       cb(null, UserIsAuthenticated(Component));
@@ -40,7 +40,7 @@ export default (store) => [{
 
 export const getIndexRoute = (store) => (partialNextState, cb) => {
   require.ensure([], (require) => {
-    const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+    const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
     const { default : Component } = require('./AccountSettingsContainer');
 
     /* Return Component */

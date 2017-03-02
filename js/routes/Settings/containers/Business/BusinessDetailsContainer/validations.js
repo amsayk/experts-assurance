@@ -16,10 +16,6 @@ const validations = {
     country        : COUNTRY,
     required       : true,
   },
-  postalCode: {
-    validateOnBlur : true,
-    zipCode        : COUNTRY,
-  },
 };
 
 export default generateValidation(validations);

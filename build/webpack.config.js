@@ -7,12 +7,15 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const sassyImport = require('postcss-sassy-import');
+const HappyPack = require('happypack');
 const config = require('build/config');
 const merge = require('lodash.merge');
 const objectAssign = require('object-assign');
 const log = require('log')('app:webpack:config');
 
 const paths = config.utils_paths;
+
+const happyThreadPool = HappyPack.ThreadPool({ size: 8 });
 
 log('Creating configuration.');
 const webpackConfig = {
@@ -42,8 +45,8 @@ const APP_ENTRY = [paths.client('app.js')];
 webpackConfig.entry = {
   polyfills: ['babel-polyfill'],
   app : __DEV__
-    ? APP_ENTRY.concat(`webpack-hot-middleware/client?path=${config.compiler_public_path}__webpack_hmr`)
-    : APP_ENTRY,
+  ? APP_ENTRY.concat(`webpack-hot-middleware/client?path=${config.compiler_public_path}__webpack_hmr`)
+  : APP_ENTRY,
   vendor : config.compiler_vendors,
 };
 
@@ -65,7 +68,47 @@ webpackConfig.externals = {};
 // ------------------------------------
 // Plugins
 // ------------------------------------
+
+const STYLE_LOADER = 'style-loader';
+
+const SASS_LOADERS = [{
+  loader: 'css-loader',
+  query: {
+    url               : false,
+    modules           : true,
+    sourceMap         : __DEV__,
+    minimize          : false,
+    discardDuplicates : !__DEV__,
+    importLoaders     : 2,
+    localIdentName    : __DEV__ ? '[name]__[local]___[hash:base64:5]' : '[hash:base64:5]',
+  },
+}, {
+  loader: 'postcss-loader',
+}, {
+  loader: 'sass-loader',
+}];
+
 webpackConfig.plugins = [
+  new HappyPack({
+    id: 'js',
+    threadPool: happyThreadPool,
+    loaders: [
+      'babel-loader?' + JSON.stringify(objectAssign({}, config.compiler_babel_query, config.compiler_babel_options)),
+    ],
+
+    // make happy more verbose with HAPPY_VERBOSE=yes
+    verbose: process.env.HAPPY_VERBOSE === 'yes',
+  }),
+  new HappyPack({
+    id: 'styles',
+    threadPool: happyThreadPool,
+    loaders : __DEV__
+      ? [STYLE_LOADER, ...SASS_LOADERS]
+      : SASS_LOADERS,
+
+    // make happy more verbose with HAPPY_VERBOSE=yes
+    verbose: process.env.HAPPY_VERBOSE === 'yes',
+  }),
   new webpack.LoaderOptionsPlugin({
     debug    : __DEV__,
     minimize : !__DEV__,
@@ -93,11 +136,11 @@ webpackConfig.plugins = [
         data         : '$env: ' + config.env + ';',
         outputStyle  : 'expanded',
         includePaths : [
+          paths.client(),
           paths.base('node_modules'),
           paths.client('styles'),
         ],
       },
-      babel: config.compiler_babel_options,
     },
   }),
   new webpack.DefinePlugin(merge(config.globals, {
@@ -115,9 +158,6 @@ webpackConfig.plugins = [
     minify   : {
       collapseWhitespace : !__DEV__,
     },
-
-    // local variables
-    title    : config.title + ' · ' + config.appName,
   }),
 ];
 
@@ -126,7 +166,7 @@ if (__DEV__) {
   webpackConfig.plugins.push(
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   );
 } else {
   log('Enable plugins for production (Offline, AggressiveMergingPlugin & UglifyJS).');
@@ -184,10 +224,9 @@ webpackConfig.module.rules = [{
   exclude : [
     path.resolve(process.cwd(), 'node_modules'),
   ],
-  use     : [{
-    loader  : 'babel-loader',
-    query   : config.compiler_babel_query,
-  }],
+  use : [
+    'happypack/loader?id=js',
+  ],
 }, {
   test   : /\.html$/,
   loader : 'ejs-loader',
@@ -207,23 +246,9 @@ webpackConfig.module.rules = [{
 webpackConfig.module.rules.push({
   test    : /\.scss$/,
   exclude : [],
-  loaders : [{
-    loader: 'style-loader',
-  }, {
-    loader: 'css-loader',
-    query: {
-      modules           : true,
-      sourceMap         : __DEV__,
-      minimize          : false,
-      discardDuplicates : !__DEV__,
-      importLoaders     : 2,
-      localIdentName    : __DEV__ ? '[name]__[local]___[hash:base64:5]' : '[hash:base64:5]',
-    },
-  }, {
-    loader: 'postcss-loader',
-  }, {
-    loader: 'sass-loader',
-  }],
+  use : [
+    'happypack/loader?id=styles',
+  ],
 });
 
 // File loaders
@@ -248,15 +273,12 @@ webpackConfig.module.rules.push(
 if (!__DEV__) {
   log('Apply ExtractTextPlugin to CSS loaders.');
   webpackConfig.module.rules.filter((loader) =>
-    loader.loaders && loader.loaders.find(({ loader }) => /css/.test(loader))
+    /scss/.test(loader.test)
   ).forEach((loader) => {
-    const first = loader.loaders[0];
-    const rest = loader.loaders.slice(1);
-    loader.loader = ExtractTextPlugin.extract({
-      fallbackLoader: first,
-      loader: rest,
+    loader.use = ExtractTextPlugin.extract({
+      fallback : STYLE_LOADER,
+      use      : SASS_LOADERS,
     });
-    delete loader.loaders;
   });
 
   webpackConfig.plugins.push(

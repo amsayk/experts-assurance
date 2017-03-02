@@ -1,0 +1,13 @@
+query settings_users__searchUsers($queryString: String) {
+  searchUsers(queryString: $queryString) {
+    id
+    displayName
+    email
+    roles
+
+    createdAt
+    updatedAt
+
+  }
+}
+

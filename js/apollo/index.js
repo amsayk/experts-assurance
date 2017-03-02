@@ -1,7 +1,7 @@
 import ApolloClient, { toIdValue } from 'apollo-client';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 import getNetworkInterface from './transport';
-const log = require('log')('app:client');
+import debug from 'log';
 
 import dataIdFromObject from 'dataIdFromObject';
 
@@ -9,6 +9,8 @@ import {
   GRAPHQL_ENDPOINT,
   GRAPHQL_SUBSCRIPTIONS_ENDPOINT,
 } from 'vars';
+
+const log = debug('app:client');
 
 const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTIONS_ENDPOINT, {
   connectionParams: {
@@ -51,7 +53,8 @@ export const client = new ApolloClient({
   addTypename: true,
   customResolvers: {
     Query: {
-      getProduct: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Product', id })),
+      getUser: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
+      getDoc: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
     },
   },
   dataIdFromObject,

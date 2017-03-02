@@ -5,15 +5,13 @@ import invariant from 'invariant';
 const EVENT_TYPES = ['change'];
 const VISIBILITY_CHANGE_EVENT = 'visibilitychange';
 
-const AppStates = {
-  BACKGROUND: 'background',
-  ACTIVE: 'active',
-};
-
 const listeners = [];
 
 export default class AppState {
   static isSupported = ExecutionEnvironment.canUseDOM && document.visibilityState
+
+  static BACKGROUND = 'background';
+  static ACTIVE = 'active';
 
   static get currentState() {
     if (!AppState.isSupported) {
@@ -24,9 +22,9 @@ export default class AppState {
       case 'hidden':
       case 'prerender':
       case 'unloaded':
-        return AppStates.BACKGROUND;
+        return AppState.BACKGROUND;
       default:
-        return AppStates.ACTIVE;
+        return AppState.ACTIVE;
     }
   }
 

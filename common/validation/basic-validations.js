@@ -36,9 +36,6 @@ export function country(field, value, prop) {
 }
 
 export function zipCode(field, value, country) {
-  if (country === 'US') {
-    return value ? !/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value) : false;
-  }
   return false;
 }
 

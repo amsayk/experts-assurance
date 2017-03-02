@@ -33,20 +33,20 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentUser }, 
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       <div className={style.body}>
-        <Sidebar selectedMenuItem={'business.settings'}/>
+        <Sidebar user={user} selectedMenuItem={'business.settings'}/>
         {loading ? null : <BusinessDetailsForm user={user} intl={intl} initialValues={{
-          id            : currentBusiness ? currentBusiness.id            : null,
-          displayName   : currentBusiness ? currentBusiness.displayName   : null,
-          description   : currentBusiness ? currentBusiness.description   : null,
-          url           : currentBusiness ? currentBusiness.url           : null,
-          country       : currentBusiness ? currentBusiness.country       : COUNTRY,
-          addressLine1  : currentBusiness ? currentBusiness.addressLine1  : null,
-          addressLine2  : currentBusiness ? currentBusiness.addressLine2  : null,
-          city          : currentBusiness ? currentBusiness.city          : null,
-          stateProvince : currentBusiness ? currentBusiness.stateProvince : null,
-          postalCode    : currentBusiness ? currentBusiness.postalCode    : null,
-          phone         : currentBusiness ? currentBusiness.phone         : null,
-          taxId         : currentBusiness ? currentBusiness.taxId         : null,
+          id            : currentBusiness ? currentBusiness.id                 : null,
+          displayName   : currentBusiness ? currentBusiness.displayName        : null,
+          description   : currentBusiness ? currentBusiness.description        : null,
+          url           : currentBusiness ? currentBusiness.url                : null,
+          country       : currentBusiness ? currentBusiness.country || COUNTRY : COUNTRY,
+          addressLine1  : currentBusiness ? currentBusiness.addressLine1       : null,
+          addressLine2  : currentBusiness ? currentBusiness.addressLine2       : null,
+          city          : currentBusiness ? currentBusiness.city               : null,
+          stateProvince : currentBusiness ? currentBusiness.stateProvince      : null,
+          postalCode    : currentBusiness ? currentBusiness.postalCode         : null,
+          phone         : currentBusiness ? currentBusiness.phone              : null,
+          taxId         : currentBusiness ? currentBusiness.taxId              : null,
         }}/>}
     </div>
   </div>
@@ -71,7 +71,7 @@ const withCurrentUserAndBusiness = graphql(QUERY, {
   options: ({ user }) => ({
     variables: { id: user.id },
   }),
-  skip: ({ user }) => user.isEmpty(),
+  skip: ({ user }) => user.isEmpty,
 });
 
 export default compose(

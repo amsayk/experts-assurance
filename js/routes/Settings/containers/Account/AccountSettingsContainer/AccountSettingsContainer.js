@@ -1,6 +1,5 @@
 import React, { PropTypes as T } from 'react';
 import { compose, bindActionCreators } from 'redux';
-import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -18,23 +17,21 @@ import messages from '../../../messages';
 
 import Title from 'components/Title';
 
-import QUERY from './currentUser.query.graphql';
-
 import { APP_NAME } from 'vars';
 
 import AccountSettingsForm from './AccountSettingsForm';
 
-function AccountSettingsContainer({ intl, data: { loading, currentUser }, actions }) {
+function AccountSettingsContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       <div className={style.body}>
-        <Sidebar selectedMenuItem={'account.settings'}/>
-        {loading ? null : <AccountSettingsForm intl={intl} initialValues={{
-          email: currentUser.email,
-          displayName: currentUser.displayName,
-        }}/>}
+        <Sidebar user={user} selectedMenuItem={'account.settings'}/>
+        <AccountSettingsForm intl={intl} initialValues={{
+          email: user.email,
+          displayName: user.displayName,
+        }}/>
       </div>
     </div>
   );
@@ -42,10 +39,7 @@ function AccountSettingsContainer({ intl, data: { loading, currentUser }, action
 
 AccountSettingsContainer.propTypes = {
   intl: intlShape.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    currentUser: T.object,
-  }).isRequired,
+
 };
 
 function mapStateToProps(state, props) {
@@ -58,14 +52,8 @@ function mapDispatchToProps(dispatch) {
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-const withCurrentUser = graphql(QUERY, {
-  options: ({ user }) => ({ variables: { id: user.id } }),
-  skip: ({ user }) => user.isEmpty(),
-});
-
 export default compose(
   injectIntl,
   Connect,
-  withCurrentUser,
 )(AccountSettingsContainer);
 

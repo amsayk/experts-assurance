@@ -1,0 +1,29 @@
+query getDocs($query: DocsFetchQuery!) {
+  getDocs(query: $query) {
+    length
+    cursor
+    docs {
+      id
+      refNo
+      date
+      state
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      insurer {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+

@@ -54,6 +54,11 @@
   position: relative;
 }
 
+.control + button[data-password-input-button] {
+  left: calc(240px - 45px);
+  top: 4px;
+}
+
 textarea.control {
   height: auto;
 }
@@ -134,6 +139,8 @@ textarea.control {
 
 .navbar {
   composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  border-bottom: 0;
+  margin-bottom: 0;
   padding-left: $navbar-horizontal-spacing;
   padding-right: $navbar-horizontal-spacing
 }

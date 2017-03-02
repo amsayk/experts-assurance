@@ -9,8 +9,9 @@ export const middleware = (params) => (store) => (next) => (action) => {
     const year    = 365 * 24 * 60 * 60;
 
     cookie.save(keys.cookieKey, value, {
-      hostOnly: true,
-      maxAge: year,
+      path     : '/',
+      hostOnly : true,
+      maxAge   : year,
     });
   }
 

@@ -5,12 +5,12 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.passwordReset-page.title',
-    defaultMessage: 'Reset your password · {appName}',
+    defaultMessage: 'Mot de passe oublié · {appName}',
   },
 
   title: {
     id: 'account.password-reset-form.title',
-    defaultMessage: 'Reset password',
+    defaultMessage: 'Retrouvez votre compte',
   },
 
   emailSent: {
@@ -20,35 +20,35 @@ export default defineMessages({
 
   introText: {
     id: 'account.password-reset-form.intro',
-    defaultMessage: 'Enter your email address and we will send you a link to reset your password.',
+    defaultMessage: 'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.',
   },
 
   email: {
     id: 'account.password-reset-form.label.email',
-    defaultMessage: 'Enter your email address',
+    defaultMessage: 'Entrez votre adresse e-mail',
   },
 
   error: {
     id: 'account.password-reset-form.login-error',
-    defaultMessage: 'There was an error. Please try again.',
+    defaultMessage: 'Une erreur est survenue. Veuillez réessayer',
   },
 
   passwordReset: {
     id: 'acccount.password-reset-form.passwordReset-action',
-    defaultMessage: 'Send password reset email',
+    defaultMessage: 'Rechercher',
   },
   support: {
     id: 'account.password-reset-form.support',
-    defaultMessage: 'Support',
+    defaultMessage: 'Support technique',
   },
   termsOfService: {
     id: 'account.password-reset-form.terms-of-service',
-    defaultMessage: 'Terms of Service',
+    defaultMessage: 'Conditions d’utilisation',
   },
 
   privacyPolicy: {
     id: 'account.password-reset-form.privacy-policy',
-    defaultMessage: 'Privacy Policy',
+    defaultMessage: 'Confidentialité',
   },
 });
 

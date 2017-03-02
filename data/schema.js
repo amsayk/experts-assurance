@@ -15,7 +15,8 @@ import parseJSONLiteral from './parseJSONLiteral';
 
 import { schema as userSchema, resolvers as userResolvers } from './user/schema';
 import { schema as businessSchema, resolvers as businessResolvers } from './business/schema';
-import { schema as catalogSchema, resolvers as catalogResolvers } from './catalog/schema';
+import { schema as docSchema, resolvers as docResolvers } from './doc/schema';
+import { schema as activitySchema, resolvers as activityResolvers } from './activity/schema';
 
 const log = require('log')('app:server:graphql');
 
@@ -28,15 +29,18 @@ const rootSchema = [`
   type Query {
     # Accounts
     getUser(id: ID!): User
+    usersByRoles(queryString: String, roles: [Role!]!): [User!]!
 
     # Business
-    # ...
+    getUsers(query: UsersFetchQuery!): UsersFetchResponse!
+    searchUsers(queryString: String): [User!]!
 
-    # Catalog
-    getProduct(id: ID!): Product
-    getProducts(query: ProductsFetchQuery!): ProductsFetchResponse!
-    catalogRecent(query: String): RecentProductsQueryResponse!
-    labels: [Label!]!
+    # Activites
+    timeline(cursor: Date, query: TimelineQuery!): TimelineResponse!
+
+    # Docs
+    getDoc(id: ID!): Doc
+    getDocs(query: DocsFetchQuery!): DocsFetchResponse!
   }
 
   type Mutation {
@@ -51,8 +55,6 @@ const rootSchema = [`
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
     resendEmailVerification: ResendEmailVerificationResponse!
 
-    # Catalog
-    addProduct(info: CreateProductPayload!): CreateProductResponse!
   }
 
   type Subscription {
@@ -112,10 +114,12 @@ const schema = [
   ...rootSchema,
   ...userSchema,
   ...businessSchema,
-  ...catalogSchema,
+  ...docSchema,
+  ...activitySchema,
 ];
 
-const resolvers = merge({}, rootResolvers, userResolvers, businessResolvers, catalogResolvers);
+const resolvers = merge(
+  {}, rootResolvers, userResolvers, businessResolvers, docResolvers, activityResolvers);
 
 export default makeExecutableSchema({
   typeDefs                : schema,

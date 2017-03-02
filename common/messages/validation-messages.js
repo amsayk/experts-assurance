@@ -3,94 +3,86 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   passwordRequired: {
     id: 'validation-messages.password-required',
-    defaultMessage: 'Password required.',
+    defaultMessage: 'Mot de passe requis.',
   },
 
   passwordMinLength: {
     id: 'validation-messages.password-min-length',
-    defaultMessage: 'Password must have at least {minLength} characters.',
+    defaultMessage: 'Le mot de passe doit comporter au moins {minLength} caractères.',
   },
 
   passwordMismatch: {
     id: 'validation-messages.password-mismatch',
-    defaultMessage: 'Passwords don\'t match',
+    defaultMessage: 'Les mots de passe ne correspondent pas',
   },
 
   emailRequired: {
     id: 'validation-messages.email-required',
-    defaultMessage: 'Email required.',
+    defaultMessage: 'E-mail requis.',
   },
 
   emailInvalid: {
     id: 'validation-messages.email-invalid',
-    defaultMessage: 'Please enter a valid email address.',
+    defaultMessage: 'Veuillez saisir une adresse e-mail valide.',
   },
 
-  productNameRequired: {
-    id: 'validation-messages.product-name-required',
-    defaultMessage: 'Product name is required.',
-  },
-  productNameTaken: {
-    id: 'validation-messages.product-name-taken',
-    defaultMessage: 'This product already exists in your catalog.',
-  },
   emailTaken: {
     id: 'validation-messages.email-taken',
-    defaultMessage: 'This email is already in our system. Please login.',
+    defaultMessage: 'Cette adresse e-mail est déjà dans notre système. Identifiez-vous.',
   },
 
   recaptchaRequired: {
     id: 'validation-messages.recaptcha',
-    defaultMessage: 'Please verify you\'re a human.',
+    defaultMessage: 'Vérifiez que vous êtes un humain.',
   },
 
   fullNameRequired: {
     id: 'validation-messages.fullname',
-    defaultMessage: 'Full name required.',
+    defaultMessage: 'Nom complet requis.',
   },
 
   businessNameRequired: {
     id: 'validation-messages.business-name',
-    defaultMessage: 'Please enter your business\'s name.',
+    defaultMessage: 'Veuillez saisir le nom de votre entreprise.',
   },
   currentPassword: {
     id: 'validation-messages.current-password-error',
-    defaultMessage: 'You entered an invalid password.',
+    defaultMessage: 'Vous avez entré un mot de passe non valide.',
   },
   currentPasswordRequired: {
     id: 'validation-messages.current-password-required-error',
-    defaultMessage: 'Please enter your current password.',
+    defaultMessage: 'Veuillez entrer votre mot de passe actuel.',
   },
 
   passwordMinScore: {
     id: 'validation-messages.password-min-score',
-    defaultMessage: 'Please choose a stronger password.',
+    defaultMessage: 'Veuillez choisir un mot de passe plus fort.',
   },
   newPasswordRequired: {
     id: 'validation-messages.new-password-required',
-    defaultMessage: 'Please enter your new password.',
+    defaultMessage: 'Veuillez saisir votre nouveau mot de passe.',
   },
 
   zipInvalid: {
     id: 'validation-messages.zipcode-invalid',
-    defaultMessage: 'Please enter a valid ZIP.',
+    defaultMessage: 'Veuillez entrer un code postal valide.',
   },
   urlInvalid: {
     id: 'validation-messages.url-invalid',
-    defaultMessage: 'Please enter a valid website.',
+    defaultMessage: 'Veuillez saisir un site Web valide.',
   },
   phoneInvalid: {
     id: 'validation-messages.phone-invalid',
-    defaultMessage: 'Please enter a valid phone number.',
+    defaultMessage: 'Veuillez entrer un numéro de téléphone valide.',
   },
 
   countryInvalid: {
     id: 'validation-messages.country-invalid',
-    defaultMessage: 'Only {country} is currently supported. Stay tuned!',
+    defaultMessage: 'Seul {country} est actuellement pris en charge. Restez à l’écoute!',
   },
   countryRequired: {
     id: 'validation-messages.country-required',
-    defaultMessage: 'Please provide us with your country.',
+    defaultMessage: 'Veuillez nous indiquer votre pays.',
   },
 });
 

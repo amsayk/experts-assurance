@@ -1,6 +1,5 @@
 import React, { PropTypes as T } from 'react';
 import { compose, bindActionCreators } from 'redux';
-import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -18,20 +17,18 @@ import messages from '../../../messages';
 
 import Title from 'components/Title';
 
-import QUERY from './currentUser.query.graphql';
-
 import { APP_NAME } from 'vars';
 
 import ChangeEmailForm from './ChangeEmailForm';
 
-function ChangeEmailContainer({ intl, data: { loading, currentUser }, actions }) {
+function ChangeEmailContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       <div className={style.body}>
-        <Sidebar selectedMenuItem={'account.change_email'}/>
-        {loading ? null : <ChangeEmailForm intl={intl} user={currentUser}/>}
+        <Sidebar user={user} selectedMenuItem={'account.change_email'}/>
+        <ChangeEmailForm intl={intl} user={user}/>
       </div>
     </div>
   );
@@ -39,10 +36,7 @@ function ChangeEmailContainer({ intl, data: { loading, currentUser }, actions })
 
 ChangeEmailContainer.propTypes = {
   intl: intlShape.isRequired,
-  data: T.shape({
-    loading: T.bool.isRequired,
-    currentUser: T.object,
-  }).isRequired,
+
 };
 
 function mapStateToProps(state, props) {
@@ -55,14 +49,8 @@ function mapDispatchToProps(dispatch) {
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-const withCurrentUser = graphql(QUERY, {
-  options: ({ user }) => ({ variables: { id: user.id } }),
-  skip: ({ user }) => user.isEmpty(),
-});
-
 export default compose(
   injectIntl,
   Connect,
-  withCurrentUser,
 )(ChangeEmailContainer);
 

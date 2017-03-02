@@ -62,5 +62,6 @@ export class Users {
   get(id) {
     return this.connector.get(id);
   }
+
 }
 

@@ -5,46 +5,41 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.choose-password-page.title',
-    defaultMessage: 'Reset password · {appName}',
+    defaultMessage: 'Mot de passe oublié · {appName}',
   },
 
   title: {
     id: 'account.choose-password-form.title',
-    defaultMessage: 'Reset password',
+    defaultMessage: 'Retrouvez votre compte',
   },
 
   password: {
     id: 'account.choose-password-form.label.password',
-    defaultMessage: 'New password',
-  },
-
-  passwordConfirmation: {
-    id: 'account.choose-password-form.label.password-confirmation',
-    defaultMessage: 'New password, again',
+    defaultMessage: 'Nouveau mot de passe',
   },
 
   error: {
     id: 'account.choose-password-form.login-error',
-    defaultMessage: 'An error occurred. Please try again.',
+    defaultMessage: 'Une erreur est survenue. Veuillez réessayer',
   },
 
   choosePassword: {
     id: 'acccount.choose-password-form.choose-password-action',
-    defaultMessage: 'Change password',
+    defaultMessage: 'Changer votre mot de passe',
   },
 
   support: {
     id: 'account.login-form.support',
-    defaultMessage: 'Support',
+    defaultMessage: 'Support technique',
   },
   termsOfService: {
     id: 'account.choose-password-form.terms-of-service',
-    defaultMessage: 'Terms of Service',
+    defaultMessage: 'Conditions d’utilisation',
   },
 
   privacyPolicy: {
     id: 'account.choose-password-form.privacy-policy',
-    defaultMessage: 'Privacy Policy',
+    defaultMessage: 'Confidentialité',
   },
 });
 

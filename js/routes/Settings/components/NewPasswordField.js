@@ -12,17 +12,17 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import PasswordMeter from './PasswordMeter';
 
+import PasswordInput from 'components/PasswordInput';
+
 function NewPasswordField({ intl, label, onKeyDown, input, meta: { touched, error } }) {
   return (
     <div className={cx(style.formGroup, { [style.formGroupHasDanger]: touched && error })}>
       <label htmlFor={input.name} className={style.label}>{label}</label>
       <div className={style.inputWrapper}>
-        <input
-          {...input}
+        <PasswordInput
+          inputProps={input}
+          inputClassName={cx(style.control, { [style.formControlDanger]: touched && error })}
           onKeyDown={onKeyDown}
-          autoComplete={'off'}
-          type={'password'}
-          className={cx(style.control, { [style.formControlDanger]: touched && error })}
         />
         <PasswordMeter password={input.value}/>
         <FormMessages errorCount={1} field={input.name}>

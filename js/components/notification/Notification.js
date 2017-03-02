@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, { PropTypes as T } from 'react';
 import {bindActionCreators} from 'redux';
 
 import {connect} from 'react-redux';
@@ -19,8 +19,8 @@ import VerificationSuccess from './VerificationSuccess';
 import { remove } from 'redux/reducers/notification/actions';
 
 class Notification extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.onClose = this.onClose.bind(this);
   }
@@ -96,8 +96,8 @@ class Notification extends React.Component {
    * @return {Object}
    */
   render() {
-    const { id, options: { active } } = this.props.notification;
-    if (active) {
+    const { id, hidden, options: { active } } = this.props.notification;
+    if (active && !hidden) {
       switch (id) {
         case 'SessionExpired':
           return <SessionExpired className={this.getClass()}/>;
@@ -119,6 +119,18 @@ class Notification extends React.Component {
   }
 
 }
+
+Notification.propTypes = {
+  id      : T.string.isRequired,
+  options : T.shape({
+    active : T.bool.isRequired,
+  }).isRequired,
+  hidden  : T.bool.isRequired,
+};
+
+Notification.defaultProps = {
+  hidden : false,
+};
 
 function mapStateToProps(state, props) {
   return selector(state, props);

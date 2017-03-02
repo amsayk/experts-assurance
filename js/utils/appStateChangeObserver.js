@@ -1,9 +1,12 @@
 import { logOut } from 'redux/reducers/user/actions';
+import { appStateChange } from 'redux/reducers/app/actions';
 import AppState from 'AppState';
 import {
   INACTIVITY_TIMEOUT,
 } from 'vars';
-const log = require('log')('app:client:appStateChangeObserver');
+import debug from 'log';
+
+const log = debug('app:client:appStateChangeObserver');
 
 export default function appStateChangeObserver(store) {
   let timeout;
@@ -22,6 +25,7 @@ export default function appStateChangeObserver(store) {
 
   function cb() {
     log(`[APP STATE CHANGED]: ${AppState.currentState}`);
+    store.dispatch(appStateChange(AppState.currentState));
 
     clearTimeout();
 

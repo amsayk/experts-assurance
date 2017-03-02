@@ -35,7 +35,6 @@ import messages from '../../messages';
 
 import EmailField from '../../components/EmailField';
 import PasswordField from '../../components/PasswordField';
-import PasswordConfirmationField from '../../components/PasswordConfirmationField';
 import ReCAPTCHAField from '../../components/ReCAPTCHAField';
 
 import MUTATION from './signUp.mutation.graphql';
@@ -45,6 +44,8 @@ import {
   APP_NAME,
   LINK_PRIVACY_POLICY,
   LINK_TERMS_OF_SERVICE,
+
+  ENABLE_RECAPTCHA,
 } from 'vars';
 
 import AppLogo from 'components/AppLogo';
@@ -106,7 +107,7 @@ export class SignupContainer extends React.Component {
           id: parseObject.id,
           email: parseObject.get('email'),
         };
-        cookie.save('app.login', parseObject.get('username'));
+        cookie.save('app.login', parseObject.get('username'), { path: '/' });
         this.props.actions.login(loggedInUser);
         this.props.router.push('/');
       } else {
@@ -139,15 +140,9 @@ export class SignupContainer extends React.Component {
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
-      <Field
-        name='passwordConfirmation'
-        component={PasswordConfirmationField}
-        placeholder={intl.formatMessage(messages.passwordConfirmation)}
-        onKeyDown={this.onKeyDown} />,
-
-      <Field
+      ENABLE_RECAPTCHA ? <Field
         name={'recaptcha'}
-        component={ReCAPTCHAField} />,
+        component={ReCAPTCHAField} /> : null,
 
       <p className={style.tos}>
         <FormattedMessage
@@ -218,4 +213,3 @@ export default compose(
   Connect,
   WithForm,
 )(SignupContainer);
-

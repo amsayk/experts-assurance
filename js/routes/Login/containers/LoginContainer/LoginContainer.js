@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { Link, withRouter } from 'react-router';
+import { Link } from 'react-router';
 
 import Parse from 'parse';
 
@@ -42,7 +42,6 @@ export class LoginContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
     intl            : intlShape.isRequired,
-    redirect        : T.string,
     actions         : T.shape({
       login : T.func.isRequired,
     }).isRequired,
@@ -63,7 +62,7 @@ export class LoginContainer extends React.Component {
   }
 
   async onSubmit(credentials) {
-    const { intl, redirect } = this.props;
+    const { intl, actions } = this.props;
     const { email, password } = credentials.toJS();
 
     try {
@@ -71,13 +70,8 @@ export class LoginContainer extends React.Component {
         email, /*password = */isEmpty(password) && __DEV__ ? process.env.DEV_PASSWORD : password);
       if (parseObject) {
         const user = { id: parseObject.id, ...parseObject.toJSON() };
-        cookie.save('app.login', email);
-        this.props.actions.login(user);
-        if (redirect) {
-          this.props.router.replace(redirect);
-        } else {
-          this.props.router.push('/');
-        }
+        cookie.save('app.login', email, { path: '/' });
+        actions.login(user);
       } else {
         throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
       }
@@ -116,10 +110,10 @@ export class LoginContainer extends React.Component {
       <div className={style.error}>
 
         {error && !submitting ?
-            <small className={style.formControlFeedback}>{intl.formatMessage(messages.error)}</small>
-            : null}
+          <small className={style.formControlFeedback}>{intl.formatMessage(messages.error)}</small>
+          : null}
 
-          </div>,
+        </div>,
 
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn}>
         {intl.formatMessage(messages.login)}
@@ -188,7 +182,6 @@ const WithForm = reduxForm({
 
 export default compose(
   injectIntl,
-  withRouter,
   Connect,
   WithForm,
 )(LoginContainer);

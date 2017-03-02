@@ -53,7 +53,11 @@ export default function createSSRRoute(app, compiler) {
     cookie.plugToRequest(req, res);
     const index = await indexHtml;
 
-    const store = createStore();
+    const lang = config.supportedLangs.indexOf(req.locale.language) !== -1
+      ? req.locale.language
+      : config.lang;
+
+    const store = createStore({ lang });
     match({ routes: getRoutes(store), location: req.originalUrl }, async (error, redirectLocation, renderProps) => {
       if (error) {
         res.status(500).send();
@@ -63,7 +67,7 @@ export default function createSSRRoute(app, compiler) {
         res.set('content-type', 'text/html');
         res.write(loading);
         try {
-          const { html, appState, apolloState } = await renderEngine({
+          const { title, html, appState, apolloState } = await renderEngine({
             renderProps,
             req,
             res,
@@ -71,6 +75,7 @@ export default function createSSRRoute(app, compiler) {
           });
 
           const head = [
+            title,
             `<script>window.__APOLLO_STATE__=${apolloState};</script>`,
             `<script>window.__APP_STATE__=${appState};</script>`,
           ];

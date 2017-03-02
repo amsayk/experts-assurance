@@ -1,0 +1,37 @@
+query getTimeline($cursor: Date, $query: TimelineQuery!) {
+  timeline(cursor: $cursor, query: $query) {
+    cursor
+    result {
+      id,
+      document {
+        id
+        refNo
+        state
+        validation {
+          date
+          user {
+            id
+            displayName
+          }
+        }
+        closure {
+          date
+          state
+          user {
+            id
+            displayName
+          }
+        }
+        user {
+          id
+          displayName
+        }
+      }
+      ns
+      type
+      metadata
+      timestamp
+    }
+  }
+}
+

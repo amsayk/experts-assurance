@@ -6,6 +6,7 @@ import {
   PATH_SETTINGS_ACCOUNT,
   PATH_SETTINGS_CHANGE_PASSWORD,
   PATH_SETTINGS_BUSINESS_DETAILS,
+  PATH_SETTINGS_BUSINESS_USERS,
   PATH_SETTINGS_CHANGE_EMAIL,
 } from 'vars';
 
@@ -17,7 +18,7 @@ import cx from 'classnames';
 
 import style from '../Settings.scss';
 
-export function Sidebar({ intl, selectedMenuItem }) {
+export function Sidebar({ intl, user, selectedMenuItem }) {
   return (
     <div className={style.sidebar}>
 
@@ -48,17 +49,23 @@ export function Sidebar({ intl, selectedMenuItem }) {
         </li>
       </ul>
 
-      <hr/>
-
       {/* Business settings */}
-      <h1 className={style.heading}>{intl.formatMessage(messages.headingBusiness)}</h1>
-      <ul>
-        <li className={cx({ [style.selected]: selectedMenuItem === 'business.settings' })}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_DETAILS}>
-            {intl.formatMessage(messages.linkBusinessDetails)}
-          </Link>
-        </li>
-      </ul>
+      {user && user.isAdmin ? [
+        <hr key='divider'/>,
+        <h1 key='business.title' className={style.heading}>{intl.formatMessage(messages.headingBusiness)}</h1>,
+        <ul key='business.links'>
+          <li className={cx({ [style.selected]: selectedMenuItem === 'business.settings' })}>
+            <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_DETAILS}>
+              {intl.formatMessage(messages.linkBusinessDetails)}
+            </Link>
+          </li>
+          <li className={cx({ [style.selected]: selectedMenuItem === 'business.users' })}>
+            <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USERS}>
+              {intl.formatMessage(messages.linkBusinessUsers)}
+            </Link>
+          </li>
+        </ul>,
+      ] : null}
     </div>
   );
 }
@@ -70,7 +77,11 @@ Sidebar.propTypes = {
     'account.change_email',
     'security.change_password',
     'business.settings',
+    'business.users',
   ]).isRequired,
+  user             : T.shape({
+    roles : T.arrayOf(T.string.isRequired).isRequired,
+  }).isRequired,
 };
 
 export default injectIntl(Sidebar);

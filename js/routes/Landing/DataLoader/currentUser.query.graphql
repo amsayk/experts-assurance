@@ -1,0 +1,19 @@
+query landing__currentUser($id: ID!) {
+
+  currentUser : getUser(id: $id) {
+    id
+    displayName
+    email
+    username
+    roles
+    emailVerified
+
+    createdAt
+    updatedAt
+
+    business {
+      id
+    }
+  }
+}
+

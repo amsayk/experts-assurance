@@ -1,6 +1,8 @@
 import { connectionStateChange } from 'redux/reducers/app/actions';
 import NetInfo from 'NetInfo';
-const log = require('log')('app:client:connectionStateChangeObserver');
+import debug from 'log';
+
+const log = debug('app:client:connectionStateChangeObserver');
 
 export default function connectionStateChangeObserver(store) {
   function cb(isConnected) {

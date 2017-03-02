@@ -1,0 +1,95 @@
+.back {
+  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+  margin-right: 17px;
+}
+
+.backButton {
+  composes: align-middle from 'styles/_base.scss';
+  margin: 0 auto;
+  padding: 0;
+  margin-left: 0;
+  padding-left: 0;
+  font-weight: 600;
+  color: $black;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+
+  opacity: 0.54;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+    color: $black;
+  }
+}
+
+.backText {
+}
+
+// Overview
+
+.overview {
+  composes: d-flex flex-column justify-content-start from 'styles/_base.scss';
+  flex: 1;
+  padding: 0 45px 25px 45px;
+  flex-shrink: 0;
+}
+
+.overviewContent {
+  flex: 1;
+  flex-shrink: 0;
+  margin-top: 25px;
+  composes: d-flex flex-column from 'styles/_base.scss';
+}
+
+.overviewLine {
+  composes: d-flex flex-row align-items-center row from 'styles/_base.scss';
+  flex-shrink: 0;
+  min-width: 450px;
+  height: 50px;
+}
+
+.overviewLabel {
+  composes: col-3 from 'styles/_base.scss';
+  font-weight: bolder;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.54);
+  user-select: none;
+}
+
+.overviewLabel,
+.overviewValue {
+  composes: d-flex align-items-center from 'styles/_base.scss';
+  height: 100%;
+}
+
+.overviewValue {
+  composes: col-9 from 'styles/_base.scss';
+  color: #000;
+}
+
+.overviewValueState {
+  composes: overviewValue;
+
+  .state {
+    font-weight: bolder;
+  }
+
+  span + span {
+    margin-left: 3px;
+  }
+}
+
+.overviewDate {
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.overviewTitle {
+  flex-shrink: 0;
+}

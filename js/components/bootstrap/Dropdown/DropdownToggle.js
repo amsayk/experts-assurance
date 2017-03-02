@@ -11,11 +11,13 @@ import style from './Dropdown.scss';
 const propTypes = {
   open: React.PropTypes.bool,
   title: React.PropTypes.string,
+  noCaret: React.PropTypes.bool,
   useAnchor: React.PropTypes.bool,
 };
 
 const defaultProps = {
   open: false,
+  noCaret: true,
   useAnchor: false,
   bsRole: 'toggle',
 };
@@ -27,6 +29,7 @@ class DropdownToggle extends React.Component {
       useAnchor,
       bsClass,
       className,
+      noCaret,
       children,
       ...props
     } = this.props;
@@ -44,7 +47,7 @@ class DropdownToggle extends React.Component {
       <Component
         {...props}
         role='button'
-        className={classNames(className, getLocalCSSClassName(style, bsClass))}
+        className={classNames(className, noCaret && style.noCaret, getLocalCSSClassName(style, bsClass))}
         aria-haspopup
         aria-expanded={open}
       >

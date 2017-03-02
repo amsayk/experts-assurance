@@ -10,6 +10,7 @@ const moduleMap = {
   'validation-messages'                : 'common/messages/validation-messages',
   'getCurrentUser'                     : 'common/getCurrentUser',
   'vars'                               : 'common/vars',
+  'roles'                              : 'common/roles',
   'dataIdFromObject'                   : 'common/dataIdFromObject',
   'log'                                : 'common/log',
   'slug'                               : 'common/slug',
@@ -22,7 +23,10 @@ const moduleMap = {
 
 const babelOptions = require('scripts/getBabelOptions')({
   plugins: [
-    'transform-runtime',
+    ['transform-runtime', {
+      polyfill: false,
+      regenerator: false
+    }],
     'transform-export-extensions',
     ['react-intl', {
       messagesDir: path.resolve(process.cwd(), 'build', 'intl', 'messages'),
@@ -39,16 +43,18 @@ const config = {
   env : process.env.NODE_ENV || 'development',
 
   // SSR
-  ssrEnabled : typeof process.env.SSR !== 'undefined'
-    ? process.env.SSR === 'yes'
-    : process.env.NODE_ENV === 'production',
+  ssrEnabled : process.env.NODE_ENV === 'production' || (process.env.SSR_DEV === 'yes'),
 
   // ----------------------------------
   // Site info
   // ----------------------------------
-  appName : 'Trading',
-  title   : process.env.HOME_TITLE,
-  country : nullthrows(process.env.COUNTRY),
+  businessKey : nullthrows(process.env.BUSINESS_KEY),
+  appName     : nullthrows(process.env.APP_NAME),
+  country     : nullthrows(process.env.COUNTRY),
+
+  // Locales
+  supportedLangs : ['fr'],
+  lang           : 'fr',
 
   // ----------------------------------
   // Project Structure
@@ -75,6 +81,8 @@ const config = {
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
 
   // App config
+  verifyUserEmails                  : process.env.VERIFY_USER_EMAILS === 'yes',
+
   path_login                        : process.env.PATH_LOGIN || '/login',
   path_signup                       : process.env.PATH_SIGNUP || '/signup',
   path_password_reset               : process.env.PATH_PASSWORD_RESET || '/password_reset',
@@ -82,20 +90,22 @@ const config = {
   path_email_verification_success   : process.env.PATH_EMAIL_VERIFICATION_SUCCESS || '/verify_email_success',
   path_password_reset_success       : process.env.PATH_PASSWORD_RESET_SUCCESS || '/password_reset_success',
   path_invalid_link                 : process.env.PATH_INVALID_LINK || '/invalid_link',
+  path_activation                   : process.env.PATH_ACTIVATION || '/activation',
+
+  // cases
+  path_cases                        : process.env.PATH_CASES || '/cases',
+  path_cases_case                   : process.env.PATH_CASES_CASE || '/case',
+  path_cases_case_param             : process.env.PATH_CASES_CASE_PARAM || 'id',
 
   // settings
-  path_settings_base               : process.env.PATH_SETTINGS_BASE || '/settings',
-  path_settings_account            : process.env.PATH_SETTINGS_ACCOUNT || 'account',
-  path_settings_change_password    : process.env.PATH_SETTINGS_CHANGE_PASSWORD || 'change_password',
-  path_settings_business_details   : process.env.PATH_SETTINGS_BUSINESS_DETAILS || 'business',
-  path_settings_change_email       : process.env.PATH_SETTINGS_CHANGE_EMAIL || 'change_email',
-
-  // product catalog
-  path_product_catalog_base           : process.env.PATH_PRODUCT_CATALOG_BASE || '/catalog',
-  path_product_catalog_label_base     : process.env.PATH_PRODUCT_CATALOG_LABEL_BASE || 'label',
-  path_product_catalog_label_param    : process.env.PATH_PRODUCT_CATALOG_LABEL_PARAM || 'slug',
-  path_product_catalog_product_base   : process.env.PATH_PRODUCT_CATALOG_PRODUCT_BASE || 'item',
-  path_product_catalog_product_param  : process.env.PATH_PRODUCT_CATALOG_PRODUCT_PARAM || 'id',
+  path_settings_base                : process.env.PATH_SETTINGS_BASE || '/settings',
+  path_settings_account             : process.env.PATH_SETTINGS_ACCOUNT || 'account',
+  path_settings_change_password     : process.env.PATH_SETTINGS_CHANGE_PASSWORD || 'change_password',
+  path_settings_business_details    : process.env.PATH_SETTINGS_BUSINESS_DETAILS || 'business',
+  path_settings_business_users      : process.env.PATH_SETTINGS_BUSINESS_USERS || 'users',
+  path_settings_business_user       : process.env.PATH_SETTINGS_BUSINESS_USER || 'user',
+  path_settings_business_user_param : process.env.PATH_SETTINGS_BUSINESS_USER_PARAM || 'id',
+  path_settings_change_email        : process.env.PATH_SETTINGS_CHANGE_EMAIL || 'change_email',
 
   // search
   path_search                      : process.env.PATH_SEARCH || '/search',
@@ -124,7 +134,7 @@ const config = {
   compiler_babel_options_module_map : moduleMap,
   compiler_babel_query : {
     babelrc        : false,
-    cacheDirectory : true,
+    cacheDirectory : false,
   },
   compiler_babel_options : objectAssign({}, babelOptions, {
     comments: false,
@@ -155,8 +165,10 @@ const config = {
     chunks : false,
     chunkModules : false,
     colors : true,
+    modules: false,
   },
   compiler_vendors : [
+    'parse',
     'react',
     'react-redux',
     'react-router',
@@ -165,7 +177,7 @@ const config = {
     'apollo-client',
     'redux-immutable',
     'classnames',
-    'moment',
+    // 'moment',
   ],
   compiler_offline_assets : [
 
@@ -179,7 +191,7 @@ All Internal Configuration Below
 Edit at Your Own Risk
 
 -------------------------------------------------
-************************************************/
+ ************************************************/
 
 // ------------------------------------
 // Environment
@@ -199,7 +211,9 @@ config.globals = {
     PERSISTED_QUERIES               : JSON.stringify(config.persistedQueries),
 
     BASENAME              : JSON.stringify(process.env.BASENAME || ''),
-    HOME_TITLE            : JSON.stringify(process.env.HOME_TITLE),
+
+    // Default lang
+    DEFAULT_LANG          : JSON.stringify(config.lang),
 
     PATH_LOGIN                        : JSON.stringify(config.path_login),
     PATH_SIGNUP                       : JSON.stringify(config.path_signup),
@@ -208,24 +222,27 @@ config.globals = {
     PATH_EMAIL_VERIFICATION_SUCCESS   : JSON.stringify(config.path_email_verification_success),
     PATH_PASSWORD_RESET_SUCCESS       : JSON.stringify(config.path_password_reset_success),
     PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
+    PATH_ACTIVATION                   : JSON.stringify(config.path_activation),
+
+    // Cases
+    PATH_CASES                        : JSON.stringify(config.path_cases),
+    PATH_CASES_CASE                   : JSON.stringify(config.path_cases_case),
+    PATH_CASES_CASE_PARAM             : JSON.stringify(config.path_cases_case_param),
 
     // Settings
-    PATH_SETTINGS_BASE               : JSON.stringify(config.path_settings_base),
-    PATH_SETTINGS_ACCOUNT            : JSON.stringify(config.path_settings_account),
-    PATH_SETTINGS_CHANGE_PASSWORD    : JSON.stringify(config.path_settings_change_password),
-    PATH_SETTINGS_BUSINESS_DETAILS   : JSON.stringify(config.path_settings_business_details),
-    PATH_SETTINGS_CHANGE_EMAIL       : JSON.stringify(config.path_settings_change_email),
-
-    // Product catalog
-    PATH_PRODUCT_CATALOG_BASE          : JSON.stringify(config.path_product_catalog_base),
-    PATH_PRODUCT_CATALOG_LABEL_BASE    : JSON.stringify(config.path_product_catalog_label_base),
-    PATH_PRODUCT_CATALOG_LABEL_PARAM   : JSON.stringify(config.path_product_catalog_label_param),
-    PATH_PRODUCT_CATALOG_PRODUCT_BASE  : JSON.stringify(config.path_product_catalog_product_base),
-    PATH_PRODUCT_CATALOG_PRODUCT_PARAM : JSON.stringify(config.path_product_catalog_product_param),
+    PATH_SETTINGS_BASE                : JSON.stringify(config.path_settings_base),
+    PATH_SETTINGS_ACCOUNT             : JSON.stringify(config.path_settings_account),
+    PATH_SETTINGS_CHANGE_PASSWORD     : JSON.stringify(config.path_settings_change_password),
+    PATH_SETTINGS_BUSINESS_DETAILS    : JSON.stringify(config.path_settings_business_details),
+    PATH_SETTINGS_BUSINESS_USERS      : JSON.stringify(config.path_settings_business_users),
+    PATH_SETTINGS_BUSINESS_USER       : JSON.stringify(config.path_settings_business_user),
+    PATH_SETTINGS_BUSINESS_USER_PARAM : JSON.stringify(config.path_settings_business_user_param),
+    PATH_SETTINGS_CHANGE_EMAIL        : JSON.stringify(config.path_settings_change_email),
 
     // Search
     PATH_SEARCH           : JSON.stringify(config.path_search),
 
+    ENABLE_RECAPTCHA      : JSON.stringify(process.env.ENABLE_RECAPTCHA === 'yes'),
     PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
     PASSWORD_MIN_SCORE    : JSON.stringify(config.password_min_score),
 
@@ -236,11 +253,13 @@ config.globals = {
 
     COUNTRY               : JSON.stringify(config.country),
 
+    BUSINESS_KEY          : JSON.stringify(config.businessKey),
+
     DEV_PASSWORD          : JSON.stringify(process.env.DEV_PASSWORD),
 
-    LINK_TERMS_OF_SERVICE : JSON.stringify(process.env.LINK_TERMS_OF_SERVICE || 'https://www.trading.com/legal/privacy-policy'),
-    LINK_PRIVACY_POLICY   : JSON.stringify(process.env.PRIVACY_POLICY || 'https://www.trading.com/legal/customer-agreement'),
-    LINK_SUPPORT          : JSON.stringify(process.env.SUPPORT || 'https://support.trading.com'),
+    LINK_TERMS_OF_SERVICE : JSON.stringify(process.env.LINK_TERMS_OF_SERVICE || 'https://www.epsilon.ma/legal/privacy-policy'),
+    LINK_PRIVACY_POLICY   : JSON.stringify(process.env.PRIVACY_POLICY || 'https://www.epsilon.ma/legal/customer-agreement'),
+    LINK_SUPPORT          : JSON.stringify(process.env.SUPPORT || 'https://support.espilon.ma'),
   },
 };
 
@@ -291,3 +310,4 @@ if (overrides) {
 }
 
 module.exports = config;
+

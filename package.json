@@ -26,7 +26,8 @@
     "deploy:prod": "bnr deploy:prod",
     "translate": "NODE_PATH=.:./js bnr translate",
     "update-schema": "NODE_PATH=.:./js bnr update-schema",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "analyse-bundle-size": "NODE_PATH=.:./js bnr analyse-bundle-size"
   },
   "betterScripts": {
     "update-schema": {
@@ -43,7 +44,7 @@
       "command": "nodemon --watch server --watch backend --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/dev-server.js --exec node",
       "env": {
         "NODE_ENV": "development",
-        "DEBUG": "app:*"
+        "DEBUG": "app:*,-app:server:history"
       }
     },
     "deploy": {
@@ -82,6 +83,12 @@
     "translate": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/translate",
       "env": {}
+    },
+    "analyse-bundle-size": {
+      "command": "node -r server/utils/validate-env-vars -r server/env node_modules/.bin/webpack --config build/webpack.config.js --json | webpack-bundle-size-analyzer",
+      "env": {
+        "NODE_ENV": "production"
+      }
     }
   },
   "engines": {
@@ -109,8 +116,7 @@
     "url": "https://bitbucket.org/amsayk/b2b-trading-platform/issues"
   },
   "dependencies": {
-    "apollo-client": "0.8.1",
-    "persistgraphql": "^0.2.10",
+    "apollo-client": "0.9.0",
     "apollo-local-query": "^0.2.0",
     "array-find-index": "^1.0.2",
     "babel-polyfill": "^6.22.0",
@@ -145,12 +151,13 @@
     "parse": "^1.9.2",
     "parse-dashboard": "^1.0.22",
     "parse-server": "^2.3.2",
+    "persistgraphql": "^0.3.0",
     "react": "^15.4.2",
-    "react-apollo": "^0.10.0",
-    "react-avatar": "^2.3.0",
+    "react-apollo": "^0.12.0",
     "react-cookie": "^1.0.4",
     "react-dom": "^15.4.2",
     "react-helmet": "^4.0.0",
+    "react-highlight-words": "^0.6.0",
     "react-immutable-proptypes": "^2.1.0",
     "react-intl": "^2.2.3",
     "react-overlays": "^0.6.10",
@@ -167,7 +174,7 @@
     "redux-thunk": "^2.2.0",
     "remote-redux-devtools": "^0.5.7",
     "reselect": "^2.5.4",
-    "speakingurl": "^11.0.0",
+    "speakingurl": "^13.0.0",
     "subscriptions-transport-ws": "^0.5.0",
     "uncontrollable": "^4.0.3",
     "valid-url": "^1.0.9",
@@ -180,7 +187,7 @@
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-check-es2015-constants": "^6.22.0",
-    "babel-plugin-jest-hoist": "^18.0.0",
+    "babel-plugin-jest-hoist": "^19.0.0",
     "babel-plugin-react-intl": "^2.3.1",
     "babel-plugin-syntax-class-properties": "^6.13.0",
     "babel-plugin-syntax-flow": "^6.18.0",
@@ -232,16 +239,17 @@
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-graphql": "^0.6.0",
     "eslint-plugin-react": "^6.9.0",
-    "extract-text-webpack-plugin": "beta",
+    "extract-text-webpack-plugin": "2.0.0",
     "fbjs": "^0.8.8",
     "fbjs-scripts": "^0.7.1",
     "file-loader": "^0.10.0",
     "fs-extra": "^2.0.0",
+    "happypack": "^3.0.3",
     "html-minifier": "^3.3.0",
     "html-webpack-plugin": "^2.26.0",
     "identity-obj-proxy": "^3.0.0",
     "inline-manifest-webpack-plugin": "^3.0.1",
-    "jest-cli": "^18.1.0",
+    "jest-cli": "^19.0.2",
     "lodash.invert": "^4.3.0",
     "node-sass": "^4.3.0",
     "nodemon": "^1.11.0",
@@ -259,13 +267,14 @@
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "stylelint": "^7.7.1",
-    "stylelint-config-sass-guidelines": "^1.1.1",
+    "stylelint-config-sass-guidelines": "^2.0.0",
     "url-loader": "^0.5.7",
-    "webpack": "2.2.0-rc.3",
+    "webpack": "^2.2.1",
+    "webpack-bundle-size-analyzer": "^2.5.0",
     "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.15.0",
     "webpack-md5-hash": "^0.0.5",
-    "worker-loader": "^0.7.1"
+    "worker-loader": "^0.8.0"
   },
   "jest": {
     "testEnvironment": "node",
@@ -276,8 +285,8 @@
       "js/**/*.js"
     ],
     "transform": {
-      "\\.graphql$": "<rootDir>/scripts/jest/graphqlPreprocessor",
-      "^.+\\.js$": "<rootDir>/scripts/jest/jsPreprocessor"
+      "\\.graphql$": "<rootDir>/scripts/jest/transform/graphql",
+      "^.+\\.js$": "<rootDir>/scripts/jest/transform/js"
     },
     "setupFiles": [
       "<rootDir>/scripts/jest/setup",

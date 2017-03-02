@@ -117,6 +117,18 @@ RootCloseWrapper.propTypes = {
 
 RootCloseWrapper.defaultProps = {
   event: 'click',
-  preventMouseRootClose() { return false;  },
+  preventMouseRootClose(e) {
+    let el = e.target;
+    try {
+      while (el !== document.body && el !== document) {
+        if (el.hasAttribute('data-root-close-ignore')) {
+          return true;
+        }
+        el = el.parentNode;
+      }
+    } catch(e) {}
+
+    return false;
+  },
 };
 

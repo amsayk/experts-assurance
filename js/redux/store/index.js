@@ -1,25 +1,27 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import { APP_NAME, BASENAME, INIT } from 'vars';
+import { APP_NAME, BASENAME, DEFAULT_LANG, INIT } from 'vars';
 
 import array from 'redux/middleware/array';
+import bufferActions from 'redux/middleware/buffer-actions';
 
 import { fromJS, Set, Map } from 'immutable';
 
 import {
   VIEW_TYPE_GRID,
   VIEW_TYPE_LIST,
-} from 'redux/reducers/catalog/constants';
+} from 'redux/reducers/users/constants';
 
 import {
   ACTION as SORT,
 } from 'redux/reducers/sorting/constants';
 
 import { AppState } from 'redux/reducers/app/reducer';
-import { CatalogState } from 'redux/reducers/catalog/reducer';
 import { NotificationState } from 'redux/reducers/notification/reducer';
 import { SnackState } from 'redux/reducers/snackbar/reducer';
 import { User } from 'redux/reducers/user/reducer';
+import { UsersState } from 'redux/reducers/users/reducer';
+import { CasesState } from 'redux/reducers/cases/reducer';
 import { SelectionState } from 'redux/reducers/selection/reducer';
 import { SortConfig } from 'redux/reducers/sorting/reducer';
 
@@ -58,20 +60,25 @@ const worker = new ReduxWorker();
 // Middleware Configuration
 // ======================================================
 const middlewares = [
-  thunk.withExtraArgument({ client: apolloClient, history }),
+  bufferActions(),
   array,
+  thunk.withExtraArgument({ client: apolloClient, history }),
   reduxCookieMiddleware({
     [VIEW_TYPE_GRID]: {
-      reducerKey : 'catalog.viewType',
-      cookieKey  : 'viewType',
+      reducerKey : 'users.viewType',
+      cookieKey  : 'users.viewType',
     },
     [VIEW_TYPE_LIST]: {
-      reducerKey : 'catalog.viewType',
-      cookieKey  : 'viewType',
+      reducerKey : 'users.viewType',
+      cookieKey  : 'users.viewType',
     },
-    [`${SORT}/catalog`]: {
-      reducerKey : 'catalog.sortConfig',
-      cookieKey  : 'catalog.sortConfig',
+    [`${SORT}/users`]: {
+      reducerKey : 'users.sortConfig',
+      cookieKey  : 'users.sortConfig',
+    },
+    [`${SORT}/cases`]: {
+      reducerKey : 'cases.sortConfig',
+      cookieKey  : 'cases.sortConfig',
     },
   }),
 ];
@@ -95,19 +102,21 @@ const enhancer = composeEnhancers(
   ...enhancers
 );
 
-export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || {}, function (key, value) {
+export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { app: { lang: DEFAULT_LANG } }, function (key, value) {
   switch (key) {
     case ''             : return new Map(value);
     case 'app'          : return new AppState(value);
-    case 'catalog'      : return new CatalogState(value);
     case 'notification' : return new NotificationState(value);
     case 'snackbar'     : return new SnackState(value);
     case 'user'         : return new User(value);
+    case 'users'        : return new UsersState(value);
+    case 'cases'        : return new CasesState(value);
     case 'selection'    : return new SelectionState(value);
     case 'sortConfig'   : return new SortConfig(value);
     case 'keys'         : return new Set(value);
     case 'form'         : return new Map(value);
     case 'options'      : return value;
+    case 'roles'        : return value;
   }
 
   return new Map(value);

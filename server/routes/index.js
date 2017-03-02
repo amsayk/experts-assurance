@@ -1,13 +1,12 @@
 import CoreLayout from 'layouts/CoreLayout';
 
-import LandingRoute from './Landing';
+import Landing from './Landing';
 import LoginRoute from './Login';
+import ActivationRoute from './Activation';
 import SignupRoute from './Signup';
 import PasswordResetRoute from './PasswordReset';
 import ChoosePasswordRoute from './ChoosePassword';
 import SettingsRoute from './Settings';
-
-import ProductCatalogRoute from './ProductCatalog';
 
 import SearchRoute from './Search';
 
@@ -25,15 +24,16 @@ export default (store) => [{
   getComponent(nextState, cb) {
     cb(null, CoreLayout);
   },
-  getIndexRoute : LandingRoute(store),
+  getIndexRoute : Landing.getIndexRoute(store),
   childRoutes   : [
     LoginRoute(store),
+    ActivationRoute(store),
     SignupRoute(store),
     PasswordResetRoute(store),
     ChoosePasswordRoute(store),
     SettingsRoute(store),
-    ProductCatalogRoute(store),
     SearchRoute(store),
+    ...Landing.routes(store),
 
     // On invalid activation or password reset link
     {

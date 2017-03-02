@@ -1,13 +1,12 @@
 import CoreLayout from 'layouts/CoreLayout';
 
-import LandingRoute from 'routes/Landing';
+import Landing from 'routes/Landing';
 import LoginRoute from 'routes/Login';
+import ActivationRoute from 'routes/Activation';
 import SignupRoute from 'routes/Signup';
 import PasswordResetRoute from 'routes/PasswordReset';
 import ChoosePasswordRoute from 'routes/ChoosePassword';
 import SettingsRoute from 'routes/Settings';
-
-import ProductCatalogRoute from 'routes/ProductCatalog';
 
 import SearchRoute from 'routes/Search';
 
@@ -23,15 +22,16 @@ import { post as addNotification } from 'redux/reducers/notification/actions';
 export default (store) => [{
   path          : '/',
   component     : CoreLayout,
-  getIndexRoute : LandingRoute(store),
+  getIndexRoute : Landing.getIndexRoute(store),
   childRoutes   : [
     LoginRoute(store),
+    ActivationRoute(store),
     SignupRoute(store),
     PasswordResetRoute(store),
     ChoosePasswordRoute(store),
     SettingsRoute(store),
-    ProductCatalogRoute(store),
     SearchRoute(store),
+    ...Landing.routes(store),
 
     // On invalid activation or password reset link
     {

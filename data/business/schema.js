@@ -10,9 +10,39 @@ import { pubsub } from '../subscriptions';
 
 export const schema = [`
 
+  # Sort
+  enum UsersSortKey {
+    displayName
+    date
+  }
+
+  enum SortDirection {
+    SORT_DIRECTION_DESC
+    SORT_DIRECTION_ASC
+  }
+
+  input UsersSortConfig {
+    key: UsersSortKey
+    direction: SortDirection
+  }
+
+  # Queries
+  type UsersFetchResponse {
+    cursor: Int!
+    length: Int!
+    users: [User!]!
+  }
+
+  input UsersFetchQuery {
+    role: String
+    queryString: String
+    cursor: Int
+    sortConfig: UsersSortConfig!
+  }
+
   # Country
   enum Country {
-    US
+    MA
   }
 
   # ------------------------------------
@@ -21,11 +51,11 @@ export const schema = [`
   type Business {
     id: ID!
 
-    displayName: String!
+    displayName: String
     description: String
     url: String
 
-    country: Country!
+    country: Country
     addressLine1: String
     addressLine2: String
     city: String
@@ -117,6 +147,12 @@ export const resolvers = {
   },
 
   Query: {
+    getUsers(obj, { query }, context) {
+      return context.Business.getUsers(query);
+    },
+    searchUsers(obj, { queryString : q }, context) {
+      return context.Business.searchUsers(q);
+    },
   },
 
 };

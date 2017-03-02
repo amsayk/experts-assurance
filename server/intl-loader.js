@@ -1,19 +1,18 @@
 import { addLocaleData } from 'react-intl';
 import areIntlLocalesSupported from 'intl-locales-supported';
+import config from 'build/config';
 const log = require('log')('app:server:intl');
 
-const localesMyAppSupports = [
-  'en',
-];
+const localesMyAppSupports = config.supportedLangs;
 
 if (global.Intl) {
   // Determine if the built-in `Intl` has the locale data we need.
   if (!areIntlLocalesSupported(localesMyAppSupports)) {
     // `Intl` exists, but it doesn't have the data we need, so load the
     // polyfill and patch the constructors we need with the polyfill's.
-    const IntlPolyfill    = require('intl');
-    Intl.NumberFormat     = IntlPolyfill.NumberFormat;
-    Intl.DateTimeFormat   = IntlPolyfill.DateTimeFormat;
+    const IntlPolyfill  = require('intl');
+    Intl.NumberFormat   = IntlPolyfill.NumberFormat;
+    Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
   }
 } else {
   // No `Intl`, so use and load the polyfill.
@@ -23,9 +22,13 @@ if (global.Intl) {
 const loaders = {
   en() {
     addLocaleData(require('react-intl/locale-data/en.js'));
-    return { messages: {} }; // This is the default language.
+    return { messages: {} };
   },
 
+  fr() {
+    addLocaleData(require('react-intl/locale-data/fr.js'));
+    return {messages: {}}; // This is the default language.
+  },
 };
 
 module.exports = (locale) => {

@@ -3,22 +3,17 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   logOut: {
     id: 'landing-page.logOut',
-    defaultMessage: 'Log Out',
+    defaultMessage: 'Déconnexion',
   },
 
   manageAccount: {
     id: 'landing-page.menu.manage-account',
-    defaultMessage: 'Manage account settings',
-  },
-
-  productCatalog: {
-    id: 'landing-page.menu.product-catalog',
-    defaultMessage: 'Product catalog',
+    defaultMessage: 'Paramètres du compte',
   },
 
   emailSent: {
     id: 'landing-page.email-sent-successfully',
-    defaultMessage: 'Thank you. We sent an email to the provided address.',
+    defaultMessage: 'Merci. Nous avons envoyé un courriel à l’adresse fournie.',
   },
 });
 

@@ -16,6 +16,7 @@ export { default as UpArrowIcon } from './UpArrow';
 
 export { default as DownArrowIcon } from './DownArrow';
 
+export { default as MoreHorizIcon } from './MoreHoriz';
 export { default as MoreVertIcon } from './MoreVert';
 
 export { default as RefreshIcon } from './Refresh';
@@ -33,4 +34,25 @@ export { default as MenuIcon } from './Menu';
 export { default as NavLeftIcon } from './NavLeft';
 
 export { default as StarIcon } from './Star';
+
+export { default as TrashIcon } from './Trash';
+
+export { default as FolderIcon } from './Folder';
+export { default as PeopleIcon } from './People';
+export { default as HomeIcon } from './Home';
+export { default as DashboardIcon } from './Dashboard';
+
+export { default as WatchIcon } from './Watch';
+export { default as InvalidIcon } from './Invalid';
+export { default as DoneIcon } from './Done';
+export { default as UnknownIcon } from './Unknown';
+
+export { default as CheckboxIcon } from './Checkbox';
+
+export { default as CircleIcon } from './Circle';
+
+export { default as ArchiveIcon } from './Archive';
+export { default as UnarchiveIcon } from './Unarchive';
+
+export { default as PrintIcon } from './Print';
 

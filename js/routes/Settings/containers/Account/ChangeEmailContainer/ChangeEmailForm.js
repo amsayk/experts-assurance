@@ -62,7 +62,7 @@ export class ChangeEmailForm extends React.Component {
     const { intl, user, handleSubmit, pristine, submitting, invalid } = this.props;
     return (
       <div className={style.content}>
-        <h1 className={style.changeEmailFormHeading}>{intl.formatMessage(messages.linkChangeEmail)}</h1>
+        <h1 className={style.changeEmailFormHeading}>{intl.formatMessage(messages.titleChangeEmail)}</h1>
         <p className={style.currentEmailIntro}>
           <FormattedMessage
             {...messages.currentEmailIntro}

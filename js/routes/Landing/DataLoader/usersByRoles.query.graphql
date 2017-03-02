@@ -1,0 +1,15 @@
+query usersByRoles($queryString: String, $roles: [Role!]!) {
+
+  usersByRoles(queryString: $queryString, roles: $roles) {
+    id
+    displayName
+    email
+    username
+    roles
+
+    createdAt
+    updatedAt
+
+  }
+}
+

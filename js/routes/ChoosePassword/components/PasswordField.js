@@ -12,15 +12,16 @@ import style from '../ChoosePassword.scss';
 
 import { PASSWORD_MIN_LENGTH } from 'vars';
 
+import PasswordInput from 'components/PasswordInput';
+
 function PasswordField({ intl, placeholder, onKeyDown, input, meta: { touched, error } }) {
   return (
     <div className={cx(style.formGroup, { [style.formGroupHasDanger]: touched && error })}>
-      <input
-        {...input}
+      <PasswordInput
+        inputProps={input}
+        inputClassName={cx(style.control, { [style.formControlDanger]: touched && error })}
         placeholder={placeholder}
         onKeyDown={onKeyDown}
-        type={'password'}
-        className={cx(style.control, { [style.formControlDanger]: touched && error })}
         autoFocus
       />
       <FormMessages errorCount={1} field={input.name}>

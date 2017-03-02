@@ -1,4 +1,4 @@
-import { formatError } from 'backend/utils';
+import { formatError, getOrCreateBusiness } from 'backend/utils';
 
 import { BusinessType } from 'data/types';
 
@@ -24,7 +24,7 @@ export default async function updateUserBusiness(request, response) {
     taxId,
   } } = request.params;
 
-  function saveOrUpdate(business) {
+  function update(business) {
     return business
       .set({
         displayName,
@@ -47,9 +47,9 @@ export default async function updateUserBusiness(request, response) {
 
   try {
     if (business) {
-      business = await saveOrUpdate(business);
+      business = await update(business);
     } else {
-      business = await saveOrUpdate(new BusinessType());
+      business = await update(await getOrCreateBusiness());
     }
 
     await request.user.set('business', business)

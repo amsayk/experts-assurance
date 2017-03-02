@@ -1,0 +1,28 @@
+@import 'variables';
+
+.center {
+  composes: center from 'styles/_base.scss';
+}
+
+.root {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  height: 100%;
+}
+
+// Header
+
+.navbar {
+  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  padding-left: $navbar-horizontal-spacing;
+  padding-right: $navbar-horizontal-spacing
+}
+
+.menu {
+  composes: navbar-nav from 'styles/_base.scss';
+  justify-content: center;
+}
+
+.logoutLink {
+  composes: nav-item nav-link from 'styles/_base.scss';
+  cursor: pointer;
+}

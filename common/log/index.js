@@ -18,5 +18,5 @@ function createDebug(label) {
   return log;
 }
 
-module.exports = createDebug;
+export default createDebug;
 

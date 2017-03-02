@@ -34,8 +34,8 @@ class CoreLayout extends React.PureComponent {
     intl           : intlShape.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.onResize = this.onResize.bind(this);
   }
@@ -73,8 +73,8 @@ class CoreLayout extends React.PureComponent {
     }
     return (
       <div className={style.root}>
-        <Title title={HOME_TITLE + ' · ' + APP_NAME}/>
-        <Notification/>
+        <Title title={intl.formatMessage(messages.title, { appName : APP_NAME })}/>
+        <Notification hidden={!displayMatches || !onLine}/>
         {body}
       </div>
     );

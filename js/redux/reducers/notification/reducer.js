@@ -1,5 +1,7 @@
 import getCurrentUser from 'getCurrentUser';
 
+import { userHasRoleAny, Role_ADMINISTRATORS } from 'roles';
+
 import { INIT } from 'vars';
 
 import { USER_LOGGED_OUT, USER_LOGGED_IN } from 'redux/reducers/user/constants';
@@ -10,11 +12,6 @@ import {
   UPDATE_NOTIFICATION,
   REMOVE_NOTIFICATION,
 } from './constants';
-
-import {
-  PATH_SETTINGS_BASE,
-  PATH_SETTINGS_BUSINESS_DETAILS,
-} from 'vars';
 
 import { Record } from 'immutable';
 
@@ -40,34 +37,23 @@ export default function reducer(state = initialState, action) {
     }
     case REMOVE_NOTIFICATION: {
       if (typeof action.id === 'undefined' || action.id === state.id) { // Clear all but required.
-        return maybeRequiredNotification(state);
+        return maybeRequiredNotification(state, action);
       }
       return state;
     }
     case USER_LOGGED_IN:
+    case LOCATION_CHANGE:
     case INIT: {
       return maybeRequiredNotification(state);
     }
     case USER_LOGGED_OUT:
       return initialState;
-    case LOCATION_CHANGE: {
-      switch (state.id) {
-        case 'BusinessRequired':
-          return state.merge({
-            options: {
-              active: action.payload.pathname !== PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_DETAILS,
-            },
-          });
-        default:
-          return state;
-      }
-    }
     default:
       return state;
   }
 }
 
-function maybeRequiredNotification(state) {
+function maybeRequiredNotification(state, action = {}) {
   const user = getCurrentUser();
   if (user) {
     if (!user.get('emailVerified')) { // Email verification takes precedence.
@@ -78,17 +64,9 @@ function maybeRequiredNotification(state) {
           active: true,
         },
       });
-    } else if (!user.has('business')) {
-      return new NotificationState({
-        id: 'BusinessRequired',
-        options: {
-          persist: true,
-          active: true,
-        },
-      });
-    } else {
-      return initialState;
     }
+
+    return state.id === 'VerificationPending' || state.id === action.id ? initialState : state;
   }
   return state;
 }

@@ -1,0 +1,379 @@
+.docs {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+}
+.docsHeader {
+  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+  height: 75px;
+  margin: 0;
+  padding: 0 20px;
+
+  .intro {
+    color: #707070;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+
+  .filters {
+    display: inherit;
+    align-items: center;
+  }
+
+  .pickUserDropdown {
+    margin: 0;
+    padding: 0;
+  }
+
+  .filters .filterGroup + .filterGroup {
+    margin-left: 10px
+  }
+}
+
+
+.pickUserDropdown [role='menu'] {
+  z-index: 1051;
+}
+
+.togglePickUser,
+.togglePickState {
+  transition: none;
+
+  color: #3572b0;
+  background: 0 0;
+  border-color: transparent;
+  box-sizing: border-box;
+  border-radius: 3.01px;
+  cursor: pointer;
+  font-weight: 400;
+  margin: 0;
+  padding: 4px 10px;
+  text-shadow: 0 1px 0 #fff;
+  white-space: nowrap;
+
+  &:after {
+    margin-left: .8em;
+  }
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+
+    border: 1px solid #ccc;
+    text-shadow: 0 1px 0 #fff;
+  }
+}
+
+.PENDING:not(.selecting){
+  margin: 0;
+  padding: 0;
+  svg {
+    color: $brand-warning;
+  }
+}
+.OPEN:not(.selecting){
+  margin: 0;
+  padding: 0;
+  svg {
+    color: $brand-info;
+  }
+}
+.CLOSED:not(.selecting){
+  margin: 0;
+  padding: 0;
+  svg {
+    color: $brand-success;
+  }
+}
+.INVALID:not(.selecting){
+  margin: 0;
+  padding: 0;
+  svg {
+    color: $brand-danger;
+  }
+}
+
+.docStateToggle svg {
+  margin-top: 3px;
+}
+
+.state {
+  composes: d-flex align-items-center from 'styles/_base.scss';
+
+  svg.checkbox {
+    color: #565656;
+    cursor: pointer;
+  }
+
+  &.selecting:hover > .checkbox,
+  &.selecting > .checkbox,
+  &:hover .checkbox,
+  .stateIcon {
+    display: inline-block;
+  }
+
+  &.selecting:hover .stateIcon,
+  &.selecting > .stateIcon,
+  &:hover > .stateIcon,
+  .checkbox {
+    display: none;
+  }
+}
+
+.selectedUserButton {
+
+  &:hover .closeIcon,
+  &:focus .closeIcon{
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.selectedStateButton {
+  composes: selectedUserButton;
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+
+.docStateCloseIcon {
+  composes: closeIcon;
+  margin-top: -2px;
+}
+
+.mask {
+  background: rgba(0,0,0,0);
+  bottom: 0;
+  filter: alpha(opacity=0);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1050;
+
+}
+
+.pickUserOpen .selectedStateButton,
+.pickUserOpen .selectedInsurerButton {
+  border-bottom-right-radius: 0!important;
+  border-bottom-left-radius: 0!important;
+}
+
+.selectedUserButton {
+  composes: d-flex align-items-center from 'styles/_base.scss';
+  composes: filterGroup;
+  background: #f5f5f5;
+  border-color: transparent;
+
+  transition: none;
+
+  color: #3572b0;
+  border-color: transparent;
+  box-sizing: border-box;
+  border-radius: 3.01px;
+  border-bottom-right-radius: 3.01px!important;
+  border-top-right-radius: 3.01px!important;
+
+  cursor: pointer;
+  font-weight: 400;
+  margin: 0;
+  padding: 4px 10px;
+  text-shadow: 0 1px 0 #fff;
+  white-space: nowrap;
+
+  &:hover,
+  &:focus {
+    border-color: #999;
+    background-color: #e9e9e9;
+    background: #f5f5f5;
+  }
+
+  svg {
+    color: $black;
+    opacity: .75;
+  }
+
+}
+
+.text {
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  span, mark {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.pickUserOpen .togglePickUser,
+.pickUserOpen .togglePickState {
+  border: 1px solid #ccc;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-color: transparent;
+  background: #e9e9e9;
+  color: #000;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,.1);
+  text-shadow: none;
+  margin: 0;
+  padding: 4px 10px;
+  font-weight: 400;
+  cursor: pointer;
+
+}
+
+.docsContainer, .docContainer {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+  margin: 0;
+  padding: 0 20px;
+}
+
+// List
+
+.listContainer {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+
+  .listItemsWrapper {
+    border-width: 0;
+    box-shadow: none;
+  }
+}
+
+.squaredMenu {
+  border-radius: 0;
+
+}
+
+.stateMenu{
+  composes: squaredMenu;
+  margin: 0 auto;
+}
+
+.userPickerMenu {
+  composes: squaredMenu;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.actionsMenuToggle {
+  composes: togglePickUser;
+
+  svg {
+    margin: -3px 0;
+    padding: 0;
+    vertical-align: middle;
+  }
+}
+
+.actionsMenu {
+  composes: squaredMenu;
+  transition: none;
+  margin: 0;
+}
+
+.pickUser {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0 3px 6px rgba(0,0,0,.2);
+  display: block;
+  width: 215px;
+
+  .result {}
+
+  .userLine {}
+
+  .userLine.userLineIsSelected {
+    background-color: darken(#f7f7f9, 5%);
+  }
+
+  .noResults {
+    color: #999;
+    padding: 3px 10px;
+    background-color: transparent;
+    display: list-item;
+    list-style: none;
+  }
+
+  .results {
+    max-height: 200px;
+    padding: 0 0 0 4px;
+    margin: 4px 4px 4px 0;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .results {
+    margin: 2px 0;
+    padding: 0;
+  }
+
+  .results > ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+
+  .search {
+    display: inline-block;
+    width: 100%;
+    min-height: 26px;
+    margin: 0;
+    position: relative;
+    z-index: 10000;
+    white-space: nowrap;
+  }
+
+  .search {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  input {
+    margin: 0;
+    outline: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.28571429;
+    height: 28px;
+    border-radius: 3px;
+    padding: 4px;
+  }
+
+  .search input {
+    border: 1px solid #ccc;
+  }
+
+  .search input {
+    min-height: 0;
+    font-family: inherit;
+    border-radius: 3px;
+  }
+
+  .search>input {
+    background: #fff!important;
+    height: 30px!important;
+    padding: 4px 5px;
+  }
+
+}
+
+.hit {
+  font-weight: bold;
+}

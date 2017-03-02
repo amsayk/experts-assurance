@@ -2,6 +2,7 @@ import {
   ACTION,
   SET,
   ADD,
+  TOGGLE,
 } from './constants';
 
 function dispatchSelectionAction(category, action) {
@@ -19,5 +20,10 @@ export const set = (category) => (keyOrKeys) => dispatchSelectionAction(category
 export const add = (category) => (keyOrKeys) => dispatchSelectionAction(category, {
   type : ADD,
   keys : Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys],
+});
+
+export const toggle = (category) => (key) => dispatchSelectionAction(category, {
+  type : TOGGLE,
+  key  : key,
 });
 

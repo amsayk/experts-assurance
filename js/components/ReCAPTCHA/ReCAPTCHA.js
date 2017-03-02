@@ -7,7 +7,9 @@ import { createSelector } from 'utils/reselect';
 import Recaptcha from 'react-recaptcha';
 import nullthrows from 'nullthrows';
 import loadScript from 'loadScript';
-const log = require('log')('app:client:recaptcha');
+import debug from 'log';
+
+const log = debug('app:client:recaptcha');
 
 import { RECAPCHA_JS_URL, RECAPCHA_SITE_KEY  } from 'vars';
 

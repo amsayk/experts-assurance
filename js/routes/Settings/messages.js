@@ -3,194 +3,211 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   title: {
     id: 'settings-page.title',
-    defaultMessage: 'Account Settings · {appName}',
+    defaultMessage: 'Paramètres · {appName}',
   },
 
   logOut: {
     id: 'settings-page.logOut',
-    defaultMessage: 'Log Out',
+    defaultMessage: 'Déconnexion',
   },
 
   linkChangeEmail: {
     id: 'settings-page.sidebar.change-email-link',
-    defaultMessage: 'Change email address',
+    defaultMessage: 'Votre adresse email',
   },
   linkAccountSettings: {
     id: 'settings-page.sidebar.account-settings-link',
-    defaultMessage: 'Account settings',
+    defaultMessage: 'Détails du compte',
   },
   close: {
     id: 'settings-page.close',
-    defaultMessage: 'Close',
+    defaultMessage: 'Fermer',
+  },
+
+  country_MA: {
+    id: 'settings-page.country-name-morocco',
+    defaultMessage: 'Maroc',
   },
 
   currentEmailIntro: {
     id: 'settings-page.change-email-intro',
-    defaultMessage: 'Your email address is currently {email}.',
+    defaultMessage: 'Votre adresse électronique est actuellement {email}',
   },
   changeEmail: {
     id: 'settings-page.change-email-button',
-    defaultMessage: 'Change email',
+    defaultMessage: 'Valider',
   },
   save: {
     id: 'settings-page.save',
-    defaultMessage: 'Save',
+    defaultMessage: 'Valider',
   },
   labelCountry: {
     id: 'settings-page.label-country',
-    defaultMessage: 'Country',
+    defaultMessage: 'Pays',
   },
   labelURL: {
     id: 'settings-page.label-url',
-    defaultMessage: 'Web site',
+    defaultMessage: 'Site Web',
   },
   labelNewEmail: {
     id: 'settings-page.label-new-email',
-    defaultMessage: 'New email address',
+    defaultMessage: 'Nouvelle e-mail',
   },
   labelEmail: {
     id: 'settings-page.label-email',
-    defaultMessage: 'Email',
+    defaultMessage: 'E-mail',
   },
   labelFullName: {
     id: 'settings-page.label-fullname',
-    defaultMessage: 'Full name',
+    defaultMessage: 'Nom complet',
   },
 
   linkBusinessDetails: {
     id: 'settings-page.sidebar.business.settings-link',
-    defaultMessage: 'Business details',
+    defaultMessage: 'Détails de l’entreprise',
+  },
+  linkBusinessUsers: {
+    id: 'settings-page.sidebar.business.users-link',
+    defaultMessage: 'Utilisateurs',
   },
 
   linkChangePassword: {
     id: 'settings-page.sidebar.change-password-link',
-    defaultMessage: 'Change password',
+    defaultMessage: 'Votre mot de passe',
   },
 
   headingGeneral: {
     id: 'settings-page.sidebar.general-section-heading',
-    defaultMessage: 'General',
+    defaultMessage: 'Général',
   },
 
   headingSecurity: {
     id: 'settings-page.sidebar.security-section-heading',
-    defaultMessage: 'Security',
+    defaultMessage: 'Sécurité',
   },
 
   headingBusiness: {
     id: 'settings-page.sidebar.business-section-heading',
-    defaultMessage: 'Business',
+    defaultMessage: 'Entreprise',
   },
 
-  labelBusinessId: {
-    id: 'settings-page.business.business-id-label',
-    defaultMessage: 'Business ID',
-  },
   labelBusinessName: {
     id: 'settings-page.business.business-name-label',
-    defaultMessage: 'Business name',
+    defaultMessage: 'Raison sociale',
   },
 
   labelBusinessDescription: {
     id: 'settings-page.business.business-description-label',
-    defaultMessage: 'Description',
+    defaultMessage: 'La description',
   },
 
   labelAddressLine1: {
     id: 'settings-page.business.business-address-line1-label',
-    defaultMessage: 'Address line 1',
+    defaultMessage: 'Adresse 1',
   },
   labelAddressLine2: {
     id: 'settings-page.business.business-address-line2-label',
-    defaultMessage: 'Address line 2',
+    defaultMessage: 'Adresse 2',
   },
   labelCity: {
     id: 'settings-page.business.business-city-label',
-    defaultMessage: 'City',
+    defaultMessage: 'Ville',
   },
   labelStateProvince: {
     id: 'settings-page.business.business-state-province-label',
-    defaultMessage: 'State / Province',
+    defaultMessage: 'État / Province',
   },
   labelPostalCode: {
     id: 'settings-page.business.business-postal-code-label',
-    defaultMessage: 'ZIP / Postalcode',
+    defaultMessage: 'Code postal',
   },
   labelPhone: {
     id: 'settings-page.business.business-phone-label',
-    defaultMessage: 'Phone',
+    defaultMessage: 'Téléphone',
   },
 
   labelTaxId: {
     id: 'settings-page.business.business-tax-id-label',
-    defaultMessage: 'Tax ID',
+    defaultMessage: 'Numéro d’identification fiscale',
+  },
+
+  titleChangeEmail: {
+    id: 'settings-page.change-email-title',
+    defaultMessage: 'Changez votre adresse d’e-mail',
   },
 
   titleChangePassword: {
     id: 'settings-page.change-password-title',
-    defaultMessage: 'Change your password',
+    defaultMessage: 'Changez votre mot de passe',
   },
-
 
   labelCurrentPassword: {
     id: 'settings-page.current-password-label',
-    defaultMessage: 'Current password',
+    defaultMessage: 'Mot de passe actuel',
   },
-
 
   labelNewPassword: {
     id: 'settings-page.new-password-label',
-    defaultMessage: 'New password',
+    defaultMessage: 'Nouveau mot de passe',
   },
 
   cancel: {
     id: 'settings-page.cancel',
-    defaultMessage: 'Cancel',
+    defaultMessage: 'Annuler',
   },
   changePassword: {
     id: 'settings-page.change-password',
-    defaultMessage: 'Change password',
+    defaultMessage: 'Valider',
   },
 
   passwordStrength: {
     id: 'settings-page.password-strength',
-    defaultMessage: 'Password strength: {scoreWord}',
+    defaultMessage: 'Fiabilité du mot de passe: {scoreWord}',
   },
 
   passwordStrengthScoreWord1: {
     id: 'settings-page.password-strength-score-word-1',
-    defaultMessage: 'Fair',
+    defaultMessage: 'Passable',
   },
 
   passwordStrengthScoreWord2: {
     id: 'settings-page.password-strength-score-word-2',
-    defaultMessage: 'Good',
+    defaultMessage: 'Bien',
   },
 
   passwordStrengthScoreWord3: {
     id: 'settings-page.password-strength-score-word-3',
-    defaultMessage: 'Strong',
+    defaultMessage: 'Fort',
   },
   passwordStrengthScoreWord4: {
     id: 'settings-page.password-strength-score-word-4',
-    defaultMessage: 'Very strong',
+    defaultMessage: 'Fiable',
   },
 
   emailChangeSuccessNotification: {
     id: 'settings-page.email-change-success-notification',
-    defaultMessage: 'We sent you an email. Please verify your account.',
+    defaultMessage: 'Nous vous avons envoyé un courriel. Veuillez vérifier votre boite.',
   },
   accountSettingsChangeSuccessNotification: {
     id: 'settings-page.account-settings-change-success-notification',
-    defaultMessage: 'Your account was updated.',
+    defaultMessage: 'Succès',
   },
   passwordChangeSuccessNotification: {
     id: 'settings-page.password-change-success-notification',
-    defaultMessage: 'Your password was successfully updated.',
+    defaultMessage: 'Succès',
   },
   businessUpdateSuccessNotification: {
     id: 'settings-page.business-update-success-notification',
-    defaultMessage: 'Your business details were updated.',
+    defaultMessage: 'Succès',
+  },
+
+  sortKey_displayName: {
+    id: 'settings-page.sort-key-name',
+    defaultMessage: 'Nom',
+  },
+  sortKey_date: {
+    id: 'settings-page.sort-key-date',
+    defaultMessage: 'Dernière activité',
   },
 });
 

@@ -1,0 +1,51 @@
+.overview {
+  composes: d-flex flex-column justify-content-start from 'styles/_base.scss';
+  flex: 1;
+  padding: 0 45px 25px 45px;
+  flex-shrink: 0;
+}
+
+.overviewContent {
+  flex: 1;
+  flex-shrink: 0;
+  margin-top: 25px;
+  composes: d-flex flex-column from 'styles/_base.scss';
+}
+
+.overviewLine {
+  composes: d-flex flex-row align-items-center row from 'styles/_base.scss';
+  flex-shrink: 0;
+  min-width: 450px;
+  height: 50px;
+}
+
+.overviewLabel {
+  composes: col-3 from 'styles/_base.scss';
+  font-weight: bolder;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.overviewLabel,
+.overviewValue {
+  composes: d-flex align-items-center from 'styles/_base.scss';
+  height: 100%;
+}
+
+.role {
+  composes: badge badge-pill badge-primary from 'styles/_base.scss';
+  text-transform: uppercase;
+}
+
+.overviewValue {
+  composes: col-9 from 'styles/_base.scss';
+      color: #000;
+}
+
+.overviewDate:first-letter {
+  text-transform: uppercase;
+}
+
+.overviewTitle {
+  flex-shrink: 0;
+}

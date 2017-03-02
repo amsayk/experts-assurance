@@ -446,6 +446,8 @@ const applyMixin = createContainerRenderMixin({
 
   getContainer(instance) {
     const popupContainer = document.createElement('div');
+    popupContainer.style.position = 'absolute';
+    popupContainer.style.left = '-999px';
     const mountNode = instance.props.getPopupContainer ?
       instance.props.getPopupContainer(findDOMNode(instance)) : document.body;
     mountNode.appendChild(popupContainer);

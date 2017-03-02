@@ -23,17 +23,15 @@
   svg {
     opacity: 0.54;
 
-  &:focus,
-  &:hover {
-    opacity: 0.8;
-  }
+    &:focus,
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
 .alertsBtn {
-  span {
-    font-weight: 600 !important;
-  }
+  font-weight: 600 !important;
 }
 
 // Popups
@@ -86,7 +84,6 @@
       text-decoration: none;
       color: $black;
     }
-
     opacity: 0.54;
 
     &:focus,
@@ -136,5 +133,4 @@
     line-height: 1.3;
     min-height: 13px;
   }
-
 }

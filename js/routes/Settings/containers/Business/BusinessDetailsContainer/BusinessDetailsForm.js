@@ -4,7 +4,7 @@ import { compose } from 'redux';
 
 import { withApollo } from 'react-apollo';
 
-import refreshCurrentUser from 'utils/refreshCurrentUser';
+import checkBusiness from 'utils/checkBusiness';
 
 import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
 
@@ -26,7 +26,6 @@ import BusinessNameField from '../../../components/BusinessNameField';
 import BusinessDescriptionField from '../../../components/BusinessDescriptionField';
 import OptionalTextInputField from '../../../components/OptionalTextInputField';
 import CountryField from '../../../components/CountryField';
-import BusinessIdField from '../../../components/BusinessIdField';
 
 import MUTATION from './updateUserBusiness.mutation.graphql';
 
@@ -99,7 +98,7 @@ export class BusinessDetailsForm extends React.Component {
     }
 
     // currentUser.business has changed, refresh notification.
-    await refreshCurrentUser();
+    await checkBusiness();
   }
 
   render() {
@@ -108,10 +107,6 @@ export class BusinessDetailsForm extends React.Component {
       <div className={style.content}>
         <h1 className={style.formHeading}>{intl.formatMessage(messages.linkBusinessDetails)}</h1>
         <div className={style.form}>
-          <Field
-            name='id'
-            component={BusinessIdField}
-            label={intl.formatMessage(messages.labelBusinessId)}/>
           <Field
             name='displayName'
             component={BusinessNameField}

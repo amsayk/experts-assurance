@@ -33,12 +33,14 @@ import { subscriptionManager } from 'data/subscriptions';
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
-import { ProductConnector } from 'data/catalog/connector';
+import { DocConnector } from 'data/doc/connector';
+import { ActivityConnector } from 'data/activity/connector';
 
 // Models
 import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
-import { Products } from 'data/catalog/models';
+import { Docs } from 'data/doc/models';
+import { Activities } from 'data/activity/models';
 
 // persisted queries
 import queryMap from 'extracted_queries';
@@ -66,7 +68,9 @@ app.use(compress());
 app.use(cors());
 
 // Setup locale
-app.use(createLocaleMiddleware());
+app.use(createLocaleMiddleware({
+  default : `${config.lang}-${config.country}`,
+}));
 
 // webpack compiler in devMode
 const compiler = config.env === 'development' && webpack(webpackConfig);
@@ -88,8 +92,8 @@ const APP_PATHS = [
   // settings
   config.path_settings_base + '*',
 
-  // product catalog
-  config.path_product_catalog_base + '*',
+  // config.paths_cases
+  config.path_cases + '*',
 
   // search
   config.path_search,
@@ -163,7 +167,7 @@ if (!config.parse_database_uri) {
 }
 const api = new ParseServer({
   appName                  : config.appName,
-  databaseURI              : config.parse_database_uri || 'mongodb://localhost:27017/b2b-trading-platform',
+  databaseURI              : config.parse_database_uri || 'mongodb://localhost:27017/Experts-Assurance',
   cloud                    : path.resolve(process.cwd(), 'backend', 'main.js'),
   appId                    : process.env.APPLICATION_ID,
   javascriptKey            : process.env.JAVASCRIPT_KEY,
@@ -178,7 +182,7 @@ const api = new ParseServer({
   sessionLength            : 15 * 24 * 60 * 60,
 
   // Email
-  verifyUserEmails                 : true,
+  verifyUserEmails                 : config.verifyUserEmails,
   revokeSessionOnPasswordReset     : true,
   emailVerifyTokenValidityDuration : 2 * 24 * 60 * 60, // 2 days
   emailAdapter                     : {
@@ -259,7 +263,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
       // eslint-disable-next-line no-param-reassign
       req.body = req.body.map(({ id, ...otherParams }) => ({ query: invertedMap[id], ...otherParams }));
     } else {
-      req.body.query = invertedMap[req.body.id] // eslint-disable-line no-param-reassign
+      req.body.query = invertedMap[req.body.id]; // eslint-disable-line no-param-reassign
     }
   }
   next();
@@ -282,20 +286,20 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
     schema,
     context: {
       user,
+      locale: req.locale,
       Users: new Users({ user, connector: new UserConnector() }),
       Business: new Business({ user, connector: new BusinessConnector() }),
-      Products: new Products({ user, connector: new ProductConnector() }),
+      Docs: new Docs({ user, connector: new DocConnector() }),
+      Activities: new Activities({ user, connector: new ActivityConnector() }),
     },
     logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,
   };
 }));
 
-if (__DEV__) {
-  app.use(config.graphiql_endpoint, graphiqlExpress({
-    endpointURL: config.graphql_endpoint,
-  }));
-}
+app.use(config.graphiql_endpoint, graphiqlExpress({
+  endpointURL : config.graphql_endpoint,
+}));
 
 // WebSocket server for subscriptions
 const websocketServer = createServer((request, response) => {

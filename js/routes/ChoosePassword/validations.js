@@ -8,10 +8,6 @@ const validations = {
     minLength      : PASSWORD_MIN_LENGTH,
   },
 
-  passwordConfirmation: {
-    validateOnBlur : true,
-    matchField     : 'new_password',
-  },
 };
 
 export default generateValidation(validations);

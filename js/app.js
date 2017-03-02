@@ -3,12 +3,14 @@ import 'parse-config';
 
 import refreshCurrentUser from 'utils/refreshCurrentUser';
 
+import checkBusiness from 'utils/checkBusiness';
+
 import React, { PropTypes as T } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Router, match } from 'react-router';
 
-const log = require('log')('app:client');
+import debug from 'log';
 
 import doSetupAppStateChangeListener from 'utils/appStateChangeObserver';
 import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObserver';
@@ -31,7 +33,9 @@ import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
 
-import { SSR } from 'vars';
+import { SSR, DEFAULT_LANG } from 'vars';
+
+const log = debug('app:client');
 
 const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
@@ -39,7 +43,7 @@ const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
 let render = async function render() {
   await refreshCurrentUser();
 
-  const locale = window.navigator.language.split(/-/)[0];
+  const locale = store.getState().getIn(['app', 'lang']);
 
   const { messages : translations } = await intlLoader(locale);
 
@@ -72,7 +76,7 @@ let render = async function render() {
     render() {
       const { routerProps } = this.props;
       return (
-        <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>
+        <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
           <ApolloProvider store={store} client={apolloClient} immutable>
             <Router {...routerProps}/>
           </ApolloProvider>
@@ -94,8 +98,11 @@ let render = async function render() {
 
   }
 
+  // Did you enter business details?
+  checkBusiness();
+
   ReactDOM.render(
-    <IntlProvider defaultLocale={'en'} locale={locale} messages={translations} formats={formats}>
+    <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
       <Provider store={store}>
         {snackbar.render()}
       </Provider>

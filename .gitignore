@@ -46,3 +46,6 @@ Icon
 # Coverage directory used by tools like istanbul
 coverage
 
+# happypack cache
+.happypack
+

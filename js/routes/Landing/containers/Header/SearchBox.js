@@ -8,7 +8,7 @@ import { SearchIcon, CloseIcon } from 'components/icons/MaterialIcons';
 
 import { intlShape } from 'react-intl';
 
-import style from '../../Landing.scss';
+import style from 'routes/Landing/styles';
 
 import Tooltip from 'components/react-components/Tooltip';
 
@@ -37,7 +37,7 @@ class SearchBox extends React.Component {
   onInputStateChange(hasFocus) {
     this.setState({
       hasFocus,
-    });
+    }, () => this.state.hasFocus ? this.props.input.onFocus() : this.props.input.onBlur());
   }
   onSearch() {
     this.props.router.push({
@@ -50,7 +50,7 @@ class SearchBox extends React.Component {
     return (
       <Dropdown componentClass={'div'} open onToggle={onClose} className={style.searchFieldWrapper} role='search'>
         <div className={cx(style.searchField, { [style.active]: this.state.hasFocus })}>
-          <Tooltip align={tooltipAlign} overlay={'Search'}>
+          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Rechercher'}>
             <Button onClick={this.onSearch} bsStyle={'link'} className={style.showResultsButton} role='button'>
               <SearchIcon size={22}/>
             </Button>
@@ -62,13 +62,13 @@ class SearchBox extends React.Component {
               className={style.input}
               autoComplete='off'
               autoCorrect='off'
-              placeholder='Search'
+              placeholder='Rechercher'
               type='text'
               spellCheck='false'
               style={{ outline: 'none' }}
             />
           </div>
-          <Tooltip align={tooltipAlign} overlay={'Clear search'}>
+          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Effacer la recherche'}>
             <Button onClick={onClose} bsStyle={'link'} className={cx(style.clearSearch, style.hidden)} role='button'>
               <CloseIcon size={22}/>
             </Button>

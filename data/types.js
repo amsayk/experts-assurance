@@ -2,5 +2,7 @@ const Parse = require(process.env.PARSE_MODULE_PATH); // will be required on bot
 
 export const BusinessType = Parse.Object.extend('Business');
 
-export const ProductType = Parse.Object.extend('Product');
+export const DocType = Parse.Object.extend('Doc');
+
+export const ActivityType = Parse.Object.extend('Activity');
 

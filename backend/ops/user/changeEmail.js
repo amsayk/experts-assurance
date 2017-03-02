@@ -9,8 +9,10 @@ export default async function changeEmail(request, response) {
   }
 
   try {
-    const user = await request.user.set('email', email)
-      .save(null, { sessionToken: request.user.getSessionToken() });
+    if (email !== request.user.get('email')) {
+      const user = await request.user.set('email', email)
+        .save(null, { sessionToken: request.user.getSessionToken() });
+    }
     response.success(user);
   } catch (e) {
     response.error(formatError(e));

@@ -8,6 +8,8 @@ import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
+import messages from '../messages';
+
 import { injectIntl, intlShape } from 'react-intl';
 
 import countries from 'countries';
@@ -26,14 +28,14 @@ function CountryField({ intl, label, className, onKeyDown, input, meta: { touche
           disabled
           onKeyDown={onKeyDown}
           className={cx(style.control, className, { [style.formControlDanger]: touched && error })}>
-          {countries.map(({ code, name }) => (
-            <option value={code}>{name}</option>
+          {countries.map(({ code }) => (
+            <option value={code}>{intl.formatMessage(messages[`country_${code}`])}</option>
           ))}
         </select>
         <FormMessages errorCount={1} field={input.name}>
           <div className={style.formControlFeedback} when={'country'}>
             {intl.formatMessage(validationMessages.countryInvalid, {
-              country: COUNTRY,
+              country: intl.formatMessage(messages[`country_${COUNTRY}`]),
             })}
           </div>
           <div className={style.formControlFeedback} when={'required'}>

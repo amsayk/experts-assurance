@@ -7,7 +7,7 @@ import ProfilePic from './ProfilePic';
 const ProfileMenuItem = ({ user, size }) => (
   <div className={style.profile}>
     <div className={style.profileAvatar}>
-      <ProfilePic user={user} round={false} size={size}/>
+      <ProfilePic user={user} square size={size}/>
     </div>
     <div className={ style.profileInfo }>
       <div className={ style.profileName }>

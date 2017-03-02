@@ -11,6 +11,12 @@ import { fromJS } from 'immutable';
 
 export const schema = [`
 
+  enum Role {
+    ADMINISTRATORS
+    AGENTS
+    CLIENTS
+  }
+
   # ------------------------------------
   # Change email
   # ------------------------------------
@@ -60,7 +66,7 @@ export const schema = [`
   input CreateUserPayload {
     email: String
     password: String
-    passwordConfirmation: String
+    role: String
     recaptcha: Boolean!
   }
 
@@ -91,6 +97,7 @@ export const schema = [`
     displayName: String
     email: String!
     username: String!
+    roles: [Role!]!
     sessionToken: String!
 
     emailVerified: Boolean
@@ -107,6 +114,9 @@ export const resolvers = {
 
   User: Object.assign(
     {
+      roles(user) {
+        return user.get('roles') || [];
+      },
     },
     parseGraphqlObjectFields([
       'business',
@@ -220,7 +230,7 @@ export const resolvers = {
       } catch (errors) {
         return { errors };
       }
-      const user = await context.Users.signUp(info);
+      const user = await context.Users.signUp({ ...info, locale: context.locale });
       return { user, errors: {} };
     },
     async passwordReset(_, { info }, context) {

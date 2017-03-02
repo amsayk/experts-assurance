@@ -1,9 +1,0 @@
-query settings_account__getUser($id: ID!) {
-
-  currentUser : getUser(id: $id) {
-    id
-    displayName
-    email
-  }
-}
-

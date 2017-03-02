@@ -5,60 +5,60 @@ import {
 export default defineMessages({
   pageTitle: {
     id: 'account.login-page.title',
-    defaultMessage: 'Log In to {appName} · {appName}',
+    defaultMessage: 'Connexion à {appName} · {appName}',
   },
 
   title: {
     id: 'account.login-form.title',
-    defaultMessage: 'Log In to {appName}',
+    defaultMessage: 'Connexion à {appName}',
   },
 
   email: {
     id: 'account.login-form.label.email',
-    defaultMessage: 'Email',
+    defaultMessage: 'Adresse e-mail',
   },
 
   password: {
     id: 'account.login-form.label.password',
-    defaultMessage: 'Password',
+    defaultMessage: 'Mot de passe',
   },
 
   error: {
     id: 'account.login-form.login-error',
-    defaultMessage: 'Email or password invalid.',
+    defaultMessage: 'Adresse e-mail ou mot de passe invalide.',
   },
 
   login: {
     id: 'account.login-form.login-action',
-    defaultMessage: 'Log In',
+    defaultMessage: 'Connexion',
   },
 
   signupQuestion: {
     id: 'account.login-form.signup-question',
-    defaultMessage: 'Not a member yet?',
+    defaultMessage: 'Pas encore membre?',
   },
 
   signUp: {
     id: 'acccount.login-form.signup',
-    defaultMessage: 'Join now!',
+    defaultMessage: 'Inscrivez-vous!',
   },
 
   passwordReset: {
     id: 'account.login-form.password_reset',
-    defaultMessage: 'Forgot your password?',
+    defaultMessage: 'Informations de compte oubliées ?',
   },
   support: {
     id: 'account.login-form.support',
-    defaultMessage: 'Support',
+    defaultMessage: 'Support technique',
   },
   termsOfService: {
     id: 'account.login-form.terms-of-service',
-    defaultMessage: 'Terms of Service',
+    defaultMessage: 'Conditions d’utilisation',
   },
 
   privacyPolicy: {
     id: 'account.login-form.privacy-policy',
-    defaultMessage: 'Privacy Policy',
+    defaultMessage: 'Confidentialité',
   },
 });
 

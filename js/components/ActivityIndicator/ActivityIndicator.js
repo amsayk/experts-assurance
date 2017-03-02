@@ -36,7 +36,7 @@ export default function ActivityIndicator({
           strokeWidth='4'
           style={{
             stroke: color,
-            opacity: 0.2,
+              opacity: 0.2,
           }}
         />
         <circle
@@ -47,8 +47,8 @@ export default function ActivityIndicator({
           strokeWidth='4'
           style={{
             stroke: color,
-            strokeDasharray: 80,
-            strokeDashoffset: 60,
+              strokeDasharray: 80,
+              strokeDashoffset: 60,
           }}
         />
       </svg>
@@ -74,6 +74,7 @@ const styles = {
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    display: 'flex',
   },
   hidesWhenStopped: {
     visibility: 'hidden',

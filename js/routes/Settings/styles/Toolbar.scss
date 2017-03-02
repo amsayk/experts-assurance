@@ -1,0 +1,15 @@
+
+.toolbarLeft {
+  composes: leftNav from 'styles/_base.scss';
+  flex: 1;
+}
+
+.toolbarMiddle {
+  composes: middleNav from 'styles/_base.scss';
+  flex: 1;
+}
+
+.toolbarRight {
+  composes: rightNav from 'styles/_base.scss';
+  flex: 1;
+}

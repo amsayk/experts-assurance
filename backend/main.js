@@ -1,3 +1,12 @@
+import path from 'path';
+import fs from 'fs';
+
+import { genDocs, loaders } from 'backend/mocks';
+
+import { getOrCreateBusiness } from 'backend/utils';
+
+import { DocType, ActivityType } from 'data/types';
+
 import {
   UPDATE_USER_BUSINESS,
   SET_PASSWORD,
@@ -6,9 +15,6 @@ import {
   PASSWORD_RESET,
   SIGN_UP,
   CHANGE_EMAIL,
-
-  // Catalog
-  ADD_PRODUCT,
 } from './constants';
 
 const log = require('log')('app:backend');
@@ -21,10 +27,6 @@ import {
   setPassword,
   changeEmail,
 } from './ops/user';
-
-import {
-  addProduct,
-} from './ops/catalog';
 
 import {
   updateUserBusiness,
@@ -56,9 +58,6 @@ Parse.Cloud.define('routeOp', function (request, response) {
     case SIGN_UP: {
       return doSignUp(req, response);
     }
-    case ADD_PRODUCT: {
-      return addProduct(req, response);
-    }
     default:
       response.error(new Error('OperationNotFound', operationKey));
   }
@@ -68,10 +67,10 @@ Parse.Cloud.define('initialization', function (request, response) {
   response.success({});
 });
 
-Parse.Cloud.define('initUsers', function (request, response) {
+Parse.Cloud.define('initUsers', async function (request, response) {
 
   function doAdd(obj) {
-    log(obj.displayName + ' doesn\'t exist, creating now...');
+    log('\'' + obj.displayName + '\', username=' + obj.username + ' doesn\'t exist, creating now...');
 
     const p = new Parse.User();
 
@@ -80,6 +79,12 @@ Parse.Cloud.define('initUsers', function (request, response) {
     p.set('username', obj.username);
 
     p.set('displayName', obj.displayName);
+
+    if (obj.role) {
+      p.addUnique('roles', obj.role);
+    }
+
+    p.set('business', business);
 
     return p.signUp(null, {
       useMasterKey: true,
@@ -92,31 +97,101 @@ Parse.Cloud.define('initUsers', function (request, response) {
     });
   }
 
-  const promises = require('../data/_User').map(function (obj) {
-    const query = new Parse.Query(Parse.User);
-    query.equalTo('username', obj.username);
+  const business = await getOrCreateBusiness();
 
-    return query.first({
-      useMasterKey: true,
-      error: function (err) {
-        return doAdd(obj);
-      },
-      success: function (o) {
-        if (!o) {
+  let initJob = require('../data/_User.json').reduce(function (job, obj) {
+    return job.then(function () {
+      const query = new Parse.Query(Parse.User);
+      query.equalTo('username', obj.username);
+
+      return query.first({
+        useMasterKey: true,
+        error: function (err) {
           return doAdd(obj);
-        }
-        return Promise.resolve(o);
-      },
+        },
+        success: function (o) {
+          if (!o) {
+            return doAdd(obj);
+          }
+          return Promise.resolve(o);
+        },
+      });
     });
 
+  }, Promise.resolve());
+
+  initJob = initJob.then(async () => {
+    const docsFilePath = path.resolve(process.cwd(), 'backend', 'mocks', '_docs.json');
+    if (!fs.existsSync(docsFilePath)) {
+      const docs = genDocs();
+      return fs.writeFileSync(docsFilePath, JSON.stringify(docs, null, 2), 'utf8');
+    } else {
+      const docs = require(docsFilePath);
+      const activities = [];
+
+      await docs.reduce((job, doc) => {
+        return job.then(async () => {
+          try {
+            await loaders.refNo.load(doc.refNo);
+            return;
+          } catch (e) {
+            return await doAdd();
+          }
+
+          async function doAdd() {
+            log.error(`Doc ${doc.refNo} doesn't exist, creating now...`);
+
+            const obj = await new DocType().set({
+              refNo      : doc.refNo,
+              date       : new Date(doc.date),
+              vehicle    : doc.vehicle,
+              insurer    : await loaders.usernames.load(doc.insurer),
+              client     : await loaders.usernames.load(doc.client),
+              user       : await loaders.usernames.load(doc.user),
+              validation : doc.validation ? { ...doc.validation, user: (await loaders.usernames.load(doc.validation.user)).id } : null,
+              closure    : doc.closure ? { ...doc.closure, user: (await loaders.usernames.load(doc.closure.user)).id } : null,
+              state      : doc.status,
+              business  : await getOrCreateBusiness(),
+            }).save(null, { useMasterKey : true });
+
+            doc.activities.forEach(async ({ type, ...metadata }) => {
+              activities.push({
+                ns        : 'DOCUMENTS',
+                type      : type,
+                metadata  : { ...metadata, date : new Date(metadata.date), user: metadata.user ? (await loaders.usernames.load(metadata.user)).id : undefined },
+                timestamp : new Date(metadata.date),
+                document  : obj,
+                business  : await getOrCreateBusiness(),
+              });
+            });
+
+            log.error(`Doc ${doc.refNo} successfully created.`);
+            return obj;
+          }
+        });
+      }, Promise.resolve());
+
+      if (activities.length > 0) {
+        log(`Creating ${activities.length} activities...`);
+        try {
+          await Parse.Object.saveAll(
+            activities.map((data) => new ActivityType().set(data)), { useMasterKey : true });
+
+        } catch (e) {
+          log(`Error creating activities`, e.message);
+        }
+
+      }
+
+      return;
+    }
   });
 
-  Promise.all(promises).then(
+  initJob.then(
     function () {
       response.success({});
     },
-    function (err) {
-      response.error(err);
+    function (err) { response.error(err);
     }
   );
 });

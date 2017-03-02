@@ -7,6 +7,8 @@ import ExecutionEnvironment from 'ExecutionEnvironment';
 import findIndex from 'array-find-index';
 import invariant from 'invariant';
 
+const log = require('debug')('app:client:netinfo');
+
 const connection = ExecutionEnvironment.canUseDOM && (
   window.navigator.connection ||
   window.navigator.mozConnection ||
@@ -25,7 +27,7 @@ const NetInfo = {
   addEventListener(type: string, handler: Function): { remove: () => void } {
     invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type);
     if (!connection) {
-      console.error('Network Connection API is not supported. Not listening for connection type changes.');
+      log.error('Network Connection API is not supported. Not listening for connection type changes.');
       return {
         remove: () => {},
       };

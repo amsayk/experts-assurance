@@ -9,7 +9,9 @@ export default defineMessages({
     id: 'navigator_offline',
     defaultMessage: 'No Internet connection.',
   },
+  title: {
+    id: 'appTitle',
+    defaultMessage: 'Welcome to {appName} · {appName}',
+  },
 });
-
-
 

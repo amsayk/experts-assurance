@@ -14,6 +14,7 @@
 
 .center {
   composes: center flex-column from 'styles/_base.scss';
+  min-height: 575px;
 }
 
 .logIn {
@@ -47,6 +48,7 @@
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
+  overflow-y: auto;
 
   .logo {
     align-self: center;

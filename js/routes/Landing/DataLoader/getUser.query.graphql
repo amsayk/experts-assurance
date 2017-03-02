@@ -1,0 +1,17 @@
+query landing__getUser($id: ID!) {
+
+  getUser(id: $id) {
+    id
+    displayName
+    email
+    username
+    roles
+    emailVerified
+
+    createdAt
+    updatedAt
+
+  }
+}
+
+

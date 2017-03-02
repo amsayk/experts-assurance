@@ -1,0 +1,97 @@
+.sideBarMenu {
+  composes: d-flex flex-row align-items-center leftNavItem from 'styles/_base.scss';
+  margin-right: 17px;
+}
+
+.sideBarMenuButton {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0;
+  transition: transform 0.3s;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+    box-shadow: none;
+  }
+  opacity: 0.5;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.sideBarMenuButtonOpen svg {
+    transform: rotate(-90deg);
+  }
+}
+
+.sideBarMenuButton {
+  padding: 4px;
+
+  span {
+    font-weight: 600 !important;
+  }
+}
+
+.sideBar {
+  height: 100%;
+  border: 0;
+  width: 165px;
+  box-shadow: none;
+  transition: width 0.2s, left 0.5s;
+
+  .menu {
+    z-index: 0;
+    padding-top: 16px;
+    left: -999px;
+    display: block;
+    top: 0;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border: none;
+    border-radius: 0;
+    margin-top: -1px;
+  }
+
+  &.sideBarOpen .menu {
+    left: 0;
+  }
+}
+
+.sideBarLinkGroup {
+  composes: d-flex flex-row align-items-center justify-content-stretch from 'styles/_base.scss';
+}
+
+.sideBarLink {
+  color: #222;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sideBarLinkText {
+  margin-left: 12px;
+}
+
+.sideBarLinkIcon {
+  opacity: 0.6;
+}
+
+.sideBarLinkOpen,
+.sideBarLinkOpen:hover,
+.sideBarLinkOpen:focus {
+  color: #fff;
+  text-decoration: none;
+  background-color: #0275d8;
+
+  .sideBarLinkText {
+  font-weight: 800;
+}
+
+  .sideBarLinkIcon {
+    opacity: 1;
+  }
+}

@@ -1,9 +1,0 @@
-query settings_change_email__getUser($id: ID!) {
-
-  currentUser : getUser(id: $id) {
-    id
-    displayName
-    email
-  }
-}
-

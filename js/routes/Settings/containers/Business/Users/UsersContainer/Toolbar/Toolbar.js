@@ -1,0 +1,105 @@
+import React, { PropTypes as T } from 'react';
+import { Link } from 'react-router';
+
+import {compose, bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+
+import AppBrand from 'components/AppBrand';
+
+import messages from 'routes/Settings/messages';
+
+import DataLoader from 'routes/Settings/containers/Business/Users/DataLoader';
+
+import style from 'routes/Settings/styles';
+
+import { injectIntl, intlShape } from 'react-intl';
+
+import Actions from './Actions';
+import Roles from './Roles';
+import PageInfo from './PageInfo';
+
+import {
+  VIEW_TYPE_GRID,
+  VIEW_TYPE_LIST,
+} from 'redux/reducers/users/constants';
+
+import SearchBox from './Search/SearchBox';
+import ViewTypeButton from './ViewTypeButton';
+import SearchButton from './Search/SearchButton';
+
+import {
+  toggleSearch,
+  viewTypeGrid,
+  viewTypeList,
+} from 'redux/reducers/users/actions';
+
+import MenuItem from 'components/bootstrap/MenuItem';
+
+import selector from './selector';
+
+function Toolbar({ intl, cursor, length, user, loading, users, actions }) {
+  const { searchOpen, viewType } = users;
+  const {
+    viewTypeGrid,
+    viewTypeList,
+    toggleSearch,
+  } = actions;
+
+  const menus = searchOpen ? [
+    <SearchBox key='searchBox' intl={intl} onClose={toggleSearch}/>,
+  ] : [
+    <Actions key='actions'/>,
+    <ViewTypeButton intl={intl} viewType={viewType} viewTypeList={viewTypeList} viewTypeGrid={viewTypeGrid}/>,
+    <SearchButton key='searchButton' intl={intl} toggleSearch={toggleSearch}/>,
+  ];
+
+  return (
+    <nav data-root-close-ignore className={style.toolbar}>
+      <div className={style.toolbarLeft}>
+        <Roles/>
+      </div>
+
+      <div className={style.toolbarMiddle}>
+        <PageInfo cursor={cursor} length={length}/>
+      </div>
+
+      <div className={style.toolbarRight}>
+        {menus}
+      </div>
+    </nav>
+  );
+}
+
+Toolbar.propTypes = {
+  intl     : intlShape.isRequired,
+  users  : T.shape({
+    searchOpen: T.bool.isRequired,
+    viewType: T.oneOf([
+      VIEW_TYPE_LIST,
+      VIEW_TYPE_GRID,
+    ]).isRequired,
+  }),
+
+};
+
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({
+      viewTypeList,
+      viewTypeGrid,
+      toggleSearch,
+    }, dispatch),
+  };
+}
+
+const Connect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(
+  injectIntl,
+  Connect,
+)(Toolbar);
+

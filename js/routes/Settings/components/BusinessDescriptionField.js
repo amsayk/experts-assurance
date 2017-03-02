@@ -13,8 +13,8 @@ function BusinessDescriptionField({ intl, label, input }) {
       <div className={style.inputWrapper}>
         <Textarea
           {...input}
-          rows={5}
-          maxRows={5}
+          rows={4}
+          maxRows={4}
           className={style.control}/>
       </div>
     </div>

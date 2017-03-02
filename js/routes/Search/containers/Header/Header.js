@@ -19,7 +19,7 @@ import Tooltip from 'components/react-components/Tooltip';
 
 import { BackIcon } from 'components/icons/MaterialIcons';
 
-import { PATH_SETTINGS_BASE, PATH_PRODUCT_CATALOG_BASE } from 'vars';
+import { PATH_SETTINGS_BASE } from 'vars';
 
 import ProfileButton, { MenuItem as ProfileMenuItem } from 'components/Profile';
 
@@ -49,11 +49,11 @@ class Header extends React.Component {
     return (
       <nav className={style.navbar}>
         <div className={style.leftNav}>
-          <Tooltip align={tooltipAlign} overlay={'Back'}>
-          <Button onClick={this.onBack} className={style.backButton} role={'button'}>
+          <Tooltip align={tooltipAlign} overlay={'Retour'}>
+            <Button onClick={this.onBack} className={style.backButton} role={'button'}>
               <BackIcon size={32}/>
-          </Button>
-        </Tooltip>
+            </Button>
+          </Tooltip>
         </div>
 
         <div className={style.middleNav}>
@@ -66,10 +66,6 @@ class Header extends React.Component {
             <MenuItem componentClass={ProfileMenuItem} user={user}/>
             <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
               {intl.formatMessage(messages.manageAccount)}
-            </MenuItem>
-            <MenuItem divider/>
-            <MenuItem componentClass={Link} to={PATH_PRODUCT_CATALOG_BASE}>
-              {intl.formatMessage(messages.productCatalog)}
             </MenuItem>
             <MenuItem divider/>
             <MenuItem onClick={onLogOut}>
