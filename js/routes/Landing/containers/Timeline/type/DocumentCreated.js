@@ -68,8 +68,8 @@ export default function DocumentCreated({ intl, doc, timestamp, metadata }, { cu
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
             {doc.user.displayName}
           </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} datetime={new Date(timestamp).toISOString()}>
-            {intl.formatRelative(timestamp)}
+          <time title={intl.formatDate(timestamp)} dateTime={new Date(new Date(timestamp)).toISOString()}>
+            {intl.formatRelative(new Date(timestamp))}
           </time>
         </div>
       </div>

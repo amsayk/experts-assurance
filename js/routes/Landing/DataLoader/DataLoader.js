@@ -108,6 +108,7 @@ const docs = graphql(GET_DOCS_QUERY, {
 });
 
 const timeline = graphql(GET_TIMELINE_QUERY, {
+  skip: ({ timelineDisplayMatches }) => !timelineDisplayMatches,
   options: (ownProps) => ({
     variables: {
       query : {

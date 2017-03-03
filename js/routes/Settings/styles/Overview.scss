@@ -1,7 +1,7 @@
 .overview {
   composes: d-flex flex-column justify-content-start from 'styles/_base.scss';
   flex: 1;
-  padding: 0 45px 25px 45px;
+  padding: 0 25px 25px 45px;
   flex-shrink: 0;
 }
 

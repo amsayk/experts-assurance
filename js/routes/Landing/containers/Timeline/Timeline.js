@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 import { isServer } from 'vars';
 
@@ -11,13 +13,13 @@ import withCurrentUser from 'utils/withCurrentUser';
 
 import DataLoader from 'routes/Landing/DataLoader';
 
+import selector from './selector';
+
 import TimelineEntry from './TimelineEntry';
 
 import style from 'routes/Landing/styles';
 
 const NAVBAR_HEIGHT = 70;
-
-const isReady = true;
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -46,9 +48,9 @@ class Timeline extends React.Component {
     }
   }
   render() {
-    const { intl, currentUser, loading, result : items } = this.props;
+    const { intl, timelineDisplayMatches, isReady, currentUser, loading, result : items, extrapolation : periods } = this.props;
 
-    if (loading) {
+    if (loading || !timelineDisplayMatches) {
       return null;
     }
 
@@ -65,29 +67,51 @@ class Timeline extends React.Component {
       );
     }
 
+    const groups = periods.map(({ id, title, to, from }) => {
+      const acts = items.filter((item) => to
+        ? to > item.timestamp && item.timestamp >= from
+        : item.timestamp >= from
+      );
+
+      return acts.length ? (
+        <div className={style.feedGroup} key={id}>
+          <h5 className={style.feedGroupTitle}>{title}</h5>
+          <section className={style.feedGroupItems}>
+            {acts.map((entry) => (
+              <TimelineEntry
+                key={entry.id}
+                intl={intl}
+                {...entry}
+              />
+            ))}
+          </section>
+        </div>
+      ) : <div className={style.feedGroup} key={id}></div>;
+    });
+
     return (
       <div className={style.timeline}>
-        <h2>
-          Activité récente
+        <h2>Activité récente
         </h2>
         <div className={style.feed}>
-          {items.map((entry) => (
-            <TimelineEntry
-              key={entry.id}
-              intl={intl}
-              {...entry}
-            />
-          ))}
+          {groups}
           {scrollSpy}
         </div>
       </div>
-    )
+    );
   }
 }
+
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+const Connect = connect(mapStateToProps);
 
 export default compose(
   injectIntl,
   withCurrentUser,
+  Connect,
   DataLoader.timeline,
 )(Timeline);
 

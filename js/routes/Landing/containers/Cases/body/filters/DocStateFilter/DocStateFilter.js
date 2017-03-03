@@ -101,7 +101,7 @@ class DocStateFilter extends React.Component {
 
           onSelect={this.onSelect}
         >
-          {state ? <StateToggle state={state} onClear={this.onSelect}/> : <Dropdown.Toggle className={style.togglePickState} noCaret={false}>
+          {state ? <StateToggle state={state} onClear={this.onSelect}/> : <Dropdown.Toggle className={style.togglePickState}>
             État
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.stateMenu}>

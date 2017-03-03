@@ -4,7 +4,7 @@
 }
 .docsHeader {
   composes: d-flex flex-row align-items-center from 'styles/_base.scss';
-  height: 75px;
+  min-height: 75px;
   margin: 0;
   padding: 0 20px;
 

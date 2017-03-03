@@ -1,12 +1,10 @@
 
 .timeline {
   position: absolute;
-  composes: sticky-top from 'styles/_base.scss';
   width: calc(100% - #{$content-width});
   right: 0;
   left: auto;
   top: calc(#{$navbar-height} + #{$toolbar-height} + 20px);
-  // min-height: calc(100% - #{$navbar-height} - #{$toolbar-height} - 20px);
   z-index: 0;
   padding: 0 10px;
 
@@ -19,23 +17,39 @@
     margin-top: 25px;
   }
 
-  .feed:after {
+  .feedGroup {
+  }
+
+  .feedGroupTitle {
+    text-transform: uppercase;
+    color: rgba(0,0,0,.3);
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  .feedGroupItems {
+    position: relative;
+  }
+
+  .feedGroupItems:after {
     content: ' ';
     background-color: #eee;
     position: absolute;
     display: block;
     width: 2px;
-    top: 45px;
-    left: 21px;
+    top: 15px;
+    left: 10px;
     bottom: 0;
     z-index: 1;
     opacity: 0.54;
   }
 
+  .feedGroup:first-child,
   .feedItem:first-child {
     margin-top: 0;
   }
 
+  .feedGroup,
   .feedItem {
     margin-top: 18px;
   }
@@ -43,7 +57,7 @@
 
 .DOCUMENT_STATE_CHANGED,
 .DOCUMENT_CREATED {
-  composes: feedItem;
+  // composes: feedItem;
   composes: d-flex flex-row from 'styles/_base.scss';
 
   .entry {

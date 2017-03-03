@@ -83,7 +83,7 @@ export default function DocumentStateChanged({ intl, doc, timestamp, metadata },
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
             {user.displayName}
           </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} datetime={new Date(timestamp).toISOString()}>
+          <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>
             {intl.formatRelative(timestamp)}
           </time>
         </div>

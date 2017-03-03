@@ -41,7 +41,7 @@
       }
     },
     "dev": {
-      "command": "nodemon --watch server --watch backend --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/dev-server.js --exec node",
+      "command": "nodemon --watch server --watch backend --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/www --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,-app:server:history"
@@ -68,7 +68,7 @@
       }
     },
     "start": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/dev-server",
+      "command": "node -r server/utils/validate-env-vars -r server/env bin/www",
       "env": {
         "DEBUG": "app:*"
       }

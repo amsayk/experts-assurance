@@ -1,4 +1,6 @@
 import { addLocaleData } from 'react-intl';
+import moment from 'moment';
+
 import debug from 'log';
 
 const log = debug('app:client:intl');
@@ -21,6 +23,8 @@ const loaders = {
   },
 
   fr(callback, force) {
+    moment.locale('fr');
+
     if (! window.Intl || force) {
       require.ensure([], (require) => {
         require('intl');

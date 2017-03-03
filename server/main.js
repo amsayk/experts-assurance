@@ -303,10 +303,7 @@ app.use(config.graphiql_endpoint, graphiqlExpress({
 }));
 
 // WebSocket server for subscriptions
-const websocketServer = createServer((request, response) => {
-  response.writeHead(404);
-  response.end();
-});
+const server = createServer(app);
 
 // eslint-disable-next-line
 new SubscriptionServer(
@@ -327,10 +324,10 @@ new SubscriptionServer(
     },
   },
   {
-    server: websocketServer,
-    path: '/',
+    server,
+    path: config.graphql_subscriptions_endpoint,
   },
 );
 
-module.exports = { app, websocketServer };
+module.exports = { app, server };
 

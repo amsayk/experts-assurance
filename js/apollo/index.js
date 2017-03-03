@@ -1,5 +1,5 @@
 import ApolloClient, { toIdValue } from 'apollo-client';
-// import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 import getNetworkInterface from './transport';
 import debug from 'log';
 
@@ -12,14 +12,14 @@ import {
 
 const log = debug('app:client');
 
-// const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTIONS_ENDPOINT, {
-//   connectionParams: {
-//     // Pass any arguments you want for initialization
-//   },
-//   reconnect: true,
-//   reconnectionAttempts: 5,
-//   connectionCallback: (error) => {},
-// });
+const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTIONS_ENDPOINT, {
+  connectionParams: {
+    // Pass any arguments you want for initialization
+  },
+  reconnect: true,
+  reconnectionAttempts: 5,
+  connectionCallback: (error) => {},
+});
 
 const responseMiddlewareNetworkInterface = getNetworkInterface(GRAPHQL_ENDPOINT, {
 });
@@ -43,13 +43,13 @@ responseMiddlewareNetworkInterface.use({
   },
 });
 
-// const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-//   responseMiddlewareNetworkInterface,
-//   wsClient,
-// );
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  responseMiddlewareNetworkInterface,
+  wsClient,
+);
 
 export const client = new ApolloClient({
-  networkInterface: responseMiddlewareNetworkInterface, // networkInterfaceWithSubscriptions,
+  networkInterface: networkInterfaceWithSubscriptions,
   addTypename: true,
   customResolvers: {
     Query: {

@@ -17,12 +17,12 @@ const MEDIA_QUERY = '(min-width: 992px)';
 const TIMELINE_MEDIA_QUERY = '(min-width: 1292px)';
 
 export class AppState extends Record({
-  displayMatches  : isServer || matchMedia(MEDIA_QUERY).matches,
-  timelineMatches : isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
-  lang            : undefined,
-  onLine          : true,
-  isReady         : false,
-  alertsOpen      : false,
+  displayMatches         : isServer || matchMedia(MEDIA_QUERY).matches,
+  timelineDisplayMatches : isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
+  lang                   : undefined,
+  onLine                 : true,
+  isReady                : false,
+  alertsOpen             : false,
 }) {}
 
 const initialState = new AppState();
@@ -32,7 +32,7 @@ export default function reducer(state = initialState, action) {
     case RESIZE:
       return state.merge({
         displayMatches: matchMedia(MEDIA_QUERY).matches,
-        timelineMatches: matchMedia(TIMELINE_MEDIA_QUERY).matches,
+        timelineDisplayMatches: matchMedia(TIMELINE_MEDIA_QUERY).matches,
       });
     case CONNECTION_STATE_CHANGE:
       return state.merge({
@@ -48,8 +48,8 @@ export default function reducer(state = initialState, action) {
       });
     case INIT: {
       return state.merge({
-        displayMatches : isServer || matchMedia(MEDIA_QUERY).matches,
-        timelineMatches: isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
+        displayMatches         : isServer || matchMedia(MEDIA_QUERY).matches,
+        timelineDisplayMatches : isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
       });
     }
     default:

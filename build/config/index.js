@@ -72,8 +72,8 @@ const config = {
   // Server Configuration
   // ----------------------------------
   server_host : process.env.HOST || 'localhost', // use string 'localhost' to prevent exposure on local network
-  server_port : process.env.PORT || 5000,
-  ws_port     : process.env.WS_PORT || 8080,
+  server_port : process.env.PORT || '5000',
+  // ws_port     : process.env.WS_PORT || 8080,
 
   // ----------------------------------
   // Parse config
@@ -127,7 +127,7 @@ const config = {
   // graphql config
   // ----------------------------------
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
-  graphql_subscriptions_endpoint : `${process.env.IS_SECURE === 'yes' ? 'wss' : 'ws'}://${process.env.HOST || 'localhost'}:${process.env.WS_PORT || 8080}`,
+  graphql_subscriptions_endpoint : process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT || '/ws',
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
   persistedQueries  : process.env.PERSISTED_QUERIES !== 'no',
 
@@ -180,7 +180,7 @@ const config = {
     'apollo-client',
     'redux-immutable',
     'classnames',
-    // 'moment',
+    'moment',
   ],
   compiler_offline_assets : [
 
@@ -210,7 +210,7 @@ config.globals = {
     SERVER_URL : JSON.stringify(config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`), // eslint-disable-line max-len
 
     GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
-    GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(config.graphql_subscriptions_endpoint),
+    GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(`${config.secure ? 'wss' : 'ws'}://${config.server_host}:${config.secure ? '' : config.server_port}${config.graphql_subscriptions_endpoint}`),
     PERSISTED_QUERIES               : JSON.stringify(config.persistedQueries),
 
     BASENAME              : JSON.stringify(process.env.BASENAME || ''),

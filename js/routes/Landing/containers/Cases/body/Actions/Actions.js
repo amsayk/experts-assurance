@@ -48,7 +48,7 @@ class Actions extends React.Component {
           onToggle={this.onToggle}
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
-          <Dropdown.Toggle className={style.actionsMenuToggle} noCaret={false}>
+          <Dropdown.Toggle className={style.actionsMenuToggle}>
             <MoreHorizIcon size={24}/>
           </Dropdown.Toggle>
           <Dropdown.Menu className={style.actionsMenu}>

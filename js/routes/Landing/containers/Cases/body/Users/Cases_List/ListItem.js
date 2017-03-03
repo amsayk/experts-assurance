@@ -39,10 +39,10 @@ const selector = createSelector(
 );
 
 const STATE_ICON = {
-  PENDING : <UnknownIcon className={style.stateIcon} size={32}/>,
-  OPEN    : <WatchIcon   className={style.stateIcon} size={32}/>,
-  CLOSED  : <DoneIcon    className={style.stateIcon} size={32}/>,
-  INVALID : <InvalidIcon className={style.stateIcon} size={32}/>,
+  PENDING : <UnknownIcon className={style.stateIcon} size={24}/>,
+  OPEN    : <WatchIcon   className={style.stateIcon} size={24}/>,
+  CLOSED  : <DoneIcon    className={style.stateIcon} size={24}/>,
+  INVALID : <InvalidIcon className={style.stateIcon} size={24}/>,
 };
 
 function StateIcon({ isSelected, hasSelection, state, onClick }) {
@@ -50,8 +50,8 @@ function StateIcon({ isSelected, hasSelection, state, onClick }) {
   return (
     <div className={cx(style.icon, style.state, style[state], selecting && style.selecting)}>
       {isSelected
-        ? <CheckboxIcon.Checked onClick={onClick} className={style.checkbox} size={32}/>
-        : <CheckboxIcon.Blank onClick={onClick} className={style.checkbox} size={32}/>}
+        ? <CheckboxIcon.Checked onClick={onClick} className={style.checkbox} size={24}/>
+        : <CheckboxIcon.Blank onClick={onClick} className={style.checkbox} size={24}/>}
       {STATE_ICON[state]}
     </div>
   );

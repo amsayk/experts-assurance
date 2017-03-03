@@ -67,7 +67,7 @@ class InsurerFilter extends React.Component {
           onToggle={this.onToggle}
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
-          {insurer ? <SelectedUserToggle onClear={actions.onInsurer} id={insurer}/> : <Dropdown.Toggle className={style.togglePickUser} noCaret={false}>
+          {insurer ? <SelectedUserToggle onClear={actions.onInsurer} id={insurer}/> : <Dropdown.Toggle className={style.togglePickUser}>
             Agent
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.userPickerMenu}>
