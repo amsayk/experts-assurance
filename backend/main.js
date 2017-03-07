@@ -26,7 +26,7 @@ import {
   updateAccountSettings,
   setPassword,
   changeEmail,
-} from './ops/user';
+} from './ops/auth';
 
 import {
   updateUserBusiness,
@@ -64,6 +64,11 @@ Parse.Cloud.define('routeOp', function (request, response) {
 });
 
 Parse.Cloud.define('initialization', function (request, response) {
+  response.success({});
+});
+
+Parse.Cloud.define('ensureBusiness', async function (request, response) {
+  await getOrCreateBusiness();
   response.success({});
 });
 
@@ -139,13 +144,13 @@ Parse.Cloud.define('initUsers', async function (request, response) {
           }
 
           async function doAdd() {
-            log.error(`Doc ${doc.refNo} doesn't exist, creating now...`);
+            log(`Doc ${doc.refNo} doesn't exist, creating now...`);
 
             const obj = await new DocType().set({
               refNo      : doc.refNo,
               date       : new Date(doc.date),
               vehicle    : doc.vehicle,
-              insurer    : await loaders.usernames.load(doc.insurer),
+              agent      : await loaders.usernames.load(doc.agent),
               client     : await loaders.usernames.load(doc.client),
               user       : await loaders.usernames.load(doc.user),
               validation : doc.validation ? { ...doc.validation, user: (await loaders.usernames.load(doc.validation.user)).id } : null,
@@ -191,7 +196,8 @@ Parse.Cloud.define('initUsers', async function (request, response) {
     function () {
       response.success({});
     },
-    function (err) { response.error(err);
+    function (err) {
+      response.error(err);
     }
   );
 });

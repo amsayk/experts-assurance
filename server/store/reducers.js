@@ -2,6 +2,7 @@ import user from 'redux/reducers/user/reducer';
 import app from 'redux/reducers/app/reducer';
 import snackbar from 'redux/reducers/snackbar/reducer';
 import notification from 'redux/reducers/notification/reducer';
+import scrolling from 'redux/reducers/scrolling/reducer';
 
 import {
   combineReducers,
@@ -14,6 +15,7 @@ import { reducer as formReducer } from 'redux-form/immutable';
 const reducers = {
   app,
   notification,
+  scrolling,
   user,
   snackbar,
   form: formReducer,

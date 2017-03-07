@@ -12,7 +12,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  InvalidIcon,
+  CancelledIcon,
 } from 'components/icons/MaterialIcons';
 
 import style from 'routes/Landing/styles';
@@ -35,10 +35,10 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING : getState('PENDING', 'En attente',    <UnknownIcon size={12}/>),
-  OPEN    : getState('OPEN',    'Validé',        <WatchIcon   size={12}/>),
-  CLOSED  : getState('CLOSED',  'Clos',          <DoneIcon    size={12}/>),
-  INVALID : getState('INVALID', 'Invalide',      <InvalidIcon size={12}/>),
+  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon size={12}/>),
+  OPEN     : getState('OPEN',     'Validé',      <WatchIcon   size={12}/>),
+  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon    size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',      <CancelledIcon size={12}/>),
 };
 
 export default function DocumentStateChanged({ intl, doc, timestamp, metadata }, { currentUser }) {
@@ -48,11 +48,11 @@ export default function DocumentStateChanged({ intl, doc, timestamp, metadata },
     user = doc.validation.user;
   }
 
-  if ((doc.state === 'INVALID' || doc.state === 'CLOSED') && doc.closure) {
+  if ((doc.state === 'CANCELED' || doc.state === 'CLOSED') && doc.closure) {
     user = doc.closure.user;
   }
 
-  if (doc.insurer ? doc.insurer.id === user.id : false) {
+  if (doc.agent ? doc.agent.id === user.id : false) {
     return null;
   }
 

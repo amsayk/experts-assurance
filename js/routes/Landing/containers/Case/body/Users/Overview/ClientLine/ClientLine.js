@@ -28,7 +28,7 @@ class ClientLine extends React.Component {
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>{label || 'Client'}</div>
+        <div className={style.overviewLabel}>{label || 'Assuré'}</div>
         <div className={style.overviewValue}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             <div style={{ display: 'flex', alignItems: 'center' }}>

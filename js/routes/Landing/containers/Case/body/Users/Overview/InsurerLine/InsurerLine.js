@@ -14,8 +14,6 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
-// import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
-
 import InsurerChanger from './InsurerChanger';
 
 class InsurerLine extends React.Component {
@@ -31,17 +29,10 @@ class InsurerLine extends React.Component {
     return (
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>
-          Agent
+          Insurer
         </div>
         <div className={style.overviewValue}>
-          {/* {user ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}> */}
-            {/*   <div style={{ display: 'flex', alignItems: 'center' }}> */}
-              {/*     <span className={style.text}> */}
-                {/*       {user.displayName} */}
-                {/*     </span> */}
-              {/*   </div> */}
-            {/* </Link> : 'Non affecté'} */}
-          <InsurerChanger insurer={user}/>
+          <InsurerChanger agent={user}/>
         </div>
       </div>
     );

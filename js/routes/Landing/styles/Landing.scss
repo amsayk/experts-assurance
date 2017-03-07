@@ -10,6 +10,7 @@ $toolbar-height: 41px;
 
 .navbar {
   composes: fixed-top navbar flex-row from 'styles/_base.scss';
+  top: -70px;
   padding-bottom: 12px;
   padding-top: 12px;
   z-index: 1;

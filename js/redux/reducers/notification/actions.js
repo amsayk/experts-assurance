@@ -58,8 +58,9 @@ export function post(id, options = {}) {
 
 export function update(id, options = {}) {
   return {
-    type    : UPDATE_NOTIFICATION,
-    payload : { id, options },
+    type: UPDATE_NOTIFICATION,
+    id,
+    options,
   };
 }
 

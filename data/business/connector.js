@@ -23,6 +23,14 @@ export class BusinessConnector {
   }
 
   getUsers(role, queryString, cursor = 0, sortConfig, user) {
+    if (!user) {
+      return Promise.resolve({
+        cursor : 0,
+        length : 0,
+        users  : [],
+      });
+    }
+
     return Promise.all([count(), doFetch()]).then(([ length, users ]) => ({
       cursor: cursor + users.length,
       length,
@@ -71,7 +79,7 @@ export class BusinessConnector {
     return doSearch();
 
     function doSearch() {
-      if (q) {
+      if (q && user) {
         const qry = new Parse.Query(Parse.User)
           .notEqualTo('objectId', user.id)
           .matchesQuery('business', businessQuery)

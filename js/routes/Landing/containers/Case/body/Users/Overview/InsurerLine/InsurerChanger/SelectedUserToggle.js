@@ -23,7 +23,7 @@ class SelectedUserToggle extends React.Component {
     const { user } = this.props;
 
     return (
-      <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedInsurerButton)} role='button'>
+      <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedAgentButton)} role='button'>
         <div className={style.text} style={{}}>
           {user ? user.displayName : 'Non affecté'}
         </div>

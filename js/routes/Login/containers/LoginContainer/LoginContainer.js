@@ -10,6 +10,8 @@ import {connect} from 'react-redux';
 
 import selector from './selector';
 
+import checkBusiness from 'utils/checkBusiness';
+
 import { login } from 'redux/reducers/user/actions';
 
 import style from '../../Login.scss';
@@ -72,6 +74,8 @@ export class LoginContainer extends React.Component {
         const user = { id: parseObject.id, ...parseObject.toJSON() };
         cookie.save('app.login', email, { path: '/' });
         actions.login(user);
+
+        checkBusiness();
       } else {
         throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
       }

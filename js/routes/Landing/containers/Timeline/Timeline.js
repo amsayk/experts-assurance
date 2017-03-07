@@ -3,6 +3,8 @@ import React from 'react'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import emptyObject from 'emptyObject';
+
 import { isServer } from 'vars';
 
 import ScrollSpy from 'components/ScrollSpy';
@@ -20,6 +22,17 @@ import TimelineEntry from './TimelineEntry';
 import style from 'routes/Landing/styles';
 
 const NAVBAR_HEIGHT = 70;
+const TOOLBAR_HEIGHT = 41;
+
+const TOP = NAVBAR_HEIGHT + TOOLBAR_HEIGHT + 20;
+
+const NOTIFICATION_HEIGHT = 45;
+
+const styles = {
+  notificationOpen : {
+    top : TOP + NOTIFICATION_HEIGHT,
+  },
+};
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -48,7 +61,7 @@ class Timeline extends React.Component {
     }
   }
   render() {
-    const { intl, timelineDisplayMatches, isReady, currentUser, loading, result : items, extrapolation : periods } = this.props;
+    const { intl, notificationOpen, timelineDisplayMatches, isReady, currentUser, loading, result : items, extrapolation : periods } = this.props;
 
     if (loading || !timelineDisplayMatches) {
       return null;
@@ -90,7 +103,7 @@ class Timeline extends React.Component {
     });
 
     return (
-      <div className={style.timeline}>
+      <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
         <h2>Activité récente
         </h2>
         <div className={style.feed}>

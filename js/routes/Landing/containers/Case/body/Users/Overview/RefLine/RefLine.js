@@ -26,7 +26,7 @@ class RefLine extends React.Component {
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>Réf</div>
+        <div className={style.overviewLabel}>Référence</div>
         <div className={style.overviewValue}>
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
             #{doc.refNo}

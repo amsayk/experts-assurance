@@ -30,6 +30,14 @@ export class ActivityConnector {
   }
 
   getTimeline(cursor, query, user) {
+    if (!user) {
+      return Promise.resolve({
+        prevCursor : 0,
+        cursor     : 0,
+        result     : [],
+      });
+    }
+
     return doFetch().then((activities) => ({
       prevCursor: cursor,
       cursor: activities.length > 0 ? activities[activities.length - 1].get('timestamp') : null,

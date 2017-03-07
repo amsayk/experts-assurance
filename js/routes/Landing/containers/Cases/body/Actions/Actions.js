@@ -52,8 +52,8 @@ class Actions extends React.Component {
             <MoreHorizIcon size={24}/>
           </Dropdown.Toggle>
           <Dropdown.Menu className={style.actionsMenu}>
-            <MenuItem>Modifier les étiquettes</MenuItem>
             <MenuItem>Changer l'état</MenuItem>
+            <MenuItem>Archiver</MenuItem>
             {user.isAdmin ? [
               <MenuItem divider/>,
               <MenuItem>Supprimer</MenuItem>

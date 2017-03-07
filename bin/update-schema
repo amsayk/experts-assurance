@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from 'fs';
 import path from 'path';
 import schema from 'data/schema';
@@ -14,14 +16,14 @@ graphql(schema, introspectionQuery).then(result => {
     );
   } else {
     fs.writeFileSync(
-      path.join(__dirname, '../data/schema.json'),
+      path.join(process.cwd(), 'data', 'schema.json'),
       JSON.stringify(result, null, 2)
     );
   }
 });
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
-  path.join(__dirname, '../data/schema.graphql'),
+  path.join(process.cwd(), 'data', 'schema.graphql'),
   printSchema(schema)
 );
 

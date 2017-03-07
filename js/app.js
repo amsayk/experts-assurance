@@ -33,6 +33,8 @@ import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
 
+import { scrolling } from 'redux/reducers/scrolling/actions';
+
 import { SSR, DEFAULT_LANG } from 'vars';
 
 const log = debug('app:client');
@@ -41,6 +43,8 @@ const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
 
 let render = async function render() {
+  store.dispatch(scrolling());
+
   await refreshCurrentUser();
 
   const locale = store.getState().getIn(['app', 'lang']);

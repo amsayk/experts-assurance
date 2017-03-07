@@ -11,7 +11,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  InvalidIcon,
+  CancelledIcon,
 } from 'components/icons/MaterialIcons';
 
 
@@ -35,10 +35,10 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING : getState('PENDING', 'En attente',    <UnknownIcon size={12}/>),
-  OPEN    : getState('OPEN',    'Validé',        <WatchIcon   size={12}/>),
-  CLOSED  : getState('CLOSED',  'Clos',          <DoneIcon    size={12}/>),
-  INVALID : getState('INVALID', 'Invalide',      <InvalidIcon size={12}/>),
+  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon   size={12}/>),
+  OPEN     : getState('OPEN',     'Validé',      <WatchIcon     size={12}/>),
+  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon      size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',      <CancelledIcon size={12}/>),
 };
 
 

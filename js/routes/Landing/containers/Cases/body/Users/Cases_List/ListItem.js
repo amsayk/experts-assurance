@@ -19,7 +19,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  InvalidIcon,
+  CancelledIcon,
 
   CheckboxIcon,
 } from 'components/icons/MaterialIcons';
@@ -39,10 +39,10 @@ const selector = createSelector(
 );
 
 const STATE_ICON = {
-  PENDING : <UnknownIcon className={style.stateIcon} size={24}/>,
-  OPEN    : <WatchIcon   className={style.stateIcon} size={24}/>,
-  CLOSED  : <DoneIcon    className={style.stateIcon} size={24}/>,
-  INVALID : <InvalidIcon className={style.stateIcon} size={24}/>,
+  PENDING  : <UnknownIcon   className={style.stateIcon} size={24}/>,
+  OPEN     : <WatchIcon     className={style.stateIcon} size={24}/>,
+  CLOSED   : <DoneIcon      className={style.stateIcon} size={24}/>,
+  CANCELED : <CancelledIcon className={style.stateIcon} size={24}/>,
 };
 
 function StateIcon({ isSelected, hasSelection, state, onClick }) {
@@ -50,7 +50,7 @@ function StateIcon({ isSelected, hasSelection, state, onClick }) {
   return (
     <div className={cx(style.icon, style.state, style[state], selecting && style.selecting)}>
       {isSelected
-        ? <CheckboxIcon.Checked onClick={onClick} className={style.checkbox} size={24}/>
+        ? <CheckboxIcon.Checked onClick={onClick} className={cx(style.checkbox, style.isSelected)} size={24}/>
         : <CheckboxIcon.Blank onClick={onClick} className={style.checkbox} size={24}/>}
       {STATE_ICON[state]}
     </div>
@@ -69,7 +69,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { isSelected, hasSelection, intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, state, client, insurer, vehicle, date } = item;
+    const { id, refNo, state, client, agent, insurer, vehicle, date } = item;
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
 
@@ -107,13 +107,13 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemInsurer}>
+        <div className={style.listItemAgent}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {insurer ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + insurer.id}>
-                    {insurer.displayName}
+                  {agent ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
+                    {agent.displayName}
                   </Link> : '--'}
                 </div>
               </div>
@@ -139,7 +139,9 @@ class ListItem extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>{vehicle.model}, {vehicle.plateNumber}</div>
+                <div className={style.text}>
+                  {vehicle.model}, {vehicle.plateNumber}
+                </div>
               </div>
             </div>
           </div>

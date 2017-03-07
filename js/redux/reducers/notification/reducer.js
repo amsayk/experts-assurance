@@ -31,7 +31,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_NOTIFICATION: {
       if (typeof action.id === 'undefined' || action.id === state.id) {
-        return state.merge(action.payload);
+        return state.update('options', (options) => ({ ...options, ...action.options }));
       }
       return state;
     }

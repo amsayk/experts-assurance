@@ -23,11 +23,11 @@ function StateUser({ doc }) {
     user = doc.validation.user;
   }
 
-  if ((doc.state === 'INVALID' || doc.state === 'CLOSED') && doc.closure) {
+  if ((doc.state === 'CANCELED' || doc.state === 'CLOSED') && doc.closure) {
     user = doc.closure.user;
   }
 
-  if (doc.insurer ? doc.insurer.id === user.id : false) {
+  if (doc.agent ? doc.agent.id === user.id : false) {
     return null;
   }
 

@@ -31,7 +31,7 @@
   },
   "betterScripts": {
     "update-schema": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/updateSchema.js",
+      "command": "node -r server/utils/validate-env-vars -r server/env bin/update-schema",
       "env": {}
     },
     "compile": {
@@ -144,6 +144,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jstimezonedetect": "^1.0.6",
     "keycode": "^2.1.8",
+    "kue": "^0.11.5",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.0",
     "moment": "^2.17.1",

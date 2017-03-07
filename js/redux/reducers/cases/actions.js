@@ -2,6 +2,7 @@ import {
   ON_SEARCH,
   ON_STATE,
   ON_CLIENT,
+  ON_AGENT,
   ON_INSURER,
 } from './constants';
 
@@ -27,6 +28,13 @@ export function search(queryString) {
 export function onClient(id) {
   return {
     type : ON_CLIENT,
+    id,
+  };
+}
+
+export function onAgent(id) {
+  return {
+    type : ON_AGENT,
     id,
   };
 }

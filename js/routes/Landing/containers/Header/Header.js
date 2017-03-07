@@ -29,8 +29,6 @@ import SearchBox from './SearchBox';
 
 import { PlusIcon, NavLeftIcon } from 'components/icons/MaterialIcons';
 
-import addEventListener from 'utils/lib/DOM/addEventListener';
-
 import {
   toggleAlerts,
 } from 'redux/reducers/app/actions';
@@ -44,66 +42,56 @@ const tooltipAlign = {
 };
 
 const styles = {
-  hide: {
-    top: -70,
-  },
+  show: (notificationOpen, scrollTop) => ({
+    top : notificationOpen && scrollTop === 0 ? NOTIFICATION_HEIGHT : 0,
+  }),
 };
 
 const MIN_HEIGHT = 200;
 const MIN_SCROLL_UP_DELTA = 18.5;
 
+const NOTIFICATION_HEIGHT = 45;
+
 class Header extends React.Component {
-  lastScrollTop = 0;
   state = {
     show : true,
   };
-  constructor() {
-    super();
 
-    this._handleScroll = this._handleScroll.bind(this);
-  }
-  _unregisterEventHandlers() {
-    if (this._eventHandler) {
-      this._eventHandler.remove();
-      this._eventHandler = null;
-    }
-
-  }
-  _registerEventHandlers() {
-    this._eventHandler = addEventListener(document, 'scroll', this._handleScroll);
-  }
-  componentDidMount() {
-    this._registerEventHandlers();
-  }
-
-  componentWillUnmount() {
-    this._unregisterEventHandlers();
-  }
-
-  _handleScroll() {
-    const st = window.pageYOffset || document.documentElement.scrollTop; // Credits: 'https://github.com/qeremy/so/blob/master/so.dom.js#L426'
-    if (st > this.lastScrollTop){
-      // downscroll code
-      if (st >= MIN_HEIGHT && this.state.show === true) {
-        this.setState({
-          show : false,
-        });
-      }
-    } else {
-      // upscroll code
-      if (Math.abs(this.lastScrollTop - st) >= MIN_SCROLL_UP_DELTA && this.state.show === false) {
-        this.setState({
-          show : true,
-        });
+  componentWillReceiveProps(nextProps) {
+    const { scrollTop, lastScrollTop } = nextProps.scrolling;
+    if (this.props.scrolling.scrollTop !== scrollTop || this.props.scrolling.lastScrollTop !== lastScrollTop) {
+      if (scrollTop > lastScrollTop){
+        // downscroll code
+        if (scrollTop >= MIN_HEIGHT && this.state.show === true) {
+          this.setState({
+            show : false,
+          });
+        }
+      } else {
+        // upscroll code
+        if (Math.abs(lastScrollTop - scrollTop) >= MIN_SCROLL_UP_DELTA && this.state.show === false) {
+          this.setState({
+            show : true,
+          });
+        }
       }
     }
-    this.lastScrollTop = st;
   }
   render() {
-    const { id, searching, intl, user, onLogOut, app, actions } = this.props;
+    const {
+      id,
+      notificationOpen,
+      scrolling,
+      searching,
+      intl,
+      user,
+      onLogOut,
+      app,
+      actions,
+    } = this.props;
     const isEmployee = user && user.isAdminOrAgent;
     return (
-      <nav style={this.state.show || searching ? emptyObject : styles.hide} className={style.navbar}>
+      <nav style={this.state.show || searching ? styles.show(notificationOpen, scrolling.scrollTop) : emptyObject} className={style.navbar}>
         <div className={style.leftNav}>
           {id ? <div className={style.back}>
             <Link className={style.backButton} to={PATH_CASES}>

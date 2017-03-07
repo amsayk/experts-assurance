@@ -70,9 +70,20 @@ function onError(error) {
  */
 
 async function onListening() {
+  function handleShutdown() {
+    log('Termination signal received. Shutting down.');
+    server.close(function () {
+      process.exit(0);
+    });
+  }
+
+  process.on('SIGTERM', handleShutdown);
+  process.on('SIGINT', handleShutdown);
+
   try {
     await Promise.all([
       Parse.Cloud.run('initialization'),
+      Parse.Cloud.run('ensureBusiness'),
       Parse.Cloud.run('initUsers'),
     ]);
     log('Server initialized.');

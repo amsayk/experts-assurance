@@ -7,6 +7,7 @@ import {
   ON_SEARCH,
   ON_STATE,
   ON_CLIENT,
+  ON_AGENT,
   ON_INSURER,
 } from './constants';
 
@@ -30,6 +31,7 @@ export class CasesState extends Record({
   queryString  : '',
   state        : null,
   client       : null,
+  agent        : null,
   insurer      : null,
 }) {}
 
@@ -60,6 +62,11 @@ export default function reducer(state = initialState, action) {
     case ON_CLIENT: {
       return state.merge({
         client: action.id,
+      });
+    }
+    case ON_AGENT: {
+      return state.merge({
+        agent: action.id,
       });
     }
     case ON_INSURER: {

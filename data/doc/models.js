@@ -14,8 +14,8 @@ export class Docs {
     return this.connector.get(id);
   }
 
-  getDocs({ queryString, cursor = 0, sortConfig, client, insurer, state }) {
-    return this.connector.getDocs(queryString, cursor, sortConfig, client, insurer, state, this.user);
+  getDocs({ queryString, cursor = 0, sortConfig, client, agent, state }) {
+    return this.connector.getDocs(queryString, cursor, sortConfig, client, agent, state, this.user);
   }
 
   searchUsersByRoles(queryString, roles) {

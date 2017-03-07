@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const log = require('log')('app:bin:compile');

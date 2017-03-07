@@ -86,7 +86,7 @@
     color: $brand-success;
   }
 }
-.INVALID:not(.selecting){
+.CANCELED:not(.selecting){
   margin: 0;
   padding: 0;
   svg {
@@ -104,6 +104,10 @@
   svg.checkbox {
     color: #565656;
     cursor: pointer;
+  }
+
+  .checkbox.isSelected {
+    color: rgb(68, 136, 255);
   }
 
   &.selecting:hover > .checkbox,
@@ -155,7 +159,7 @@
 }
 
 .pickUserOpen .selectedStateButton,
-.pickUserOpen .selectedInsurerButton {
+.pickUserOpen .selectedAgentButton {
   border-bottom-right-radius: 0!important;
   border-bottom-left-radius: 0!important;
 }

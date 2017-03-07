@@ -10,10 +10,15 @@ import { injectIntl } from 'react-intl';
 import style from 'routes/Landing/styles';
 
 import ClientLine from './ClientLine';
+import AgentLine from './AgentLine';
 import InsurerLine from './InsurerLine';
 import StateLine from './StateLine';
 import RefLine from './RefLine';
+import VehicleLine from './VehicleLine';
 import LastActivityLine from './LastActivityLine';
+import DTValidationLine from './DTValidation';
+import DTSinisterLine from './DTSinister';
+import DTMissionLine from './DTMission';
 
 class Overview extends React.Component {
   render() {
@@ -31,7 +36,11 @@ class Overview extends React.Component {
             doc={doc}
             user={user}
           />
-          <InsurerLine
+          <VehicleLine
+            loading={loading}
+            doc={doc}
+          />
+          <AgentLine
             loading={loading}
             doc={doc}
           />
@@ -40,7 +49,19 @@ class Overview extends React.Component {
             loading={loading}
             doc={doc}
           />
-          <ClientLine
+          <InsurerLine
+            loading={loading}
+            doc={doc}
+          />
+          <DTValidationLine
+            loading={loading}
+            doc={doc}
+          />
+          <DTSinisterLine
+            loading={loading}
+            doc={doc}
+          />
+          <DTMissionLine
             loading={loading}
             doc={doc}
           />

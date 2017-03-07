@@ -13,11 +13,11 @@ import cx from 'classnames';
 
 import SelectedUserToggle from './SelectedUserToggle';
 
-import { Role_ADMINISTRATORS, Role_AGENTS } from 'roles';
+import { Role_INSURERS } from 'roles';
 
 import createUserPicker from './PickInsurer';
 
-const PickInsurer = createUserPicker(Role_ADMINISTRATORS, Role_AGENTS);
+const PickInsurer = createUserPicker(Role_INSURERS);
 
 class InsurerChanger extends React.Component {
   state ={
@@ -64,7 +64,7 @@ class InsurerChanger extends React.Component {
     this._input = input;
   }
   render() {
-    const { insurer, actions } = this.props;
+    const { agent, actions } = this.props;
     return (
       <div className={style.filterGroup}>
         <div className={cx(this.state.open && style.mask)}></div>
@@ -73,7 +73,7 @@ class InsurerChanger extends React.Component {
           onToggle={this.onToggle}
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
-          <SelectedUserToggle onOpen={this.onToggle} user={insurer}/>
+          <SelectedUserToggle onOpen={this.onToggle} user={agent}/>
           <Dropdown.Menu className={style.userPickerMenu}>
             <MenuItem
               onAction={this.onAction}

@@ -13,7 +13,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  InvalidIcon,
+  CancelledIcon,
 } from 'components/icons/MaterialIcons';
 
 import style from 'routes/Landing/styles';
@@ -36,10 +36,10 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING : getState('PENDING', 'En attente',    <UnknownIcon size={18}/>),
-  OPEN    : getState('OPEN',    'Validé',        <WatchIcon   size={18}/>),
-  CLOSED  : getState('CLOSED',  'Clos',          <DoneIcon    size={18}/>),
-  INVALID : getState('INVALID', 'Invalide',      <InvalidIcon size={18}/>),
+  PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
+  OPEN     : getState('OPEN',     'Validé',     <WatchIcon     size={18}/>),
+  CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
+  CANCELED : getState('CANCELED', 'Annulé',     <CancelledIcon size={18}/>),
 };
 
 class StateToggle extends React.Component {
@@ -144,13 +144,13 @@ class StateChanger extends React.Component {
                 </div>
               </div>
             </MenuItem>
-            <MenuItem eventKey='INVALID'>
+            <MenuItem eventKey='CANCELED'>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['INVALID']}>
-                  <InvalidIcon size={18}/>
+                <div className={style['CANCELED']}>
+                  <CancelledIcon size={18}/>
                 </div>
                 <div style={{ marginLeft: 9 }}>
-                  Invalide
+                  Annulé
                 </div>
               </div>
             </MenuItem>

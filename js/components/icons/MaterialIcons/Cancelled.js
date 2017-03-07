@@ -1,6 +1,6 @@
 import React, { PropTypes as T } from 'react';
 
-export default function Invalid({ size, color, className }) {
+export default function Cancelled({ size, color, className }) {
   return (
     <svg className={className} fill={color} height={size} viewBox='0 0 24 24' width={size} xmlns='http://www.w3.org/2000/svg'>
       <path d='M0 0h24v24H0z' fill='none'/>
@@ -9,12 +9,12 @@ export default function Invalid({ size, color, className }) {
   );
 }
 
-Invalid.propTypes = {
+Cancelled.propTypes = {
   color : T.string,
   size  : T.number.isRequired,
 };
 
-Invalid.defaultProps = {
+Cancelled.defaultProps = {
   color : 'currentColor',
 };
 

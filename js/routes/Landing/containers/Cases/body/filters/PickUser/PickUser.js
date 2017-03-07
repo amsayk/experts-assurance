@@ -16,8 +16,6 @@ import selector from './selector';
 
 import { search } from 'redux/reducers/cases/actions';
 
-import ActivityIndicator from 'components/ActivityIndicator';
-
 import ProfilePic from 'components/Profile/ProfilePic';
 
 class PickUser extends React.Component {
@@ -34,7 +32,7 @@ class PickUser extends React.Component {
 
     let content = <li className={style.noResults}>Aucun résultat</li>;
     if (loading) {
-      content = queryString ? <ActivityIndicator size='small'/> : content;
+      content = queryString ? null : content;
     } else if (users.length > 0) {
       content = users.map((user) => (
         <li className={style.result}>

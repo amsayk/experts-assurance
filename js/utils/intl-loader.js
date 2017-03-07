@@ -13,12 +13,12 @@ const loaders = {
         require('intl/locale-data/jsonp/en.js');
         addLocaleData(require('react-intl/locale-data/en.js'));
         callback({messages: {}});
-      }, 'intl-loader-en-0');
+      }, 'Intl-EN.0');
     } else {
       require.ensure([], (require) => {
         addLocaleData(require('react-intl/locale-data/en.js'));
         callback({messages: {}}); // This is the default language
-      }, 'intl-loader-en');
+      }, 'INTL-EN');
     }
   },
 
@@ -31,12 +31,12 @@ const loaders = {
         require('intl/locale-data/jsonp/fr.js');
         addLocaleData(require('react-intl/locale-data/fr.js'));
         callback({messages: {}});
-      }, 'intl-loader-fr-0');
+      }, 'INTL-FR.0');
     } else {
       require.ensure([], (require) => {
         addLocaleData(require('react-intl/locale-data/fr.js'));
         callback({messages: {}});
-      }, 'intl-loader-fr');
+      }, 'INTL-FR');
     }
   }
 };

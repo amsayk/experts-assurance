@@ -17,8 +17,6 @@ import cx from 'classnames';
 
 import style from 'routes/Landing/styles';
 
-import ActivityIndicator from 'components/ActivityIndicator';
-
 class PickInsurer extends React.Component {
   constructor() {
     super();
@@ -37,7 +35,7 @@ class PickInsurer extends React.Component {
 
     let content = <li className={style.noResults}>Aucun résultat</li>;
     if (loading) {
-      content = queryString ? <ActivityIndicator size='small'/> : content;
+      content = queryString ? null : content;
     } else if (users.length > 0) {
       content = users.map((user) => {
         return (

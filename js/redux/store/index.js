@@ -18,6 +18,7 @@ import {
 
 import { AppState } from 'redux/reducers/app/reducer';
 import { NotificationState } from 'redux/reducers/notification/reducer';
+import { ScrollState } from 'redux/reducers/scrolling/reducer';
 import { SnackState } from 'redux/reducers/snackbar/reducer';
 import { User } from 'redux/reducers/user/reducer';
 import { UsersState } from 'redux/reducers/users/reducer';
@@ -107,6 +108,7 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
     case ''             : return new Map(value);
     case 'app'          : return new AppState(value);
     case 'notification' : return new NotificationState(value);
+    case 'scrolling'    : return new ScrollState(value);
     case 'snackbar'     : return new SnackState(value);
     case 'user'         : return new User(value);
     case 'users'        : return new UsersState(value);

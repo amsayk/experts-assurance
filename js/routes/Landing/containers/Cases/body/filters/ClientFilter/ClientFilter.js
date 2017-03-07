@@ -76,7 +76,7 @@ class ClientFilter extends React.Component {
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
           {client ? <SelectedUserToggle onOpen={this.onOpen} onClear={actions.onClient} id={client}/> : <Dropdown.Toggle className={style.togglePickUser}>
-            Client
+            Assuré
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.userPickerMenu}>
             <MenuItem open={this.state.open} onInput={this._onInput} onUser={this.onUser} componentClass={PickUser}/>

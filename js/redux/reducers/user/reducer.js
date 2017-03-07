@@ -2,7 +2,7 @@ import getCurrentUser from 'getCurrentUser';
 
 import { Record } from 'immutable';
 
-import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS, userHasRoleAny } from 'roles';
+import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS, Role_INSURERS, userHasRoleAny } from 'roles';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
@@ -31,6 +31,10 @@ export class User extends Record({
 
   get isClient() {
     return userHasRoleAny(this, Role_CLIENTS);
+  }
+
+  get isInsurer() {
+    return userHasRoleAny(this, Role_INSURERS);
   }
 }
 

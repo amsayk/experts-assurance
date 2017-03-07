@@ -15,6 +15,10 @@ query getDocs($query: DocsFetchQuery!) {
         id
         displayName
       }
+      agent {
+        id
+        displayName
+      }
       insurer {
         id
         displayName

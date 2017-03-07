@@ -66,7 +66,7 @@ export class DocConnector {
     }
   }
 
-  getDocs(queryString, cursor = 0, sortConfig, client, insurer, state, user) {
+  getDocs(queryString, cursor = 0, sortConfig, client, agent, state, user) {
     return Promise.all([count(), doFetch()]).then(([ length, docs ]) => ({
       cursor: cursor + docs.length,
       length,
@@ -81,8 +81,8 @@ export class DocConnector {
         q.equalTo('client', Parse.User.createWithoutData(client));
       }
 
-      if (insurer) {
-        q.equalTo('insurer', Parse.User.createWithoutData(insurer));
+      if (agent) {
+        q.equalTo('agent', Parse.User.createWithoutData(agent));
       }
 
       if (state) {

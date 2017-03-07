@@ -133,7 +133,7 @@ export function genDocs() {
 
     const retn = Object.assign({}, doc, {
       date       : new Date(doc.date),
-      insurer    : genUser(Role_AGENTS, Role_ADMINISTRATORS),
+      agent      : genUser(Role_AGENTS, Role_ADMINISTRATORS),
       client     : genUser(Role_CLIENTS),
       user       : creator,
       vehicle    : genCar(),

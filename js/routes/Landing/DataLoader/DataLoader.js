@@ -59,7 +59,7 @@ const docs = graphql(GET_DOCS_QUERY, {
     variables: {
       query : {
         client      : ownProps.client,
-        insurer     : ownProps.insurer,
+        agent       : ownProps.agent,
         state       : ownProps.state,
         queryString : ownProps.queryString,
         sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
@@ -77,7 +77,7 @@ const docs = graphql(GET_DOCS_QUERY, {
           query : {
             cursor,
             client      : ownProps.client,
-            insurer     : ownProps.insurer,
+            agent       : ownProps.agent,
             state       : ownProps.state,
             queryString : ownProps.queryString,
             sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),

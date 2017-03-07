@@ -26,6 +26,7 @@ export const schema = [`
     sortConfig: DocsSortConfig!
     state: DocState
     client: ID
+    agent: ID
     insurer: ID
     cursor: Int
   }
@@ -37,7 +38,7 @@ export const schema = [`
     PENDING
     OPEN
     CLOSED
-    INVALID
+    CANCELED
   }
 
   # ------------------------------------
@@ -77,7 +78,8 @@ export const schema = [`
     vehicle: Vehicle!
 
     client: User!
-    insurer: User!
+    agent: User!
+    insurer: User #TODO: make this required.
     user: User!
 
     validation: DocValidationState
@@ -140,6 +142,7 @@ export const resolvers = {
       'vehicle',
 
       'client',
+      'agent',
       'insurer',
       'user',
 

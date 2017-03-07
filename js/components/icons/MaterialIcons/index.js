@@ -43,7 +43,7 @@ export { default as HomeIcon } from './Home';
 export { default as DashboardIcon } from './Dashboard';
 
 export { default as WatchIcon } from './Watch';
-export { default as InvalidIcon } from './Invalid';
+export { default as CancelledIcon } from './Cancelled';
 export { default as DoneIcon } from './Done';
 export { default as UnknownIcon } from './Unknown';
 
@@ -55,4 +55,6 @@ export { default as ArchiveIcon } from './Archive';
 export { default as UnarchiveIcon } from './Unarchive';
 
 export { default as PrintIcon } from './Print';
+
+export { default as LinkExternalIcon } from './LinkExternal';
 

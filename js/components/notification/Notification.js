@@ -64,6 +64,16 @@ class Notification extends React.Component {
       return true;
     }
 
+    // ### scrollTop
+    // Check if scrollTop has changed.
+
+    const curScrollTop = this.props.scrollTop;
+    const nxtScrollTop = nextProps.scrollTop;
+
+    if (nxtScrollTop !== curScrollTop) {
+      return true;
+    }
+
     return false;
   }
 
@@ -96,34 +106,37 @@ class Notification extends React.Component {
    * @return {Object}
    */
   render() {
-    // const { id, hidden, options: { active } } = this.props.notification;
-    // if (active && !hidden) {
-    //   switch (id) {
-    //     case 'SessionExpired':
-    //       return <SessionExpired className={this.getClass()}/>;
-    //     case 'BusinessRequired':
-    //       return <BusinessRequired className={this.getClass()}/>;
-    //     case 'InvalidLink':
-    //       return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
-    //     case 'PasswordResetSuccess':
-    //       return <PasswordResetSuccess className={this.getClass()}/>;
-    //     case 'VerificationPending':
-    //       return <VerificationPending className={this.getClass()}/>;
-    //     case 'VerificationSuccess':
-    //       return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
-    //     default:
-    //       return null;
-    //   }
-    // }
+    const { notification, scrollTop, hidden } = this.props;
+    const { id, options: { active } } = notification;
+    if (scrollTop === 0 && active && !hidden) {
+      switch (id) {
+        case 'SessionExpired':
+          return <SessionExpired className={this.getClass()}/>;
+        case 'BusinessRequired':
+          return <BusinessRequired className={this.getClass()}/>;
+        case 'InvalidLink':
+          return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
+        case 'PasswordResetSuccess':
+          return <PasswordResetSuccess className={this.getClass()}/>;
+        case 'VerificationPending':
+          return <VerificationPending className={this.getClass()}/>;
+        case 'VerificationSuccess':
+          return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
+        default:
+          return null;
+      }
+    }
     return null;
   }
 
 }
 
 Notification.propTypes = {
-  id      : T.string.isRequired,
-  options : T.shape({
-    active : T.bool.isRequired,
+  notification : T.shape({
+    id      : T.string.isRequired,
+    options : T.shape({
+      active : T.bool.isRequired,
+    }).isRequired
   }).isRequired,
   hidden  : T.bool.isRequired,
 };
