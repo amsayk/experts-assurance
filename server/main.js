@@ -80,6 +80,8 @@ const compiler = config.env === 'development' && webpack(webpackConfig);
 const APP_PATHS = [
   '/',
 
+  config.path_activation,
+
   config.path_login,
   config.path_signup,
   config.path_choose_password,
