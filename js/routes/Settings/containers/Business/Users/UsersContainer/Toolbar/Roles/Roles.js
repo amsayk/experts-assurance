@@ -36,10 +36,10 @@ const ROLES = [{
   displayName: 'Admins',
   id: Role_ADMINISTRATORS,
 }, {
-  displayName: 'Agents',
+  displayName: 'Gestionaires',
   id: Role_AGENTS,
 }, {
-  displayName: 'Clients',
+  displayName: 'Assurés',
   id: Role_CLIENTS,
 }];
 

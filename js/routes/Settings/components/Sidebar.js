@@ -1,6 +1,10 @@
 import React, { PropTypes as T } from 'react';
 import { Link } from 'react-router';
 
+import { connect } from 'react-redux';
+
+import { compose } from 'redux';
+
 import {
   PATH_SETTINGS_BASE,
   PATH_SETTINGS_ACCOUNT,
@@ -10,17 +14,38 @@ import {
   PATH_SETTINGS_CHANGE_EMAIL,
 } from 'vars';
 
+import { createSelector } from 'utils/reselect';
+
 import { intlShape, injectIntl } from 'react-intl';
 
-import messages from '../messages';
+import messages from 'routes/Settings/messages';
 
 import cx from 'classnames';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
-export function Sidebar({ intl, user, selectedMenuItem }) {
+const scrollingSelector = (state) => state.get('scrolling');
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
+
+const selector = createSelector(
+  scrollingSelector,
+  notificationOpenSelector,
+  (scrolling, notificationOpen) => ({ scrolling, notificationOpen }),
+);
+
+const NAVBAR_HEIGHT = 61;
+const NOTIFICATION_HEIGHT = 45;
+
+const DEFAULT_TOP = NAVBAR_HEIGHT;
+
+const getStyle = (notificationOpen, scrollTop) => notificationOpen ? ({
+  top : scrollTop === 0 ? DEFAULT_TOP + NOTIFICATION_HEIGHT : DEFAULT_TOP,
+  height : `calc(100% - ${NAVBAR_HEIGHT} - ${NOTIFICATION_HEIGHT})`,
+}) : {};
+
+export function Sidebar({ intl, user, selectedMenuItem, scrolling, notificationOpen }) {
   return (
-    <div className={style.sidebar}>
+    <div style={getStyle(notificationOpen, scrolling.scrollTop)} className={style.sidebar}>
 
       {/* General section */}
       <h1 className={style.heading}>{intl.formatMessage(messages.headingGeneral)}</h1>
@@ -84,5 +109,14 @@ Sidebar.propTypes = {
   }).isRequired,
 };
 
-export default injectIntl(Sidebar);
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+const Connect = connect(mapStateToProps);
+
+export default compose(
+  injectIntl,
+  Connect,
+)(Sidebar);
 

@@ -1,4 +1,5 @@
 import React, { PropTypes as T } from 'react';
+import { Link } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
 
@@ -13,6 +14,8 @@ import cx from 'classnames';
 import ProfilePic from 'components/Profile/ProfilePic';
 
 import { injectIntl, intlShape } from 'react-intl';
+
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 const selectionSelector = (state) => state.getIn(['users', 'selection', 'keys']);
 const keySelector = (_, { index }) => index;
@@ -36,7 +39,7 @@ class GridItem extends React.Component {
 
   render() {
     const { isSelected, intl, className, tabIndex, role, onClick, onKeyDown, item } = this.props;
-    const { displayName, updatedAt } = item;
+    const { id, displayName, updatedAt } = item;
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} onClick={onClick} onDoubleClick={this.onDoubleClick} onKeyDown={onKeyDown} className={cx(style.gridItemWrapper, className, { [style.isSelected]: isSelected })}>
         <div className={style.gridItem}>
@@ -49,7 +52,11 @@ class GridItem extends React.Component {
                   </div>
                 </div>
                 <div className={style.info}>
-                  <div className={style.text}>{displayName}</div>
+                  <div className={style.text}>
+                    <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id}>
+                      {displayName}
+                    </Link>
+                  </div>
                 </div>
                 <div className={style.bottomLine}>
                   <div className={style.date}>

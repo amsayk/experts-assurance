@@ -1,25 +1,31 @@
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
   height: 100%;
+  background-color: #fff;
 }
 
-.body {
-  background-color: #fff;
-  composes: d-flex from 'styles/_base.scss';
-  flex: 1;
-}
+// .body {
+//   margin-top: calc(#{$navbar-height} + 1px);
+//   background-color: #fff;
+//   composes: d-flex from 'styles/_base.scss';
+//   flex: 1;
+// }
 
 // users
 
-.usersContainer, .userContainer {
+.usersContainer,
+.userContainer {
+  margin-top: calc(#{$navbar-height} + 1px);
   composes: d-flex flex-column from 'styles/_base.scss';
   flex: 1;
+  margin-left: $sidebar-width;
 }
 
 // List
 
 .listContainer {
   composes: d-flex flex-column from 'styles/_base.scss';
+  margin-top: calc(#{$toolbar-height});
   flex: 1;
 
   .listItemsWrapper {
@@ -30,12 +36,12 @@
 
 .root:not(.listView) .body {
   overflow-x: hidden;
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 // toolbar
 
 .toolbar {
-  composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  composes: navbar fixed-top flex-row justify-content-between from 'styles/_base.scss';
   padding-left: 16px;
   padding-right: 16px;
   box-shadow: none;
@@ -44,4 +50,16 @@
   margin-top: 1px;
   border-top-width: 0;
   margin-bottom: 0;
+  transition: top .5s ease-in-out;
+
+  .notificationOpen & {
+    // top: calc(#{$navbar-height} + #{$notification-height});
+  }
+
+  top: calc(#{$navbar-height});
+  left: $sidebar-width;
+  width: calc(100% - #{$sidebar-width});
+  z-index: 2;
+
+  height: $toolbar-height;
 }

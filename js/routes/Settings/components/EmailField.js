@@ -3,13 +3,13 @@ import { Link } from 'react-router';
 
 import { PATH_SETTINGS_BASE, PATH_SETTINGS_CHANGE_EMAIL } from 'vars';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 
 import Tooltip from 'components/react-components/Tooltip';
 
-import messages from '../messages';
+import messages from 'routes/Settings/messages';
 
 import { PencilIcon } from 'components/icons/MaterialIcons';
 

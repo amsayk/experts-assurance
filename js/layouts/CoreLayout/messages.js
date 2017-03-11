@@ -3,15 +3,15 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   UnsupportedDisplay: {
     id: 'unsupported_display',
-    defaultMessage: 'Your display is unsupported.',
+    defaultMessage: 'Votre affichage n\'est pas pris en charge.',
   },
   NavigatorOffline: {
     id: 'navigator_offline',
-    defaultMessage: 'No Internet connection.',
+    defaultMessage: 'Pas de connexion Internet.',
   },
   title: {
     id: 'appTitle',
-    defaultMessage: 'Welcome to {appName} · {appName}',
+    defaultMessage: 'Bienvenue à {appName} · {appName}',
   },
 });
 

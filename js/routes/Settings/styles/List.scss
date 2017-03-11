@@ -79,8 +79,8 @@
 
 .listItemsWrapper {
   composes: d-flex flex-column from 'styles/_base.scss';
-  overflow-x: hidden;
-  overflow-y: auto;
+  // overflow-x: hidden;
+  // overflow-y: auto;
   flex: 1;
   padding-right: 16px;
   position: relative;

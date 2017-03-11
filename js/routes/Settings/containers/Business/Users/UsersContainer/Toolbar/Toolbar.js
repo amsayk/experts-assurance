@@ -37,7 +37,16 @@ import MenuItem from 'components/bootstrap/MenuItem';
 
 import selector from './selector';
 
-function Toolbar({ intl, cursor, length, user, loading, users, actions }) {
+const NAVBAR_HEIGHT = 61;
+const NOTIFICATION_HEIGHT = 45;
+
+const DEFAULT_TOP = NAVBAR_HEIGHT;
+
+const getStyle = (notificationOpen, scrollTop) => notificationOpen ? ({
+  top : scrollTop === 0 ? DEFAULT_TOP + NOTIFICATION_HEIGHT : DEFAULT_TOP,
+}) : {};
+
+function Toolbar({ intl, cursor, length, user, loading, users, scrolling, notificationOpen, actions }) {
   const { searchOpen, viewType } = users;
   const {
     viewTypeGrid,
@@ -54,7 +63,7 @@ function Toolbar({ intl, cursor, length, user, loading, users, actions }) {
   ];
 
   return (
-    <nav data-root-close-ignore className={style.toolbar}>
+    <nav data-root-close-ignore style={getStyle(notificationOpen, scrolling.scrollTop)} className={style.toolbar}>
       <div className={style.toolbarLeft}>
         <Roles/>
       </div>

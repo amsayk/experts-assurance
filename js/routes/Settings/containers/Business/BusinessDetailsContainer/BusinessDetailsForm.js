@@ -14,9 +14,9 @@ import isEmpty from 'isEmpty';
 
 import { intlShape } from 'react-intl';
 
-import messages from '../../../messages';
+import messages from 'routes/Settings/messages';
 
-import style from '../../../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import validations from './validations';
 

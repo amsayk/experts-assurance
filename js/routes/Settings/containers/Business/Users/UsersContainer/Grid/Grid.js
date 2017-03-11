@@ -126,7 +126,7 @@ class Grid extends React.Component {
       const { spy, fetchMore } = this.state;
       const disabled = (items.length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying fetchMore={fetchMore} offset={NAVBAR_HEIGHT + TOOLBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
+        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
       );
     }
 
@@ -139,7 +139,7 @@ class Grid extends React.Component {
           onSelect={this.onSelect}
           onNext={this.onNext}
           onPrevious={this.onPrevious}
-          className={style.body}
+          className={style.listContainer}
         >
           <GridHeader/>
           <Dropdown.Menu className={style.gridItemsWrapper}>

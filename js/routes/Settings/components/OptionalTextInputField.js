@@ -2,7 +2,7 @@ import React from 'react';
 
 import cx from 'classnames';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import FormMessages from 'components/FormMessages';
 

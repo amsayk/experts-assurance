@@ -6,7 +6,7 @@ import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 

@@ -4,10 +4,12 @@ import { PATH_SETTINGS_BUSINESS_USER_PARAM } from 'vars';
 
 const userSelector = state => state.get('user');
 const userIdSelector = (_, { params }) => params[PATH_SETTINGS_BUSINESS_USER_PARAM];
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
 
 export default createSelector(
   userSelector,
   userIdSelector,
-  (user, id) => ({ user, userId : id })
+  notificationOpenSelector,
+  (user, id, notificationOpen) => ({ user, userId : id, notificationOpen })
 );
 

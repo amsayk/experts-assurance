@@ -2,13 +2,13 @@ import React from 'react';
 
 import cx from 'classnames';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import FormMessages from 'components/FormMessages';
 
 import validationMessages from 'validation-messages';
 
-import messages from '../messages';
+import messages from 'routes/Settings/messages';
 
 import { injectIntl, intlShape } from 'react-intl';
 

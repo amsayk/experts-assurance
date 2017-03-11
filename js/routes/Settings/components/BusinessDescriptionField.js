@@ -2,7 +2,7 @@ import React from 'react';
 
 import Textarea from 'react-textarea-autosize';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 

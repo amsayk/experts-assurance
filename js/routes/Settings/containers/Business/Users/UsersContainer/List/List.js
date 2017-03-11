@@ -111,7 +111,7 @@ class List extends React.Component {
       const { spy, fetchMore } = this.state;
       const disabled = (items.length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying scrollThreshold={0.5} fetchMore={fetchMore} offset={NAVBAR_HEIGHT + TOOLBAR_HEIGHT + HEADER_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
+        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
       );
     }
 

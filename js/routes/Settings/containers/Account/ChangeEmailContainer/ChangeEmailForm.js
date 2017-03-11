@@ -11,9 +11,9 @@ import isEmpty from 'isEmpty';
 
 import { intlShape, FormattedMessage } from 'react-intl';
 
-import messages from '../../../messages';
+import messages from 'routes/Settings/messages';
 
-import style from '../../../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import NewEmailField from '../../../components/NewEmailField';
 

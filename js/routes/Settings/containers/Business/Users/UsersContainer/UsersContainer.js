@@ -26,16 +26,16 @@ import { APP_NAME, COUNTRY } from 'vars';
 import Grid from './Grid';
 import List from './List';
 
-function UsersContainer({ intl, user, viewType, actions }) {
+function UsersContainer({ intl, user, viewType, notificationOpen, actions }) {
   const isList = viewType === VIEW_TYPE_LIST;
   return (
-    <div className={cx(style.root, isList && style.listView)}>
+    <div className={cx(style.root, isList && style.listView, notificationOpen && style.notificationOpen)}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
-      <div className={style.body}>
+      {/* <div className={style.body}> */}
         <Sidebar user={user} selectedMenuItem={'business.users'}/>
         {isList ? <List/> : <Grid/>}
-      </div>
+      {/* </div> */}
     </div>
   );
 }

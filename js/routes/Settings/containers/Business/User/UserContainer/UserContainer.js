@@ -10,6 +10,8 @@ import selector from './selector';
 
 import style from 'routes/Settings/styles';
 
+import cx from 'classnames';
+
 import Header from 'routes/Settings/components/Header';
 import Sidebar from 'routes/Settings/components/Sidebar';
 
@@ -27,9 +29,9 @@ import Overview from './info/Overview';
 
 import Nav from './Nav';
 
-function UserContainer({ intl, user, loading, selectedUser, actions }) {
+function UserContainer({ intl, user, loading, selectedUser, notificationOpen, actions }) {
   return (
-    <div className={style.root}>
+    <div className={cx(style.root, notificationOpen && style.notificationOpen)}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       <div className={style.body}>

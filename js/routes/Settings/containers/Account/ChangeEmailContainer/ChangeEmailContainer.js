@@ -8,12 +8,12 @@ import { logOut } from 'redux/reducers/user/actions';
 
 import selector from './selector';
 
-import style from '../../../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import Header from '../../../components/Header';
 import Sidebar from '../../../components/Sidebar';
 
-import messages from '../../../messages';
+import messages from 'routes/Settings/messages';
 
 import Title from 'components/Title';
 

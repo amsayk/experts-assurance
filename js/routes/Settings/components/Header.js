@@ -1,16 +1,37 @@
 import React, { PropTypes as T } from 'react';
+import { connect } from 'react-redux';
+
+import { compose } from 'redux';
+
+import { createSelector } from 'utils/reselect';
 
 import AppBrand from 'components/AppBrand';
 
-import messages from '../messages';
+import messages from 'routes/Settings/messages';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-function Header({ intl, onLogOut }) {
+const scrollingSelector = (state) => state.get('scrolling');
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
+
+const selector = createSelector(
+  scrollingSelector,
+  notificationOpenSelector,
+  (scrolling, notificationOpen) => ({ scrolling, notificationOpen }),
+);
+
+const NOTIFICATION_HEIGHT = 45;
+const DEFAULT_TOP = 0;
+
+const getStyle = (notificationOpen, scrollTop) => notificationOpen ? ({
+  top : scrollTop === 0 ? NOTIFICATION_HEIGHT : DEFAULT_TOP,
+}) : {};
+
+function Header({ intl, scrolling, notificationOpen, onLogOut }) {
   return (
-    <nav className={style.navbar}>
+    <nav style={getStyle(notificationOpen, scrolling.scrollTop)} className={style.navbar}>
       <AppBrand/>
       <div className={style.menu}>
         <a className={style.logoutLink} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
@@ -24,5 +45,14 @@ Header.propTypes = {
   onLogOut : T.func.isRequired,
 };
 
-export default injectIntl(Header);
+function mapStateToProps(state, props) {
+  return selector(state, props);
+}
+
+const Connect = connect(mapStateToProps);
+
+export default compose(
+  injectIntl,
+  Connect,
+)(Header);
 

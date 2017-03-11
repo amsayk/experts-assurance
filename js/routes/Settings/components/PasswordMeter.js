@@ -8,11 +8,11 @@ import { createSelector } from 'utils/reselect';
 
 import cx from 'classnames';
 
-import style from '../Settings.scss';
+import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import messages from '../messages';
+import messages from 'routes/Settings/messages';
 
 function PasswordMeter({ intl, score}) {
   return (
