@@ -21,10 +21,11 @@ const babelOptions = require('scripts/getBabelOptions')({
     'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
   },
   plugins: [
-    'transform-runtime',
+    'transform-async-to-generator',
     'transform-export-extensions',
   ],
   modules: true,
+  regenerator : false,
 });
 
 babelRegister(objectAssign(babelOptions, {
@@ -83,8 +84,11 @@ const vars = config.globals['process.env'];
 Object.keys(vars).forEach((key) => {
   Object.defineProperty(process.env, key, {
     value: key === 'SERVER_URL'
-      ? config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`
-      : JSON.parse(vars[key])
+    ? config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`
+    : JSON.parse(vars[key])
   });
 });
+
+// Initialize parse
+require('./parse-config');
 

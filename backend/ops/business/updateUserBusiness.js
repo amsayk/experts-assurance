@@ -1,10 +1,10 @@
-import { formatError, getOrCreateBusiness } from 'backend/utils';
+import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
 import { BusinessType } from 'data/types';
 
-export default async function updateUserBusiness(request, response) {
+export default async function updateUserBusiness(request, done) {
   if (!request.user) {
-    response.error(new Error('A user is required.'));
+    done(new Error('A user is required.'));
     return;
   }
 
@@ -55,9 +55,9 @@ export default async function updateUserBusiness(request, response) {
     await request.user.set('business', business)
       .save(null, { useMasterKey: true });
 
-    response.success(business);
+    done(null, serializeParseObject(business));
   } catch (e) {
-    response.error(formatError(e));
+    done(formatError(e));
   }
 }
 

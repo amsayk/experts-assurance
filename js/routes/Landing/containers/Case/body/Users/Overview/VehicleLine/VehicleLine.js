@@ -11,20 +11,22 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
+const LABEL = 'Vehicle (Modèle, Matricule)';
+
 class VehicleLine extends React.Component {
   render() {
     const { intl, docLoading, doc } = this.props;
 
     if (docLoading) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>
-          Vehicle (Modèle, Matricule)
+          {LABEL}
         </div>
         <div className={style.overviewValue}>
           {doc.vehicle.model}, {doc.vehicle.plateNumber}

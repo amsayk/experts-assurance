@@ -7,7 +7,9 @@ import ExecutionEnvironment from 'ExecutionEnvironment';
 import findIndex from 'array-find-index';
 import invariant from 'invariant';
 
-const log = require('debug')('app:client:netinfo');
+import debug from 'log';
+
+const log = debug('app:client:netinfo');
 
 const connection = ExecutionEnvironment.canUseDOM && (
   window.navigator.connection ||

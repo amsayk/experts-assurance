@@ -48,7 +48,7 @@ class PickAgent extends React.Component {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{ marginRight: 5 }}>
                   {isSelected(user.id)
-                    ? <CircleIcon.Checked size={24}/>
+                    ? <CircleIcon.Checked className={cx(style.isSelected, style.checkbox)} size={24}/>
                     : <CircleIcon.Blank size={24}/>}
                   </span>
                   <span className={style.text}>

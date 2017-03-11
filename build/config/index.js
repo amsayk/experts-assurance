@@ -4,6 +4,9 @@ const log = require('log')('app:config');
 const objectAssign = require('object-assign');
 const nullthrows = require('nullthrows');
 
+const kue = require('kue');
+const Redis = require('ioredis');
+
 const moduleMap = {
   'loadScript'                         : 'utils/loadScript',
   'validation'                         : 'common/validation',
@@ -25,7 +28,7 @@ const babelOptions = require('scripts/getBabelOptions')({
   plugins: [
     ['transform-runtime', {
       polyfill: false,
-      regenerator: false
+      regenerator: false,
     }],
     'transform-export-extensions',
     ['react-intl', {
@@ -44,6 +47,11 @@ const config = {
 
   // HTTPS
   secure : process.env.IS_SECURE === 'yes',
+
+  // Cluster
+  get clusterSize() {
+    return require('os').cpus().length;
+  },
 
   // SSR
   ssrEnabled : process.env.NODE_ENV === 'production' || (process.env.SSR_DEV === 'yes'),
@@ -73,7 +81,6 @@ const config = {
   // ----------------------------------
   server_host : process.env.HOST || 'localhost', // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || '5000',
-  // ws_port     : process.env.WS_PORT || 8080,
 
   // ----------------------------------
   // Parse config
@@ -186,6 +193,31 @@ const config = {
 
   ],
 };
+
+// ------------------------------------
+// Kue global queue
+// ------------------------------------
+
+config.kue_opts = {
+  prefix : config.businessKey,
+  redis  : {
+    createClientFactory: function () {
+      return new Redis();
+    }
+  },
+  disableSearch: true,
+};
+
+Object.defineProperty(config, 'queue', {
+  get: function () {
+    if (!global.__queue) {
+      log('Creating queue');
+      global.__queue = kue.createQueue(config.kue_opts);
+    }
+
+    return global.__queue;
+  },
+});
 
 /************************************************
 -------------------------------------------------

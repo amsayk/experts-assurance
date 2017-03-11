@@ -68,7 +68,7 @@ class AgentFilter extends React.Component {
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
           {agent ? <SelectedUserToggle onClear={actions.onAgent} id={agent}/> : <Dropdown.Toggle className={style.togglePickUser}>
-            Agent
+            Gestionnaire
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.userPickerMenu}>
             <MenuItem open={this.state.open} onInput={this._onInput} onUser={this.onUser} componentClass={PickUser}/>

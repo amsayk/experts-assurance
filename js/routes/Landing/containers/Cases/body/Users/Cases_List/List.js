@@ -13,7 +13,7 @@ import ListHeader from './ListHeader';
 import ListItem from './ListItem';
 import Empty from './EmptyList';
 
-import { Line } from '../../Loading';
+import LoadingItem from './LoadingItem';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 
@@ -80,7 +80,7 @@ class List extends React.Component {
           >
             <ListHeader/>
             <Dropdown.Menu className={style.listItemsWrapper}>
-              {Array.from(new Array(10)).map(() => <Line/>)}
+              {Array.from(new Array(15)).map(() => <LoadingItem/>)}
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -92,7 +92,7 @@ class List extends React.Component {
       const { spy, fetchMore } = this.state;
       const disabled = (items.length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={Line} disabled={disabled}/>
+        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={LoadingItem} disabled={disabled}/>
       );
     }
 

@@ -1,5 +1,9 @@
 // List Header
 
+.placeholder {
+  composes: placeholder from 'styles/_base.scss';
+}
+
 .listHeader {
   composes: d-flex flex-row from 'styles/_base.scss';
   // background-color: #fafafa;
@@ -125,8 +129,8 @@
   &:active {
     background-color: transparent;
   }
-  &:hover {
-    background-color: #f7f7f9;
+  &:not(.loadingItem):hover {
+    background-color: transparent;
   }
 
   &.isSelected {
@@ -198,6 +202,9 @@
 
   .innerWrapper {
     padding-left: 16px;
+    height: 100%;
+    align-items: center;
+    display: flex;
   }
 
   .item {

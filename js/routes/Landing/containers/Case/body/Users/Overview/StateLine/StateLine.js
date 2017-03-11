@@ -16,6 +16,8 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
+const LABEL = 'État';
+
 function StateUser({ doc }) {
   let user = doc.user;
 
@@ -66,13 +68,13 @@ class StateLine extends React.Component {
 
     if (docLoading) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>État</div>
+        <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValueState}>
           <StateChanger state={doc.state}/>
           <StateUser doc={doc}/>

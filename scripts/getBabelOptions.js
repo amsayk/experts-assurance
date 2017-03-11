@@ -8,6 +8,7 @@ module.exports = function (options) {
     moduleMap: {},
     plugins: [],
     modules: false,
+    regenerator : true,
   }, options);
   let { passPerPreset, presets } = require('build/babel-preset/configure')({
     autoImport: true,
@@ -28,7 +29,9 @@ module.exports = function (options) {
   presets = presets.map(function (preset, i) {
     if (i === 0) {
       return {
-        plugins: ['transform-regenerator'].concat(preset.plugins),
+        plugins: options.regenerator ? [
+          'transform-regenerator'
+        ].concat(preset.plugins) : preset.plugins,
       };
     }
     return preset;

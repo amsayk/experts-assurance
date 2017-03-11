@@ -14,7 +14,7 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
-import InsurerChanger from './InsurerChanger';
+const LABEL = 'Assureur';
 
 class InsurerLine extends React.Component {
   render() {
@@ -22,17 +22,21 @@ class InsurerLine extends React.Component {
 
     if (docLoading === true || (typeof loading === 'undefined') || loading === true) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>
-          Insurer
+          {LABEL}
         </div>
         <div className={style.overviewValue}>
-          <InsurerChanger agent={user}/>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span className={style.text}>
+              --
+            </span>
+          </div>
         </div>
       </div>
     );

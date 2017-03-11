@@ -1,4 +1,5 @@
 import React, { PropTypes as T } from 'react';
+import { Link } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
 
@@ -6,13 +7,15 @@ import { connect } from 'react-redux';
 
 import { createSelector } from 'utils/reselect';
 
-import style from '../../../../../styles';
+import style from 'routes/Settings/styles';
 
 import ProfilePic from 'components/Profile/ProfilePic';
 
 import cx from 'classnames';
 
 import { injectIntl, intlShape } from 'react-intl';
+
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 const selectionSelector = (state) => state.getIn(['users', 'selection', 'keys']);
 const keySelector = (_, { index }) => index;
@@ -35,7 +38,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { isSelected, intl, className, tabIndex, role, onClick, onKeyDown, item } = this.props;
-    const { displayName, email, updatedAt } = item;
+    const { id, displayName, email, updatedAt } = item;
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} onClick={onClick}  onDoubleClick={this.onDoubleClick} onKeyDown={onKeyDown} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
         <div className={style.listItemName}>
@@ -45,7 +48,11 @@ class ListItem extends React.Component {
                 <div className={style.icon}>
                   <ProfilePic user={item} textSizeRatio={2}/>
                 </div>
-                <div className={style.text}>{displayName}</div>
+                <div className={style.text}>
+                  <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id}>
+                    {displayName}
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

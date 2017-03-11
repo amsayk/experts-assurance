@@ -98,16 +98,16 @@
   margin-top: 3px;
 }
 
+.checkbox.isSelected {
+  color: rgb(68, 136, 255);
+}
+
 .state {
   composes: d-flex align-items-center from 'styles/_base.scss';
 
   svg.checkbox {
     color: #565656;
     cursor: pointer;
-  }
-
-  .checkbox.isSelected {
-    color: rgb(68, 136, 255);
   }
 
   &.selecting:hover > .checkbox,

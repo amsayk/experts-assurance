@@ -6,7 +6,26 @@ const defaultColors = [
   '#4285f4',
   '#67ae3f',
   '#d61a7f',
-  '#ff4080'
+  '#ff4080',
+
+  '#f44336',
+  '#e91e63',
+  '#9c27b0',
+  '#673ab7',
+  '#3f51b5',
+  '#2196f3',
+  '#03a9f4',
+  '#00bcd4',
+  '#009688',
+  '#4caf50',
+  '#8bc34a',
+  '#cddc39',
+  '#ffeb3b',
+  '#ffc107',
+  '#ff9800',
+  '#ff5722',
+  '#795548',
+  '#607d8b',
 ];
 
 function getRandomColor(value, colors = defaultColors) {
@@ -50,6 +69,7 @@ function getStyles(props) {
       alignItems: 'center',
       justifyContent: 'center',
       font: Math.floor(typeof size === 'number' ? size / textSizeRatio : Avatar.defaultProps.size / textSizeRatio) + 'px Helvetica, Arial, sans-serif',
+      fontWeight: 'bolder',
       borderRadius: square ? 0 : '50%',
       textTransform: 'uppercase',
       height: size,

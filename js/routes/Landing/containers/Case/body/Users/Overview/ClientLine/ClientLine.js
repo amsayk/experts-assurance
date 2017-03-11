@@ -16,19 +16,21 @@ import selector from './selector';
 
 import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
+const LABEL = 'Assuré';
+
 class ClientLine extends React.Component {
   render() {
-    const { label, intl, docLoading, user, loading } = this.props;
+    const { intl, docLoading, user, loading } = this.props;
 
     if (docLoading === true || (typeof loading === 'undefined') || loading === true) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>{label || 'Assuré'}</div>
+        <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             <div style={{ display: 'flex', alignItems: 'center' }}>

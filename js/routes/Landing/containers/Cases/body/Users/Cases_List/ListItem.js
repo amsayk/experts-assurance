@@ -126,9 +126,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {insurer ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + insurer.id}>
-                    {insurer.displayName}
-                  </Link> : '--'}
+                  {vehicle.model}
                 </div>
               </div>
             </div>
@@ -140,7 +138,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {vehicle.model}, {vehicle.plateNumber}
+                  {vehicle.plateNumber}
                 </div>
               </div>
             </div>

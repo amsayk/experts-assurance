@@ -117,7 +117,10 @@
 
   &.isSelected .listItem,
   &:active .listItem,
-  &:focus .listItem {
+  &:focus .listItem,
+  &.isSelected .listItem a,
+  &:active .listItem a,
+  &:focus .listItem a{
     color: $white;
   }
 

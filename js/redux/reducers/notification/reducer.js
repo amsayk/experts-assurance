@@ -32,6 +32,12 @@ export default function reducer(state = initialState, action) {
     case UPDATE_NOTIFICATION: {
       if (typeof action.id === 'undefined' || action.id === state.id) {
         return state.update('options', (options) => ({ ...options, ...action.options }));
+      } else {
+        // New notification
+        return state.merge({
+          id : action.id,
+          options : action.options,
+        });
       }
       return state;
     }

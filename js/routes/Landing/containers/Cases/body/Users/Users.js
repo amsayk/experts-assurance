@@ -5,7 +5,7 @@ import style from 'routes/Landing/styles';
 import Header from './Header_Filters';
 import List from './Cases_List';
 
-export default class Users extends React.Component {
+export default class Users extends React.PureComponent {
   render() {
     return (
       <div className={style.content}>

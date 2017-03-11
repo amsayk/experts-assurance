@@ -1,6 +1,7 @@
-import './parse-config';
-
 import 'isomorphic-fetch';
+
+import kue from 'kue';
+import kueUiExpress from 'kue-ui-express';
 
 import getCurrentUser from 'getCurrentUser';
 
@@ -111,7 +112,7 @@ if (config.ssrEnabled) {
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
   // rendering, you'll want to remove this middleware.
-  app.use(APP_PATHS, require('connect-history-api-fallback')({
+  app.get(APP_PATHS, require('connect-history-api-fallback')({
     verbose : __DEV__,
     logger  : require('log')('app:server:history'),
   }));
@@ -303,6 +304,19 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
 app.use(config.graphiql_endpoint, graphiqlExpress({
   endpointURL : config.graphql_endpoint,
 }));
+
+// ------------------------------------
+// Kue ui
+// ------------------------------------
+kueUiExpress(app, '/kue/', '/api');
+
+// Create queue
+config.queue;
+
+kue.app.set('title', config.appName);
+
+// Mount kue JSON api
+app.use('/api', kue.app);
 
 // WebSocket server for subscriptions
 const server = createServer(app);

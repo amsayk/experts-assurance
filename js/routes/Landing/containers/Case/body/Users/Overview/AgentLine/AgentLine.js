@@ -16,20 +16,22 @@ import selector from './selector';
 
 import AgentChanger from './AgentChanger';
 
+const LABEL = 'Gestionnaire';
+
 class AgentLine extends React.Component {
   render() {
     const { intl, docLoading, user, loading } = this.props;
 
     if (docLoading === true || (typeof loading === 'undefined') || loading === true) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>
-          Agent
+          {LABEL}
         </div>
         <div className={style.overviewValue}>
           <AgentChanger agent={user}/>

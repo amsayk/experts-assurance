@@ -38,7 +38,7 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
+  PENDING  : getState('PENDING',  'En cours', <UnknownIcon   size={18}/>),
   OPEN     : getState('OPEN',     'Validé',     <WatchIcon     size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',     <CancelledIcon size={18}/>),
@@ -111,7 +111,7 @@ class DocStateFilter extends React.Component {
                   <UnknownIcon size={18}/>
                 </div>
                 <div style={{ marginLeft: 9 }}>
-                  En attente
+                  En cours
                 </div>
               </div>
             </MenuItem>

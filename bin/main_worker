@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+import { UPDATE_USER_BUSINESS } from 'backend/constants';
+
+import config from 'build/config';
+
+import * as ops from 'backend/ops/business';
+
+import createWorker from 'backend/kue-mq/createWorker';
+
+const log = require('log')('app:backend:main_worker');
+
+const opts = {
+  ...config.kue_opts,
+  concurrency : 1,
+};
+
+const SERVER_NAME = 'MAIN';
+
+createWorker(opts, SERVER_NAME, {
+  [UPDATE_USER_BUSINESS] : ops.updateUserBusiness,
+});
+

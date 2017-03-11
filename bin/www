@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import cluster from 'cluster';
+
 import Parse from 'parse/node';
 import config from 'build/config';
 import { app, server } from 'server/main';
@@ -9,13 +11,30 @@ const log = require('log')('app:bin:server');
 const port = normalizePort(config.server_port);
 app.set('port', port);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+if (cluster.isMaster && config.env === 'production') {
+  for (let i = 0; i < config.clusterSize; i++) {
+    cluster.fork();
+  }
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  // Listen for dying workers
+  cluster.on('exit', function (worker, code, signal) {
+
+    // Replace the dead worker,
+    // we're not sentimental
+    log.error('Worker %d died :(', worker.process.id);
+    cluster.fork();
+
+  });
+} else {
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
 
 /**
  * Normalize a port into a number, string, or false.
@@ -70,20 +89,9 @@ function onError(error) {
  */
 
 async function onListening() {
-  function handleShutdown() {
-    log('Termination signal received. Shutting down.');
-    server.close(function () {
-      process.exit(0);
-    });
-  }
-
-  process.on('SIGTERM', handleShutdown);
-  process.on('SIGINT', handleShutdown);
-
   try {
     await Promise.all([
       Parse.Cloud.run('initialization'),
-      Parse.Cloud.run('ensureBusiness'),
       Parse.Cloud.run('initUsers'),
     ]);
     log('Server initialized.');

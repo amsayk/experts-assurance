@@ -1,7 +1,7 @@
 # webstorm
 .idea/
 
-dist/
+dist
 
 .eslintcache
 
@@ -13,7 +13,7 @@ node_modules
 
 # Logs
 logs
-*.log
+*.log*
 
 # Config
 .env

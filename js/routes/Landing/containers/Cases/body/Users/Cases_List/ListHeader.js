@@ -68,7 +68,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>Réf</div>
+                <div className={style.text}>État</div>
                 {key === 'refNo' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>
@@ -102,7 +102,7 @@ class ListHeader extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={cx(style.text)}>
-                  Assureur
+                  Modèle
                 </div>
               </div>
             </div>
@@ -113,9 +113,8 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} className={style.text}>
-                  <div>Vehicle</div>
-                  <div>(Modèle, Matricule)</div>
+                <div className={style.text}>
+                  Matricule
                 </div>
               </div>
             </div>
@@ -126,7 +125,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>Modifié</div>
+                <div className={style.text}>DT Sinistre</div>
                 {key === 'date' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>

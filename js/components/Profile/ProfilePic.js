@@ -3,12 +3,14 @@ import React, { PropTypes as T } from 'react';
 import Avatar from 'components/Avatar';
 
 function getInitials(name) {
-  const parts = name.split(' ');
-  let initials = '';
-  for(let i = 0 ; i < parts.length ; i++) {
-    initials += parts[i].substr(0, 1).toUpperCase();
-  }
-  return initials;
+  // const parts = name.split(' ');
+  // let initials = '';
+  // for(let i = 0 ; i < parts.length ; i++) {
+  //   initials += parts[i].substr(0, 1).toUpperCase();
+  // }
+  // return initials;
+
+  return name[0];
 }
 
 const ProfilePic = ({ user, size, ...props }) => {

@@ -1,7 +1,9 @@
 import Parse from 'parse';
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
-const log = require('debug')('app:client:auth');
+import debug from 'log';
+
+const log = debug('app:client:auth');
 
 export function login(payload) {
   return {

@@ -53,7 +53,7 @@
 }
 
 .overviewLabel {
-  composes: col-3 from 'styles/_base.scss';
+  composes: col-4 from 'styles/_base.scss';
   font-weight: bolder;
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.54);
@@ -67,7 +67,7 @@
 }
 
 .overviewValue {
-  composes: col-9 from 'styles/_base.scss';
+  composes: col-8 from 'styles/_base.scss';
   color: #000;
 }
 

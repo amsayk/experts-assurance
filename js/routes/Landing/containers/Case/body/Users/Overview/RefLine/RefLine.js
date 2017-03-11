@@ -14,19 +14,21 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
+const LABEL = 'Référence';
+
 class RefLine extends React.Component {
   render() {
     const { intl, docLoading, doc } = this.props;
 
     if (docLoading) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>Référence</div>
+        <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
             #{doc.refNo}

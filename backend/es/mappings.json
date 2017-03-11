@@ -1,0 +1,222 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "email": {
+          "type": "pattern_capture",
+          "preserve_original": 1,
+          "patterns": [
+            "([^@]+)",
+            "(\\p{L}+)",
+            "(\\d+)",
+            "@(.+)",
+            "([^-@]+)"
+          ]
+        }
+      },
+      "analyzer": {
+        "email": {
+          "tokenizer": "uax_url_email",
+          "filter": [
+            "email",
+            "lowercase",
+            "unique"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "person": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "email": {
+          "type": "string",
+          "analyzer": "email"
+        },
+        "username": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "date": {
+          "type": "date"
+        },
+        "lastModified": {
+          "type": "date"
+        }
+      }
+    },
+    "doc": {
+      "properties": {
+        "refNo": {
+          "type": "integer"
+        },
+        "state": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "vehicle": {
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "plateNumber": {
+              "type": "string"
+            }
+          }
+        },
+        "agent": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "isAdmin": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string",
+              "analyzer": "simple"
+            },
+            "email": {
+              "type": "string",
+              "analyzer": "email"
+            }
+          }
+        },
+        "client": {
+          "properties" : {
+            "id": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "string",
+              "analyzer": "simple"
+            },
+            "email": {
+              "type": "string",
+              "analyzer": "email"
+            }
+          }
+        },
+        "insurer": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "string",
+              "analyzer": "simple"
+            },
+            "email": {
+              "type": "string",
+              "analyzer": "email"
+            }
+          }
+        },
+        "user": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "isAdmin": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string",
+              "analyzer": "simple"
+            },
+            "email": {
+              "type": "string",
+              "analyzer": "email"
+            }
+          }
+        },
+        "validation": {
+          "properties": {
+            "user": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "type": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                },
+                "isAdmin": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string",
+                  "analyzer": "simple"
+                },
+                "email": {
+                  "type": "string",
+                  "analyzer": "email"
+                }
+              }
+            },
+            "date": {
+              "type": "date"
+            }
+          }
+        },
+        "closure": {
+          "properties": {
+            "state": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "user": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "type": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                },
+                "isAdmin": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string",
+                  "analyzer": "simple"
+                },
+                "email": {
+                  "type": "string",
+                  "analyzer": "email"
+                }
+              }
+            },
+            "date": {
+              "type": "date"
+            }
+          }
+        },
+        "date": {
+          "type": "date"
+        },
+        "lastModified": {
+          "type": "date"
+        }
+      }
+    }
+  }
+}

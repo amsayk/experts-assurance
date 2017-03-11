@@ -125,6 +125,6 @@ export default makeExecutableSchema({
   typeDefs                : schema,
   resolvers               : resolvers,
   allowUndefinedInResolve : false,
-  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', require('util').inspect(e.stack)) },
+  logger                  : { log: (e) => log.error('[GRAPHQL ERROR]', require('util').inspect(e)) },
 });
 

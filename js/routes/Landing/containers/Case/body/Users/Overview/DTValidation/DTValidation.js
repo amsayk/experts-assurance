@@ -11,13 +11,15 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
+const LABEL = 'DT Validation';
+
 class DTValidation extends React.Component {
   render() {
     const { intl, docLoading, doc } = this.props;
 
     if (docLoading) {
       return (
-        <Loading/>
+        <Loading width={LABEL.length}/>
       );
     }
 
@@ -27,7 +29,7 @@ class DTValidation extends React.Component {
 
     return (
       <div className={style.overviewLine}>
-        <div className={style.overviewLabel}>DT Validation</div>
+        <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
           {intl.formatDate(doc.validation.date)}
         </div>
