@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 
+import config from 'build/config';
+
 import publish from 'backend/kue-mq/publish';
 
 import * as es from 'backend/es';
