@@ -9,7 +9,7 @@ import { DocType } from 'data/types';
 
 import docs from './utils/docs.json';
 
-import users from 'data/_User.json';
+import users from 'backend/sample_data/utils/users.json';
 
 export const loaders = {
   refNo : new DataLoader(async function (keys) {

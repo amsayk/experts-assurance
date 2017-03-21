@@ -22,5 +22,17 @@ export class Docs {
     return this.connector.searchUsersByRoles(queryString, roles);
   }
 
+  esSearchUsersByRoles(queryString, roles) {
+    return this.connector.esSearchUsersByRoles(queryString, roles);
+  }
+
+  esSearchDocs(queryString, state) {
+    return this.connector.esSearchDocs(queryString, state);
+  }
+
+  esQueryDocs(query) {
+    return this.connector.esQueryDocs(query);
+  }
+
 }
 

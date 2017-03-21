@@ -30,10 +30,12 @@ const rootSchema = [`
     # Accounts
     getUser(id: ID!): User
     usersByRoles(queryString: String, roles: [Role!]!): [User!]!
+    esUsersByRoles(queryString: String, roles: [Role!]!): ESUsersQueryResponse!
 
     # Business
     getUsers(query: UsersFetchQuery!): UsersFetchResponse!
     searchUsers(queryString: String): [User!]!
+    esSearchUsers(queryString: String): ESUsersQueryResponse!
 
     # Activites
     timeline(cursor: Date, query: TimelineQuery!): TimelineResponse!
@@ -41,6 +43,8 @@ const rootSchema = [`
     # Docs
     getDoc(id: ID!): Doc
     getDocs(query: DocsFetchQuery!): DocsFetchResponse!
+    esSearchDocs(queryString: String, state: DocState): ESDocsQueryResponse!
+    esQueryDocs(query: ESDocsQueryPayload!): ESDocsQueryResponse!
   }
 
   type Mutation {

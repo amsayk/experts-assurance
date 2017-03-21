@@ -28,23 +28,23 @@ class PickUser extends React.Component {
     this.props.actions.search(e.target.value);
   }
   render() {
-    const { onInput, queryString, loading, users = [], onUser } = this.props;
+    const { onInput, queryString, loading = false, result = { hits: [] }, onUser } = this.props;
 
     let content = <li className={style.noResults}>Aucun résultat</li>;
     if (loading) {
       content = queryString ? null : content;
-    } else if (users.length > 0) {
-      content = users.map((user) => (
+    } else if (result.hits.length > 0) {
+      content = result.hits.map(({ _id, _source : user }) => (
         <li className={style.result}>
-          <MenuItem onClick={onUser.bind(null, user.id)} className={style.userLine} role='button'>
+          <MenuItem onClick={onUser.bind(null, _id)} className={style.userLine} role='button'>
             <span style={{ marginRight: 5 }}>
-              <ProfilePic size={18} user={user}/>
+              <ProfilePic size={18} user={{ displayName : user.name }}/>
             </span>
             <span className={style.text}>
               <Highlighter
                 highlightClassName={style.hit}
                 searchWords={[queryString]}
-                textToHighlight={user.displayName}
+                textToHighlight={user.name}
               />
             </span>
           </MenuItem>
@@ -89,6 +89,6 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 export default (...roles) => compose(
   Connect,
-  DataLoader.usersByRoles(...roles),
+  DataLoader.esUsersByRoles(...roles),
 )(PickUser);
 

@@ -26,13 +26,13 @@ const responseMiddlewareNetworkInterface = getNetworkInterface(GRAPHQL_ENDPOINT,
 
 // Sample error handling middleware
 responseMiddlewareNetworkInterface.use({
-  applyMiddleware(req, next) {
+  applyBatchMiddleware(req, next) {
     if (!req.options.headers) {
       req.options.headers = {};  // Create the header object if needed.
     }
     next();
   },
-  applyAfterware: (response, next) => {
+  applyBatchAfterware: (response, next) => {
     if (response.errors) {
       if (typeof window !== 'undefined') {
         log.error(JSON.stringify(response.errors));

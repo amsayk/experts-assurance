@@ -72,13 +72,17 @@ export class SignupContainer extends React.Component {
     if (e.key === 'Enter' && e.shiftKey === false) {
       const submit = this.props.handleSubmit(this.onSubmit);
       submit();
+      debugger;
     }
   }
 
   async onSubmit(data) {
+    debugger;
+
     try {
       await validations.asyncValidate(data);
     } catch (e) {
+      debugger;
       throw new SubmissionError(e);
     }
 
@@ -90,7 +94,7 @@ export class SignupContainer extends React.Component {
         email                : data.get('email'),
         password             : data.get('password'),
         passwordConfirmation : data.get('passwordConfirmation'),
-        recaptcha            : data.get('recaptcha'),
+        // recaptcha            : true,
       } },
     });
 
@@ -140,9 +144,9 @@ export class SignupContainer extends React.Component {
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
-      ENABLE_RECAPTCHA ? <Field
-        name={'recaptcha'}
-        component={ReCAPTCHAField} /> : null,
+      // ENABLE_RECAPTCHA ? <Field
+      //   name={'recaptcha'}
+      //   component={ReCAPTCHAField} /> : null,
 
       <p className={style.tos}>
         <FormattedMessage

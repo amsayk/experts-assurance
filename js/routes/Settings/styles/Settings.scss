@@ -6,18 +6,19 @@ $sidebar-width: 240px;
 
 // Common
 
-.body {
-  margin-top: calc(#{$navbar-height} + 1px);
-  background-color: #fff;
-  composes: d-flex from 'styles/_base.scss';
-  flex: 1;
-}
+// .body {
+//   margin-top: calc(#{$navbar-height} + 1px);
+//   background-color: #fff;
+//   composes: d-flex from 'styles/_base.scss';
+//   flex: 1;
+// }
 
 .content {
   flex: 1;
   // overflow: auto;
   padding: 20px;
   margin-left: $sidebar-width;
+  margin-top: calc(#{$navbar-height});
 }
 
 .form {
@@ -45,10 +46,21 @@ $sidebar-width: 240px;
 .changePasswordButton {
   composes: btn btn-primary from 'styles/_base.scss';
   font-weight: 500;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .cancelButton {
   composes: btn btn-link from 'styles/_base.scss';
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+
 }
 
 .control {
@@ -154,7 +166,7 @@ textarea.control {
   height: $navbar-height;
 
   .notificationOpen & {
-    top: calc(#{$notification-height});
+    // top: calc(#{$notification-height});
   }
 
 }
@@ -172,8 +184,11 @@ textarea.control {
 // Sidebar
 
 .sidebar {
-  composes: fixed-top from 'styles/_base.scss';
+  position: fixed;
   top: $navbar-height;
+  right: 0;
+  left: 0;
+  z-index: 1030;
   border-right: 1px solid rgba(0, 0, 0, 0.095);
   padding: 20px;
   width: $sidebar-width;

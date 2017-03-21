@@ -12,6 +12,17 @@
             "@(.+)",
             "([^-@]+)"
           ]
+        },
+        "nGram_filter": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 20,
+          "token_chars": [
+            "letter",
+            "digit",
+            "punctuation",
+            "symbol"
+          ]
         }
       },
       "analyzer": {
@@ -22,199 +33,259 @@
             "lowercase",
             "unique"
           ]
-        }
-      }
-    }
-  },
-  "mappings": {
-    "person": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "analyzer": "simple"
         },
-        "email": {
-          "type": "string",
-          "analyzer": "email"
+        "nGram_analyzer": {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "nGram_filter"
+          ]
         },
-        "username": {
-          "type": "keyword"
-        },
-        "type": {
-          "type": "string",
-          "index": "not_analyzed"
-        },
-        "isAdmin": {
-          "type": "boolean"
-        },
-        "date": {
-          "type": "date"
-        },
-        "lastModified": {
-          "type": "date"
+        "whitespace_analyzer": {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
         }
       }
     },
-    "doc": {
-      "properties": {
-        "refNo": {
-          "type": "integer"
-        },
-        "state": {
-          "type": "string",
-          "index": "not_analyzed"
-        },
-        "vehicle": {
-          "properties": {
-            "model": {
-              "type": "string"
-            },
-            "plateNumber": {
-              "type": "string"
-            }
+    "mappings": {
+      "person": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "index_options": "offsets",
+            "analyzer": "nGram_analyzer",
+            "search_analyzer": "whitespace_analyzer"
+          },
+          "email": {
+            "type": "string",
+            "index_options": "offsets",
+            "analyzer": "email"
+          },
+          "username": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "string",
+            "index": "not_analyzed"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "date": {
+            "type": "date"
+          },
+          "lastModified": {
+            "type": "date"
           }
-        },
-        "agent": {
-          "properties": {
-            "id": {
-              "type": "keyword"
-            },
-            "type": {
-              "type": "string",
-              "index": "not_analyzed"
-            },
-            "isAdmin": {
-              "type": "boolean"
-            },
-            "name": {
-              "type": "string",
-              "analyzer": "simple"
-            },
-            "email": {
-              "type": "string",
-              "analyzer": "email"
-            }
-          }
-        },
-        "client": {
-          "properties" : {
-            "id": {
-              "type": "keyword"
-            },
-            "name": {
-              "type": "string",
-              "analyzer": "simple"
-            },
-            "email": {
-              "type": "string",
-              "analyzer": "email"
-            }
-          }
-        },
-        "insurer": {
-          "properties": {
-            "id": {
-              "type": "keyword"
-            },
-            "name": {
-              "type": "string",
-              "analyzer": "simple"
-            },
-            "email": {
-              "type": "string",
-              "analyzer": "email"
-            }
-          }
-        },
-        "user": {
-          "properties": {
-            "id": {
-              "type": "keyword"
-            },
-            "type": {
-              "type": "string",
-              "index": "not_analyzed"
-            },
-            "isAdmin": {
-              "type": "boolean"
-            },
-            "name": {
-              "type": "string",
-              "analyzer": "simple"
-            },
-            "email": {
-              "type": "string",
-              "analyzer": "email"
-            }
-          }
-        },
-        "validation": {
-          "properties": {
-            "user": {
-              "properties": {
-                "id": {
-                  "type": "keyword"
-                },
-                "type": {
-                  "type": "string",
-                  "index": "not_analyzed"
-                },
-                "isAdmin": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string",
-                  "analyzer": "simple"
-                },
-                "email": {
-                  "type": "string",
-                  "analyzer": "email"
-                }
+        }
+      },
+      "doc": {
+        "properties": {
+          "refNo": {
+            "type": "integer"
+          },
+          "refNo_string": {
+            "type": "string",
+            "index_options": "offsets",
+            "analyzer": "nGram_analyzer",
+            "search_analyzer": "whitespace_analyzer"
+          },
+          "state": {
+            "type": "string",
+            "index": "not_analyzed"
+          },
+          "vehicle": {
+            "properties": {
+              "model": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+
+              },
+              "plateNumber": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+
               }
-            },
-            "date": {
-              "type": "date"
             }
-          }
-        },
-        "closure": {
-          "properties": {
-            "state": {
-              "type": "string",
-              "index": "not_analyzed"
-            },
-            "user": {
-              "properties": {
-                "id": {
-                  "type": "keyword"
-                },
-                "type": {
-                  "type": "string",
-                  "index": "not_analyzed"
-                },
-                "isAdmin": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string",
-                  "analyzer": "simple"
-                },
-                "email": {
-                  "type": "string",
-                  "analyzer": "email"
-                }
+          },
+          "agent": {
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "type": {
+                "type": "string",
+                "index": "not_analyzed"
+              },
+              "isAdmin": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+              },
+              "email": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "email"
               }
-            },
-            "date": {
-              "type": "date"
             }
+          },
+          "client": {
+            "properties" : {
+              "id": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+              },
+              "email": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "email"
+              }
+            }
+          },
+          "insurer": {
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+              },
+              "email": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "email"
+              }
+            }
+          },
+          "user": {
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "type": {
+                "type": "string",
+                "index": "not_analyzed"
+              },
+              "isAdmin": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "nGram_analyzer",
+                "search_analyzer": "whitespace_analyzer",
+                "fielddata": true
+              },
+              "email": {
+                "type": "string",
+                "index_options": "offsets",
+                "analyzer": "email"
+              }
+            }
+          },
+          "validation": {
+            "properties": {
+              "user": {
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "type": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                  },
+                  "isAdmin": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "string",
+                    "index_options": "offsets",
+                    "analyzer": "nGram_analyzer",
+                    "search_analyzer": "whitespace_analyzer",
+                    "fielddata": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "index_options": "offsets",
+                    "analyzer": "email"
+                  }
+                }
+              },
+              "date": {
+                "type": "date"
+              }
+            }
+          },
+          "closure": {
+            "properties": {
+              "state": {
+                "type": "string",
+                "index": "not_analyzed"
+              },
+              "user": {
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "type": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                  },
+                  "isAdmin": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "string",
+                    "index_options": "offsets",
+                    "analyzer": "nGram_analyzer",
+                    "search_analyzer": "whitespace_analyzer",
+                    "fielddata": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "index_options": "offsets",
+                    "analyzer": "email"
+                  }
+                }
+              },
+              "date": {
+                "type": "date"
+              }
+            }
+          },
+          "date": {
+            "type": "date"
+          },
+          "lastModified": {
+            "type": "date"
           }
-        },
-        "date": {
-          "type": "date"
-        },
-        "lastModified": {
-          "type": "date"
         }
       }
     }

@@ -37,7 +37,7 @@ export default defineMessages({
 
   BusinessRequired: {
     id: 'notification.business-required',
-    defaultMessage: 'Merci d’avoir utilisé {appName}. Veuillez {link} pour ajouter les détails de votre entreprise.',
+    defaultMessage: 'Merci d’utiliser {appName}. Veuillez {link} pour ajouter les détails de votre entreprise.',
   },
   AddBusinessLink: {
     id: 'notification.add-business-link',

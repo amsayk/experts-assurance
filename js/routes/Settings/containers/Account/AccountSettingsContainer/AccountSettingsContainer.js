@@ -26,13 +26,13 @@ function AccountSettingsContainer({ intl, user, actions }) {
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
-      <div className={style.body}>
+      {/* <div className={style.body}> */}
         <Sidebar user={user} selectedMenuItem={'account.settings'}/>
         <AccountSettingsForm intl={intl} initialValues={{
           email: user.email,
           displayName: user.displayName,
         }}/>
-      </div>
+      {/* </div> */}
     </div>
   );
 }

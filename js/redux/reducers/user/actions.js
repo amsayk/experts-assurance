@@ -12,7 +12,7 @@ export function login(payload) {
   };
 }
 
-export function logOut() {
+export function logOut(manual = true) {
   return async (dispatch, _, { client }) => {
     try {
       await Parse.User.logOut();
@@ -25,7 +25,7 @@ export function logOut() {
           log.error(e);
       }
     } finally {
-      dispatch({ type: USER_LOGGED_OUT });
+      dispatch({ type: USER_LOGGED_OUT, manual });
       client.resetStore();
     }
   };

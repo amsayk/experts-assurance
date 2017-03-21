@@ -14,7 +14,7 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
-const LABEL = 'Assureur';
+const LABEL = 'Agent';
 
 class InsurerLine extends React.Component {
   render() {

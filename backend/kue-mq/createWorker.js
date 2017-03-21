@@ -14,17 +14,6 @@ const log = require('log')('app:backend:mq:backend');
  */
 export default function createWorker(opts, name, methods) {
   log('Creating worker for', name);
-  // const queue = kue.createQueue({
-  //   prefix: opts.prefix || 'q',
-  //   redis: {
-  //     port: opts.redis.port || 6379,
-  //     host: opts.redis.host || '127.0.0.1',
-  //     auth: opts.redis.auth || '',
-  //     db: opts.redis.db,
-  //     options: opts.redis.options,
-  //   },
-  //   disableSearch: true,
-  // });
   const queue = kue.createQueue(opts);
 
   queue.process(name, opts.concurrency || 1, function (job, done) {

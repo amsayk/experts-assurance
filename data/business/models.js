@@ -27,5 +27,9 @@ export class Business {
     return this.connector.searchUsers(q, this.user);
   }
 
+  esSearchUsers(q) {
+    return this.connector.esSearchUsers(q, this.user);
+  }
+
 }
 

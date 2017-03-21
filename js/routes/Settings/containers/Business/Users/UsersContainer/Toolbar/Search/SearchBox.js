@@ -57,7 +57,7 @@ class SearchBox extends React.Component {
     raf(() => this.props.actions.search(''));
   }
   render() {
-    const { users, loading, queryString : q, intl, onClose } = this.props;
+    const { result, loading, queryString : q, intl, onClose } = this.props;
     return (
       <Dropdown componentClass={'div'} defaultOpen onClose={onClose} className={style.searchFieldWrapper} role='search'>
         <div className={cx(style.searchField, style.active, style.hasContent)}>
@@ -72,7 +72,7 @@ class SearchBox extends React.Component {
               onChange={this.onText}
               autoComplete='off'
               autoCorrect='off'
-              placeholder='Rechercher des utilisateurs'
+              placeholder='Recherche des utilisateurs'
               type='text'
               spellCheck='false'
               style={{ outline: 'none' }}
@@ -82,11 +82,11 @@ class SearchBox extends React.Component {
             <CloseIcon size={18}/>
           </Button> : null}
         </div>
-        <Dropdown.Menu className={cx(style.searchBoxMenu, users.length > 0 || style.hide)}>
+        <Dropdown.Menu className={cx(style.searchBoxMenu, result.hits.length > 0 || style.hide)}>
           <MenuItem header componentClass={Header} title={'Résultat de recherche'}/>
-          {users.map((user, index) => {
+          {result.hits.map(({ _id, _source : user }, index) => {
             return (
-              <MenuItem q={q} url={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id} key={user.id} eventKey={index} ProfilePic={ProfilePic} componentClass={ListItem} item={user} intl={intl}/>
+              <MenuItem q={q} url={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + _id} key={_id} eventKey={index} ProfilePic={ProfilePic} componentClass={ListItem} item={user} intl={intl}/>
             );
           })}
         </Dropdown.Menu>
@@ -111,25 +111,25 @@ function ListItem({ intl, item, q, url, role }) {
       <Link to={url}>
         <div className={style.icon}>
           <span className={style.iconWrapper}>
-            <ProfilePic/>
+            <ProfilePic user={{ displayName : item.name }}/>
             <span className={style.iconOverlay} />
           </span>
         </div>
-        <div className={style.content}>
+        <div className={style.info}>
           <div className={style.title}>
             <span>
               <Highlighter
                 highlightClassName={style.hit}
                 searchWords={[q]}
-                textToHighlight={item.displayName}
+                textToHighlight={item.name}
               />
             </span>
           </div>
-          {item.updatedAt ? <div className={style.subtitle}>
+          {item.lastModified ? <div className={style.subtitle}>
             <div className={style.entryByLine}>
               <span>
                 <span className={style.timeAgo}>
-                  {intl.formatRelative(item.updatedAt)}
+                  {intl.formatRelative(item.lastModified)}
                 </span>
               </span>
               <span>
@@ -174,6 +174,6 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(
   Connect,
-  DataLoader.search,
+  DataLoader.esSearch,
 )(SearchBox);
 

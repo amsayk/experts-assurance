@@ -20,7 +20,7 @@ export default function appStateChangeObserver(store) {
 
   function doLogOut() {
     clearTimeout();
-    store.dispatch(logOut());
+    store.dispatch(logOut(/* manual = */false));
   }
 
   function cb() {

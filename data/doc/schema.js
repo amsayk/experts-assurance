@@ -15,6 +15,92 @@ export const schema = [`
   }
 
   # Queries
+
+  type ESDocValidationState {
+    date: Date!
+    user: ESUserSource!
+  }
+
+  type ESDocClosureState {
+    date: Date!
+    user: ESUserSource!
+    state: DocState!
+  }
+
+  type ESDocSource {
+    id: ID!
+    refNo: Int!
+    refNo_string: String!
+    state: DocState!
+    vehicle: Vehicle!
+
+    client: ESUserSource!
+    agent: ESUserSource!
+    insurer: ESUserSource # TODO: make this required.
+    user: ESUserSource!
+
+    validation: ESDocValidationState
+    closure: ESDocClosureState
+
+    date: Date!
+    lastModified: Date!
+  }
+
+  type ESDoc {
+    _index: String!
+    _type: String!
+    _id: String!
+    _score: Int!
+    highlight: [String!]!
+    _source: ESDocSource!
+  }
+
+  input UserQuery {
+    id: ID
+    q: String
+  }
+
+  input DateRange {
+    from: Date
+    to: Date
+  }
+
+  input ESSortConfig {
+    key: String
+    direction: SortDirection
+  }
+
+  input ESDocsQueryPayload {
+    q: String
+    state: DocState
+
+    agent: UserQuery
+    client: UserQuery
+    insurer: UserQuery
+
+    range: DateRange
+    validationRange: DateRange
+    closureRange: DateRange
+
+    validator: UserQuery
+    closer: UserQuery
+    user: UserQuery
+
+    lastModified: Date
+
+    sortConfig: ESSortConfig
+
+    cursor: Int
+  }
+
+  type ESDocsQueryResponse {
+    took: Int!
+    length: Int!
+    max_score: Float
+    cursor: Int!
+    hits: [ESDoc!]!
+  }
+
   type DocsFetchResponse {
     cursor: Int!
     length: Int!
@@ -159,6 +245,14 @@ export const resolvers = {
     ])
   ),
 
+  ESDoc: Object.assign(
+    {
+      highlight(_source, {}, {}) {
+        return Object.keys(_source.highlight || {});
+      },
+    },
+  ),
+
   Mutation: {
 
   },
@@ -172,6 +266,15 @@ export const resolvers = {
     },
     usersByRoles(obj, { queryString, roles }, context) {
       return context.Docs.searchUsersByRoles(queryString, roles);
+    },
+    esUsersByRoles(obj, { queryString, roles }, context) {
+      return context.Docs.esSearchUsersByRoles(queryString, roles);
+    },
+    esSearchDocs(obj, { queryString, state }, context) {
+      return context.Docs.esSearchDocs(queryString, state);
+    },
+    esQueryDocs(obj, { query }, context) {
+      return context.Docs.esQueryDocs(query);
     },
   },
 

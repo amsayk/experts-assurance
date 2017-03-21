@@ -36,7 +36,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     const timeoutCall = setTimeout(function () {
       reject('Timeout error by call of ' + serverMethod);
       clearJob();
-    }, options.timeout || (12 * 60 * 1000));
+    }, options.timeout || (30 * 1000));
 
     job.on('failed', function (err) {
       clearTimeout(timeoutCall);

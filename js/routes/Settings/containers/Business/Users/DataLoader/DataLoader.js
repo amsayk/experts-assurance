@@ -2,7 +2,8 @@ import { graphql } from 'react-apollo';
 
 import CURRENT_USER_QUERY from './currentUser.query.graphql';
 import GET_USERS_QUERY from './getUsers.query.graphql';
-import SEARCH_USERS_QUERY from './searchUsers.query.graphql';
+// import SEARCH_USERS_QUERY from './searchUsers.query.graphql';
+import ES_SEARCH_USERS_QUERY from './esSearchUsers.query.graphql';
 
 import pick from 'lodash.pick';
 
@@ -55,15 +56,27 @@ const users = graphql(GET_USERS_QUERY, {
   }),
 });
 
-const search = graphql(SEARCH_USERS_QUERY, {
+// const search = graphql(SEARCH_USERS_QUERY, {
+//   options: (ownProps) => ({
+//     variables: {
+//       queryString : ownProps.queryString,
+//     },
+//   }),
+//   props: ({ ownProps, data: { loading, searchUsers = [] } }) => ({
+//     loading,
+//     users : searchUsers,
+//   }),
+// });
+
+const esSearch = graphql(ES_SEARCH_USERS_QUERY, {
   options: (ownProps) => ({
     variables: {
       queryString : ownProps.queryString,
     },
   }),
-  props: ({ ownProps, data: { loading, searchUsers = [] } }) => ({
+  props: ({ ownProps, data: { loading, esSearchUsers = { hits: [] } } }) => ({
     loading,
-    users : searchUsers,
+    result : esSearchUsers,
   }),
 });
 
@@ -72,5 +85,5 @@ const currentUser = graphql(CURRENT_USER_QUERY, {
   skip: ({ user }) => user.isEmpty,
 });
 
-export default { users, currentUser, search };
+export default { users, currentUser,/* search,*/ esSearch };
 

@@ -11,6 +11,8 @@ import {
   ON_INSURER,
 } from './constants';
 
+import { USER_LOGGED_OUT, USER_LOGGED_IN } from 'redux/reducers/user/constants';
+
 import { INIT } from 'vars';
 
 // selection
@@ -75,11 +77,14 @@ export default function reducer(state = initialState, action) {
       });
     }
 
+      case USER_LOGGED_IN:
     case INIT: {
       return state.merge({
         sortConfig : sortInitialState.merge(cookie.load('cases.sortConfig', /* doNotParse = */false)),
       });
     }
+    case USER_LOGGED_OUT:
+      return action.manual ? initialState : state;
     default:
       return state;
   }

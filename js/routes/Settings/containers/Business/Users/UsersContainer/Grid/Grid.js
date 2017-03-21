@@ -124,7 +124,7 @@ class Grid extends React.Component {
     let scrollSpy = null;
     if (isReady && !isServer) {
       const { spy, fetchMore } = this.state;
-      const disabled = (items.length < 30);
+      const disabled = (length < 30);
       scrollSpy = (
         spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
       );

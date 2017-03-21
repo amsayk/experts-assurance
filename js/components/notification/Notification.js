@@ -13,7 +13,7 @@ import SessionExpired from './SessionExpired';
 import BusinessRequired from './BusinessRequired';
 import InvalidLink from './InvalidLink';
 import PasswordResetSuccess from './PasswordResetSuccess';
-import VerificationPending from './VerificationPending';
+// import VerificationPending from './VerificationPending';
 import VerificationSuccess from './VerificationSuccess';
 
 import { remove } from 'redux/reducers/notification/actions';
@@ -118,8 +118,8 @@ class Notification extends React.Component {
           return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
         case 'PasswordResetSuccess':
           return <PasswordResetSuccess className={this.getClass()}/>;
-        case 'VerificationPending':
-          return <VerificationPending className={this.getClass()}/>;
+        // case 'VerificationPending':
+          // return <VerificationPending className={this.getClass()}/>;
         case 'VerificationSuccess':
           return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
         default:

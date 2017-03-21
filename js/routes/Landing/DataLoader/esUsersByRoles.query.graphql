@@ -1,0 +1,22 @@
+query esUsersByRoles($queryString: String, $roles: [Role!]!) {
+  esUsersByRoles(queryString: $queryString, roles:$roles) {
+    took
+    total
+    max_score
+    hits {
+      _index
+      _type
+      _id
+      _score
+      _source {
+        name
+        email
+        username
+        isAdmin
+        type
+        date
+        lastModified
+      }
+    }
+  }
+}

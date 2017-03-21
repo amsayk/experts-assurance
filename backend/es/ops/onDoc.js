@@ -15,14 +15,16 @@ const log = require('log')('app:backend:es:onDoc');
 export default function onDoc(id) {
   return new Promise(async (resolve, reject) => {
     try {
-      const doc = await new Parse.Query(DocType).get(id);
+      const doc = await new Parse.Query(DocType).get(id, { useMasterKey : true });
 
       client.index({
         index: 'fikrat',
         type: 'doc',
         id: doc.get('refNo'),
         body: {
+          id           : doc.id,
           refNo        : doc.get('refNo'),
+          refNo_string : String(doc.get('refNo')),
           vehicle      : doc.get('vehicle'),
           state        : doc.get('state'),
           date         : doc.get('date'),
@@ -50,27 +52,36 @@ export default function onDoc(id) {
   });
 }
 
-function indexedUser(user, isEmployee = false) {
+async function indexedUser(user, isEmployee = false) {
   if (user) {
-    return user.fetch({ useMasterKey: true }).then(user => ({
-      id: user.id,
-      name: user.get('displayName'),
-      email: user.get('email'),
-      ...(isEmployee ? {
+    try {
+      return await user.fetch({ useMasterKey: true }).then(user => ({
+        id           : user.id,
+        name         : user.get('displayName'),
+        email        : user.get('email'),
         type         : getType(user),
         isAdmin      : (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1,
-      } : {}),
-    })).catch(() => null);
+        date         : user.get('createdAt'),
+        lastModified : user.get('updatedAt'),
+      }));
+
+    } catch (e) {
+      log.error(`Error getting user ${user.id}`, e);
+      return null;
+    }
   }
 
-  return Promise.resolve(null);
+  return null;
 }
 
 async function getValidation(doc) {
-  if (doc.validation) {
+  const validation = doc.get('validation');
+  if (validation) {
+    const user = await new Parse.Query(Parse.User).get(validation.user, { useMasterKey : true });
+    const isEmployee = (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
     return {
-      ...doc.validation,
-      user : await new Parse.Query(Parse.User).get(doc.validation.user),
+      date : validation.date,
+      user : await indexedUser(user, isEmployee),
     };
   }
 
@@ -79,10 +90,14 @@ async function getValidation(doc) {
 
 
 async function getClosure(doc) {
-  if (doc.closure) {
+  const closure = doc.get('closure');
+  if (closure) {
+    const user = await new Parse.Query(Parse.User).get(closure.user, { useMasterKey : true });
+    const isEmployee = (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
     return {
-      ...doc.closure,
-      user : await new Parse.Query(Parse.User).get(doc.closure.user),
+      state : closure.state,
+      date : closure.date,
+      user : await indexedUser(user, isEmployee),
     };
   }
 
@@ -104,6 +119,6 @@ function getType(user) {
     return 'INSURER';
   }
 
-  return null;
+  return 'CLIENT';
 }
 

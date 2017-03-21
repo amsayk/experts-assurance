@@ -21,7 +21,7 @@ export default async function checkBusiness() {
     const business = await new Parse.Query(BusinessType)
       .equalTo('key', BUSINESS_KEY)
       .first({ sessionToken: user.sessionToken });
-    if (business && business.has('displayName') && business.get('displayName')) {
+    if (user.emailVerified === false ? business && business.has('displayName') && business.get('displayName') : true) {
       store.dispatch(removeNotification('BusinessRequired'));
     } else {
       store.dispatch(addNotification('BusinessRequired', { persist: true }));

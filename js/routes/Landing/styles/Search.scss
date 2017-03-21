@@ -1,0 +1,249 @@
+// Search
+
+.searchFieldWrapper {
+  flex: 1;
+  margin-left: 17px;
+  margin-right: 17px;
+}
+
+.searchField {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  max-width: 720px;
+  position: relative;
+  transition: background 100ms ease-in, width 100ms ease-out;
+  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+
+  .searchLoading {
+    padding: .5rem 1rem;
+  }
+}
+
+.searchField.active {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+}
+
+.searchField.hasContent {
+  border-bottom: none;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.inputWrapper {
+  cursor: default;
+  transition: opacity 250ms ease-out;
+}
+
+.inputWrapper {
+  flex: 1;
+  composes: d-flex flex-row from 'styles/_base.scss';
+}
+
+.input {
+  border: none;
+  font-size: 16px;
+  font-weight: normal;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.clearSearch {
+  padding-left: 0.6rem;
+}
+
+.toggleAdvancedMode {
+  visibility: hidden;
+  padding-left: 0;
+
+  .searchFieldWrapper .hasInput & {
+    padding-right: 0;
+  }
+
+  .searchFieldWrapper:hover &,
+  .searchFieldWrapper .active &{
+    visibility: visible;
+  }
+}
+
+.searchField button,
+.searchField input {
+  color: #212121;
+}
+
+.searchField button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    box-shadow: none;
+  }
+  opacity: 0.54;
+
+  &:hover {
+    opacity: 0.8;
+    color: $black;
+  }
+}
+
+.searchBoxMenu {
+  width: 100%;
+  top: 102%;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+  background-clip: initial;
+  display: block;
+  max-width: 720px;
+  max-height: 80vh;
+  // overflow-y: auto;
+
+  .noTopBorder {
+    border-top: none;
+  }
+
+  &:empty {
+    display: none;
+  }
+
+  z-index: 2399999;
+}
+
+.scrollY {
+  overflow-y: auto;
+}
+
+// State filters
+
+.stateFilter {
+  padding: 15px 8px 14px 25px;
+  color: #222;
+
+  & * {
+    user-select: none;
+  }
+}
+
+.stateFilterAdvancedSearch,
+.stateFilter_PENDING,
+.stateFilter_OPEN,
+.stateFilter_CLOSED,
+.stateFilter_CANCELED {
+  composes: stateFilter;
+}
+
+.stateFilterAdvancedSearch {
+  font-weight: 700;
+  // background-color: #fafafa;
+
+  &:hover {
+    // background-color: #eee;
+  }
+}
+
+.docSearchState {
+  &:empty {
+    display: none;
+  }
+
+  padding: .4rem 0;
+
+  height: 32px;
+  border-right: 1px solid #eaecef;
+  margin-right: 12px;
+
+  padding-right: 12px;
+  font-size: 12px;
+  color: #586069;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.docSearchState_PENDING,
+.docSearchState_OPEN,
+.docSearchState_CLOSED,
+.docSearchState_CANCELED {
+  composes: docSearchState;
+}
+
+.docSearchState_PENDING {
+  color: $brand-warning;
+}
+.docSearchState_OPEN {
+  color: $brand-info;
+}
+
+.docSearchState_CLOSED {
+  color: $brand-success;
+}
+.docSearchState_CANCELED {
+  color: $brand-danger;
+}
+
+// Search results
+
+.docSearchDoc {
+  composes: d-flex flex-row from 'styles/_base.scss';
+  flex: 1;
+  padding: 15px 8px 14px 25px;
+}
+
+.docSearchDocInfo {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  flex: 1;
+
+  .docSearchDocTop {
+    font-weight: 700;
+  }
+}
+
+.docSearchDocMiddle {
+  composes: d-flex flex-row justify-content-start align-items-center from 'styles/_base.scss';
+  flex: 1;
+}
+
+
+// Highlight
+
+.highlightGroup {
+  & + .highlightGroup {
+    margin-left: 6px;
+  }
+}
+
+.highlightGroupLinkWrapper {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.highlightGroupLabel,
+.docSearchDocBottom {
+  font-size: 12px;
+  color: #586069;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+
+}
+
+// Hits
+.hit {
+  font-weight: bold;
+  letter-spacing: 0;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Advanced search
+.advancedSearch {
+  max-height: 80vh;
+}

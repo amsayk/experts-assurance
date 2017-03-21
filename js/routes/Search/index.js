@@ -20,6 +20,12 @@ export default (store) => ({
       const { default : Component } = require('./containers/SearchContainer');
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+      const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+
+      store.injectReducers([
+        { key: 'docSearch', reducer: docSearchReducer },
+      ]);
+
       Search = UserIsAuthenticated(Component);
 
       /*  Return getComponent   */

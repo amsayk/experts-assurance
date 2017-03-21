@@ -15,6 +15,7 @@ export const schema = [`
     ADMINISTRATORS
     AGENTS
     CLIENTS
+    INSURERS
   }
 
   # ------------------------------------
@@ -67,7 +68,7 @@ export const schema = [`
     email: String
     password: String
     role: String
-    recaptcha: Boolean!
+    # recaptcha: Boolean!
   }
 
   # ------------------------------------

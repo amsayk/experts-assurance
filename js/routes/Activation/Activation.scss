@@ -1,11 +1,21 @@
 @import 'variables';
+@import 'animate';
+
+.notification {
+  composes: notification notification-full align-content-center alert fade show from 'styles/_base.scss';
+}
+
+.notificationVerificationPending {
+  composes: alert-warning from 'styles/_base.scss';
+}
 
 .center {
-  composes: center from 'styles/_base.scss';
+  composes: center flex-column from 'styles/_base.scss';
 }
 
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
+  background-color: #fff;
   height: 100%;
 }
 
@@ -13,8 +23,11 @@
 
 .navbar {
   composes: navbar flex-row justify-content-between from 'styles/_base.scss';
+  border-bottom: 0;
+  margin-bottom: 0;
   padding-left: $navbar-horizontal-spacing;
-  padding-right: $navbar-horizontal-spacing
+  padding-right: $navbar-horizontal-spacing;
+  box-shadow: 0 2px 4px 0 #e6e9ed;
 }
 
 .menu {
@@ -25,4 +38,16 @@
 .logoutLink {
   composes: nav-item nav-link from 'styles/_base.scss';
   cursor: pointer;
+}
+
+.link {
+  composes: alert-link from 'styles/_base.scss';
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: underline !important;
+}
+
+.changeEmailLink,
+.resendLink {
+  composes: link;
 }

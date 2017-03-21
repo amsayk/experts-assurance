@@ -25,9 +25,7 @@ button {
   -webkit-font-smoothing: antialiased;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: inherit;
 }
 
@@ -54,4 +52,35 @@ mark {
 
 ::placeholder {
   user-select: none;
+}
+
+:global {
+  // React dates
+  @import 'react-dates/css/styles';
+
+  .DateInput {
+    padding-left: 0;
+    width: auto;
+  }
+
+  .DateRangePickerInput {
+    border: 0;
+  }
+
+  .DateRangePickerInput__clear-dates--hide {
+    display: none;
+  }
+
+  .DateRangePickerInput__arrow {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .SingleDatePickerInput {
+    border: 0;
+  }
+
+  .DateInput__input {
+    cursor: pointer;
+  }
 }

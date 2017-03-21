@@ -27,7 +27,7 @@ class PickAgent extends React.Component {
     this.props.onSearch(e.target.value);
   }
   render() {
-    const { onInput, selectedUserId, queryString, loading, users = [], onUser, onAction } = this.props;
+    const { onInput, selectedUserId, queryString, loading = false, result = { hits: [] }, onUser, onAction } = this.props;
 
     function isSelected (id) {
       return selectedUserId === id;
@@ -36,18 +36,18 @@ class PickAgent extends React.Component {
     let content = <li className={style.noResults}>Aucun résultat</li>;
     if (loading) {
       content = queryString ? null : content;
-    } else if (users.length > 0) {
-      content = users.map((user) => {
+    } else if (result.hits.length > 0) {
+      content = result.hits.map(({ _id, _source : user }) => {
         return (
           <li className={style.result}>
             <MenuItem
-              onClick={onUser.bind(null, user.id)}
-              className={cx(style.userLine, isSelected(user.id) && style.userLineIsSelected)}
+              onClick={onUser.bind(null, _id)}
+              className={cx(style.userLine, isSelected(_id) && style.userLineIsSelected)}
               role='button'
             >
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{ marginRight: 5 }}>
-                  {isSelected(user.id)
+                  {isSelected(_id)
                     ? <CircleIcon.Checked className={cx(style.isSelected, style.checkbox)} size={24}/>
                     : <CircleIcon.Blank size={24}/>}
                   </span>
@@ -55,7 +55,7 @@ class PickAgent extends React.Component {
                     <Highlighter
                       highlightClassName={style.hit}
                       searchWords={[queryString]}
-                      textToHighlight={user.displayName}
+                      textToHighlight={user.name}
                     />
                   </span>
                 </div>
@@ -103,6 +103,6 @@ const Connect = connect(null, mapDispatchToProps);
 
 export default (...roles) => compose(
   Connect,
-  DataLoader.usersByRoles(...roles),
+  DataLoader.esUsersByRoles(...roles),
 )(PickAgent);
 

@@ -40,6 +40,40 @@ export const schema = [`
     sortConfig: UsersSortConfig!
   }
 
+  # search types
+
+  enum ESUserType {
+    EMPLOYEE
+    INSURER
+    CLIENT
+  }
+
+  type ESUserSource {
+    id: ID
+    name: String!
+    email: String!
+    username: String!
+    isAdmin: Boolean!
+    type: ESUserType!
+    date: Date!
+    lastModified: Date!
+  }
+
+  type ESUser {
+    _index: String!
+    _type: String!
+    _id: String!
+    _score: Int!
+    _source: ESUserSource!
+  }
+
+  type ESUsersQueryResponse {
+    took: Int!
+    total: Int!
+    max_score: Float
+    hits: [ESUser!]!
+  }
+
   # Country
   enum Country {
     MA
@@ -152,6 +186,9 @@ export const resolvers = {
     },
     searchUsers(obj, { queryString : q }, context) {
       return context.Business.searchUsers(q);
+    },
+    esSearchUsers(obj, { queryString : q }, context) {
+      return context.Business.esSearchUsers(q);
     },
   },
 

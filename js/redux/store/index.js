@@ -17,6 +17,7 @@ import {
 } from 'redux/reducers/sorting/constants';
 
 import { AppState } from 'redux/reducers/app/reducer';
+import { DocSearchState } from 'redux/reducers/docSearch/reducer';
 import { NotificationState } from 'redux/reducers/notification/reducer';
 import { ScrollState } from 'redux/reducers/scrolling/reducer';
 import { SnackState } from 'redux/reducers/snackbar/reducer';
@@ -107,6 +108,7 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
   switch (key) {
     case ''             : return new Map(value);
     case 'app'          : return new AppState(value);
+    case 'docSearch'    : return new DocSearchState(value);
     case 'notification' : return new NotificationState(value);
     case 'scrolling'    : return new ScrollState(value);
     case 'snackbar'     : return new SnackState(value);

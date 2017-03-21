@@ -66,6 +66,7 @@ class StateToggle extends React.Component {
     );
   }
 }
+
 class DocStateFilter extends React.Component {
   state ={
     open : false,

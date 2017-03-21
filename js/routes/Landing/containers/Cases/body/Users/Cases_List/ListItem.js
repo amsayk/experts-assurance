@@ -148,9 +148,9 @@ class ListItem extends React.Component {
         <div className={style.listItemDate}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
-              <div className={style.item} title={intl.formatDate(date)}>
+              <div className={style.item}>
                 <div className={style.text}>
-                  {intl.formatRelative(date)}
+                  {intl.formatDate(date)}
                 </div>
               </div>
             </div>

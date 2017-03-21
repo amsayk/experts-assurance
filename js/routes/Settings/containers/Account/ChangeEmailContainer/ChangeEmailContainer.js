@@ -26,10 +26,10 @@ function ChangeEmailContainer({ intl, user, actions }) {
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
-      <div className={style.body}>
+      {/* <div className={style.body}> */}
         <Sidebar user={user} selectedMenuItem={'account.change_email'}/>
         <ChangeEmailForm intl={intl} user={user}/>
-      </div>
+      {/* </div> */}
     </div>
   );
 }

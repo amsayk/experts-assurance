@@ -4,8 +4,6 @@ import { Link } from 'react-router';
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
-import { reduxForm, Field } from 'redux-form/immutable';
-
 import AppBrand from 'components/AppBrand';
 
 import messages from '../../messages';
@@ -106,10 +104,7 @@ class Header extends React.Component {
         </div>
 
         <div className={style.middleNav}>
-          <Field
-            name='search'
-            component={SearchBox}
-          />
+          <SearchBox/>
         </div>
 
         <div className={style.rightNav}>
@@ -168,13 +163,8 @@ function mapDispatchToProps(dispatch) {
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-const Form = reduxForm({
-  form : 'globalSearch',
-});
-
 export default compose(
   injectIntl,
   Connect,
-  Form,
 )(Header);
 

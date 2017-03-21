@@ -5,6 +5,12 @@ const getIndexRoute = (store) => (partialNextState, cb) => {
     const { default : Component } = require('./containers/Dashboard');
     const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+    const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+
+    store.injectReducers([
+      { key: 'docSearch', reducer: docSearchReducer },
+    ]);
+
     /* Return Component */
     cb(null, { component: UserIsAuthenticated(Component) });
 
@@ -18,6 +24,12 @@ const getRoutes = (store) => [{
     require.ensure([], (require) => {
       const { default : Component } = require('./containers/Dashboard');
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+
+      const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+
+      store.injectReducers([
+        { key: 'docSearch', reducer: docSearchReducer },
+      ]);
 
       /* Return Component */
       cb(null, UserIsAuthenticated(Component));
@@ -33,9 +45,11 @@ const getRoutes = (store) => [{
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
       const { default : casesReducer } = require('redux/reducers/cases/reducer');
+      const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
 
       store.injectReducers([
         { key: 'cases', reducer: casesReducer },
+        { key: 'docSearch', reducer: docSearchReducer },
       ]);
 
       /* Return Component */
@@ -48,25 +62,27 @@ const getRoutes = (store) => [{
 }, {
   path : PATH_CASES_CASE + '/:' + PATH_CASES_CASE_PARAM,
   getComponent : (nextState, cb) => {
-  require.ensure([], (require) => {
-    const { default : Component } = require('./containers/Case');
-    const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+    require.ensure([], (require) => {
+      const { default : Component } = require('./containers/Case');
+      const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
-    const { default : casesReducer } = require('redux/reducers/cases/reducer');
+      const { default : casesReducer } = require('redux/reducers/cases/reducer');
+      const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
 
-    store.injectReducers([
-      { key: 'cases', reducer: casesReducer },
-    ]);
+      store.injectReducers([
+        { key: 'cases', reducer: casesReducer },
+        { key: 'docSearch', reducer: docSearchReducer },
+      ]);
 
-    const Case = UserIsAuthenticated(Component);
+      const Case = UserIsAuthenticated(Component);
 
-    /* Return Component */
-    cb(null, Case);
+      /* Return Component */
+      cb(null, Case);
 
-    /* Webpack named bundle */
-  }, 'Case');
+      /* Webpack named bundle */
+    }, 'Case');
 
-},
+  },
 }];
 
 export default { routes : getRoutes, getIndexRoute };

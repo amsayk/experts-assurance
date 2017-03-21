@@ -1,6 +1,4 @@
-import getCurrentUser from 'getCurrentUser';
-
-import { userHasRoleAny, Role_ADMINISTRATORS } from 'roles';
+// import getCurrentUser from 'getCurrentUser';
 
 import { INIT } from 'vars';
 
@@ -60,20 +58,20 @@ export default function reducer(state = initialState, action) {
 }
 
 function maybeRequiredNotification(state, action = {}) {
-  const user = getCurrentUser();
-  if (user) {
-    if (!user.get('emailVerified')) { // Email verification takes precedence.
-      return new NotificationState({
-        id: 'VerificationPending',
-        options: {
-          persist: true,
-          active: true,
-        },
-      });
-    }
-
-    return state.id === 'VerificationPending' || state.id === action.id ? initialState : state;
-  }
+  // const user = getCurrentUser();
+  // if (user) {
+  //   if (!user.get('emailVerified')) { // Email verification takes precedence.
+  //     return new NotificationState({
+  //       id: 'VerificationPending',
+  //       options: {
+  //         persist: true,
+  //         active: true,
+  //       },
+  //     });
+  //   }
+  //
+  //   return state.id === 'VerificationPending' || state.id === action.id ? initialState : state;
+  // }
   return state;
 }
 

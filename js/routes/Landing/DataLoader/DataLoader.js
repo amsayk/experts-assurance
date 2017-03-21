@@ -6,7 +6,9 @@ import CURRENT_USER_QUERY from './currentUser.query.graphql';
 import GET_USER_QUERY from './getUser.query.graphql';
 import GET_DOCS_QUERY from './getDocs.query.graphql';
 import GET_DOC_QUERY from './getDoc.query.graphql';
-import USERS_BY_ROLES_QUERY from './usersByRoles.query.graphql';
+// import USERS_BY_ROLES_QUERY from './usersByRoles.query.graphql';
+import ES_USERS_BY_ROLES_QUERY from './esUsersByRoles.query.graphql';
+import ES_SEARCH_DOCS_QUERY from './esSearchDocs.query.graphql';
 
 import GET_TIMELINE_QUERY from './getTimeline.query.graphql';
 
@@ -15,7 +17,7 @@ const currentUser = graphql(CURRENT_USER_QUERY, {
   skip: ({ user }) => user.isEmpty,
 });
 
-const usersByRoles = (...roles) => graphql(USERS_BY_ROLES_QUERY, {
+const esUsersByRoles = (...roles) => graphql(ES_USERS_BY_ROLES_QUERY, {
   skip: ({ open }) => !open,
   options: ({ queryString }) => ({
     variables: {
@@ -23,11 +25,25 @@ const usersByRoles = (...roles) => graphql(USERS_BY_ROLES_QUERY, {
       roles,
     },
   }),
-  props: ({ data: { loading, usersByRoles = [] } }) => ({
+  props: ({ data: { loading, esUsersByRoles = { hits: [] } } }) => ({
     loading,
-    users : usersByRoles,
+    result : esUsersByRoles,
   }),
 });
+
+// const usersByRoles = (...roles) => graphql(USERS_BY_ROLES_QUERY, {
+//   skip: ({ open }) => !open,
+//   options: ({ queryString }) => ({
+//     variables: {
+//       queryString,
+//       roles,
+//     },
+//   }),
+//   props: ({ data: { loading, usersByRoles = [] } }) => ({
+//     loading,
+//     users : usersByRoles,
+//   }),
+// });
 
 const user = graphql(GET_USER_QUERY, {
   skip: ({ docLoading, id }) => docLoading || typeof id === 'undefined',
@@ -107,6 +123,21 @@ const docs = graphql(GET_DOCS_QUERY, {
   }),
 });
 
+const searchDocs = graphql(ES_SEARCH_DOCS_QUERY, {
+  skip: ({ search }) => !search.q || search.q.length < 2,
+  options: ({ search }) => ({
+    variables: {
+        queryString : search.q,
+        state       : search.state,
+    },
+  }),
+  props: ({ ownProps, data: { loading, esSearchDocs: { length = 0, hits = [] } = {} } }) => ({
+    loading,
+    hits,
+    length,
+  }),
+});
+
 const timeline = graphql(GET_TIMELINE_QUERY, {
   skip: ({ timelineDisplayMatches }) => !timelineDisplayMatches,
   options: (ownProps) => ({
@@ -152,5 +183,5 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
   }),
 });
 
-export default { currentUser, usersByRoles, user, doc, docs, timeline };
+export default { currentUser/*, usersByRoles*/, esUsersByRoles, searchDocs, user, doc, docs, timeline };
 

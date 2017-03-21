@@ -8,6 +8,8 @@ import {
   BusinessType,
 } from 'data/types';
 
+import es from 'backend/es';
+
 import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
 const LIMIT_PER_PAGE = 30;
@@ -100,6 +102,54 @@ export class BusinessConnector {
       return Promise.resolve([]);
     }
 
+  }
+
+  esSearchUsers(q) {
+    if (q) {
+      const searchParams = {
+        index: 'fikrat',
+        type: 'person',
+        size: SEARCH_LIMIT,
+        body: {
+          sort: [
+            '_score',
+            {
+              lastModified: {
+                order: 'desc',
+              },
+            },
+          ],
+          query: {
+            bool: {
+              must: {
+                multi_match: {
+                  operator: 'or',
+                  fields: [
+                    'name',
+                    'email',
+                  ],
+                  query: q,
+                },
+              },
+            },
+          },
+        },
+      };
+
+      return es.search(searchParams).then(({ took, hits }) => ({
+        took      : took,
+        total     : hits.total,
+        max_score : hits.max_score,
+        hits      : hits.hits,
+      }));
+    }
+
+    return {
+      took      : 0,
+      total     : 0,
+      max_score : 0,
+      hits      : [],
+    };
   }
 }
 

@@ -58,3 +58,7 @@ export { default as PrintIcon } from './Print';
 
 export { default as LinkExternalIcon } from './LinkExternal';
 
+export { default as ArrowDropdownIcon } from './ArrowDropdown';
+
+export { default as DownloadIcon } from './Download';
+

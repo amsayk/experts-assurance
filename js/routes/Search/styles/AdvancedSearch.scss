@@ -1,0 +1,60 @@
+.advancedSearch {
+  composes: d-flex flex-column from 'styles/_base.scss';
+
+  &:not(.full) .advancedSearch_field_label {
+    max-width: 250px;
+  }
+}
+
+.advancedSearch_divider {
+  composes: dropdown-divider from 'styles/_base.scss';
+}
+
+.advancedSearch_field {
+  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+  padding: .75rem 2.5rem;
+
+  .advancedSearch_field_label {
+    display: flex;
+    flex: 1;
+    opacity: .65;
+    font-weight: 700;
+  }
+  .advancedSearch_field_info {
+    display: flex;
+    flex: 1;
+  }
+}
+
+.advancedSearh_actions {
+  composes: d-flex flex-row align-items-center justify-content-end from 'styles/_base.scss';
+  padding: 1.2rem 2.5rem;
+}
+
+.advancedSearch_searchButton {
+  composes: btn btn-primary from 'styles/_base.scss';
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.advancedSearch_cancelButton {
+  composes: btn btn-link from 'styles/_base.scss';
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+
+}
+
+.advancedSearch_intro {
+  composes: dropdown-header from 'styles/_base.scss';
+  padding: 0 1.5rem 0.5rem;
+
+}

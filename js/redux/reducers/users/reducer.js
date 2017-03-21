@@ -12,6 +12,8 @@ import {
   ON_SEARCH,
 } from './constants';
 
+import { USER_LOGGED_OUT, USER_LOGGED_IN } from 'redux/reducers/user/constants';
+
 import { INIT } from 'vars';
 
 // selection
@@ -31,7 +33,7 @@ export class UsersState extends Record({
   sortConfig   : sortInitialState,
   viewType     : VIEW_TYPE_GRID,
   searchOpen   : false,
-  queryString  : undefined,
+  queryString  : '',
   role         : undefined,
 }) {}
 
@@ -74,12 +76,15 @@ export default function reducer(state = initialState, action) {
         queryString: action.queryString,
       });
     }
+    case USER_LOGGED_IN:
     case INIT: {
       return state.merge({
         viewType   : cookie.load('users.viewType', /* doNotParse = */true) || VIEW_TYPE_GRID,
         sortConfig : sortInitialState.merge(cookie.load('users.sortConfig', /* doNotParse = */false)),
       });
     }
+    case USER_LOGGED_OUT:
+      return action.manual ? initialState : state;
     default:
       return state;
   }

@@ -91,7 +91,7 @@ const config = {
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
 
   // App config
-  verifyUserEmails                  : process.env.VERIFY_USER_EMAILS === 'yes',
+  verifyUserEmails                  : true, // process.env.VERIFY_USER_EMAILS === 'yes',
 
   path_login                        : process.env.PATH_LOGIN || '/login',
   path_signup                       : process.env.PATH_SIGNUP || '/signup',
@@ -203,11 +203,12 @@ config.kue_opts = {
   redis  : {
     createClientFactory: function () {
       return new Redis();
-    }
+    },
   },
   disableSearch: true,
 };
 
+// Lazily create kue
 Object.defineProperty(config, 'queue', {
   get: function () {
     if (!global.__queue) {

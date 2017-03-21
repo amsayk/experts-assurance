@@ -1,0 +1,7 @@
+mutation resendEmailVerification {
+
+  resendEmailVerification {
+    errors
+  }
+}
+

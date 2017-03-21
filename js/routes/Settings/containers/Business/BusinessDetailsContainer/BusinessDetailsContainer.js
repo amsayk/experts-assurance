@@ -32,7 +32,7 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentUser }, 
     <div className={style.root}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
-      <div className={style.body}>
+      {/* <div className={style.body}> */}
         <Sidebar user={user} selectedMenuItem={'business.settings'}/>
         {loading ? null : <BusinessDetailsForm user={user} intl={intl} initialValues={{
           id            : currentBusiness ? currentBusiness.id                 : null,
@@ -48,7 +48,7 @@ function BusinessDetailsContainer({ intl, user, data: { loading, currentUser }, 
           phone         : currentBusiness ? currentBusiness.phone              : null,
           taxId         : currentBusiness ? currentBusiness.taxId              : null,
         }}/>}
-    </div>
+    {/* </div> */}
   </div>
   );
 }

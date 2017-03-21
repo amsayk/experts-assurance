@@ -44,7 +44,10 @@ const DEFAULT_TOP = NAVBAR_HEIGHT;
 
 const getStyle = (notificationOpen, scrollTop) => notificationOpen ? ({
   top : scrollTop === 0 ? DEFAULT_TOP + NOTIFICATION_HEIGHT : DEFAULT_TOP,
-}) : {};
+  ...(scrollTop === 0 ? {} : { boxShadow: '0 2px 4px 0 #e6e9ed' }),
+}) : ({
+  ...(scrollTop === 0 ? {} : { boxShadow: '0 2px 4px 0 #e6e9ed' }),
+});
 
 function Toolbar({ intl, cursor, length, user, loading, users, scrolling, notificationOpen, actions }) {
   const { searchOpen, viewType } = users;

@@ -21,9 +21,6 @@ const babelOptions = require('scripts/getBabelOptions')({
     'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
   },
   plugins: [
-    ['transform-runtime', {
-      regenerator : false,
-    }],
     'transform-async-to-generator',
     'transform-export-extensions',
   ],

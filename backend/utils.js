@@ -4,7 +4,7 @@ export { default as formatError } from 'error-formatter';
 
 import config from 'build/config';
 
-import { BusinessType } from 'data/types';
+const { BusinessType } = require('data/types');
 
 export function serializeParseObject(parseObject) {
   return parseObject ? { className: parseObject.className, ...parseObject.toJSON() } : null;

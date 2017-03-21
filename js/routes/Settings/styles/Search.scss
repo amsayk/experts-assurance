@@ -33,7 +33,7 @@
 
 .inputWrapper {
   flex: 1;
-  composes: d-flex flex-row from 'styles/_base.scss';
+  composes: d-flex flex-column from 'styles/_base.scss';
 }
 
 .input {
@@ -182,13 +182,13 @@
   top: 0;
 }
 
-.menuItem .content {
+.menuItem .info {
   margin-left: 15px;
   flex: 1 1;
   overflow: hidden;
 }
 
-.menuItem .content {
+.menuItem .info {
   width: calc(100% - 112px);
   margin-left: 16px;
 }
@@ -230,6 +230,10 @@
 
 .hit {
   font-weight: bold;
+  letter-spacing: 0;
+  user-select: none;
+  margin: 0;
+  padding: 0;
 }
 
 .divider {

@@ -1,5 +1,7 @@
 import React, { PropTypes as T } from 'react';
 
+import assign from 'object-assign';
+
 const defaultColors = [
   '#d73d32',
   '#7e3794',
@@ -154,7 +156,7 @@ export default class Avatar extends React.Component {
     if (src) {
       return (
         <img
-          style={Object.assign(styles.root, style)}
+          style={assign(styles.root, style)}
           {...other}
           src={src}
           className={className}
@@ -164,12 +166,12 @@ export default class Avatar extends React.Component {
       return (
         <div
           {...other}
-          style={Object.assign(styles.root, style)}
+          style={assign(styles.root, style)}
           className={className}
         >
           {icon && React.cloneElement(icon, {
             color: styles.icon.color,
-            style: Object.assign(styles.icon, icon.props.style),
+            style: assign(styles.icon, icon.props.style),
           })}
           {this.props.children}
         </div>

@@ -11,7 +11,7 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
-const LABEL = 'Vehicle (Modèle, Matricule)';
+const LABEL = 'Vehicle (Modèle, Immatriculation)';
 
 class VehicleLine extends React.Component {
   render() {

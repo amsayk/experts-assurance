@@ -5,9 +5,9 @@ import style from 'routes/Settings/styles';
 import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS } from 'roles';
 
 const ROLE_TITLE = {
-  [Role_AGENTS]         : 'Agent',
+  [Role_AGENTS]         : 'Gestionnaire',
   [Role_ADMINISTRATORS] : 'Admin',
-  [Role_CLIENTS]        : 'Client',
+  [Role_CLIENTS]        : 'Assuré',
 };
 
 export default class Overview extends React.Component {

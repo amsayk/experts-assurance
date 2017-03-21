@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   pageTitle: {
     id: 'searhc-page.page-title',
-    defaultMessage: 'Rechercher · {appName}',
+    defaultMessage: 'Recherche des dossiers · {appName}',
   },
   logOut: {
     id: 'search-page.logOut',

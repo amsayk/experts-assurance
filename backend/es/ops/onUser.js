@@ -13,7 +13,7 @@ const log = require('log')('app:backend:es:onUser');
 export default function onUser(id) {
   return new Promise(async (resolve, reject) => {
     try {
-      const user = await new Parse.Query(Parse.User).get(id);
+      const user = await new Parse.Query(Parse.User).get(id, { useMasterKey : true });
 
       client.index({
         index: 'fikrat',
@@ -59,5 +59,5 @@ function getType(user) {
     return 'INSURER';
   }
 
-  return null;
+  return 'CLIENT';
 }

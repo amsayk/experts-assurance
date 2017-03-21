@@ -1,0 +1,33 @@
+query esSearchDocs($queryString: String, $state: DocState) {
+  esSearchDocs(queryString: $queryString, state: $state) {
+    took
+    length
+    cursor
+    hits {
+      _id
+      highlight
+      _source {
+        id
+        agent{ id name }
+        insurer{ id name }
+        user{ id name }
+        client{ id name }
+        refNo
+        state
+        vehicle{ model plateNumber}
+        validation {
+          user { id name }
+          date
+        }
+        closure {
+          state
+          user { id name }
+          date
+        }
+        date
+        lastModified
+      }
+    }
+  }
+}
+
