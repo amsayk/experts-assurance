@@ -62,7 +62,7 @@ export { default as ArrowDropdownIcon } from './ArrowDropdown';
 
 export { default as DownloadIcon } from './Download';
 
-export { default as CarIcon } from './Car';
-export { default as PersonIcon } from './Person';
-export { default as ClockIcon } from './Clock';
+// export { default as CarIcon } from './Car';
+// export { default as PersonIcon } from './Person';
+// export { default as ClockIcon } from './Clock';
 
