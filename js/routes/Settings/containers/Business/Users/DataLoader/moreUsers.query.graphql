@@ -1,0 +1,16 @@
+query settings_users__moreUsers($query: UsersFetchQuery!) {
+  getUsers(query: $query) {
+    cursor
+    users {
+      id
+      displayName
+      email
+      roles
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+

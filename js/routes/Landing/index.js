@@ -1,8 +1,13 @@
-import { PATH_CASES, PATH_CASES_CASE, PATH_CASES_CASE_PARAM } from 'vars';
+import {
+  PATH_DASHBOARD,
+  PATH_CASES,
+  PATH_CASES_CASE,
+  PATH_CASES_CASE_PARAM,
+} from 'vars';
 
 const getIndexRoute = (store) => (partialNextState, cb) => {
   require.ensure([], (require) => {
-    const { default : Component } = require('./containers/Dashboard');
+    const { default : Component } = require('./containers/Home');
     const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
     const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
@@ -20,6 +25,25 @@ const getIndexRoute = (store) => (partialNextState, cb) => {
 
 const getRoutes = (store) => [{
   path : '/',
+  getComponent: (nextState, cb) => {
+    require.ensure([], (require) => {
+      const { default : Component } = require('./containers/Home');
+      const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
+
+      const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+
+      store.injectReducers([
+        { key: 'docSearch', reducer: docSearchReducer },
+      ]);
+
+      /* Return Component */
+      cb(null, UserIsAuthenticated(Component));
+
+      /* Webpack named bundle */
+    }, 'Home');
+  },
+}, {
+  path : PATH_DASHBOARD,
   getComponent: (nextState, cb) => {
     require.ensure([], (require) => {
       const { default : Component } = require('./containers/Dashboard');

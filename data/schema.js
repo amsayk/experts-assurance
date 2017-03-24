@@ -45,6 +45,15 @@ const rootSchema = [`
     getDocs(query: DocsFetchQuery!): DocsFetchResponse!
     esSearchDocs(queryString: String, state: DocState): ESDocsQueryResponse!
     esQueryDocs(query: ESDocsQueryPayload!): ESDocsQueryResponse!
+
+    recentDocs: [Doc!]!
+
+    dashboard: Dashboard!
+
+    # Docs dashboard
+    pendingDashboard(durationInDays: Int!): [Doc!]!
+    openDashboard(durationInDays: Int!): [Doc!]!
+    closedDashboard(durationInDays: Int!): [Doc!]!
   }
 
   type Mutation {

@@ -5,12 +5,15 @@ import pick from 'lodash.pick';
 import CURRENT_USER_QUERY from './currentUser.query.graphql';
 import GET_USER_QUERY from './getUser.query.graphql';
 import GET_DOCS_QUERY from './getDocs.query.graphql';
+import GET_MORE_DOCS_QUERY from './moreDocs.query.graphql';
 import GET_DOC_QUERY from './getDoc.query.graphql';
 // import USERS_BY_ROLES_QUERY from './usersByRoles.query.graphql';
 import ES_USERS_BY_ROLES_QUERY from './esUsersByRoles.query.graphql';
 import ES_SEARCH_DOCS_QUERY from './esSearchDocs.query.graphql';
 
 import GET_TIMELINE_QUERY from './getTimeline.query.graphql';
+
+import GET_RECENT_DOCS_QUERY from './recentDocs.query.graphql';
 
 const currentUser = graphql(CURRENT_USER_QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
@@ -82,13 +85,14 @@ const docs = graphql(GET_DOCS_QUERY, {
       },
     },
   }),
-  props: ({ ownProps, data: { loading, getDocs: { cursor, length, docs = [] } = {}, fetchMore } }) => ({
+  props: ({ ownProps, data: { loading, getDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
     loading,
     docs,
     cursor,
     length,
     loadMoreDocs() {
       return fetchMore({
+        query: GET_MORE_DOCS_QUERY,
         variables: {
           query : {
             cursor,
@@ -108,7 +112,7 @@ const docs = graphql(GET_DOCS_QUERY, {
               // to the new cursor.
               cursor: fetchMoreResult.data.getDocs.cursor,
 
-              length: fetchMoreResult.data.getDocs.length,
+              // length: fetchMoreResult.data.getDocs.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -127,8 +131,8 @@ const searchDocs = graphql(ES_SEARCH_DOCS_QUERY, {
   skip: ({ search }) => !search.q || search.q.length < 2,
   options: ({ search }) => ({
     variables: {
-        queryString : search.q,
-        state       : search.state,
+      queryString : search.q,
+      state       : search.state,
     },
   }),
   props: ({ ownProps, data: { loading, esSearchDocs: { length = 0, hits = [] } = {} } }) => ({
@@ -148,7 +152,7 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
       },
     },
   }),
-  props: ({ ownProps, data: { loading, timeline: { cursor, result = [] } = {}, fetchMore } }) => ({
+  props: ({ ownProps, data: { loading, timeline: { cursor = 0, result = [] } = {}, fetchMore } }) => ({
     loading,
     result,
     cursor,
@@ -183,5 +187,15 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
   }),
 });
 
-export default { currentUser/*, usersByRoles*/, esUsersByRoles, searchDocs, user, doc, docs, timeline };
+
+const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
+  options: () => ({
+  }),
+  props: ({ data: { loading, recentDocs = [] } }) => ({
+    loading,
+    docs: recentDocs,
+  }),
+});
+
+export default { currentUser/*, usersByRoles*/, esUsersByRoles, searchDocs, user, doc, docs, timeline, recentDocs };
 

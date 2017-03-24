@@ -40,7 +40,7 @@ export class ActivityConnector {
 
     return doFetch().then((activities) => ({
       prevCursor: cursor,
-      cursor: activities.length > 0 ? activities[activities.length - 1].get('timestamp') : null,
+      cursor: activities.length > 0 ? activities[activities.length - 1].get('timestamp') : 0,
       result: activities,
     }));
 
@@ -70,6 +70,16 @@ export class ActivityConnector {
       if (cursor) {
         q.lessThan('timestamp', cursor);
       }
+
+      q.include([
+        'document',
+        // 'document.user',
+        // 'document.agent',
+        // 'document.client',
+        // 'document.insurer',
+        'user',
+      ]);
+
       return q.find({ useMasterKey: true });
     }
 

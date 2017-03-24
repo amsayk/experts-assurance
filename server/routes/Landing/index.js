@@ -1,7 +1,13 @@
-import { PATH_CASES, PATH_CASES_CASE, PATH_CASES_CASE_PARAM } from 'vars';
+import {
+  PATH_DASHBOARD,
+  PATH_CASES,
+  PATH_CASES_CASE,
+  PATH_CASES_CASE_PARAM,
+} from 'vars';
 
 import { onEnter } from 'authWrappers/UserIsAuthenticated';
 
+import Home from 'routes/Landing/containers/Home';
 import Dashboard from 'routes/Landing/containers/Dashboard';
 import Cases from 'routes/Landing/containers/Cases';
 import Case from 'routes/Landing/containers/Case';
@@ -14,13 +20,22 @@ const getIndexRoute = (store) => (partialNextState, cb) => cb(null, {
     store.injectReducers([
       { key: 'docSearch', reducer: docSearchReducer },
     ]);
-    cb(null, Dashboard);
+    cb(null, Home);
   },
   onEnter: onEnter(store),
 });
 
 const getRoutes = (store) => [{
   path : '/',
+  getComponent(nextState, cb) {
+    store.injectReducers([
+      { key: 'docSearch', reducer: docSearchReducer },
+    ]);
+    cb(null, Home);
+  },
+  onEnter: onEnter(store),
+}, {
+  path : PATH_DASHBOARD,
   getComponent(nextState, cb) {
     store.injectReducers([
       { key: 'docSearch', reducer: docSearchReducer },

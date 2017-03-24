@@ -2,6 +2,7 @@ import { graphql } from 'react-apollo';
 
 import CURRENT_USER_QUERY from './currentUser.query.graphql';
 import GET_USERS_QUERY from './getUsers.query.graphql';
+import GET_MORE_USERS_QUERY from './moreUsers.query.graphql';
 // import SEARCH_USERS_QUERY from './searchUsers.query.graphql';
 import ES_SEARCH_USERS_QUERY from './esSearchUsers.query.graphql';
 
@@ -24,6 +25,7 @@ const users = graphql(GET_USERS_QUERY, {
     length,
     loadMoreUsers() {
       return fetchMore({
+        query: GET_MORE_USERS_QUERY,
         variables: {
           query : {
             cursor,
@@ -41,7 +43,7 @@ const users = graphql(GET_USERS_QUERY, {
               // to the new cursor.
               cursor: fetchMoreResult.data.getUsers.cursor,
 
-              length: fetchMoreResult.data.getUsers.length,
+              // length: fetchMoreResult.data.getUsers.length,
 
               // Put the new users at the end of the list
               users: [

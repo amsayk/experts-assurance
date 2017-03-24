@@ -125,7 +125,15 @@
   }
 }
 
+
+a.selectedUserButton:hover {
+  padding: 3px 9px;
+}
+
 .selectedUserButton {
+  &:hover {
+    text-decoration: none;
+  }
 
   &:hover .closeIcon,
   &:focus .closeIcon{
@@ -229,7 +237,12 @@
 
 }
 
-.docsContainer, .docContainer {
+.emptyList ~ .docsHeader {
+  // display: none;
+}
+
+.docsContainer,
+.docContainer {
   composes: d-flex flex-column from 'styles/_base.scss';
   flex: 1;
   margin: 0;

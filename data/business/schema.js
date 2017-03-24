@@ -8,6 +8,8 @@ import phoneNumberValidations from './phoneNumberValidations';
 
 import { pubsub } from '../subscriptions';
 
+import graphqlFields from 'graphql-fields';
+
 export const schema = [`
 
   # Sort
@@ -181,8 +183,9 @@ export const resolvers = {
   },
 
   Query: {
-    getUsers(obj, { query }, context) {
-      return context.Business.getUsers(query);
+    getUsers(obj, { query }, context, info) {
+      const topLevelFields = Object.keys(graphqlFields(info));
+      return context.Business.getUsers(query, topLevelFields);
     },
     searchUsers(obj, { queryString : q }, context) {
       return context.Business.searchUsers(q);

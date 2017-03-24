@@ -7,30 +7,34 @@ query getTimeline($cursor: Date, $query: TimelineQuery!) {
         id
         refNo
         state
-        validation {
-          date
-          user {
-            id
-            displayName
-          }
-        }
-        closure {
-          date
-          state
-          user {
-            id
-            displayName
-          }
-        }
-        user {
-          id
-          displayName
-        }
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
       }
       ns
       type
       metadata
       timestamp
+      user {
+        id
+        displayName
+      }
     }
   }
 }

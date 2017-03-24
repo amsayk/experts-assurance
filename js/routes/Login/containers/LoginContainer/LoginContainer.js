@@ -119,7 +119,7 @@ export class LoginContainer extends React.Component {
 
         </div>,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn}>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn} role='button'>
         {intl.formatMessage(messages.login)}
       </button>,
 

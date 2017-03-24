@@ -44,6 +44,8 @@ export const schema = [`
     updatedAt: Date!
 
     business: Business
+
+    user: User
   }
 
 `];
@@ -57,6 +59,7 @@ export const resolvers = {
       'business',
       'document',
       'metadata',
+      'user',
     ]),
     parseGraphqlScalarFields([
       'id',

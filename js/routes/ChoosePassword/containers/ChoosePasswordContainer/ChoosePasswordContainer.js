@@ -80,7 +80,7 @@ export class ChoosePasswordContainer extends React.Component {
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.changePasswordButton}>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.changePasswordButton} role='button'>
         {intl.formatMessage(messages.choosePassword)}
       </button>,
 

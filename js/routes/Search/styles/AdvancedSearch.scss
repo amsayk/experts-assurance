@@ -6,6 +6,10 @@
   }
 }
 
+.h6 {
+
+}
+
 .advancedSearch_divider {
   composes: dropdown-divider from 'styles/_base.scss';
 }
@@ -57,4 +61,19 @@
   composes: dropdown-header from 'styles/_base.scss';
   padding: 0 1.5rem 0.5rem;
 
+  font-size: .8125rem;
+  line-height: 1.5rem;
+  letter-spacing: .125rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #7d97ad;
+
+  &:before {
+    content: '';
+    left: 0;
+    width: .25rem;
+    height: 2.25rem;
+    position: absolute;
+    background: #02b3e4;
+  }
 }

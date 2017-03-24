@@ -3256,6 +3256,10 @@ graphql-anywhere@^2.0.0, graphql-anywhere@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-2.2.0.tgz#652c3fa23a4a6cfeb98817512fb48100b97f3d5c"
 
+graphql-fields@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-fields/-/graphql-fields-1.0.2.tgz#099ee1d4445b42d0f47e06d622acebb33abc6cce"
+
 graphql-server-core@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-0.6.0.tgz#468625cba4a00f80275c065432faa481985f5a65"

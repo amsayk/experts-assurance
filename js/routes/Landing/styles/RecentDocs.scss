@@ -1,0 +1,62 @@
+.recentDocs {
+  position: absolute;
+  width: calc(100% - #{$content-width});
+  right: 0;
+  left: auto;
+  // top: calc(#{$navbar-height} + #{$toolbar-height} + 25px);
+  top: calc(#{$navbar-height} + 25px);
+  z-index: 0;
+  padding: 0 10px;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .allDocsLink {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  .feed {
+    margin-top: 25px;
+  }
+
+  .feedGroup {
+  }
+
+  .feedGroupTitle {
+    text-transform: uppercase;
+    color: rgba(0,0,0,.3);
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  .feedGroupItems {
+    position: relative;
+  }
+
+  .feedGroupItems:after {
+    content: ' ';
+    background-color: #eee;
+    position: absolute;
+    display: block;
+    width: 2px;
+    top: 15px;
+    left: 10px;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.54;
+  }
+
+  .feedGroup:first-child,
+  .feedItem:first-child {
+    margin-top: 0;
+  }
+
+  .feedGroup,
+  .feedItem {
+    margin-top: 18px;
+  }
+}
+

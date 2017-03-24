@@ -114,7 +114,7 @@ export class PasswordResetContainer extends React.Component {
         placeholder={intl.formatMessage(messages.email)}
         onKeyDown={this.onKeyDown} />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.passwordResetButton}>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.passwordResetButton} role='button'>
         {intl.formatMessage(messages.passwordReset)}
       </button>,
 

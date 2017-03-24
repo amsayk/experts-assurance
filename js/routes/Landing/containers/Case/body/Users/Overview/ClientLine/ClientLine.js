@@ -12,6 +12,8 @@ import { injectIntl } from 'react-intl';
 
 import style from 'routes/Landing/styles';
 
+import cx from 'classnames';
+
 import selector from './selector';
 
 import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
@@ -32,11 +34,11 @@ class ClientLine extends React.Component {
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span className={style.text}>
+          <Link className={cx(style.selectedUserButton, style.togglePickUser, style.selectedAgentButton)} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+            <div className={style.text}>
+              {/* <span className={style.text}> */}
                 {user.displayName}
-              </span>
+              {/* </span> */}
             </div>
           </Link>
         </div>

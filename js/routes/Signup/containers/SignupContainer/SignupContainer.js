@@ -163,7 +163,7 @@ export class SignupContainer extends React.Component {
         />
       </p>,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.join}>
+      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.join} role='button'>
         {intl.formatMessage(messages.signUp)}
       </button>,
 

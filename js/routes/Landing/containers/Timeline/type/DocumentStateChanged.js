@@ -25,12 +25,19 @@ const TYPE = 'DOCUMENT_STATE_CHANGED';
 
 function getState(state, stateText, icon) {
   return [
-    <span className={cx(style[state], style.docStateToggle)}>
-      {icon}
-    </span>,
-    <span className={style.text} style={{ textTransform: 'uppercase', marginLeft: 5 }}>
-      {stateText}
-    </span>,
+    // <span className={cx(style[state], style.docStateToggle)}>
+    //   {icon}
+    // </span>,
+    <span className={style.text} style={{
+      // textTransform: 'uppercase',
+      marginRight: 5,
+      border: '1px solid #000',
+      borderRadius: '15%',
+      padding: '1px 4px',
+      marginLeft: 5,
+    }}>
+    {stateText}
+  </span>,
   ];
 }
 
@@ -41,26 +48,26 @@ const STATES = {
   CANCELED : getState('CANCELED', 'Annulé',      <CancelledIcon size={12}/>),
 };
 
-export default function DocumentStateChanged({ intl, doc, timestamp, metadata }, { currentUser }) {
-  let user = doc.user;
-
-  if (doc.state === 'OPEN' && doc.validation) {
-    user = doc.validation.user;
-  }
-
-  if ((doc.state === 'CANCELED' || doc.state === 'CLOSED') && doc.closure) {
-    user = doc.closure.user;
-  }
-
-  if (doc.agent ? doc.agent.id === user.id : false) {
-    return null;
-  }
+export default function DocumentStateChanged({ intl, doc, user, timestamp, metadata }, { currentUser }) {
+  // let user = doc.user;
+  //
+  // if (doc.state === 'OPEN' && doc.validation) {
+  //   user = doc.validation.user;
+  // }
+  //
+  // if ((doc.state === 'CANCELED' || doc.state === 'CLOSED') && doc.closure) {
+  //   user = doc.closure.user;
+  // }
+  //
+  // if (doc.agent ? doc.agent.id === user.id : false) {
+  //   return null;
+  // }
 
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 
       <div className={style.profilePic}>
-        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
+        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
           <ProfilePic
             user={user}
             size={24}
@@ -71,7 +78,7 @@ export default function DocumentStateChanged({ intl, doc, timestamp, metadata },
       <div className={style.entry}>
         <div className={style.title}>
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
-            Dossier #{doc.refNo} a changé d'état
+            Dossier <b>{doc.refNo}</b> a changé d'état
           </Link>
         </div>
         <div className={style.desc}>
@@ -80,7 +87,7 @@ export default function DocumentStateChanged({ intl, doc, timestamp, metadata },
           <span>{STATES[metadata.toState]}</span>
         </div>
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
+          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             {user.displayName}
           </Link> ·{' '}
           <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>

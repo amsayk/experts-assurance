@@ -1,0 +1,23 @@
+query recentDocs {
+  recentDocs {
+    id
+    refNo
+    date
+    state
+    vehicle {
+      model
+      plateNumber
+    }
+
+    user {
+      id
+      displayName
+    }
+
+    createdAt
+    updatedAt
+  }
+}
+
+
+

@@ -24,7 +24,7 @@ export class BusinessConnector {
     return this.loader.load(id);
   }
 
-  getUsers(role, queryString, cursor = 0, sortConfig, user) {
+  getUsers(role, queryString, cursor = 0, sortConfig, user, topLevelFields) {
     if (!user) {
       return Promise.resolve({
         cursor : 0,
@@ -63,7 +63,10 @@ export class BusinessConnector {
     }
 
     function count() {
-      return getQuery().count();
+      if (topLevelFields.indexOf('length') !== -1) {
+        return getQuery().count();
+      }
+      return Promise.resolve(0);
     }
 
     function doFetch() {
@@ -73,6 +76,7 @@ export class BusinessConnector {
       if (cursor) {
         q.skip(cursor);
       }
+
       return q.find({ useMasterKey: true });
     }
 
@@ -156,7 +160,7 @@ export class BusinessConnector {
 async function fetch(ids) {
   const objects = await new Parse.Query(BusinessType)
     .containedIn('objectId', ids)
-    .matchesQuery('business', businessQuery)
+    // .matchesQuery('business', businessQuery)
     .find({ useMasterKey: true });
 
   return ids.map((id) => {

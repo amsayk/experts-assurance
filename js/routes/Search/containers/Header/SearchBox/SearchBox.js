@@ -224,6 +224,11 @@ class SearchBox extends React.Component {
       this.onSearch();
     }
 
+    if (e.key === 'Backspace') {
+      if (isEmpty(this.state.search.q)) {
+        this.onState(null);
+      }
+    }
   }
 
   renderAdvancedSearch() {

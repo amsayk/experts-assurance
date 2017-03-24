@@ -24,6 +24,10 @@
   composes: center from 'styles/_base.scss';
   composes: scroll;
 
+  button {
+    box-shadow: 8px 10px 20px 0px rgba(46,61,73,0.15);
+  }
+
   &.done {
   }
 

@@ -43,6 +43,7 @@ export default function createRenderEngine(app) {
         Business: new Business({ user, connector: new BusinessConnector() }),
         Docs: new Docs({ user, connector: new DocConnector() }),
         Activities: new Activities({ user, connector: new ActivityConnector() }),
+        Now: new Date().getTime(),
       },
     });
     const client = new ApolloClient({

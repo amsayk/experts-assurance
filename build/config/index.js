@@ -91,7 +91,7 @@ const config = {
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
 
   // App config
-  verifyUserEmails                  : true, // process.env.VERIFY_USER_EMAILS === 'yes',
+  verifyUserEmails                  : false, // process.env.VERIFY_USER_EMAILS === 'yes',
 
   path_login                        : process.env.PATH_LOGIN || '/login',
   path_signup                       : process.env.PATH_SIGNUP || '/signup',
@@ -101,6 +101,9 @@ const config = {
   path_password_reset_success       : process.env.PATH_PASSWORD_RESET_SUCCESS || '/password_reset_success',
   path_invalid_link                 : process.env.PATH_INVALID_LINK || '/invalid_link',
   path_activation                   : process.env.PATH_ACTIVATION || '/activation',
+
+  // dashboard
+  path_dashboard                    : process.env.PATH_DASHBOARD || '/stats',
 
   // cases
   path_cases                        : process.env.PATH_CASES || '/cases',
@@ -259,6 +262,9 @@ config.globals = {
     PATH_PASSWORD_RESET_SUCCESS       : JSON.stringify(config.path_password_reset_success),
     PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
     PATH_ACTIVATION                   : JSON.stringify(config.path_activation),
+
+    // Dasboard
+    PATH_DASHBOARD                    : JSON.stringify(config.path_dashboard),
 
     // Cases
     PATH_CASES                        : JSON.stringify(config.path_cases),

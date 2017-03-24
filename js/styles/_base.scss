@@ -49,6 +49,16 @@
 // Utility classes
 @import 'bootstrap/scss/utilities';
 
+.buttonShadow {
+  box-shadow: 8px 10px 20px 0px rgba(46,61,73,0.15);
+  border-radius: 0.25rem;
+  border-color: transparent;
+
+  &:hover {
+    box-shadow: 2px 4px 8px 0px rgba(46,61,73,0.2);
+  }
+}
+
 .alert {
   &.alert-dismissible {
     padding: 0.55em 1.25rem 0;

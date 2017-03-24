@@ -35,6 +35,11 @@ const styles = {
 };
 
 class Timeline extends React.Component {
+  static defaultProps = {
+    cursor  : 0,
+    loading : false,
+  };
+
   constructor(props) {
     super(props);
 
@@ -104,7 +109,7 @@ class Timeline extends React.Component {
 
     return (
       <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        <h2>Activité récente
+        <h2>Actualité
         </h2>
         <div className={style.feed}>
           {groups}

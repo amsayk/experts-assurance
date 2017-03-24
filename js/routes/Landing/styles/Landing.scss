@@ -52,7 +52,7 @@ $toolbar-height: 41px;
 }
 
 .buyButton {
-  composes: btn btn-primary rightNavItem disable-selection center from 'styles/_base.scss';
+  composes: btn btn-primary rightNavItem disable-selection buttonShadow center from 'styles/_base.scss';
   cursor: pointer;
   font-size: 1rem;
   font-weight: 700;
@@ -94,3 +94,5 @@ $toolbar-height: 41px;
 @import 'routes/Landing/styles/Actions';
 @import 'routes/Landing/styles/Timeline';
 @import 'routes/Landing/styles/Search';
+@import 'routes/Landing/styles/RecentDocs';
+@import 'routes/Landing/styles/Boards';

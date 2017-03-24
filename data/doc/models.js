@@ -14,8 +14,8 @@ export class Docs {
     return this.connector.get(id);
   }
 
-  getDocs({ queryString, cursor = 0, sortConfig, client, agent, state }) {
-    return this.connector.getDocs(queryString, cursor, sortConfig, client, agent, state, this.user);
+  getDocs({ queryString, cursor = 0, sortConfig, client, agent, state }, topLevelFields) {
+    return this.connector.getDocs(queryString, cursor, sortConfig, client, agent, state, this.user, topLevelFields);
   }
 
   searchUsersByRoles(queryString, roles) {
@@ -34,5 +34,22 @@ export class Docs {
     return this.connector.esQueryDocs(query);
   }
 
+  pendingDashboard(durationInDays, now) {
+    return this.connector.pendingDashboard(durationInDays, this.user, now);
+  }
+  openDashboard(durationInDays, now) {
+    return this.connector.openDashboard(durationInDays, this.user, now);
+  }
+  closedDashboard(durationInDays, now) {
+    return this.connector.closedDashboard(durationInDays, this.user, now);
+  }
+
+  recent() {
+    return this.connector.recentDocs(this.user);
+  }
+
+  dashboard(selectionSet) {
+    return this.connector.dashboard(this.user, selectionSet);
+  }
 }
 

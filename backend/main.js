@@ -7,6 +7,8 @@ import publish from 'backend/kue-mq/publish';
 
 import * as es from 'backend/es';
 
+import omit from 'lodash.omit';
+
 import { genDocs, loaders } from 'backend/sample_data';
 
 import { getOrCreateBusiness, deserializeParseObject } from 'backend/utils';
@@ -213,7 +215,7 @@ Parse.Cloud.define('importSamples', async function (request, response) {
       return fs.writeFileSync(docsFilePath, JSON.stringify(docs, null, 2), 'utf8');
     } else {
       const docs = require(docsFilePath);
-      const activities = [];
+      // let activities = [];
 
       await docs.reduce((job, doc) => {
         return job.then(async () => {
@@ -227,51 +229,77 @@ Parse.Cloud.define('importSamples', async function (request, response) {
           async function doAdd() {
             log(`Doc ${doc.refNo} doesn't exist, creating now...`);
 
-            const obj = await new DocType().set({
-              refNo      : doc.refNo,
-              date       : new Date(doc.date),
-              vehicle    : doc.vehicle,
-              agent      : await loaders.usernames.load(doc.agent),
-              client     : await loaders.usernames.load(doc.client),
-              user       : await loaders.usernames.load(doc.user),
-              validation : doc.validation ? { ...doc.validation, user: (await loaders.usernames.load(doc.validation.user)).id } : null,
-              closure    : doc.closure ? { ...doc.closure, user: (await loaders.usernames.load(doc.closure.user)).id } : null,
-              state      : doc.status,
-              business  : await getOrCreateBusiness(),
-            }).save(null, { useMasterKey : true });
+            const validation = doc.validation ? {
+              validation_date : new Date(doc.validation.date),
+              validation_user : (await loaders.usernames.load(doc.validation.user)),
+            } : {};
 
-            doc.activities.forEach(async ({ type, ...metadata }) => {
-              activities.push({
-                ns        : 'DOCUMENTS',
-                type      : type,
-                metadata  : { ...metadata, date : new Date(metadata.date), user: metadata.user ? (await loaders.usernames.load(metadata.user)).id : undefined },
-                timestamp : new Date(metadata.date),
-                document  : obj,
-                business  : await getOrCreateBusiness(),
-              });
-            });
+            const closure = doc.closure ? {
+              closure_date  : new Date(doc.closure.date),
+              closure_state : doc.closure.state,
+              closure_user  : (await loaders.usernames.load(doc.closure.user)),
+            } : {};
+
+            const obj = await new DocType()
+              .set({
+                refNo      : doc.refNo,
+                date       : new Date(doc.date),
+                vehicle    : doc.vehicle,
+                agent      : (await loaders.usernames.load(doc.agent)),
+                client     : (await loaders.usernames.load(doc.client)),
+                user       : (await loaders.usernames.load(doc.user)),
+                state      : doc.status,
+                business   : (await getOrCreateBusiness()),
+                ...validation,
+                ...closure,
+              })
+              .save(null, { useMasterKey : true });
+
+            if (doc.activities.length > 0) {
+              log(`Creating ${doc.activities.length} activities...`);
+
+              try {
+                const activities = await Promise.all(doc.activities.map(async ({ type, date, user, ...metadata }) => {
+                  return new ActivityType().set({
+                    ns        : 'DOCUMENTS',
+                    type      : type,
+                    metadata  : { ...metadata },
+                    timestamp : new Date(date),
+                    document  : obj,
+                    business  : (await getOrCreateBusiness()),
+                    user      : user ? (await loaders.usernames.load(user)) : obj.get('user'),
+                  });
+                }));
+                await Parse.Object.saveAll(activities, { useMasterKey : true });
+
+                log(`Activities successfully created.`);
+              } catch (e) {
+                log.error(`Error creating activities`, e.message);
+                throw e;
+              }
+            }
 
             log(`Doc ${doc.refNo} successfully created.`);
 
             // Index doc
-            es.onDoc(obj.id);
+            await es.onDoc(obj.id);
 
             return obj;
           }
         });
       }, Promise.resolve());
 
-      if (activities.length > 0) {
-        log(`Creating ${activities.length} activities...`);
-        try {
-          await Parse.Object.saveAll(
-            activities.map((data) => new ActivityType().set(data)), { useMasterKey : true });
-
-        } catch (e) {
-          log.error(`Error creating activities`, e.message);
-        }
-
-      }
+      // if (activities.length > 0) {
+      //   log(`Creating ${activities.length} activities...`);
+      //   try {
+      //     await Parse.Object.saveAll(
+      //       activities.map((data) => new ActivityType().set(data)), { useMasterKey : true });
+      //
+      //   } catch (e) {
+      //     log.error(`Error creating activities`, e.message);
+      //   }
+      //
+      // }
 
       return;
     }

@@ -26,7 +26,7 @@ export function logOut(manual = true) {
       }
     } finally {
       dispatch({ type: USER_LOGGED_OUT, manual });
-      client.resetStore();
+      // client.resetStore();
     }
   };
 }

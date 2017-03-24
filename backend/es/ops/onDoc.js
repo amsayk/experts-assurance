@@ -29,12 +29,12 @@ export default function onDoc(id) {
           state        : doc.get('state'),
           date         : doc.get('date'),
           lastModified : doc.get('updatedAt'),
-          agent        : await indexedUser(doc.get('agent'), /* isEmployee = */true),
-          client       : await indexedUser(doc.get('client')),
-          insurer      : await indexedUser(doc.get('insurer')),
-          user         : await indexedUser(doc.get('user'), /* isEmployee = */true),
-          validation   : await getValidation(doc),
-          closure      : await getClosure(doc),
+          agent        : (await indexedUser(doc.get('agent'), /* isEmployee = */true)),
+          client       : (await indexedUser(doc.get('client'))),
+          insurer      : (await indexedUser(doc.get('insurer'))),
+          user         : (await indexedUser(doc.get('user'), /* isEmployee = */true)),
+          ...(await getValidation(doc)),
+          ...(await getClosure(doc)),
         }
       }, function (error, response) {
         if (error) {
@@ -75,13 +75,14 @@ async function indexedUser(user, isEmployee = false) {
 }
 
 async function getValidation(doc) {
-  const validation = doc.get('validation');
-  if (validation) {
-    const user = await new Parse.Query(Parse.User).get(validation.user, { useMasterKey : true });
-    const isEmployee = (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
+  const validation_date = doc.get('validation_date');
+  const validation_user = doc.get('validation_user');
+
+  if (validation_date && validation_user) {
+    const isEmployee = (validation_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (validation_user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
     return {
-      date : validation.date,
-      user : await indexedUser(user, isEmployee),
+      validation_date,
+      validation_user : (await indexedUser(validation_user, isEmployee)),
     };
   }
 
@@ -90,14 +91,16 @@ async function getValidation(doc) {
 
 
 async function getClosure(doc) {
-  const closure = doc.get('closure');
-  if (closure) {
-    const user = await new Parse.Query(Parse.User).get(closure.user, { useMasterKey : true });
-    const isEmployee = (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
+  const closure_date = doc.get('closure_date');
+  const closure_state = doc.get('closure_state');
+  const closure_user = doc.get('closure_user');
+
+  if (closure_date && closure_state && closure_user) {
+    const isEmployee = (closure_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (closure_user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
     return {
-      state : closure.state,
-      date : closure.date,
-      user : await indexedUser(user, isEmployee),
+      closure_state,
+      closure_date,
+      closure_user : (await indexedUser(closure_user, isEmployee)),
     };
   }
 

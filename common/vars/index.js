@@ -41,6 +41,9 @@ export const PATH_PASSWORD_RESET_SUCCESS      = process.env.PATH_PASSWORD_RESET_
 export const PATH_INVALID_LINK                = process.env.PATH_INVALID_LINK;
 export const PATH_ACTIVATION                  = process.env.PATH_ACTIVATION;
 
+// Dashboard
+export const PATH_DASHBOARD                   = process.env.PATH_DASHBOARD;
+
 // Cases
 export const PATH_CASES                       = process.env.PATH_CASES;
 export const PATH_CASES_CASE                  = process.env.PATH_CASES_CASE;

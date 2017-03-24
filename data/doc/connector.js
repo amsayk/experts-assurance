@@ -21,21 +21,49 @@ import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 const LIMIT_PER_PAGE = 45;
 const LIMIT_PER_NEXT_PAGE = 15;
 const SEARCH_LIMIT = 15;
+const RECENT_DOCS_LIMIT = 5;
 
 export class DocConnector {
   constructor() {
     this.loader = new DataLoader(this.fetch.bind(this), {
     });
+    this.countByStateLoader = new DataLoader(this.countByState.bind(this), {
+    });
   }
   async fetch(ids) {
-    const activities = await new Parse.Query(DocType)
+    const docs = await new Parse.Query(DocType)
       .containedIn('objectId', ids)
       .matchesQuery('business', businessQuery)
+      .include([
+        'agent',
+        'client',
+        'user',
+        'insurer',
+      ])
       .find({ useMasterKey: true });
 
     return ids.map((id) => {
-      const index = activities.findIndex((doc) => doc.id === id);
-      return index !== -1 ? activities[index] : new Error(`Doc ${id} not found`);
+      const index = docs.findIndex((doc) => doc.id === id);
+      return index !== -1 ? docs[index] : new Error(`Doc ${id} not found`);
+    })
+  }
+  async countByState(states) {
+    const counts = await Promise.all(states.map(async (s) => {
+      try {
+        return await new Parse.Query(DocType)
+          .equalTo('state', s.toUpperCase())
+          .matchesQuery('business', businessQuery)
+          .count({ useMasterKey: true })
+      } catch (e) {
+        return e;
+      }
+    }));
+
+    return states.map((s, index) => {
+      const count = counts[index];
+      return typeof count !== 'undefined' && Number.isFinite(count)
+        ? count
+        : new Error(`Docs count for state \`${s}\` failed`);
     })
   }
 
@@ -71,6 +99,10 @@ export class DocConnector {
         .ascending('email')
         .matchesQuery('business', businessQuery)
         .limit(SEARCH_LIMIT);
+
+      q.include([
+        'business',
+      ]);
 
       return q.find({ useMasterKey: true });
     }
@@ -170,7 +202,7 @@ export class DocConnector {
         }
         must.push({
           range : {
-            'validation.date' : range,
+            'validation_date' : range,
           },
         });
       }
@@ -188,7 +220,7 @@ export class DocConnector {
         }
         must.push({
           range : {
-            'closure.date' : range,
+            'closure_date' : range,
           },
         });
       }
@@ -196,13 +228,13 @@ export class DocConnector {
 
     if (validator && validator.id) {
       must.push({
-        term : { 'validation.user.id' : validator.id },
+        term : { 'validation_user.id' : validator.id },
       });
     }
 
     if (closer && closer.id) {
       must.push({
-        term : { 'closure.user.id' : closer.id },
+        term : { 'closure_user.id' : closer.id },
       });
     }
 
@@ -355,11 +387,11 @@ export class DocConnector {
 
           'refNo_string',
 
-          'validation.user.name',
-          'validation.user.email',
+          'validation_user.name',
+          'validation_user.email',
 
-          'closure.user.name',
-          'closure.user.email',
+          'closure_user.name',
+          'closure_user.email',
         ],
         query: queryString,
       };
@@ -408,11 +440,11 @@ export class DocConnector {
 
               'refNo_string'                 : {},
 
-              'validation.user.name'         : {},
-              'validation.user.email'        : {},
+              'validation_user.name'         : {},
+              'validation_user.email'        : {},
 
-              'closure.user.name'            : {},
-              'closure.user.email'           : {},
+              'closure_user.name'            : {},
+              'closure_user.email'           : {},
             },
           },
         },
@@ -528,7 +560,7 @@ export class DocConnector {
     }
   }
 
-  getDocs(queryString, cursor = 0, sortConfig, client, agent, state, user) {
+  getDocs(queryString, cursor = 0, sortConfig, client, agent, state, user, topLevelFields) {
     return Promise.all([count(), doFetch()]).then(([ length, docs ]) => ({
       cursor: cursor + docs.length,
       length,
@@ -554,7 +586,10 @@ export class DocConnector {
     }
 
     function count() {
-      return getQuery().count();
+      if (topLevelFields.indexOf('length') !== -1) {
+        return getQuery().count();
+      }
+      return Promise.resolve(0);
     }
 
     function doFetch() {
@@ -569,9 +604,120 @@ export class DocConnector {
       if (cursor) {
         q.skip(cursor);
       }
+
+      q.include([
+        'agent',
+        'client',
+        'user',
+        'insurer',
+      ]);
+
       return q.find({ useMasterKey: true });
     }
 
+  }
+
+  pendingDashboard(durationInDays, user, now) {
+    if (!user) {
+      return Promise.resolve([]);
+    }
+
+    return new Parse.Query(DocType)
+      .equalTo('state', 'PENDING')
+      .greaterThanOrEqualTo('createdAt', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      .matchesQuery('business', businessQuery)
+      .include([
+        'user',
+        'agent',
+        'client',
+        'insurer',
+      ])
+      .find({ useMasterKey : true });
+
+    // return docs.filter((doc) => {
+    //   const dt = doc.createdAt; // TODO: should this be dtSinister?
+    //   return now - dt.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
+    // });
+  }
+  openDashboard(durationInDays, user, now) {
+    if (!user) {
+      return Promise.resolve([]);
+    }
+
+    return new Parse.Query(DocType)
+      .equalTo('state', 'OPEN')
+      .greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      .matchesQuery('business', businessQuery)
+      .include([
+        'validation_user',
+        'agent',
+        'client',
+        'insurer',
+      ])
+      .find({ useMasterKey : true });
+
+    // return docs.filter((doc) => {
+    //   const dtValidation = new Date(doc.get('validation').date);
+    //   return now - dtValidation.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
+    // });
+  }
+  closedDashboard(durationInDays, user, now) {
+    if (!user) {
+      return Promise.resolve([]);
+    }
+
+    const queries = [
+      new Parse.Query(DocType).equalTo('state', 'CLOSED'),
+      new Parse.Query(DocType).equalTo('state', 'CANCELED'),
+    ];
+
+    return Parse.Query.or.apply(Parse.Query, queries)
+      .greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      .matchesQuery('business', businessQuery)
+      .include([
+        'closure_user',
+        'agent',
+        'client',
+        'insurer',
+      ])
+      .find({ useMasterKey : true });
+
+    // return docs.filter((doc) => {
+    //   const dtClosure = new Date(doc.get('closure').date);
+    //   return now - dtClosure.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
+    // });
+  }
+
+  recentDocs(user) {
+    if (!user) {
+      return Promise.resolve([]);
+    }
+
+    return new Parse.Query(DocType)
+      .descending('date')
+      .limit(RECENT_DOCS_LIMIT)
+      .include([
+        'user',
+      ])
+      .find();
+  }
+
+  async dashboard(user, selectionSet) {
+    if (!user) {
+      return {
+        pending  : { count: 0 },
+        open     : { count: 0 },
+        closed   : { count: 0 },
+        canceled : { count: 0 },
+      };
+    }
+
+    const results = await Promise.all(selectionSet.map((state) => this.countByStateLoader.load(state)));
+
+    return selectionSet.reduce((memo, state, index) => {
+      memo[state] = { count: results[index] };
+      return memo;
+    }, {});
   }
 }
 

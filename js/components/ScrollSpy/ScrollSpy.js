@@ -88,7 +88,7 @@ class Spying extends React.Component {
   renderLoadMoreButton() {
     return this.props.manual ? (
       <Button bsStyle='secondary' onClick={this._onMore} role='button'>
-        Plus d'activité
+        Plus d'actualité
       </Button>
     ) : null;
   }

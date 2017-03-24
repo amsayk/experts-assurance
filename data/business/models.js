@@ -20,8 +20,8 @@ export class Business {
     return this.connector.get(id);
   }
 
-  getUsers({ role, queryString, cursor, sortConfig }) {
-    return this.connector.getUsers(role, queryString, cursor, sortConfig, this.user);
+  getUsers({ role, queryString, cursor, sortConfig }, topLevelFields) {
+    return this.connector.getUsers(role, queryString, cursor, sortConfig, this.user, topLevelFields);
   }
   searchUsers(q) {
     return this.connector.searchUsers(q, this.user);

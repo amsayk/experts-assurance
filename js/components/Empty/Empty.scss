@@ -1,0 +1,33 @@
+.icon {
+  width: 170px;
+  height: 170px;
+  margin: 0 auto 24px;
+  border-radius: 100%;
+  background: #f3f0f2;
+  text-align: center;
+  padding-top: 45px;
+}
+
+.center {
+  transform: translate(-10%, 25%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;m: translate(-50%,-50%);
+}
+
+.title {
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 55px;
+  white-space: nowrap;
+  margin-bottom: 45px;
+}
+
+.description {
+  font-family: Dosis,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  letter-spacing: .72px;
+  line-height: 17px;
+  margin-bottom: 12px;
+}
+

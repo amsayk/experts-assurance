@@ -14,7 +14,6 @@ import {
   CancelledIcon,
 } from 'components/icons/MaterialIcons';
 
-
 import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
@@ -25,12 +24,19 @@ const TYPE = 'DOCUMENT_CREATED';
 
 function getState(state, stateText, icon) {
   return [
-    <span className={cx(style[state], style.docStateToggle)}>
-      {icon}
-    </span>,
-    <span className={style.text} style={{ textTransform: 'uppercase', marginLeft: 5 }}>
-      {stateText}
-    </span>,
+    // <span className={cx(style[state], style.docStateToggle)}>
+    //   {icon}
+    // </span>,
+    <span className={style.text} style={{
+      // textTransform: 'uppercase',
+      marginRight: 5,
+      border: '1px solid #000',
+      borderRadius: '15%',
+      padding: '1px 4px',
+      marginLeft: 5,
+    }}>
+    {stateText}
+  </span>,
   ];
 }
 
@@ -42,14 +48,14 @@ const STATES = {
 };
 
 
-export default function DocumentCreated({ intl, doc, timestamp, metadata }, { currentUser }) {
+export default function DocumentCreated({ intl, doc, user, timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 
       <div className={style.profilePic}>
-        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
+        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
           <ProfilePic
-            user={doc.user}
+            user={user}
             size={24}
           />
         </Link>
@@ -58,15 +64,15 @@ export default function DocumentCreated({ intl, doc, timestamp, metadata }, { cu
       <div className={style.entry}>
         <div className={style.title}>
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
-            Création de dossier #{doc.refNo}
+            Création de dossier <b>{doc.refNo}</b>
           </Link>
         </div>
         <div className={style.desc}>
           {STATES[metadata.state]}
         </div>
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
-            {doc.user.displayName}
+          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+            {user.displayName}
           </Link> ·{' '}
           <time title={intl.formatDate(timestamp)} dateTime={new Date(new Date(timestamp)).toISOString()}>
             {intl.formatRelative(new Date(timestamp))}

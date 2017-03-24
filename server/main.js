@@ -95,6 +95,9 @@ const APP_PATHS = [
   // settings
   config.path_settings_base + '*',
 
+  // dashboard
+  config.path_dashboard + '*',
+
   // config.paths_cases
   config.path_cases + '*',
   config.path_cases_case + '*',
@@ -177,7 +180,7 @@ const api = new ParseServer({
   javascriptKey            : process.env.JAVASCRIPT_KEY,
   masterKey                : process.env.MASTER_KEY,
   serverURL                : config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
-  publicServerURL                : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  publicServerURL          : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
   enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
   allowClientClassCreation : true,
   maxUploadSize            : '25mb',
@@ -238,7 +241,7 @@ const dashboard = new ParseDashboard({
       'appId'         : process.env.APPLICATION_ID,
       'javascriptKey' : process.env.JAVASCRIPT_KEY,
       'masterKey'     : process.env.MASTER_KEY,
-      'serverURL'     : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
+      'serverURL'     : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
       'appName'       : config.appName,
       'production'    : !__DEV__,
     },
@@ -295,6 +298,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
       Business: new Business({ user, connector: new BusinessConnector() }),
       Docs: new Docs({ user, connector: new DocConnector() }),
       Activities: new Activities({ user, connector: new ActivityConnector() }),
+      Now: new Date().getTime(),
     },
     logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,

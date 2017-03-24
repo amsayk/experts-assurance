@@ -59,10 +59,13 @@ class StateToggle extends React.Component {
     const { state } = this.props;
 
     return (
-      <Button onClick={this.onClear} className={style.selectedUserButton} role='button'>
-        {STATES[state]}
-        <CloseIcon className={style.docStateCloseIcon} size={12}/>
-      </Button>
+      <Button style={{
+        paddingTop: 2,
+        paddingBottom: 1,
+      }} onClick={this.onClear} className={style.selectedUserButton} role='button'>
+      {STATES[state]}
+      <CloseIcon className={style.docStateCloseIcon} size={12}/>
+    </Button>
     );
   }
 }

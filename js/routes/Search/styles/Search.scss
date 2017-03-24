@@ -171,7 +171,7 @@ $navbar-height: 60px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
   background-clip: initial;
   display: block;
-  max-height: 80vh;
+  max-height: 83vh;
   // overflow-y: auto;
 
   .noTopBorder {
@@ -355,7 +355,7 @@ $navbar-height: 60px;
 
 // Advanced search
 .advancedSearch {
-  max-height: 80vh;
+  max-height: 83vh;
 }
 
 @import  'routes/Search/styles/List';
