@@ -227,6 +227,9 @@ const api = new ParseServer({
     choosePassword       : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_choose_password,
     passwordResetSuccess : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_password_reset_success,
   },
+
+  // Only log errors during production
+  logLevel: config.env === 'development' ? 'info' : 'error',
 });
 
 // Serve the Parse API on the /parse URL prefix
