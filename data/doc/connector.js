@@ -264,13 +264,13 @@ export class DocConnector {
       operator: 'and',
       fields: [
         'agent.name',
-        'agent.email',
+        // 'agent.email',
 
         'client.name',
-        'client.email',
+        // 'client.email',
 
         'insurer.name',
-        'insurer.email',
+        // 'insurer.email',
 
         'vehicle.model',
         'vehicle.plateNumber',
@@ -323,16 +323,16 @@ export class DocConnector {
           'post_tags' : ['</mark>'],
           fields      : {
             'agent.name'          : {},
-            'agent.email'         : {},
+            // 'agent.email'         : {},
 
             'insurer.name'        : {},
-            'insurer.email'       : {},
+            // 'insurer.email'       : {},
 
             'vehicle.model'       : {},
             'vehicle.plateNumber' : {},
 
             'client.name'         : {},
-            'client.email'        : {},
+            // 'client.email'        : {},
 
             'refNo_string'        : {},
           },
@@ -371,13 +371,13 @@ export class DocConnector {
         operator: 'and',
         fields: [
           'agent.name',
-          'agent.email',
+          // 'agent.email',
 
           'client.name',
-          'client.email',
+          // 'client.email',
 
           'insurer.name',
-          'insurer.email',
+          // 'insurer.email',
 
           'vehicle.model',
           'vehicle.plateNumber',
@@ -388,10 +388,10 @@ export class DocConnector {
           'refNo_string',
 
           'validation_user.name',
-          'validation_user.email',
+          // 'validation_user.email',
 
           'closure_user.name',
-          'closure_user.email',
+          // 'closure_user.email',
         ],
         query: queryString,
       };
@@ -424,27 +424,27 @@ export class DocConnector {
             'post_tags' : ['</mark>'],
             fields      : {
               'agent.name'                   : {},
-              'agent.email'                  : {},
+              // 'agent.email'                  : {},
 
               'user.name'                    : {},
-              'user.email'                   : {},
+              // 'user.email'                   : {},
 
               'insurer.name'                 : {},
-              'insurer.email'                : {},
+              // 'insurer.email'                : {},
 
               'vehicle.model'                : {},
               'vehicle.plateNumber'          : {},
 
               'client.name'                  : {},
-              'client.email'                 : {},
+              // 'client.email'                 : {},
 
               'refNo_string'                 : {},
 
               'validation_user.name'         : {},
-              'validation_user.email'        : {},
+              // 'validation_user.email'        : {},
 
               'closure_user.name'            : {},
-              'closure_user.email'           : {},
+              // 'closure_user.email'           : {},
             },
           },
         },

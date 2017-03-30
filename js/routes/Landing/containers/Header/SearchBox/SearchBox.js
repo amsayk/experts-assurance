@@ -90,7 +90,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
   const matches = highlight.reduce(function (matches, highlight) {
     switch (highlight) {
       case 'agent.name':
-      case 'agent.email':
+      // case 'agent.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -112,7 +112,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'client.name':
-      case 'client.email':
+      // case 'client.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -134,7 +134,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'insurer.name':
-      case 'insurer.email':
+      // case 'insurer.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -156,7 +156,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'user.name':
-      case 'user.email':
+      // case 'user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -178,7 +178,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'validation_user.name':
-      case 'validation_user.email':
+      // case 'validation_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -200,7 +200,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'closure_user.name':
-      case 'closure_user.email':
+      // case 'closure_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
