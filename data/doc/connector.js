@@ -261,7 +261,7 @@ export class DocConnector {
     } : undefined;
 
     const multi_match = q ? {
-      operator: 'or',
+      operator: 'and',
       fields: [
         'agent.name',
         'agent.email',
@@ -368,7 +368,7 @@ export class DocConnector {
       } : undefined;
 
       const multi_match = {
-        operator: 'or',
+        operator: 'and',
         fields: [
           'agent.name',
           'agent.email',
@@ -596,7 +596,6 @@ export class DocConnector {
       const q = getQuery()
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
 
-
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
         !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
       );
@@ -617,70 +616,224 @@ export class DocConnector {
 
   }
 
-  pendingDashboard(durationInDays, user, now) {
+  pendingDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet) {
     if (!user) {
-      return Promise.resolve([]);
+      return Promise.resolve({
+        length: 0,
+        docs: [],
+        cursor: 0,
+      });
     }
 
-    return new Parse.Query(DocType)
-      .equalTo('state', 'PENDING')
-      .greaterThanOrEqualTo('createdAt', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-      .matchesQuery('business', businessQuery)
-      .include([
-        'user',
-        'agent',
-        'client',
-        'insurer',
-      ])
-      .find({ useMasterKey : true });
+    return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
+      length,
+      docs,
+      cursor: cursor + docs.length,
+    }));
 
-    // return docs.filter((doc) => {
-    //   const dt = doc.createdAt; // TODO: should this be dtSinister?
-    //   return now - dt.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
-    // });
+    function getQuery() {
+      const q = new Parse.Query(DocType)
+        .equalTo('state', 'PENDING')
+        .matchesQuery('business', businessQuery);
+
+      if (durationInDays === -1) {
+        q.greaterThanOrEqualTo('date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+      } else {
+        q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      }
+
+      return q;
+    }
+
+    function doFetch() {
+      const q = getQuery()
+        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
+        .include([
+          'user',
+          'agent',
+          'client',
+          'insurer',
+        ])
+
+      if (cursor) {
+        q.skip(cursor);
+      }
+
+      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+      );
+
+      return q.find({ useMasterKey : true });
+    }
+
+    function doCount() {
+      if (selectionSet.indexOf('length') !== -1){
+        return getQuery().count();
+      }
+
+      return Promise.resolve(0);
+    }
+
+    // if (!user) {
+    //   return Promise.resolve([]);
+    // }
+
+    // return new Parse.Query(DocType)
+    //   .equalTo('state', 'PENDING')
+    //   .greaterThanOrEqualTo('createdAt', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+    //   .matchesQuery('business', businessQuery)
+    //   .include([
+    //     'user',
+    //     'agent',
+    //     'client',
+    //     'insurer',
+    //   ])
+    // .find({ useMasterKey : true });
+
   }
-  openDashboard(durationInDays, user, now) {
+  openDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet) {
     if (!user) {
-      return Promise.resolve([]);
+      return Promise.resolve({
+        length: 0,
+        docs: [],
+        cursor: 0,
+      });
     }
 
-    return new Parse.Query(DocType)
-      .equalTo('state', 'OPEN')
-      .greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-      .matchesQuery('business', businessQuery)
-      .include([
-        'validation_user',
-        'agent',
-        'client',
-        'insurer',
-      ])
-      .find({ useMasterKey : true });
+    return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
+      length,
+      docs,
+      cursor: cursor + docs.length,
+    }));
 
-    // return docs.filter((doc) => {
-    //   const dtValidation = new Date(doc.get('validation').date);
-    //   return now - dtValidation.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
-    // });
+    function getQuery() {
+      const q = new Parse.Query(DocType)
+        .equalTo('state', 'OPEN')
+        .matchesQuery('business', businessQuery);
+
+      if (durationInDays === -1) {
+        q.greaterThanOrEqualTo('validation_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+      } else {
+        q.greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      }
+
+      return q;
+    }
+
+    function doFetch() {
+      const q = getQuery()
+        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
+        .include([
+          'validation_user',
+          'agent',
+          'client',
+          'insurer',
+        ])
+
+      if (cursor) {
+        q.skip(cursor);
+      }
+
+      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+      );
+
+      return q.find({ useMasterKey : true });
+    }
+
+    function doCount() {
+      if (selectionSet.indexOf('length') !== -1){
+        return getQuery().count();
+      }
+
+      return Promise.resolve(0);
+    }
+
   }
-  closedDashboard(durationInDays, user, now) {
+  closedDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet, includeCanceled) {
     if (!user) {
-      return Promise.resolve([]);
+      return Promise.resolve({
+        length: 0,
+        docs: [],
+        cursor: 0,
+      });
     }
 
-    const queries = [
-      new Parse.Query(DocType).equalTo('state', 'CLOSED'),
-      new Parse.Query(DocType).equalTo('state', 'CANCELED'),
-    ];
+    return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
+      length,
+      docs,
+      cursor: cursor + docs.length,
+    }));
 
-    return Parse.Query.or.apply(Parse.Query, queries)
-      .greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-      .matchesQuery('business', businessQuery)
-      .include([
-        'closure_user',
-        'agent',
-        'client',
-        'insurer',
-      ])
-      .find({ useMasterKey : true });
+    function getQuery() {
+      let q = new Parse.Query(DocType).equalTo('state', 'CLOSED');
+
+      if (includeCanceled) {
+        q = [
+          q,
+          new Parse.Query(DocType).equalTo('state', 'CANCELED'),
+        ];
+      }
+
+      q = (Array.isArray(q) ? Parse.Query.or.apply(Parse.Query, q) : q)
+        .matchesQuery('business', businessQuery);
+
+      if (durationInDays === -1) {
+        q.greaterThanOrEqualTo('closure_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+      } else {
+        q.greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)));
+      }
+
+      return q;
+    }
+
+    function doFetch() {
+      const q = getQuery()
+        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
+        .include([
+          'closure_user',
+          'agent',
+          'client',
+          'insurer',
+        ]);
+
+      if (cursor) {
+        q.skip(cursor);
+      }
+
+      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+      );
+
+      return q.find({ useMasterKey : true });
+    }
+
+    function doCount() {
+      if (selectionSet.indexOf('length') !== -1){
+        return getQuery().count();
+      }
+
+      return Promise.resolve(0);
+    }
+    // if (!user) {
+    //   return Promise.resolve([]);
+    // }
+    //
+    // const queries = [
+    //   new Parse.Query(DocType).equalTo('state', 'CLOSED'),
+    //   new Parse.Query(DocType).equalTo('state', 'CANCELED'),
+    // ];
+    //
+    // return Parse.Query.or.apply(Parse.Query, queries)
+    //   .greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+    //   .matchesQuery('business', businessQuery)
+    //   .include([
+    //     'closure_user',
+    //     'agent',
+    //     'client',
+    //     'insurer',
+    //   ])
+    //   .find({ useMasterKey : true });
 
     // return docs.filter((doc) => {
     //   const dtClosure = new Date(doc.get('closure').date);

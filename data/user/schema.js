@@ -96,7 +96,7 @@ export const schema = [`
     id: ID!
 
     displayName: String
-    email: String!
+    email: String
     username: String!
     roles: [Role!]!
     sessionToken: String!

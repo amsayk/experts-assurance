@@ -34,7 +34,7 @@ class InsurerLine extends React.Component {
         <div className={style.overviewValue}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={style.text}>
-              --
+              —
             </span>
           </div>
         </div>

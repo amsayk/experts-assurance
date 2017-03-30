@@ -8,7 +8,7 @@ import { logOut } from 'redux/reducers/user/actions';
 import style from 'routes/Landing/styles';
 
 import Header from '../Header';
-import Nav from 'routes/Landing/components/Nav';
+// import Nav from 'routes/Landing/components/Nav';
 
 import selector from './selector';
 
@@ -18,7 +18,7 @@ export class DashboardContainer extends React.PureComponent {
     return (
       <div className={style.root}>
         <Header user={user} onLogOut={actions.logOut}/>
-        <Nav user={user} selectedNavItem='app.dashboard'/>
+        {/* <Nav user={user} selectedNavItem='app.dashboard'/> */}
         <div className={style.content}>
           <div className={style.center}>
             Tableaux de bords

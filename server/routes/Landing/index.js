@@ -14,11 +14,13 @@ import Case from 'routes/Landing/containers/Case';
 
 import casesReducer from 'redux/reducers/cases/reducer';
 import docSearchReducer from 'redux/reducers/docSearch/reducer';
+import dashboardReducer from 'redux/reducers/dashboard/reducer';
 
 const getIndexRoute = (store) => (partialNextState, cb) => cb(null, {
   getComponent(nextState, cb) {
     store.injectReducers([
       { key: 'docSearch', reducer: docSearchReducer },
+      { key: 'dashboard', reducer: dashboardReducer },
     ]);
     cb(null, Home);
   },
@@ -30,6 +32,7 @@ const getRoutes = (store) => [{
   getComponent(nextState, cb) {
     store.injectReducers([
       { key: 'docSearch', reducer: docSearchReducer },
+      { key: 'dashboard', reducer: dashboardReducer },
     ]);
     cb(null, Home);
   },

@@ -1,0 +1,34 @@
+query moreOpenDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConfig!) {
+  openDashboard(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig) {
+    cursor
+    docs {
+      id
+      refNo
+      date
+      state
+      vehicle {
+        model
+        plateNumber
+      }
+      validation {
+        date
+        user {
+          id
+          displayName
+        }
+      }
+      client {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+

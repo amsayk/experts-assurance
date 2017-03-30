@@ -30,7 +30,7 @@ export default class Overview extends React.Component {
           <div className={style.overviewLine}>
             <div className={style.overviewLabel}>Adresse e-mail</div>
             <div className={style.overviewValue}>
-              {loading ? null : user.email}
+              {loading ? null : user.email || '—'}
             </div>
           </div>
 

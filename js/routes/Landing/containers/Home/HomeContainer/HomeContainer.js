@@ -8,9 +8,11 @@ import { logOut } from 'redux/reducers/user/actions';
 import style from 'routes/Landing/styles';
 
 import Header from 'routes/Landing/containers/Header';
-import Nav from 'routes/Landing/components/Nav';
+// import Nav from 'routes/Landing/components/Nav';
 
+import Tails from '../tails';
 import Boards from '../boards';
+
 import RecentDocs from '../RecentDocs';
 
 import selector from './selector';
@@ -26,7 +28,8 @@ export class HomeContainer extends React.PureComponent {
     return (
       <div className={style.root}>
         <Header user={user} onLogOut={actions.logOut}/>
-        <Nav user={user} selectedNavItem='app.home'/>
+        {/* <Nav user={user} selectedNavItem='app.home'/> */}
+        <Tails user={user}/>
         <Boards user={user}/>
         <RecentDocs/>
       </div>

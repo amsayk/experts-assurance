@@ -15,15 +15,15 @@ function FilesSolid({}) {
 
 export default class Empty extends React.Component {
   render() {
-    const { className, message, description } = this.props;
+    const { noIcon, className, message, description } = this.props;
     return (
       <div className={cx(className, style.center)}>
 
-        <div className={style.icon}>
+        {noIcon ? null  : <div className={style.icon}>
           <svg width={80} height={80} fill='#343445'>
             <FilesSolid/>
           </svg>
-        </div>
+        </div>}
 
         <div className={style.title}>
           {message || 'Aucun données à afficher.'}
@@ -37,4 +37,8 @@ export default class Empty extends React.Component {
     )
   }
 }
+
+Empty.defaultProps = {
+  noIcon : false,
+};
 

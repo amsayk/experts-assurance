@@ -8,7 +8,7 @@ import { logOut } from 'redux/reducers/user/actions';
 import style from 'routes/Landing/styles';
 
 import Header from '../../Header';
-import Nav from 'routes/Landing/components/Nav';
+// import Nav from 'routes/Landing/components/Nav';
 
 import selector from './selector';
 
@@ -27,7 +27,7 @@ export class CasesContainer extends React.PureComponent {
     return (
       <div className={style.root}>
         <Header user={user} onLogOut={actions.logOut}/>
-        <Nav user={user} selectedNavItem='app.cases'/>
+        {/* <Nav user={user} selectedNavItem='app.cases'/> */}
         <Body user={user}/>
         <Timeline/>
       </div>

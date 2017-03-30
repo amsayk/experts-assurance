@@ -88,7 +88,7 @@ const config = {
   parse_server_mount_point    : process.env.PARSE_MOUNT || '/parse',
   parse_server_url            : process.env.SERVER_URL,
   parse_database_uri          : process.env.DATABASE_URI,
-  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/dashboard',
+  parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/parse-dashboard',
 
   // App config
   verifyUserEmails                  : false, // process.env.VERIFY_USER_EMAILS === 'yes',
@@ -103,7 +103,7 @@ const config = {
   path_activation                   : process.env.PATH_ACTIVATION || '/activation',
 
   // dashboard
-  path_dashboard                    : process.env.PATH_DASHBOARD || '/stats',
+  path_dashboard                    : process.env.PATH_DASHBOARD || '/dashboard',
 
   // cases
   path_cases                        : process.env.PATH_CASES || '/cases',

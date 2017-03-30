@@ -49,6 +49,8 @@ $toolbar-height: 41px;
   // overflow-y: visible;
   max-width: $content-width;
   min-width: $content-width;
+
+  margin: 70px 0 0 0;
 }
 
 .buyButton {
@@ -89,10 +91,9 @@ $toolbar-height: 41px;
 @import 'routes/Landing/styles/Cases';
 @import 'routes/Landing/styles/Case';
 @import 'routes/Landing/styles/List';
-@import 'routes/Landing/styles/Nav';
+// @import 'routes/Landing/styles/Nav';
 // @import 'routes/Landing/styles/Loading';
 @import 'routes/Landing/styles/Actions';
 @import 'routes/Landing/styles/Timeline';
 @import 'routes/Landing/styles/Search';
 @import 'routes/Landing/styles/RecentDocs';
-@import 'routes/Landing/styles/Boards';

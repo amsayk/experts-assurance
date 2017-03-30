@@ -106,3 +106,44 @@ export const extrapolate = function () {
 
 };
 
+export const durations = [{
+  duration : 3,
+  label: '3 jours',
+}, {
+  duration : 7,
+  label: '1 semaine',
+}, {
+  duration : 15,
+  label: '2 semaines',
+}, {
+  duration : 30,
+  label: '1 mois',
+}, {
+  duration : 60,
+  label: '2 mois',
+}, {
+  duration : 3 * 30,
+  label: '3 mois',
+}, {
+  duration : 6 * 30,
+  label: '6 mois',
+}, {
+  duration : 9 * 30,
+  label: '9 mois',
+}, {
+  duration : 12 * 30,
+  label: '1 an',
+}, {
+  duration : 18 * 30,
+  label: '18 mois',
+}, {
+  duration : 24 * 30,
+  label: '2 ans',
+}, {
+  duration : 3 * 24 * 30,
+  label: '3 ans',
+}, {
+  duration : -1,
+  label: 'Plus de 3 ans',
+}];
+

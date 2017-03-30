@@ -12,7 +12,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  CancelledIcon,
+  CanceledIcon,
 } from 'components/icons/MaterialIcons';
 
 import style from 'routes/Landing/styles';
@@ -42,10 +42,10 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En cours',  <UnknownIcon size={12}/>),
-  OPEN     : getState('OPEN',     'Validé',      <WatchIcon   size={12}/>),
-  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon    size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',      <CancelledIcon size={12}/>),
+  PENDING  : getState('PENDING',  'En cours',    <UnknownIcon  size={12}/>),
+  OPEN     : getState('OPEN',     'Validé',      <WatchIcon    size={12}/>),
+  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
 };
 
 export default function DocumentStateChanged({ intl, doc, user, timestamp, metadata }, { currentUser }) {

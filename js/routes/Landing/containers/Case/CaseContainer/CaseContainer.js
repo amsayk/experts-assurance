@@ -10,7 +10,7 @@ import { logOut } from 'redux/reducers/user/actions';
 import style from 'routes/Landing/styles';
 
 import Header from '../../Header';
-import Nav from '../Nav';
+// import Nav from '../Nav';
 
 import selector from './selector';
 
@@ -46,12 +46,12 @@ export class CaseContainer extends React.PureComponent {
           user={user}
           onLogOut={actions.logOut}
         />
-        <Nav
-          id={id}
-          user={user}
-          onNav={this.onNav}
-          selectedNavItem={this.state.nav}
-        />
+        {/* <Nav */}
+        {/*   id={id} */}
+        {/*   user={user} */}
+        {/*   onNav={this.onNav} */}
+        {/*   selectedNavItem={this.state.nav} */}
+        {/* /> */}
         <Body
           user={user}
           id={id}

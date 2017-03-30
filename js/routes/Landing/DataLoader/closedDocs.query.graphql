@@ -1,0 +1,36 @@
+query closedDocs($durationInDays: Int!, $sortConfig: ESSortConfig!, $includeCanceled: Boolean) {
+  closedDashboard(durationInDays: $durationInDays, sortConfig: $sortConfig, includeCanceled: $includeCanceled) {
+    length
+    cursor
+    docs {
+      id
+      refNo
+      date
+      state
+      vehicle {
+        model
+        plateNumber
+      }
+      closure {
+        date
+        user {
+          id
+          displayName
+        }
+      }
+      client {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+

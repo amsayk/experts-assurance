@@ -352,14 +352,36 @@ export const resolvers = {
       return context.Docs.esQueryDocs(query);
     },
 
-    pendingDashboard(_, { durationInDays }, context) {
-      return context.Docs.pendingDashboard(durationInDays, context.Now);
+    pendingDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.pendingDashboard(
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        context.Now,
+      );
     },
-    openDashboard(_, { durationInDays }, context) {
-      return context.Docs.openDashboard(durationInDays, context.Now);
+    openDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.openDashboard(
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        context.Now,
+      );
     },
-    closedDashboard(_, { durationInDays }, context) {
-      return context.Docs.closedDashboard(durationInDays, context.Now);
+    closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.closedDashboard(
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        includeCanceled,
+        context.Now,
+      );
     },
 
     recentDocs(_, {}, context) {

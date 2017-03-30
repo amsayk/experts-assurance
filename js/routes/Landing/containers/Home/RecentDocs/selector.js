@@ -10,6 +10,6 @@ export default createSelector(
   extrapolationSelector,
   appSelector,
   notificationOpenSelector,
-  (extrapolation, app, notificationOpen) => ({ extrapolation, notificationOpen, isReady: app.isReady, timelineDisplayMatches : app.timelineDisplayMatches })
+  (extrapolation, app, notificationOpen) => ({ extrapolation, notificationOpen, isReady: app.isReady })
 );
 

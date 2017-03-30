@@ -15,10 +15,10 @@ function getInitials(name) {
 
 const ProfilePic = ({ user, size, ...props }) => {
   if (user) {
-    if (user.displayName) {
+    if (user.displayName || user.name) {
       return (
         <Avatar size={size} textSizeRatio={1.75} {...props}>
-          {getInitials(user.displayName)}
+          {getInitials(user.displayName || user.name)}
         </Avatar>
       );
     } else {
@@ -35,7 +35,6 @@ const ProfilePic = ({ user, size, ...props }) => {
 ProfilePic.propTypes = {
   user : T.shape({
     displayName: T.string.isRequired,
-    email: T.string.isRequired,
   }),
   size : T.number.isRequired,
 };

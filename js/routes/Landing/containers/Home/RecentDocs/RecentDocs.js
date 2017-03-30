@@ -15,7 +15,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  CancelledIcon,
+  CanceledIcon,
 } from 'components/icons/MaterialIcons';
 
 import ProfilePic from 'components/Profile/ProfilePic';
@@ -49,9 +49,9 @@ const styles = {
 
 class RecentDocs extends React.Component {
   render() {
-    const { intl, notificationOpen, timelineDisplayMatches, isReady, currentUser, loading, docs : items, extrapolation : periods } = this.props;
+    const { intl, notificationOpen, isReady, currentUser, loading, docs : items, extrapolation : periods } = this.props;
 
-    if (loading || !timelineDisplayMatches) {
+    if (loading) {
       return null;
     }
 
@@ -129,7 +129,7 @@ const STATES = {
   PENDING  : getState('PENDING',  'En cours',  <UnknownIcon   size={12}/>),
   OPEN     : getState('OPEN',     'Validé',    <WatchIcon     size={12}/>),
   CLOSED   : getState('CLOSED',   'Clos',      <DoneIcon      size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',    <CancelledIcon size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',    <CanceledIcon  size={12}/>),
 };
 
 const TYPE = 'RECENT_DOCUMENT';
@@ -157,7 +157,7 @@ function Entry({ intl, doc }, { currentUser }) {
           {/*   {STATES[doc.state]} */}
           {/* </div> */}
         <div className={style.desc}>
-          <h6 style={{ marginBottom: 3 }}>{doc.vehicle.model}, {doc.vehicle.plateNumber}</h6>
+          <h6 style={{ marginBottom: 3, marginTop: 3 }}>{doc.vehicle.model}, {doc.vehicle.plateNumber}</h6>
         </div>
         <div className={style.info}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>

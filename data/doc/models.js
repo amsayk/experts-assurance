@@ -34,14 +34,36 @@ export class Docs {
     return this.connector.esQueryDocs(query);
   }
 
-  pendingDashboard(durationInDays, now) {
-    return this.connector.pendingDashboard(durationInDays, this.user, now);
+  pendingDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
+    return this.connector.pendingDashboard(
+      durationInDays,
+      cursor,
+      sortConfig,
+      this.user,
+      now,
+      selectionSet,
+    );
   }
-  openDashboard(durationInDays, now) {
-    return this.connector.openDashboard(durationInDays, this.user, now);
+  openDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
+    return this.connector.openDashboard(
+      durationInDays,
+      cursor,
+      sortConfig,
+      this.user,
+      now,
+      selectionSet,
+    );
   }
-  closedDashboard(durationInDays, now) {
-    return this.connector.closedDashboard(durationInDays, this.user, now);
+  closedDashboard(durationInDays, cursor, sortConfig, selectionSet, includeCanceled, now) {
+    return this.connector.closedDashboard(
+      durationInDays,
+      cursor,
+      sortConfig,
+      this.user,
+      now,
+      selectionSet,
+      includeCanceled,
+    );
   }
 
   recent() {

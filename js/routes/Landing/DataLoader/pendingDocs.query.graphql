@@ -1,0 +1,29 @@
+query pendingDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
+  pendingDashboard(durationInDays: $durationInDays, sortConfig: $sortConfig) {
+    length
+    cursor
+    docs {
+      id
+      refNo
+      date
+      state
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+

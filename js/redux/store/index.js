@@ -2,6 +2,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 
 import { APP_NAME, BASENAME, DEFAULT_LANG, INIT } from 'vars';
 
+import pick from 'lodash.pick';
+
 import array from 'redux/middleware/array';
 import bufferActions from 'redux/middleware/buffer-actions';
 
@@ -13,11 +15,19 @@ import {
 } from 'redux/reducers/users/constants';
 
 import {
+  SET_DURATION as DASHBOARD_SET_DURATION,
+  TOGGLE as DASHBOARD_TOGGLE,
+  TOGGLE_INCLUDE_CANCELED as DASHBOARD_TOGGLE_INCLUDE_CANCELED,
+  SET_ONLY_VALID_OPEN as DASHBOARD_SET_ONLY_VALID_OPEN,
+} from 'redux/reducers/dashboard/constants';
+
+import {
   ACTION as SORT,
 } from 'redux/reducers/sorting/constants';
 
 import { AppState } from 'redux/reducers/app/reducer';
 import { DocSearchState } from 'redux/reducers/docSearch/reducer';
+import { DashboardState } from 'redux/reducers/dashboard/reducer';
 import { NotificationState } from 'redux/reducers/notification/reducer';
 import { ScrollState } from 'redux/reducers/scrolling/reducer';
 import { SnackState } from 'redux/reducers/snackbar/reducer';
@@ -66,6 +76,7 @@ const middlewares = [
   array,
   thunk.withExtraArgument({ client: apolloClient, history }),
   reduxCookieMiddleware({
+    // Users
     [VIEW_TYPE_GRID]: {
       reducerKey : 'users.viewType',
       cookieKey  : 'users.viewType',
@@ -78,9 +89,45 @@ const middlewares = [
       reducerKey : 'users.sortConfig',
       cookieKey  : 'users.sortConfig',
     },
+
+    // Cases
     [`${SORT}/cases`]: {
       reducerKey : 'cases.sortConfig',
       cookieKey  : 'cases.sortConfig',
+    },
+
+    // Dashboard
+    [DASHBOARD_TOGGLE]: {
+      reducerKey : (state) => state.get('dashboard').viewStatus,
+      cookieKey  : 'dashboard.viewStatus',
+    },
+
+    [DASHBOARD_TOGGLE_INCLUDE_CANCELED]: {
+      reducerKey : 'dashboard.includeCanceled',
+      cookieKey  : 'dashboard.includeCanceled',
+    },
+
+    [DASHBOARD_SET_DURATION]: {
+      reducerKey : (state) => state.get('dashboard').durations,
+      cookieKey  : 'dashboard.durations',
+    },
+
+    [DASHBOARD_SET_ONLY_VALID_OPEN]: {
+      reducerKey : 'dashboard.onlyValidOpen',
+      cookieKey  : 'dashboard.onlyValidOpen',
+    },
+
+    [`${SORT}/pendingDashboard`]: {
+      reducerKey : (store) => pick(store.getState().get('dashboard').pendingSortConfig, ['key', 'direction']),
+      cookieKey  : 'dashboard.pendingSortConfig',
+    },
+    [`${SORT}/openDashboard`]: {
+      reducerKey : (store) => pick(store.getState().get('dashboard').openSortConfig, ['key', 'direction']),
+      cookieKey  : 'dashboard.openSortConfig',
+    },
+    [`${SORT}/closedDashboard`]: {
+      reducerKey : (store) => pick(store.getState().get('dashboard').closedSortConfig, ['key', 'direction']),
+      cookieKey  : 'dashboard.closedSortConfig',
     },
   }),
 ];
@@ -109,6 +156,7 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
     case ''             : return new Map(value);
     case 'app'          : return new AppState(value);
     case 'docSearch'    : return new DocSearchState(value);
+    case 'dashboard'    : return new DashboardState(value);
     case 'notification' : return new NotificationState(value);
     case 'scrolling'    : return new ScrollState(value);
     case 'snackbar'     : return new SnackState(value);

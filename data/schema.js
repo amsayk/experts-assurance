@@ -51,9 +51,24 @@ const rootSchema = [`
     dashboard: Dashboard!
 
     # Docs dashboard
-    pendingDashboard(durationInDays: Int!): [Doc!]!
-    openDashboard(durationInDays: Int!): [Doc!]!
-    closedDashboard(durationInDays: Int!): [Doc!]!
+    pendingDashboard(
+      durationInDays: Int!,
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
+    ): DocsFetchResponse!
+
+    openDashboard(
+      durationInDays: Int!,
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
+    ): DocsFetchResponse!
+
+    closedDashboard(
+      durationInDays: Int!,
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
+      includeCanceled: Boolean = false,
+    ): DocsFetchResponse!
   }
 
   type Mutation {

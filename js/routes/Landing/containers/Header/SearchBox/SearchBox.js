@@ -40,7 +40,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  CancelledIcon,
+  CanceledIcon,
 } from 'components/icons/MaterialIcons';
 
 import {
@@ -293,14 +293,14 @@ const STATES_2 = {
   PENDING  : getState2('PENDING',  <UnknownIcon   size={32}/>),
   OPEN     : getState2('OPEN',     <WatchIcon     size={32}/>),
   CLOSED   : getState2('CLOSED',   <DoneIcon      size={32}/>),
-  CANCELED : getState2('CANCELED', <CancelledIcon size={32}/>),
+  CANCELED : getState2('CANCELED', <CanceledIcon  size={32}/>),
 };
 
 const STATES = {
   PENDING  : getState('PENDING',  'Dossiers en cours',   <UnknownIcon   size={24}/>),
   OPEN     : getState('OPEN',     'Dossiers validés',    <WatchIcon     size={24}/>),
   CLOSED   : getState('CLOSED',   'Dossiers clos',       <DoneIcon      size={24}/>),
-  CANCELED : getState('CANCELED', 'Dossiers annulés',    <CancelledIcon size={24}/>),
+  CANCELED : getState('CANCELED', 'Dossiers annulés',    <CanceledIcon  size={24}/>),
 };
 
 class SearchBox extends React.Component {

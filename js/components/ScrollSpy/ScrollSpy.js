@@ -29,6 +29,7 @@ class Spying extends React.Component {
     bubbles         : false,
     fetchMore       : false,
     manual          : false,
+    loadMoreLabel   : 'Plus d\'actualité',
   }
   constructor(props) {
     super(props);
@@ -86,21 +87,21 @@ class Spying extends React.Component {
     raf(this.props.onSpy);
   }
   renderLoadMoreButton() {
-    return this.props.manual ? (
+    return (
       <Button bsStyle='secondary' onClick={this._onMore} role='button'>
-        Plus d'actualité
+        {this.props.loadMoreLabel}
       </Button>
-    ) : null;
+    );
   }
   render() {
-    const { fetchMore, disabled } = this.props;
+    const { fetchMore, disabled, manual } = this.props;
     if (disabled) {
       return null;
     }
 
     return (
       <div className={cx(style.scrollSpy, !fetchMore && style.done)}>
-        {fetchMore
+        {fetchMore && !manual
           ? null
           : this.renderLoadMoreButton()}
         </div>
@@ -123,9 +124,17 @@ class Idle extends React.Component {
   }
 
   render() {
-    const { disabled, Loading } = this.props;
+    const { disabled, Loading, done, doneLabel } = this.props;
     if (disabled) {
       return null;
+    }
+
+    if (done) {
+      return doneLabel ? (
+        <div className={style.loaded}>
+          {doneLabel}
+        </div>
+      ) : null;
     }
 
     return (

@@ -9,11 +9,11 @@ const ProfileMenuItem = ({ user, size }) => (
     <div className={style.profileAvatar}>
       <ProfilePic user={user} square size={size}/>
     </div>
-    <div className={ style.profileInfo }>
+    <div className={style.profileInfo}>
       <div className={ style.profileName }>
         {user && user.displayName}
       </div>
-      <div className={ style.profileEmail }>
+      <div className={style.profileEmail}>
         {user && user.email}
       </div>
     </div>

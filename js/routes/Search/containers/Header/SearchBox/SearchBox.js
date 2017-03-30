@@ -36,7 +36,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  CancelledIcon,
+  CanceledIcon,
 } from 'components/icons/MaterialIcons';
 
 import {

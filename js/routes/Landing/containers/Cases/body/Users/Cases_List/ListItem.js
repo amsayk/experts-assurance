@@ -19,7 +19,7 @@ import {
   UnknownIcon,
   WatchIcon,
   DoneIcon,
-  CancelledIcon,
+  CanceledIcon,
 
   CheckboxIcon,
 } from 'components/icons/MaterialIcons';
@@ -42,7 +42,7 @@ const STATE_ICON = {
   PENDING  : <UnknownIcon   className={style.stateIcon} size={24}/>,
   OPEN     : <WatchIcon     className={style.stateIcon} size={24}/>,
   CLOSED   : <DoneIcon      className={style.stateIcon} size={24}/>,
-  CANCELED : <CancelledIcon className={style.stateIcon} size={24}/>,
+  CANCELED : <CanceledIcon  className={style.stateIcon} size={24}/>,
 };
 
 function StateIcon({ isSelected, hasSelection, state, onClick }) {
@@ -114,7 +114,7 @@ class ListItem extends React.Component {
                 <div className={style.text}>
                   {agent ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
                     {agent.displayName}
-                  </Link> : '--'}
+                  </Link> : '—'}
                 </div>
               </div>
             </div>
