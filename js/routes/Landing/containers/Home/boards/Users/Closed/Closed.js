@@ -41,7 +41,7 @@ class Closed extends React.Component {
     }
   }
   render() {
-    const { toggleIncludeCanceled, closedDashboardIsOpen, durationInDays, data, loadMore, actions } = this.props;
+    const { includeCanceled, closedDashboardIsOpen, durationInDays, data, loadMore, actions } = this.props;
     const summary = data.length && data.cursor ? <span style={{
       color: 'rgba(112, 112, 112, 0.85)',
       fontSize: 13,
@@ -76,7 +76,7 @@ class Closed extends React.Component {
             marginRight: 6,
           }}>
           <Switch
-            value={toggleIncludeCanceled}
+            value={includeCanceled}
             onValueChange={actions.toggleIncludeCanceled}
           />
         </div>
