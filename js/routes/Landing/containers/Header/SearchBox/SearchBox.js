@@ -177,8 +177,8 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         );
         break;
 
-      case 'validation.user.name':
-      case 'validation.user.email':
+      case 'validation_user.name':
+      case 'validation_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -199,8 +199,8 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         );
         break;
 
-      case 'closure.user.name':
-      case 'closure.user.email':
+      case 'closure_user.name':
+      case 'closure_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
