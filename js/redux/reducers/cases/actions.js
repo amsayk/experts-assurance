@@ -2,8 +2,8 @@ import {
   ON_SEARCH,
   ON_STATE,
   ON_CLIENT,
+  ON_MANAGER,
   ON_AGENT,
-  ON_INSURER,
 } from './constants';
 
 // Selection
@@ -32,16 +32,16 @@ export function onClient(id) {
   };
 }
 
-export function onAgent(id) {
+export function onManager(id) {
   return {
-    type : ON_AGENT,
+    type : ON_MANAGER,
     id,
   };
 }
 
-export function onInsurer(id) {
+export function onAgent(id) {
   return {
-    type : ON_INSURER,
+    type : ON_AGENT,
     id,
   };
 }

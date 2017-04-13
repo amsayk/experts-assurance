@@ -1,2 +1,2 @@
-export { default } from './ChangeEmailContainer';
+export default from './ChangeEmailContainer';
 

@@ -80,8 +80,8 @@
 }
 
 .listHeaderItemClient,
+.listHeaderItemManager,
 .listHeaderItemAgent,
-.listHeaderItemInsurer,
 .listHeaderItemVehicle {
   composes: listHeaderItem sortable;
   flex: 1;
@@ -166,7 +166,7 @@
     //   }
     //
     //   &.listItemClient,
-    //   &.listItemAgent,
+    //   &.listItemManager,
     //   &.listItemVehicle {
       //     padding-top: 1px;
       //     padding-bottom: 0;
@@ -250,8 +250,8 @@
 }
 
 .listItemClient,
-.listItemInsurer,
 .listItemAgent,
+.listItemManager,
 .listItemVehicle {
   composes: listItem;
   flex: 1;

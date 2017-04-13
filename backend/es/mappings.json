@@ -120,7 +120,7 @@
               }
             }
           },
-          "agent": {
+          "manager": {
             "properties": {
               "id": {
                 "type": "keyword"
@@ -165,7 +165,7 @@
               }
             }
           },
-          "insurer": {
+          "agent": {
             "properties": {
               "id": {
                 "type": "keyword"

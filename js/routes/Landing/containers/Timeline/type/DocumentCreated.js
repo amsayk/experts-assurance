@@ -41,12 +41,11 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En cours',    <UnknownIcon   size={12}/>),
-  OPEN     : getState('OPEN',     'Validé',      <WatchIcon     size={12}/>),
-  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon      size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon  size={12}/>),
+  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon  size={12}/>),
+  OPEN     : getState('OPEN',     'En cours',    <WatchIcon    size={12}/>),
+  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
 };
-
 
 export default function DocumentCreated({ intl, doc, user, timestamp, metadata }, { currentUser }) {
   return (

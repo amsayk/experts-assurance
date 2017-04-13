@@ -36,8 +36,8 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En cours',   <UnknownIcon   size={18}/>),
-  OPEN     : getState('OPEN',     'Validé',     <WatchIcon     size={18}/>),
+  PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
+  OPEN     : getState('OPEN',     'En cours',   <WatchIcon     size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',     <CanceledIcon  size={18}/>),
 };
@@ -65,8 +65,8 @@ class StateToggle extends React.Component {
 }
 class StateChanger extends React.Component {
   onToggle() {
-    this.setState(({ open }) => ({
-      open : !open,
+    this.setState(({ open }, { deletion }) => ({
+      open : deletion ? false : !open,
     }), () => {
 
     });
@@ -120,7 +120,7 @@ class StateChanger extends React.Component {
                   <UnknownIcon size={18}/>
                 </div>
                 <div style={{ marginLeft: 9 }}>
-                  En cours
+                  En attente
                 </div>
               </div>
             </MenuItem>
@@ -130,7 +130,7 @@ class StateChanger extends React.Component {
                   <WatchIcon size={18}/>
                 </div>
                 <div style={{ marginLeft: 9 }}>
-                  Validé
+                  En cours
                 </div>
               </div>
             </MenuItem>

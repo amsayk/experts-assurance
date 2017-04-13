@@ -15,7 +15,7 @@ export class ActivityConnector {
   }
   async fetch(ids) {
     const activities = await new Parse.Query(ActivityType)
-      .matchesQuery('business', businessQuery)
+      .matchesQuery('business', businessQuery())
       .containedIn('objectId', ids)
       .find({ useMasterKey: true });
 
@@ -51,7 +51,7 @@ export class ActivityConnector {
 
     function doFetch() {
       const q = getQuery()
-        .matchesQuery('business', businessQuery)
+        .matchesQuery('business', businessQuery())
         .descending('timestamp')
         .limit(LIMIT_PER_PAGE);
 
@@ -76,7 +76,7 @@ export class ActivityConnector {
         // 'document.user',
         // 'document.agent',
         // 'document.client',
-        // 'document.insurer',
+        // 'document.agent',
         'user',
       ]);
 

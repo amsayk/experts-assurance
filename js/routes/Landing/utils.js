@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const END = new Date(2015, 0, 1);
+const END = new Date(2013, 0, 1);
 
 export const extrapolate = function () {
   const end = moment.utc(END).startOf('day');

@@ -19,3 +19,4 @@ export const middleware = (params) => (store) => (next) => (action) => {
 
   return result;
 };
+

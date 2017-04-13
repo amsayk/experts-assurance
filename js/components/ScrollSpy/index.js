@@ -1,2 +1,2 @@
-export { default } from './ScrollSpy';
+export default from './ScrollSpy';
 

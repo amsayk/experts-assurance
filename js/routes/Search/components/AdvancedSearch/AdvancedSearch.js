@@ -5,9 +5,9 @@ import style from 'routes/Search/styles';
 import cx from 'classnames';
 
 import State from './fields/State';
-import Agent from './fields/Agent';
+import Manager from './fields/Manager';
 import Client from './fields/Client';
-import Insurer from './fields/Insurer';
+import Agent from './fields/Agent';
 import DTSinister from './fields/DTSinister';
 import DTValidation from './fields/DTValidation';
 import DTClosure from './fields/DTClosure';
@@ -50,17 +50,17 @@ export default class AdvancedSearch extends React.Component {
         <div className={style.advancedSearch_divider}/>
 
         {/* render users ---- */}
-        <Agent
-          agent={search.agent}
-          onAgent={actions.onAgent}
+        <Manager
+          manager={search.manager}
+          onManager={actions.onManager}
         />
         <Client
           client={search.client}
           onClient={actions.onClient}
         />
-        <Insurer
-          insurer={search.insurer}
-          onInsurer={actions.onInsurer}
+        <Agent
+          agent={search.agent}
+          onAgent={actions.onAgent}
         />
 
         {/* render divider */}

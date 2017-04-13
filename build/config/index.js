@@ -22,6 +22,14 @@ const moduleMap = {
   'countries'                          : 'common/countries',
   'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
   'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
+
+  // TODO: remove when subscriptions-transport-ws gets updated
+  'graphql-tag/printer'                : 'graphql/language/printer',
+
+  // cookie storage
+  'StorageController.cookie'           : 'common/utils/StorageController.cookie',
+
+  'result-codes'                       : 'common/result-codes',
 };
 
 const babelOptions = require('scripts/getBabelOptions')({
@@ -46,7 +54,7 @@ const config = {
   env : process.env.NODE_ENV || 'development',
 
   // HTTPS
-  secure : process.env.IS_SECURE === 'yes',
+  secure : process.env.NODE_ENV === 'production' && process.env.IS_SECURE === 'yes',
 
   // Cluster
   get clusterSize() {
@@ -55,6 +63,9 @@ const config = {
 
   // SSR
   ssrEnabled : process.env.NODE_ENV === 'production' || (process.env.SSR_DEV === 'yes'),
+
+  // Public access
+  public     : nullthrows(process.env.PUBLIC_SITE) === 'yes',
 
   // ----------------------------------
   // Site info
@@ -90,8 +101,58 @@ const config = {
   parse_database_uri          : process.env.DATABASE_URI,
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/parse-dashboard',
 
+  // Recaptcha
+  get recaptcha() {
+    if (!this._recaptcha) {
+      const Recaptcha = require('recaptcha-verify');
+      this._recaptcha = new Recaptcha({
+        secret  : nullthrows(process.env.RECAPCHA_SITE_SECRET),
+        verbose : true,
+      })
+    }
+    return this._recaptcha;
+  },
+
+  // mail adapter
+  get mailAdapterOptions() {
+    if (!this._mailAdapterOptions) {
+      this._mailAdapterOptions = {
+        fromAddress: this.mailgun_from_address,
+        domain: this.mailgun_domain,
+        apiKey: this.mailgun_api_key,
+        templates: {
+          passwordResetEmail: {
+            subject: 'Réinitializer votre mot de passe avec ' + this.appName,
+            pathPlainText: this.utils_paths.server('email-templates/password_reset_email.txt'),
+            callback: (user) => ({}),
+          },
+          verificationEmail: {
+            subject: 'Vérifier votre adresse e-mail avec ' + this.appName,
+            pathPlainText: this.utils_paths.server('email-templates/verification_email.txt'),
+            callback: (user) => ({}),
+          },
+        },
+      };
+    }
+    return this._mailAdapterOptions;
+  },
+
+  get mailAdapter() {
+    const Parse = require('parse/node');
+    const MailAdapter = require('backend/mail/MailAdapter');
+    // Get access to Parse Server's cache
+    const { AppCache } = require('parse-server/lib/cache');
+    // Get a reference to the MailgunAdapter
+    // NOTE: It's best to do this inside the Parse.Cloud.define(...) method body and not at the top of your file with your other imports. This gives Parse Server time to boot, setup cloud code and the email adapter.
+    const app = AppCache.get(Parse.applicationId);
+    const MailgunAdapter = app
+      ? app['userController']['adapter']
+      : new MailAdapter(this.mailAdapterOptions);
+    return MailgunAdapter;
+  },
+
   // App config
-  verifyUserEmails                  : false, // process.env.VERIFY_USER_EMAILS === 'yes',
+  verifyUserEmails                  : process.env.VERIFY_USER_EMAILS !== 'no',
 
   path_login                        : process.env.PATH_LOGIN || '/login',
   path_signup                       : process.env.PATH_SIGNUP || '/signup',
@@ -136,6 +197,16 @@ const config = {
   // ----------------------------------
   // graphql config
   // ----------------------------------
+  get queryMap() {
+    if (!this._queryMap) {
+      const queryMap = require('persisted_queries.json');
+      const invert = require('lodash.invert');
+
+      this._queryMap = invert(queryMap);
+    }
+
+    return this._queryMap;
+  },
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
   graphql_subscriptions_endpoint : process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT || '/ws',
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
@@ -155,7 +226,9 @@ const config = {
     babelrc: false,
     env: {
       development: {
-        plugins: ['transform-react-jsx-source'],
+        plugins: [
+          'transform-react-jsx-source'
+        ],
       },
       production: {
         minified: true,
@@ -240,6 +313,8 @@ config.globals = {
   'process.env'  : {
     NODE_ENV              : JSON.stringify(config.env),
 
+    PUBLIC                : JSON.stringify(config.env),
+
     APPLICATION_ID        : JSON.stringify(process.env.APPLICATION_ID),
     JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),
 
@@ -247,7 +322,6 @@ config.globals = {
 
     GRAPHQL_ENDPOINT                : JSON.stringify(config.graphql_endpoint),
     GRAPHQL_SUBSCRIPTIONS_ENDPOINT  : JSON.stringify(`${config.secure ? 'wss' : 'ws'}://${config.server_host}:${config.secure ? '' : config.server_port}${config.graphql_subscriptions_endpoint}`),
-    PERSISTED_QUERIES               : JSON.stringify(config.persistedQueries),
 
     BASENAME              : JSON.stringify(process.env.BASENAME || ''),
 
@@ -284,10 +358,10 @@ config.globals = {
     // Search
     PATH_SEARCH           : JSON.stringify(config.path_search),
 
-    ENABLE_RECAPTCHA      : JSON.stringify(process.env.ENABLE_RECAPTCHA === 'yes'),
     PASSWORD_MIN_LENGTH   : JSON.stringify(config.password_min_length),
     PASSWORD_MIN_SCORE    : JSON.stringify(config.password_min_score),
 
+    ENABLE_RECAPTCHA      : JSON.stringify(process.env.ENABLE_RECAPTCHA === 'yes'),
     RECAPCHA_SITE_KEY     : JSON.stringify(process.env.RECAPCHA_SITE_KEY),
     RECAPCHA_JS_URL       : JSON.stringify(process.env.RECAPCHA_JS_URL),
 
@@ -298,6 +372,8 @@ config.globals = {
     BUSINESS_KEY          : JSON.stringify(config.businessKey),
 
     DEV_PASSWORD          : JSON.stringify(process.env.DEV_PASSWORD),
+
+    SECURE                : JSON.stringify(config.secure),
 
     LINK_TERMS_OF_SERVICE : JSON.stringify(process.env.LINK_TERMS_OF_SERVICE || 'https://www.epsilon.ma/legal/privacy-policy'),
     LINK_PRIVACY_POLICY   : JSON.stringify(process.env.PRIVACY_POLICY || 'https://www.epsilon.ma/legal/customer-agreement'),

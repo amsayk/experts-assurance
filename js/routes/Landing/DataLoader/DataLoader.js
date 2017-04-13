@@ -26,6 +26,8 @@ import GET_MORE_CLOSED_DOCS from './moreClosedDocs.query.graphql';
 
 import DASHBOARD_QUERY from './dashboard.query.graphql';
 
+import LAST_REFNO_QUERY from './getLastRefNo.query.graphql';
+
 const currentUser = graphql(CURRENT_USER_QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
   skip: ({ user }) => user.isEmpty,
@@ -89,7 +91,7 @@ const docs = graphql(GET_DOCS_QUERY, {
     variables: {
       query : {
         client      : ownProps.client,
-        agent       : ownProps.agent,
+        manager     : ownProps.manager,
         state       : ownProps.state,
         queryString : ownProps.queryString,
         sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
@@ -108,20 +110,20 @@ const docs = graphql(GET_DOCS_QUERY, {
           query : {
             cursor,
             client      : ownProps.client,
-            agent       : ownProps.agent,
+            manager     : ownProps.manager,
             state       : ownProps.state,
             queryString : ownProps.queryString,
             sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.data.getDocs.docs;
+          const newDocs = fetchMoreResult.getDocs.docs;
 
           return {
             getDocs : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.getDocs.cursor,
+              cursor: fetchMoreResult.getDocs.cursor,
 
               // length: fetchMoreResult.data.getDocs.length,
 
@@ -177,13 +179,13 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newActivities = fetchMoreResult.data.timeline.result;
+          const newActivities = fetchMoreResult.timeline.result;
 
           return {
             timeline : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.timeline.cursor,
+              cursor: fetchMoreResult.timeline.cursor,
 
               // Put the new activies at the end of the list
               result: [
@@ -231,13 +233,13 @@ const pendingDocs = graphql(GET_PENDING_DOCS, {
           sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.data.pendingDashboard.docs;
+          const newDocs = fetchMoreResult.pendingDashboard.docs;
 
           return {
             pendingDashboard : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.pendingDashboard.cursor,
+              cursor: fetchMoreResult.pendingDashboard.cursor,
 
               // length: fetchMoreResult.data.pendingDashboard.length,
 
@@ -277,15 +279,15 @@ const openDocs = graphql(GET_OPEN_DOCS, {
           sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.data.openDashboard.docs;
+          const newDocs = fetchMoreResult.openDashboard.docs;
 
           return {
             openDashboard : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.openDashboard.cursor,
+              cursor: fetchMoreResult.openDashboard.cursor,
 
-              // length: fetchMoreResult.data.openDashboard.length,
+              // length: fetchMoreResult.openDashboard.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -325,15 +327,15 @@ const closedDocs = graphql(GET_CLOSED_DOCS, {
           sortConfig      : pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.data.closedDashboard.docs;
+          const newDocs = fetchMoreResult.closedDashboard.docs;
 
           return {
             closedDashboard : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.closedDashboard.cursor,
+              cursor: fetchMoreResult.closedDashboard.cursor,
 
-              // length: fetchMoreResult.data.closedDashboard.length,
+              // length: fetchMoreResult.closedDashboard.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -365,6 +367,16 @@ const dashboard = graphql(DASHBOARD_QUERY, {
   }),
 });
 
+
+const lastRefNo = graphql(LAST_REFNO_QUERY, {
+  options: ({}) => ({
+  }),
+  props: ({ data: { loading, getLastRefNo = { value: 0 } } }) => ({
+    loading,
+    lastRefNo : getLastRefNo.value,
+  }),
+});
+
 export default {
   currentUser/*, usersByRoles*/,
   esUsersByRoles,
@@ -378,5 +390,6 @@ export default {
   openDocs,
   closedDocs,
   dashboard,
+  lastRefNo,
 };
 

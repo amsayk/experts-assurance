@@ -1,2 +1,2 @@
-export { default } from './RefLine';
+export default from './RefLine';
 

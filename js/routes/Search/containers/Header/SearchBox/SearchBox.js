@@ -73,10 +73,10 @@ class SearchBox extends React.Component {
 
     this.onSearch              = this.onSearch.bind(this);
 
-    this.onLastModified           = this.onLastModified.bind(this);
+    this.onLastModified        = this.onLastModified.bind(this);
     this.onTextInput           = this.onTextInput.bind(this);
     this.onState               = this.onState.bind(this);
-    this.onAgent               = this.onAgent.bind(this);
+    this.onManager             = this.onManager.bind(this);
     this.onClient              = this.onClient.bind(this);
     this.onUser                = this.onUser.bind(this);
     this.onCloser              = this.onCloser.bind(this);
@@ -111,10 +111,10 @@ class SearchBox extends React.Component {
     }));
   }
 
-  onAgent(id) {
+  onManager(id) {
     this.setState(({ search }) => ({
       search : search.merge({
-        agent : id ? {id} : null,
+        manager : id ? {id} : null,
       }),
     }));
   }
@@ -239,7 +239,7 @@ class SearchBox extends React.Component {
         qClassName={style.full}
         actions={{
           onState           : this.onState,
-          onAgent           : this.onAgent,
+          onManager         : this.onManager,
           onClient          : this.onClient,
           onUser            : this.onUser,
           onCloser          : this.onCloser,
@@ -278,6 +278,7 @@ class SearchBox extends React.Component {
           </div>}
           <div className={style.inputWrapper}>
             <input
+              id='gSearchInput'
               autoFocus
               ref={(input) => this.input = input}
               className={style.input}

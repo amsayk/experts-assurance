@@ -1,0 +1,22 @@
+mutation LogIn($username: String, $password: String) {
+  logIn(username: $username, password: $password) {
+    error {
+      code
+    }
+
+    user {
+      id
+      displayName
+      username
+      email
+      roles
+      emailVerified
+      sessionToken
+      business {
+        id
+          displayName
+      }
+    }
+  }
+}
+

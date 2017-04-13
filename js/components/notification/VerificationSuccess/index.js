@@ -1,2 +1,2 @@
-export { default } from './VerificationSuccess';
+export default from './VerificationSuccess';
 

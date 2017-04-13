@@ -1,2 +1,2 @@
-export { default } from './Header_Filters';
+export default from './Header_Filters';
 

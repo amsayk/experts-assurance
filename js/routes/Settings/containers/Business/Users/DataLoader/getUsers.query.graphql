@@ -8,6 +8,11 @@ query settings_users__getUsers($query: UsersFetchQuery!) {
       email
       roles
 
+      authorization {
+        date
+        user { id }
+      }
+
       createdAt
       updatedAt
     }

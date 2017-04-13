@@ -33,8 +33,8 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
         q               : search.q,
 
         client          : search.client,
+        manager         : search.manager,
         agent           : search.agent,
-        insurer         : search.insurer,
 
         validator       : search.validator,
         closer          : search.closer,
@@ -67,8 +67,8 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
             q               : ownProps.search.q,
 
             client          : ownProps.search.client,
+            manager         : ownProps.search.manager,
             agent           : ownProps.search.agent,
-            insurer         : ownProps.search.insurer,
 
             validator       : ownProps.search.validator,
             closer          : ownProps.search.closer,
@@ -86,15 +86,15 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.data.esQueryDocs.hits;
+          const newDocs = fetchMoreResult.esQueryDocs.hits;
 
           return {
             esQueryDocs : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.esQueryDocs.cursor,
+              cursor: fetchMoreResult.esQueryDocs.cursor,
 
-              length: fetchMoreResult.data.esQueryDocs.length,
+              length: fetchMoreResult.esQueryDocs.length,
 
               // Put the new docs at the end of the list
               hits: [

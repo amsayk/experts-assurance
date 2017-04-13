@@ -1,10 +1,12 @@
-import { formatError } from 'backend/utils';
+import Parse from 'parse/node';
 
-export default async function changeEmail(request, response) {
+import { formatError, serializeParseObject } from 'backend/utils';
+
+export default async function changeEmail(request, done) {
   const { payload: { email } } = request.params;
 
   if (!request.user) {
-    response.error(new Error('A user is required.'));
+    done(new Error('A user is required.'));
     return;
   }
 
@@ -13,9 +15,9 @@ export default async function changeEmail(request, response) {
       const user = await request.user.set('email', email)
         .save(null, { sessionToken: request.user.getSessionToken() });
     }
-    response.success(user);
+    done(null, serializeParseObject(user));
   } catch (e) {
-    response.error(formatError(e));
+    done(formatError(e));
   }
 }
 

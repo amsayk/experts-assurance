@@ -28,7 +28,7 @@ export default defineMessages({
     defaultMessage: 'Adresse e-mail ou mot de passe invalide.',
   },
 
-  login: {
+  logIn: {
     id: 'account.login-form.login-action',
     defaultMessage: 'Connexion',
   },

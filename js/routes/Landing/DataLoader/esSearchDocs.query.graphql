@@ -8,8 +8,8 @@ query esSearchDocs($queryString: String, $state: DocState) {
       highlight
       _source {
         id
+        manager{ id name }
         agent{ id name }
-        insurer{ id name }
         user{ id name }
         client{ id name }
         refNo

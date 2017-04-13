@@ -53,6 +53,7 @@ class ReCAPTCHA extends React.Component {
         <Recaptcha
           sitekey={nullthrows(RECAPCHA_SITE_KEY)}
           render={'explicit'}
+          size='invisible'
           verifyCallback={this.onVerify}
           onloadCallback={this.onLoadCallback}
           expiredCallback={this.onExpired}

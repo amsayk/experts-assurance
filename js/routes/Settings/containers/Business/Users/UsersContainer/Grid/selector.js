@@ -2,12 +2,12 @@ import { createSelector } from 'utils/reselect';
 
 const appSelector = state => state.get('app');
 const sortConfigSelector = state => state.getIn(['users', 'sortConfig']);
-const roleSelector = state => state.getIn(['users', 'role']);
+const rolesSelector = state => state.getIn(['users', 'roles']);
 
 export default createSelector(
   appSelector,
   sortConfigSelector,
-  roleSelector,
-  (app, sortConfig, role) => ({ isReady : app.isReady, sortConfig, role })
+  rolesSelector,
+  (app, sortConfig, roles) => ({ isReady : app.isReady, sortConfig, roles: roles ? roles.toJS() : [] })
 );
 

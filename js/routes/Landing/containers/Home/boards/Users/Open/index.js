@@ -1,2 +1,2 @@
-export { default } from './Open';
+export default from './Open';
 

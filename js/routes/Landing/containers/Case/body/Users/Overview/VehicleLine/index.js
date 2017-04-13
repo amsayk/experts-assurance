@@ -1,2 +1,2 @@
-export { default } from './VehicleLine';
+export default from './VehicleLine';
 

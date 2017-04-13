@@ -17,6 +17,8 @@ import schema from 'data/schema';
 
 import getCurrentUser from 'getCurrentUser';
 
+import emptyObject from 'emptyObject';
+
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
@@ -28,6 +30,8 @@ import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
 import { Docs } from 'data/doc/models';
 import { Activities } from 'data/activity/models';
+
+import { APOLLO_DEFAULT_REDUX_ROOT_KEY } from 'vars';
 
 const graphql = require('graphql');
 
@@ -48,7 +52,6 @@ export default function createRenderEngine(app) {
     });
     const client = new ApolloClient({
       ssrMode: true,
-      addTypename: true,
       // Remember that this is the interface the SSR server will use to connect to the
       // API server, so we need to ensure it isn't firewalled, etc
       networkInterface,
@@ -72,13 +75,17 @@ export default function createRenderEngine(app) {
     try {
       const content = await renderToStringWithData(app);
       const { title } = Helmet.rewind();
-      const apolloState = client.store.getState()[client.reduxRootKey];
+
+      // store is not always present
+      const apolloState = client.store
+        ? client.store.getState()[APOLLO_DEFAULT_REDUX_ROOT_KEY]
+        : { data: emptyObject };
 
       return {
         title       : title.toString(),
         html        : content,
         appState    : JSON.stringify(store.getState().toJS()),
-        apolloState : JSON.stringify({ [client.reduxRootKey]: { data: apolloState.data } }),
+        apolloState : JSON.stringify({ [APOLLO_DEFAULT_REDUX_ROOT_KEY]: { data: apolloState.data } }),
       };
     } catch (e) {
       log.error('RENDERING ERROR:', e);

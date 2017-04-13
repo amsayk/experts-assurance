@@ -38,14 +38,41 @@ const tooltipAlign = {
 };
 
 const styles = {
-  show: (notificationOpen) => ({
-    top : notificationOpen === 0 ? NOTIFICATION_HEIGHT : 0,
+  show: (notificationOpen, scrollTop) => ({
+    top : notificationOpen && scrollTop === 0 ? NOTIFICATION_HEIGHT : 0,
   }),
 };
+
+const MIN_HEIGHT = 200;
+const MIN_SCROLL_UP_DELTA = 18.5;
 
 const NOTIFICATION_HEIGHT = 45;
 
 class Header extends React.Component {
+  state = {
+    show : true,
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const { scrollTop, lastScrollTop } = nextProps.scrolling;
+    if (this.props.scrolling.scrollTop !== scrollTop || this.props.scrolling.lastScrollTop !== lastScrollTop) {
+      if (scrollTop > lastScrollTop){
+        // downscroll code
+        if (scrollTop >= MIN_HEIGHT && this.state.show === true) {
+          this.setState({
+            show : false,
+          });
+        }
+      } else {
+        // upscroll code
+        if (Math.abs(lastScrollTop - scrollTop) >= MIN_SCROLL_UP_DELTA && this.state.show === false) {
+          this.setState({
+            show : true,
+          });
+        }
+      }
+    }
+  }
   constructor(props) {
     super(props);
 
@@ -59,6 +86,8 @@ class Header extends React.Component {
     const {
       length,
       notificationOpen,
+      searching,
+      scrolling,
       intl,
       user,
       onLogOut,
@@ -66,7 +95,7 @@ class Header extends React.Component {
       actions,
     } = this.props;
     return (
-      <nav style={styles.show(notificationOpen)} className={style.navbar}>
+      <nav style={this.state.show || searching ? styles.show(notificationOpen, scrolling.scrollTop) : emptyObject} className={style.navbar}>
         <div className={style.leftNav}>
           <Tooltip align={tooltipAlign} overlay={'Retour'}>
             <Button onClick={this.onBack} className={style.backButton} role={'button'}>

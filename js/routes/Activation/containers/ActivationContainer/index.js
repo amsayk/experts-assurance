@@ -1,2 +1,2 @@
-export { default } from './ActivationContainer';
+export default from './ActivationContainer';
 

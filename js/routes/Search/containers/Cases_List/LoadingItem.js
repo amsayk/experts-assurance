@@ -63,6 +63,22 @@ export default class LoadingItem extends React.Component {
           </div>
         </div>
 
+        <div className={style.listItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <div
+                    className={style.placeholder}
+                    style={{ width: SIZE }}
+                  >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className={style.listItemAgent}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
@@ -79,23 +95,7 @@ export default class LoadingItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemInsurer}>
-          <div className={style.wrapper}>
-            <div className={style.innerWrapper}>
-              <div className={style.item}>
-                <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={style.listItemInsurer}>
+        <div className={style.listItemAgent}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

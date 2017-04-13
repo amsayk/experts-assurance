@@ -16,7 +16,6 @@ const log = require('log')('app:backend:mq:frontend');
  * @returns Promise
  */
 export default function publish(serverName, serverMethod, req, options = {}) {
-  log(`publish(${serverName}, ${serverMethod})`);
   return new Promise(function (resolve, reject) {
     req.user = serializeParseObject(req.user);
     const data = {
@@ -58,6 +57,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
         clearTimeout(timeoutCall);
         reject(err);
       }
+      log(`publish(${serverName}, ${serverMethod}) Job #${job.id}`);
     });
 
   });

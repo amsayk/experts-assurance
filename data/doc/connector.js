@@ -7,9 +7,9 @@ import es from 'backend/es';
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
-  Role_AGENTS,
+  Role_MANAGERS,
   Role_CLIENTS,
-  Role_INSURERS,
+  Role_AGENTS,
 } from 'roles';
 
 import { businessQuery } from 'data/utils';
@@ -33,12 +33,14 @@ export class DocConnector {
   async fetch(ids) {
     const docs = await new Parse.Query(DocType)
       .containedIn('objectId', ids)
-      .matchesQuery('business', businessQuery)
+      .matchesQuery('business', businessQuery())
       .include([
-        'agent',
+        'manager',
         'client',
         'user',
-        'insurer',
+        'agent',
+        'validation_user',
+        'closure_user',
       ])
       .find({ useMasterKey: true });
 
@@ -51,8 +53,10 @@ export class DocConnector {
     const counts = await Promise.all(states.map(async (s) => {
       try {
         return await new Parse.Query(DocType)
+          .doesNotExist('deletion_date')
+          .doesNotExist('deletion_user')
           .equalTo('state', s.toUpperCase())
-          .matchesQuery('business', businessQuery)
+          .matchesQuery('business', businessQuery())
           .count({ useMasterKey: true })
       } catch (e) {
         return e;
@@ -71,42 +75,42 @@ export class DocConnector {
     return this.loader.load(id);
   }
 
-  searchUsersByRoles(queryString, roles) {
-    return queryString
-      ? doFetch()
-      : Promise.resolve([]);
-
-    function getQuery(role) {
-      const queries = [
-        new Parse.Query(Parse.User).matches('displayName', `.*${queryString}.*`),
-        new Parse.Query(Parse.User).matches('email', `.*${queryString}.*`),
-      ];
-
-      const q = Parse.Query.or.apply(Parse.Query, queries);
-
-      if (role) {
-        q.equalTo('roles', role);
-      }
-
-      return q;
-    }
-
-    function doFetch() {
-      const q = (roles.length > 1
-        ?  Parse.Query.or.apply(Parse.Query, roles.map(getQuery))
-        : getQuery(roles[0]))
-        .ascending('displayName')
-        .ascending('email')
-        .matchesQuery('business', businessQuery)
-        .limit(SEARCH_LIMIT);
-
-      q.include([
-        'business',
-      ]);
-
-      return q.find({ useMasterKey: true });
-    }
-  }
+  // searchUsersByRoles(queryString, roles) {
+  //   return queryString
+  //     ? doFetch()
+  //     : Promise.resolve([]);
+  //
+  //   function getQuery(role) {
+  //     const queries = [
+  //       new Parse.Query(Parse.User).matches('displayName', `.*${queryString}.*`),
+  //       new Parse.Query(Parse.User).matches('email', `.*${queryString}.*`),
+  //     ];
+  //
+  //     const q = Parse.Query.or.apply(Parse.Query, queries);
+  //
+  //     if (role) {
+  //       q.equalTo('roles', role);
+  //     }
+  //
+  //     return q;
+  //   }
+  //
+  //   function doFetch() {
+  //     const q = (roles.length > 1
+  //       ?  Parse.Query.or.apply(Parse.Query, roles.map(getQuery))
+  //       : getQuery(roles[0]))
+  //       .ascending('displayName')
+  //       .ascending('email')
+  //       .matchesQuery('business', businessQuery())
+  //       .limit(SEARCH_LIMIT);
+  //
+  //     q.include([
+  //       'business',
+  //     ]);
+  //
+  //     return q.find({ useMasterKey: true });
+  //   }
+  // }
 
   esQueryDocs({
     cursor = 0,
@@ -115,9 +119,9 @@ export class DocConnector {
 
     state = null,
 
-    agent = null,
+    manager = null,
     client = null,
-    insurer = null,
+    agent = null,
 
     lastModified = null,
 
@@ -140,10 +144,10 @@ export class DocConnector {
       });
     }
 
-    if (agent) {
-      if (agent.id) {
+    if (manager) {
+      if (manager.id) {
         must.push({
-          term: { 'agent.id': agent.id },
+          term: { 'manager.id': manager.id },
         });
       }
     }
@@ -156,18 +160,18 @@ export class DocConnector {
       }
     }
 
-    if (insurer) {
-      if (insurer.id) {
-        must.push({
-          term: { 'insurer.id': insurer.id },
-        });
-      }
-    }
-
     if (agent) {
       if (agent.id) {
         must.push({
           term: { 'agent.id': agent.id },
+        });
+      }
+    }
+
+    if (manager) {
+      if (manager.id) {
+        must.push({
+          term: { 'manager.id': manager.id },
         });
       }
     }
@@ -263,14 +267,14 @@ export class DocConnector {
     const multi_match = q ? {
       operator: 'and',
       fields: [
-        'agent.name',
-        // 'agent.email',
+        'manager.name',
+        // 'manager.email',
 
         'client.name',
         // 'client.email',
 
-        'insurer.name',
-        // 'insurer.email',
+        'agent.name',
+        // 'agent.email',
 
         'vehicle.model',
         'vehicle.plateNumber',
@@ -322,11 +326,11 @@ export class DocConnector {
           'pre_tags'  : ['<mark class=\'hit\'>'],
           'post_tags' : ['</mark>'],
           fields      : {
-            'agent.name'          : {},
-            // 'agent.email'         : {},
+            'manager.name'          : {},
+            // 'manager.email'         : {},
 
-            'insurer.name'        : {},
-            // 'insurer.email'       : {},
+            'agent.name'        : {},
+            // 'agent.email'       : {},
 
             'vehicle.model'       : {},
             'vehicle.plateNumber' : {},
@@ -370,14 +374,14 @@ export class DocConnector {
       const multi_match = {
         operator: 'and',
         fields: [
-          'agent.name',
-          // 'agent.email',
+          'manager.name',
+          // 'manager.email',
 
           'client.name',
           // 'client.email',
 
-          'insurer.name',
-          // 'insurer.email',
+          'agent.name',
+          // 'agent.email',
 
           'vehicle.model',
           'vehicle.plateNumber',
@@ -423,14 +427,14 @@ export class DocConnector {
             'pre_tags'  : ['<mark class=\'hit\'>'],
             'post_tags' : ['</mark>'],
             fields      : {
-              'agent.name'                   : {},
-              // 'agent.email'                  : {},
+              'manager.name'                   : {},
+              // 'manager.email'                  : {},
 
               'user.name'                    : {},
               // 'user.email'                   : {},
 
-              'insurer.name'                 : {},
-              // 'insurer.email'                : {},
+              'agent.name'                 : {},
+              // 'agent.email'                : {},
 
               'vehicle.model'                : {},
               'vehicle.plateNumber'          : {},
@@ -544,7 +548,7 @@ export class DocConnector {
 
     function getType(roles) {
 
-      if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_AGENTS)) {
+      if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_MANAGERS)) {
         return 'EMPLOYEE';
       }
 
@@ -552,15 +556,15 @@ export class DocConnector {
         return 'CLIENT';
       }
 
-      if (userHasRoleAny({ roles }, Role_INSURERS)) {
-        return 'INSURER';
+      if (userHasRoleAny({ roles }, Role_AGENTS)) {
+        return 'AGENT';
       }
 
       return null;
     }
   }
 
-  getDocs(queryString, cursor = 0, sortConfig, client, agent, state, user, topLevelFields) {
+  getDocs(queryString, cursor = 0, sortConfig, client, manager, state, user, topLevelFields) {
     return Promise.all([count(), doFetch()]).then(([ length, docs ]) => ({
       cursor: cursor + docs.length,
       length,
@@ -569,19 +573,24 @@ export class DocConnector {
 
     function getQuery() {
       const q = new Parse.Query(DocType)
-        .matchesQuery('business', businessQuery)
+        .matchesQuery('business', businessQuery())
 
       if (client) {
         q.equalTo('client', Parse.User.createWithoutData(client));
       }
 
-      if (agent) {
-        q.equalTo('agent', Parse.User.createWithoutData(agent));
+      if (manager) {
+        q.equalTo('manager', Parse.User.createWithoutData(manager));
       }
 
       if (state) {
         q.equalTo('state', state);
       }
+
+      // Not deleted
+      q.doesNotExist('deletion_date');
+      q.doesNotExist('deletion_user');
+
       return q;
     }
 
@@ -605,10 +614,10 @@ export class DocConnector {
       }
 
       q.include([
-        'agent',
+        'manager',
         'client',
         'user',
-        'insurer',
+        'agent',
       ]);
 
       return q.find({ useMasterKey: true });
@@ -634,13 +643,17 @@ export class DocConnector {
     function getQuery() {
       const q = new Parse.Query(DocType)
         .equalTo('state', 'PENDING')
-        .matchesQuery('business', businessQuery);
+        .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
         q.greaterThanOrEqualTo('date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
       } else {
         q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
+
+      // Not deleted
+      q.doesNotExist('deletion_date');
+      q.doesNotExist('deletion_user');
 
       return q;
     }
@@ -650,9 +663,9 @@ export class DocConnector {
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
           'user',
-          'agent',
+          'manager',
           'client',
-          'insurer',
+          'agent',
         ])
 
       if (cursor) {
@@ -674,24 +687,8 @@ export class DocConnector {
       return Promise.resolve(0);
     }
 
-    // if (!user) {
-    //   return Promise.resolve([]);
-    // }
-
-    // return new Parse.Query(DocType)
-    //   .equalTo('state', 'PENDING')
-    //   .greaterThanOrEqualTo('createdAt', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-    //   .matchesQuery('business', businessQuery)
-    //   .include([
-    //     'user',
-    //     'agent',
-    //     'client',
-    //     'insurer',
-    //   ])
-    // .find({ useMasterKey : true });
-
   }
-  openDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet) {
+  openDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet, validOnly) {
     if (!user) {
       return Promise.resolve({
         length: 0,
@@ -709,13 +706,17 @@ export class DocConnector {
     function getQuery() {
       const q = new Parse.Query(DocType)
         .equalTo('state', 'OPEN')
-        .matchesQuery('business', businessQuery);
+        .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
         q.greaterThanOrEqualTo('validation_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
       } else {
         q.greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
+
+      // Not deleted
+      q.doesNotExist('deletion_date');
+      q.doesNotExist('deletion_user');
 
       return q;
     }
@@ -725,9 +726,9 @@ export class DocConnector {
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
           'validation_user',
-          'agent',
+          'manager',
           'client',
-          'insurer',
+          'agent',
         ])
 
       if (cursor) {
@@ -776,13 +777,17 @@ export class DocConnector {
       }
 
       q = (Array.isArray(q) ? Parse.Query.or.apply(Parse.Query, q) : q)
-        .matchesQuery('business', businessQuery);
+        .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
         q.greaterThanOrEqualTo('closure_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
       } else {
         q.greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)));
       }
+
+      // Not deleted
+      q.doesNotExist('deletion_date');
+      q.doesNotExist('deletion_user');
 
       return q;
     }
@@ -792,9 +797,9 @@ export class DocConnector {
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
           'closure_user',
-          'agent',
+          'manager',
           'client',
-          'insurer',
+          'agent',
         ]);
 
       if (cursor) {
@@ -815,30 +820,7 @@ export class DocConnector {
 
       return Promise.resolve(0);
     }
-    // if (!user) {
-    //   return Promise.resolve([]);
-    // }
-    //
-    // const queries = [
-    //   new Parse.Query(DocType).equalTo('state', 'CLOSED'),
-    //   new Parse.Query(DocType).equalTo('state', 'CANCELED'),
-    // ];
-    //
-    // return Parse.Query.or.apply(Parse.Query, queries)
-    //   .greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-    //   .matchesQuery('business', businessQuery)
-    //   .include([
-    //     'closure_user',
-    //     'agent',
-    //     'client',
-    //     'insurer',
-    //   ])
-    //   .find({ useMasterKey : true });
 
-    // return docs.filter((doc) => {
-    //   const dtClosure = new Date(doc.get('closure').date);
-    //   return now - dtClosure.getTime() >= (durationInDays * 24 * 60 * 60 * 1000);
-    // });
   }
 
   recentDocs(user) {
@@ -847,7 +829,13 @@ export class DocConnector {
     }
 
     return new Parse.Query(DocType)
-      .descending('date')
+      .doesNotExist('deletion_date')
+      .doesNotExist('deletion_user')
+      .descending([
+        `lastModified_${user.id}`,
+        'lastModified',
+        'date'
+      ])
       .limit(RECENT_DOCS_LIMIT)
       .include([
         'user',
@@ -872,5 +860,6 @@ export class DocConnector {
       return memo;
     }, {});
   }
+
 }
 

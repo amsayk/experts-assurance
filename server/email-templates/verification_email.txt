@@ -1,7 +1,9 @@
-Hi,
+Bonjour,
 
-You are being asked to confirm the e-mail address {{email}} with {{appName}}.
+Vous êtes invité à confirmer l'adresse e-mail {{email}} avec {{appName}}.
 
-Click here to confirm it: {{link}}.
+Cliquez ici pour le confirmer:
 
-Thank you.
+{{{link}}}
+
+Merci.

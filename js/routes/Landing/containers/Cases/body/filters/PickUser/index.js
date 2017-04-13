@@ -1,2 +1,2 @@
-export { default } from './PickUser';
+export default from './PickUser';
 

@@ -3,7 +3,7 @@ import DataLoader from 'dataloader';
 import genModel from './utils/models';
 import plateNumber from './utils/plateNumber';
 
-import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS } from 'roles';
+import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS } from 'roles';
 
 import { DocType } from 'data/types';
 
@@ -56,7 +56,7 @@ function genRandomDate(start, end) {
 export function genDocs() {
   console.log('start generating docs');
   return docs.map((doc) => {
-    const creator = genUser(Role_ADMINISTRATORS, Role_AGENTS);
+    const creator = genUser(Role_ADMINISTRATORS, Role_MANAGERS);
 
     let activities = [];
     let validation = null;
@@ -68,7 +68,7 @@ export function genDocs() {
       ];
     } else if (doc.status === 'OPEN') {
       let date = new Date(doc.date);
-      const user = genUser(Role_ADMINISTRATORS, Role_AGENTS);
+      const user = genUser(Role_ADMINISTRATORS, Role_MANAGERS);
 
       const state = VALID_STATUS[plateNumber.genRandomNumber(0, VALID_STATUS.length - 1)];
 
@@ -100,7 +100,7 @@ export function genDocs() {
       };
 
     } else {
-      const user = genUser(Role_ADMINISTRATORS, Role_AGENTS);
+      const user = genUser(Role_ADMINISTRATORS, Role_MANAGERS);
       const date = state === 'CLOSED'
         ? genRandomDate(new Date(doc.date), new Date())
         : genRandomDate(
@@ -133,7 +133,8 @@ export function genDocs() {
 
     const retn = Object.assign({}, doc, {
       date       : new Date(doc.date),
-      agent      : genUser(Role_AGENTS, Role_ADMINISTRATORS),
+      agent      : genUser(Role_AGENTS),
+      manager    : plateNumber.genRandomNumber(0, 30) % 2 === 0 ? genUser(Role_MANAGERS, Role_ADMINISTRATORS) : undefined,
       client     : genUser(Role_CLIENTS),
       user       : creator,
       vehicle    : genCar(),

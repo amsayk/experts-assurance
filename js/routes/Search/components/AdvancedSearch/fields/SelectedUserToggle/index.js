@@ -1,2 +1,2 @@
-export { default } from './SelectedUserToggle';
+export default from './SelectedUserToggle';
 

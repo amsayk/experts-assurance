@@ -12,7 +12,7 @@ const users = graphql(GET_USERS_QUERY, {
   options: (ownProps) => ({
     variables: {
       query : {
-        role        : ownProps.role,
+        roles       : ownProps.roles,
         queryString : ownProps.queryString,
         sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
       },
@@ -29,21 +29,21 @@ const users = graphql(GET_USERS_QUERY, {
         variables: {
           query : {
             cursor,
-            role        : ownProps.role,
+            roles       : ownProps.roles,
             queryString : ownProps.queryString,
             sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newUsers = fetchMoreResult.data.getUsers.users;
+          const newUsers = fetchMoreResult.getUsers.users;
 
           return {
             getUsers : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.data.getUsers.cursor,
+              cursor: fetchMoreResult.getUsers.cursor,
 
-              // length: fetchMoreResult.data.getUsers.length,
+              // length: fetchMoreResult.getUsers.length,
 
               // Put the new users at the end of the list
               users: [

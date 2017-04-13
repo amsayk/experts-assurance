@@ -1,8 +1,8 @@
 import getCurrentUser from 'getCurrentUser';
 
-import { Record } from 'immutable';
+import { Record, List } from 'immutable';
 
-import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS, Role_INSURERS, userHasRoleAny } from 'roles';
+import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS, userHasRoleAny } from 'roles';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
@@ -14,8 +14,8 @@ export class User extends Record({
   displayName   : undefined,
   email         : undefined,
   emailVerified : true,
-  roles         : [],
-  sessionToken  : undefined
+  roles         : List.of(),
+  sessionToken  : undefined,
 }) {
   get isEmpty() {
     return typeof this.id === 'undefined';
@@ -25,17 +25,18 @@ export class User extends Record({
     return userHasRoleAny(this, Role_ADMINISTRATORS);
   }
 
-  get isAdminOrAgent() {
-    return userHasRoleAny(this, Role_ADMINISTRATORS, Role_AGENTS);
+  get isAdminOrManager() {
+    return userHasRoleAny(this, Role_ADMINISTRATORS, Role_MANAGERS);
   }
 
   get isClient() {
     return userHasRoleAny(this, Role_CLIENTS);
   }
 
-  get isInsurer() {
-    return userHasRoleAny(this, Role_INSURERS);
+  get isAgent() {
+    return userHasRoleAny(this, Role_AGENTS);
   }
+
 }
 
 function maybeUser() {

@@ -8,7 +8,7 @@ import {
   SELECTION,
   SORT,
 
-  ON_ROLE,
+  ON_ROLES,
   ON_SEARCH,
 } from './constants';
 
@@ -26,7 +26,7 @@ import sortReducer, {
   initialState as sortInitialState,
 } from 'redux/reducers/sorting/reducer';
 
-import { Record } from 'immutable';
+import { Record, List } from 'immutable';
 
 export class UsersState extends Record({
   selection    : selectionInitialState,
@@ -34,7 +34,7 @@ export class UsersState extends Record({
   viewType     : VIEW_TYPE_GRID,
   searchOpen   : false,
   queryString  : '',
-  role         : undefined,
+  roles        : List.of(),
 }) {}
 
 const initialState = new UsersState();
@@ -66,9 +66,9 @@ export default function reducer(state = initialState, action) {
         searchOpen: !state.searchOpen,
       });
     }
-    case ON_ROLE: {
+    case ON_ROLES: {
       return state.merge({
-        role: action.role,
+        roles: List.of(...action.roles),
       });
     }
     case ON_SEARCH: {

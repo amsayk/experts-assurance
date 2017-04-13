@@ -24,6 +24,7 @@ import { PATH_SETTINGS_BASE, PATH_CASES } from 'vars';
 import ProfileButton, { MenuItem as ProfileMenuItem } from 'components/Profile';
 
 import SearchBox from './SearchBox';
+import AddDoc from './AddDoc';
 
 import { PlusIcon, NavLeftIcon } from 'components/icons/MaterialIcons';
 
@@ -87,7 +88,7 @@ class Header extends React.Component {
       app,
       actions,
     } = this.props;
-    const isEmployee = user && user.isAdminOrAgent;
+    const isEmployee = user && user.isAdminOrManager;
     return (
       <nav style={this.state.show || searching ? styles.show(notificationOpen, scrolling.scrollTop) : emptyObject} className={style.navbar}>
         <div className={style.leftNav}>
@@ -109,14 +110,7 @@ class Header extends React.Component {
 
         <div className={style.rightNav}>
           {isEmployee ? [
-            <Button className={style.buyButton}>
-              <div>
-                <PlusIcon size={32} />
-                <span>
-                  Nouveau Dossier
-                </span>
-              </div>
-            </Button>,
+            <AddDoc/>,
             <Alerts toggleAlerts={actions.toggleAlerts} intl={intl} alertsOpen={app.alertsOpen}/>,
           ]: null}
           <ProfileButton user={user}>

@@ -49,7 +49,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, state, client, agent, insurer, vehicle, date } = item._source;
+    const { id, refNo, state, client, manager, agent, vehicle, date } = item._source;
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
@@ -85,21 +85,7 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemAgent}>
-          <div className={style.wrapper}>
-            <div className={style.innerWrapper}>
-              <div className={style.item}>
-                <div className={style.text}>
-                  {insurer ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + insurer.id}>
-                    {insurer.name}
-                  </Link> : '—'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={style.listItemAgent}>
+        <div className={style.listItemManager}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
@@ -113,7 +99,21 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemInsurer}>
+        <div className={style.listItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
+                    {manager.name}
+                  </Link> : '—'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={style.listItemAgent}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

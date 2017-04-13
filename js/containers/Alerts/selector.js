@@ -1,9 +1,11 @@
 import { createSelector } from 'utils/reselect';
 
 const appSelector = state => state.get('app');
+const scrollingSelector = state => state.get('scrolling');
 
 export default createSelector(
   appSelector,
-  (app) => ({ isReady : app.isReady }),
+  scrollingSelector,
+  (app, scrolling) => ({ isReady : app.isReady, scrolling }),
 );
 

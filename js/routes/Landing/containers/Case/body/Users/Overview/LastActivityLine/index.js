@@ -1,2 +1,2 @@
-export { default } from './LastActivityLine';
+export default from './LastActivityLine';
 

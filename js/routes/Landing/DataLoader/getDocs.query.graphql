@@ -4,9 +4,11 @@ query getDocs($query: DocsFetchQuery!) {
     cursor
     docs {
       id
+      key
       refNo
       date
       state
+
       vehicle {
         model
         plateNumber
@@ -15,11 +17,11 @@ query getDocs($query: DocsFetchQuery!) {
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }
-      insurer {
+      agent {
         id
         displayName
       }

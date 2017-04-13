@@ -1,2 +1,2 @@
-export { default } from './PasswordResetSuccess';
+export default from './PasswordResetSuccess';
 

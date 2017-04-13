@@ -25,7 +25,7 @@ import cx from 'classnames';
 import style from 'routes/Settings/styles';
 
 const scrollingSelector = (state) => state.get('scrolling');
-const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options']).active;
 
 const selector = createSelector(
   scrollingSelector,
@@ -75,7 +75,7 @@ export function Sidebar({ intl, user, selectedMenuItem, scrolling, notificationO
       </ul>
 
       {/* Business settings */}
-      {user && user.isAdmin ? [
+      {user && user.isAdmin && user.emailVerified ? [
         <hr key='divider'/>,
         <h1 key='business.title' className={style.heading}>{intl.formatMessage(messages.headingBusiness)}</h1>,
         <ul key='business.links'>

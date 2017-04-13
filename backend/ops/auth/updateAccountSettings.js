@@ -1,12 +1,14 @@
+import Parse from 'parse/node';
+
 import { formatError } from 'backend/utils';
 
-export default async function updateAccountSettings(request, response) {
+export default async function updateAccountSettings(request, done) {
   const { payload: {
     displayName,
   } } = request.params;
 
   if (!request.user) {
-    response.error(new Error('A user is required.'));
+    done(new Error('A user is required.'));
     return;
   }
 
@@ -14,9 +16,9 @@ export default async function updateAccountSettings(request, response) {
     const user = await request.user.set({
       displayName,
     }).save(null, { sessionToken: request.user.getSessionToken() });
-    response.success(user);
+    done(null, serializeParseObject(user));
   } catch (e) {
-    response.error(formatError(e));
+    done(formatError(e));
   }
 }
 

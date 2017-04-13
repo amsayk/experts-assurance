@@ -22,6 +22,15 @@ const log = require('log')('app:server:graphql');
 
 const rootSchema = [`
 
+  type Error {
+    code: Int
+  }
+
+  type Deletion {
+    user: User!
+    date: Date!
+  }
+
   scalar Date
 
   scalar JSON
@@ -29,12 +38,12 @@ const rootSchema = [`
   type Query {
     # Accounts
     getUser(id: ID!): User
-    usersByRoles(queryString: String, roles: [Role!]!): [User!]!
+    # usersByRoles(queryString: String, roles: [Role!]!): [User!]!
     esUsersByRoles(queryString: String, roles: [Role!]!): ESUsersQueryResponse!
 
     # Business
     getUsers(query: UsersFetchQuery!): UsersFetchResponse!
-    searchUsers(queryString: String): [User!]!
+    # searchUsers(queryString: String): [User!]!
     esSearchUsers(queryString: String): ESUsersQueryResponse!
 
     # Activites
@@ -60,6 +69,7 @@ const rootSchema = [`
     openDashboard(
       durationInDays: Int!,
       cursor: Int = 0,
+      validOnly: Boolean = false,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
@@ -69,9 +79,17 @@ const rootSchema = [`
       sortConfig: ESSortConfig!
       includeCanceled: Boolean = false,
     ): DocsFetchResponse!
+
+    getLastRefNo: RefNo!
   }
 
   type Mutation {
+    # mutations
+    addDoc(payload: AddDocPayload!): AddDocResponse!
+    delDoc(id: ID!): DelDocResponse!
+    setManager(id: ID!, manager: ID!): SetManagerResponse!
+    setState(id: ID!, state: DocState!): SetStateResponse!
+
     # Business
     updateUserBusiness(payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!
 
@@ -82,6 +100,12 @@ const rootSchema = [`
     signUp(info: CreateUserPayload!): CreateUserResponse!
     passwordReset(info: PasswordResetPayload!): PasswordResetResponse!
     resendEmailVerification: ResendEmailVerificationResponse!
+
+    authorizeManager(id: ID!): AuthorizeManagerResponse!
+
+    # auth
+    logIn(username: String, password: String): LogInResponse!
+    logOut: LogOutResponse!
 
   }
 
@@ -110,13 +134,13 @@ const rootResolvers = {
       }
 
       if (moment.isMoment(value)) {
-        return value.valueOf();  // value sent to the client
+        return +value;  // value sent to the client
       }
 
       if (typeof value === 'string' || Number.isInteger(value)) {
         const mDate = moment.utc(value);
         if (mDate.isValid()) {
-          return mDate.valueOf();
+          return +mDate;   // value sent to the client
         }
       }
 

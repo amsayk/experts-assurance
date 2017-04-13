@@ -7,49 +7,92 @@ import publish from 'backend/kue-mq/publish';
 
 import * as es from 'backend/es';
 
-import omit from 'lodash.omit';
-
 import { genDocs, loaders } from 'backend/sample_data';
 
-import { getOrCreateBusiness, deserializeParseObject } from 'backend/utils';
+import { getOrCreateBusiness, genDocKey, deserializeParseObject } from 'backend/utils';
 
 import { DocType, ActivityType } from 'data/types';
 
 import {
   UPDATE_USER_BUSINESS,
+
   SET_PASSWORD,
   UPDATE_ACCOUNT_SETTINGS,
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
   CHANGE_EMAIL,
+
+  AUTHORIZE_MANAGER,
+
+  ADD_DOC,
+  DELETE_DOC,
+  SET_MANAGER,
+  SET_STATE,
 } from './constants';
 
 const log = require('log')('app:backend');
 
-import {
-  signUp as doSignUp,
-  resendEmailVerification,
-  passwordReset,
-  updateAccountSettings,
-  setPassword,
-  changeEmail,
-} from './ops/auth';
-
-// import {
-//   updateUserBusiness,
-// } from './ops/business';
-
 Parse.Cloud.define('routeOp', async function (request, response) {
   const operationKey = request.params.__operationKey;
-  const req = { user: request.user, params: request.params.args };
+  const req = {
+    user   : request.user,
+    now    : Date.now(),
+    params : request.params.args,
+  };
 
   switch (operationKey) {
-    case UPDATE_USER_BUSINESS: {
-      // return updateUserBusiness(req, response);
-
+    case ADD_DOC: {
       try {
-        const { data : business, job } = await publish('MAIN', UPDATE_USER_BUSINESS, req);
+        const { data : { doc } } = await publish('MAIN', operationKey, req);
+        response.success({ doc : deserializeParseObject(doc) });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case DELETE_DOC: {
+      try {
+        await publish('MAIN', operationKey, req);
+        response.success({});
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case SET_MANAGER: {
+      try {
+        const { data: { manager, doc } } = await publish('MAIN', operationKey, req);
+        response.success({
+          manager : deserializeParseObject(manager),
+          doc     : deserializeParseObject(doc),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case SET_STATE: {
+      try {
+        const { data: { doc } } = await publish('MAIN', operationKey, req);
+        response.success({ doc : deserializeParseObject(doc) });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case AUTHORIZE_MANAGER: {
+      try {
+        const { data: { user } } = await publish('MAIN', operationKey, req);
+        response.success(deserializeParseObject(user));
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case UPDATE_USER_BUSINESS: {
+      try {
+        const { data : business } = await publish('MAIN', operationKey, req);
         response.success(deserializeParseObject(business));
       } catch(e) {
         response.error(e);
@@ -57,22 +100,58 @@ Parse.Cloud.define('routeOp', async function (request, response) {
       break;
     }
     case SET_PASSWORD: {
-      return setPassword(req, response);
+      try {
+        await publish('MAIN', operationKey, req);
+        response.success({});
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     case CHANGE_EMAIL: {
-      return changeEmail(req, response);
+      try {
+        await publish('MAIN', operationKey, req);
+        response.success({});
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     case UPDATE_ACCOUNT_SETTINGS: {
-      return updateAccountSettings(req, response);
+      try {
+        const { data : user } = await publish('MAIN', operationKey, req);
+        response.success(deserializeParseObject(user));
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     case PASSWORD_RESET: {
-      return passwordReset(req, response);
+      try {
+        await publish('MAIN', operationKey, req);
+        response.success({});
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     case RESEND_EMAIL_VERIFICATION: {
-      return resendEmailVerification(req, response);
+      try {
+        await publish('MAIN', operationKey, req);
+        response.success({});
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     case SIGN_UP: {
-      return doSignUp(req, response);
+      try {
+        const { data : user } = await publish('MAIN', operationKey, req);
+        response.success(deserializeParseObject(user));
+      } catch(e) {
+        response.error(e);
+      }
+      break;
     }
     default:
       response.error(new Error('OperationNotFound', operationKey));
@@ -154,7 +233,7 @@ Parse.Cloud.define('importSamples', async function (request, response) {
     const p = new Parse.User();
 
     p.setPassword(obj.password);
-    p.set('email', obj.email);
+    p.set('mail', obj.email);
     p.set('username', obj.username);
 
     p.set('displayName', obj.displayName);
@@ -242,14 +321,17 @@ Parse.Cloud.define('importSamples', async function (request, response) {
 
             const obj = await new DocType()
               .set({
-                refNo      : doc.refNo,
-                date       : new Date(doc.date),
-                vehicle    : doc.vehicle,
-                agent      : (await loaders.usernames.load(doc.agent)),
-                client     : (await loaders.usernames.load(doc.client)),
-                user       : (await loaders.usernames.load(doc.user)),
-                state      : doc.status,
-                business   : (await getOrCreateBusiness()),
+                refNo        : doc.refNo,
+                date         : new Date(doc.date),
+                vehicle      : doc.vehicle,
+                agent        : (await loaders.usernames.load(doc.agent)),
+                client       : (await loaders.usernames.load(doc.client)),
+                manager      : doc.manager ? (await loaders.usernames.load(doc.manager)) : undefined,
+                user         : (await loaders.usernames.load(doc.user)),
+                state        : doc.status,
+                business     : (await getOrCreateBusiness()),
+                key          : (await genDocKey()),
+                lastModified : new Date(),
                 ...validation,
                 ...closure,
               })
@@ -288,18 +370,6 @@ Parse.Cloud.define('importSamples', async function (request, response) {
           }
         });
       }, Promise.resolve());
-
-      // if (activities.length > 0) {
-      //   log(`Creating ${activities.length} activities...`);
-      //   try {
-      //     await Parse.Object.saveAll(
-      //       activities.map((data) => new ActivityType().set(data)), { useMasterKey : true });
-      //
-      //   } catch (e) {
-      //     log.error(`Error creating activities`, e.message);
-      //   }
-      //
-      // }
 
       return;
     }

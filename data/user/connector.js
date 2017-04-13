@@ -11,7 +11,7 @@ export class UserConnector {
   }
   async fetch(ids) {
     const users = await new Parse.Query(Parse.User)
-      .matchesQuery('business', businessQuery)
+      .matchesQuery('business', businessQuery())
       .containedIn('objectId', ids)
       .include([
         'business',
@@ -26,6 +26,14 @@ export class UserConnector {
 
   get(id) {
     return this.loader.load(id);
+  }
+
+  // auth
+  logIn(username, password) {
+    return Parse.User.logIn(username, password);
+  }
+  logOut() {
+    return Parse.User.logOut();
   }
 
 }

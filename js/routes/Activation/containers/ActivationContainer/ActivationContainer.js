@@ -53,12 +53,14 @@ export class ActivationContainer extends React.PureComponent {
         <Header user={user} onLogOut={actions.logOut}/>
         <div className={style.center}>
           <p className={style.infoLine}>
-            <FormattedMessage
-              {...messages.Thanks}
-              values={{
-                appName: <strong>{APP_NAME}</strong>,
-              }}
-            />
+            <h3>
+              <FormattedMessage
+                {...messages.Thanks}
+                values={{
+                  appName: <strong>{APP_NAME}</strong>,
+                }}
+              />
+            </h3>
           </p>
           <p className={style.infoLine}>
             <FormattedMessage

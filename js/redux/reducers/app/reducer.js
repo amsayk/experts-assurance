@@ -5,30 +5,37 @@ import {
   RESIZE,
   CONNECTION_STATE_CHANGE,
   TOGGLE_ALERTS,
+
+  ADD_DOC,
 } from './constants';
 
 import { INIT } from 'vars';
 
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
 import { Record } from 'immutable';
 
 const MEDIA_QUERY = '(min-width: 992px)';
-const TIMELINE_MEDIA_QUERY = '(min-width: 1292px)';
+const TIMELINE_MEDIA_QUERY = '(min-width: 1232px)';
 
 export class AppState extends Record({
-  displayMatches         : isServer || matchMedia(MEDIA_QUERY).matches,
-  timelineDisplayMatches : isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
+  displayMatches         : SERVER || matchMedia(MEDIA_QUERY).matches,
+  timelineDisplayMatches : SERVER || matchMedia(TIMELINE_MEDIA_QUERY).matches,
   lang                   : undefined,
   onLine                 : true,
   isReady                : false,
   alertsOpen             : false,
+  addingDoc              : false,
 }) {}
 
 const initialState = new AppState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case ADD_DOC:
+      return state.merge({
+        addingDoc: action.addingDoc,
+      });
     case RESIZE:
       return state.merge({
         displayMatches: matchMedia(MEDIA_QUERY).matches,
@@ -48,8 +55,8 @@ export default function reducer(state = initialState, action) {
       });
     case INIT: {
       return state.merge({
-        displayMatches         : isServer || matchMedia(MEDIA_QUERY).matches,
-        timelineDisplayMatches : isServer || matchMedia(TIMELINE_MEDIA_QUERY).matches,
+        displayMatches         : SERVER || matchMedia(MEDIA_QUERY).matches,
+        timelineDisplayMatches : SERVER || matchMedia(TIMELINE_MEDIA_QUERY).matches,
       });
     }
     default:

@@ -7,6 +7,11 @@ query settings_users__moreUsers($query: UsersFetchQuery!) {
       email
       roles
 
+      authorization {
+        date
+        user { id }
+      }
+
       createdAt
       updatedAt
     }

@@ -1,5 +1,7 @@
 import path from 'path';
 
+import Parse from 'parse/node';
+
 import config from 'build/config';
 
 import createStore from 'server/store';
@@ -50,7 +52,14 @@ export default function createSSRRoute(app, compiler) {
   });
 
   return async function routeSSR(req, res, next) {
-    cookie.plugToRequest(req, res);
+    // Reload user everytime
+    Parse.User._clearCache();
+
+    const unplug = cookie.plugToRequest(req, res);
+    res.on('finish', function () {
+      unplug();
+    });
+
     const index = await indexHtml;
 
     const lang = config.supportedLangs.indexOf(req.locale.language) !== -1

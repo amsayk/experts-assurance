@@ -5,7 +5,9 @@ import ExecutionEnvironment from 'ExecutionEnvironment';
 // Use this constant to initialize reducers
 export const INIT                             = keyOf({ INIT: null });
 
-export const isServer                         = !ExecutionEnvironment.canUseDOM;
+export const SERVER                           = !ExecutionEnvironment.canUseDOM;
+
+export const PUBLIC                           = typeof process.env.PUBLIC === 'string' ? process.env.PUBLIC === 'true' : process.env.PUBLIC; // will be string on server-side
 
 export const APP_NAME                         = process.env.APP_NAME;
 export const COUNTRY                          = process.env.COUNTRY;
@@ -17,9 +19,9 @@ export const DEFAULT_LANG                     = process.env.DEFAULT_LANG;
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT   = process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT;
 export const GRAPHQL_ENDPOINT                 = process.env.GRAPHQL_ENDPOINT;
 export const APOLLO_QUERY_BATCH_INTERVAL      = process.env.APOLLO_QUERY_BATCH_INTERVAL;
-export const PERSISTED_QUERIES                = process.env.PERSISTED_QUERIES;
+export const PERSISTED_QUERIES                = process.env.PERSISTED_QUERIES; // used only on client-side
 
-export const ENABLE_RECAPTCHA                 = process.env.ENABLE_RECAPTCHA;
+export const ENABLE_RECAPTCHA                 = typeof process.env.ENABLE_RECAPTCHA === 'string' ? process.env.ENABLE_RECAPTCHA === 'true' : process.env.ENABLE_RECAPTCHA; // will be string on server-side
 export const RECAPCHA_JS_URL                  = process.env.RECAPCHA_JS_URL;
 export const RECAPCHA_SITE_KEY                = process.env.RECAPCHA_SITE_KEY;
 
@@ -62,9 +64,13 @@ export const PATH_SETTINGS_BUSINESS_USER_PARAM  = process.env.PATH_SETTINGS_BUSI
 // Search
 export const PATH_SEARCH                      = process.env.PATH_SEARCH;
 
-export const SSR                              = process.env.SSR;
+export const SSR                              = process.env.SSR; // only used on client-side. Defined in webpack.config
 
 export const LINK_TERMS_OF_SERVICE            = process.env.LINK_TERMS_OF_SERVICE;
 export const LINK_PRIVACY_POLICY              = process.env.LINK_PRIVACY_POLICY;
 export const LINK_SUPPORT                     = process.env.LINK_SUPPORT;
+
+export const APOLLO_DEFAULT_REDUX_ROOT_KEY    = 'apollo';
+
+export const SECURE                           = typeof process.env.SECURE === 'string' ? process.env.SECURE === 'true' : process.env.SECURE; // will be string on server-side
 

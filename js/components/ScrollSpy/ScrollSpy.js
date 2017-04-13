@@ -46,7 +46,7 @@ class Spying extends React.Component {
   }
   _registerEventHandlers() {
     if (!this.props.manual) {
-      this._eventHandler = addEventListener(document, 'scroll', this._handleScroll, /* capture = */ !this.props.bubbles);
+      this._eventHandler = addEventListener(document, 'scroll', this._handleScroll, /* capture = */ !this.props.bubbles, /* passive = */ true);
     }
   }
   componentDidMount() {
@@ -67,13 +67,17 @@ class Spying extends React.Component {
   }
   _isAtBottom(event) {
     if (this.props.bubbles) {
-      return ((this.props.scrollThreshold * document.body.scrollHeight) <= document.body.scrollTop + window.innerHeight + this.props.offset);
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      return ((this.props.scrollThreshold * document.body.scrollHeight) <= scrollTop + window.innerHeight + this.props.offset);
     } else {
       const target = event.target;
       const clientHeight = (target === document.body || target === document.documentElement)
         ? window.screen.availHeight : target.clientHeight;
 
-      const scrolled = this.props.scrollThreshold * (target.scrollHeight - target.scrollTop - this.props.offset);
+      const scrollTop = target === document.body
+        ? window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+        : target.scrollTop;
+      const scrolled = this.props.scrollThreshold * (target.scrollHeight - scrollTop - this.props.offset);
       return scrolled < clientHeight;
     }
   }

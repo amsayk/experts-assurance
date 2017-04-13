@@ -54,7 +54,7 @@ export default class LoadingItem extends React.Component {
       <div style={{
           maxWidth: 140,
           minWidth: 140,
-        }} className={style.listItemAgent}>
+        }} className={style.listItemManager}>
         <div className={style.wrapper}>
           <div className={style.innerWrapper}>
             <div className={style.item}>

@@ -1,2 +1,2 @@
-export { default } from './RootCloseWrapper';
+export default from './RootCloseWrapper';
 

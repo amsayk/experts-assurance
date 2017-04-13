@@ -1,2 +1,2 @@
-export { default } from './SessionExpired';
+export default from './SessionExpired';
 

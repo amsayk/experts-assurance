@@ -3,7 +3,7 @@ import cookie from 'react-cookie';
 
 const redirectSelector = (_, props) => props.location.query.redirect || '/';
 const initialValuesSelector = () => ({
-  email: cookie.load('app.login', /* doNotParse = */true),
+  email: cookie.load('app.logIn', /* doNotParse = */true),
 });
 
 export default createSelector(

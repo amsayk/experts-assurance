@@ -1,2 +1,2 @@
-export { default } from './Settings.scss';
+export default from './Settings.scss';
 

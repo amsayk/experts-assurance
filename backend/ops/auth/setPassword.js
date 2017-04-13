@@ -1,19 +1,21 @@
+import Parse from 'parse/node';
+
 import { formatError } from 'backend/utils';
 
-export default async function setPassword(request, response) {
+export default async function setPassword(request, done) {
   const { payload: { newPassword } } = request.params;
 
   if (!request.user) {
-    response.error(new Error('A user is required.'));
+    done(new Error('A user is required.'));
     return;
   }
 
   try {
     await request.user.set('password', newPassword)
       .save(null, { sessionToken: request.user.getSessionToken() });
-    response.success({});
+    done(null, {});
   } catch (e) {
-    response.error(formatError(e));
+    done(formatError(e));
   }
 }
 

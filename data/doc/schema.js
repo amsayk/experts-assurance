@@ -1,9 +1,74 @@
 import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
+import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, userVerified } from 'roles';
+
+import codes from 'result-codes';
+
+import { pubsub } from '../subscriptions';
+
 import graphqlFields from 'graphql-fields';
 
 export const schema = [`
+
+  type RefNo {
+    value: Int!
+  }
+
+  # Mutations
+
+  enum UserInKey {
+    id
+    userData
+  }
+
+  input UserData {
+    displayName: String
+    email: String
+  }
+
+  input UserIn {
+    key: UserInKey!
+    id: ID
+    userData: UserData
+  }
+
+  input VehicleIn {
+    model: String
+    plateNumber: String
+  }
+
+  input AddDocPayload {
+    vehicle: VehicleIn
+
+    isOpen: Boolean
+
+    manager: UserIn
+    agent: UserIn!
+    client: UserIn!
+
+    date: Date
+  }
+
+  type AddDocResponse {
+    doc: Doc
+    errors: JSON!
+  }
+
+  type DelDocResponse {
+    error: Error
+  }
+
+  type SetManagerResponse {
+    doc: Doc
+    manager: User
+    error: Error
+  }
+
+  type SetStateResponse {
+    doc: Doc
+    error: Error
+  }
 
   # Dashboard
 
@@ -58,9 +123,9 @@ export const schema = [`
     state: DocState!
     vehicle: Vehicle!
 
+    manager: ESUserSource
     client: ESUserSource!
     agent: ESUserSource!
-    insurer: ESUserSource # TODO: make this required.
     user: ESUserSource!
 
     validation: ESDocValidationState
@@ -98,9 +163,9 @@ export const schema = [`
     q: String
     state: DocState
 
-    agent: UserQuery
+    manager: UserQuery
     client: UserQuery
-    insurer: UserQuery
+    agent: UserQuery
 
     range: DateRange
     validationRange: DateRange
@@ -136,8 +201,8 @@ export const schema = [`
     sortConfig: DocsSortConfig!
     state: DocState
     client: ID
+    manager: ID
     agent: ID
-    insurer: ID
     cursor: Int
   }
 
@@ -182,14 +247,16 @@ export const schema = [`
   type Doc {
     id: ID!
 
+    key: ID!
+
     refNo: Int!
     date: Date!
     state: DocState!
     vehicle: Vehicle!
 
     client: User!
+    manager: User
     agent: User!
-    insurer: User #TODO: make this required.
     user: User!
 
     validation: DocValidationState
@@ -197,6 +264,10 @@ export const schema = [`
 
     createdAt: Date!
     updatedAt: Date!
+
+    lastModified: Date!
+
+    deletion: Deletion
 
     business: Business
   }
@@ -215,21 +286,6 @@ export const resolvers = {
       'plateNumber',
     ])
   ),
-
-  // DocValidationState: Object.assign(
-  //   {
-  //     date : (doc) => doc.validation_date || doc.get('validation_date'),
-  //     user : (doc) => doc.validation_user || doc.get('validation_user'),
-  //   },
-  // ),
-
-  // DocClosureState: Object.assign(
-  //   {
-  //     date : (doc) => doc.closure_date || doc.get('closure_date'),
-  //     state : (doc) => doc.closure_state || doc.get('closure_state'),
-  //     user : (doc) => doc.closure_user || doc.get('closure_user'),
-  //   },
-  // ),
 
   Doc: Object.assign(
     {
@@ -263,6 +319,34 @@ export const resolvers = {
 
         return null;
       },
+      deletion: (doc) => {
+        const deletion_date  = doc.deletion_date  || doc.get('deletion_date');
+        const deletion_user  = doc.deletion_user  || doc.get('deletion_user');
+
+        if (deletion_date && deletion_user) {
+          return {
+            date  : deletion_date,
+            user  : deletion_user,
+          };
+        }
+
+        return null;
+      },
+      lastModified(doc, {}, context) {
+        let ret;
+
+        if (!context.user) {
+          ret = doc.get
+            ? doc.get('lastModified')
+            : doc.lastModified;
+        } else {
+          ret = doc.get
+            ? doc.get(`lastModified_${context.user.id}`) || doc.get('lastModified') || doc.updatedAt
+            : doc[`lastModified_${context.user.id}`] || doc.lastModified || doc.updatedAt;
+        }
+
+        return typeof ret !== 'undefined' ? ret :  null;
+      },
     },
     parseGraphqlObjectFields([
       'business',
@@ -270,12 +354,13 @@ export const resolvers = {
       'vehicle',
 
       'client',
+      'manager',
       'agent',
-      'insurer',
       'user',
     ]),
     parseGraphqlScalarFields([
       'id',
+      'key',
       'refNo',
       'date',
       'state',
@@ -315,6 +400,17 @@ export const resolvers = {
 
         return null;
       },
+      lastModified(doc, {}, context) {
+        let ret;
+
+        if (!context.user) {
+          ret = doc.lastModified;
+        } else {
+          ret = doc[`lastModified_${context.user.id}`] || doc.lastModified;
+        }
+
+        return typeof ret !== 'undefined' ? ret :  null;
+      },
     },
   ),
 
@@ -326,8 +422,136 @@ export const resolvers = {
     },
   ),
 
-  Mutation: {
+  AddDocResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'errors',
+    ])
+  ),
 
+  DelDocResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+    ]),
+    parseGraphqlScalarFields([
+      'error',
+    ])
+  ),
+
+  SetManagerResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+      'manager',
+    ]),
+    parseGraphqlScalarFields([
+      'error',
+    ])
+  ),
+
+  SetStateResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'error',
+    ])
+  ),
+
+  Mutation: {
+    async addDoc(_, { payload }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+      try {
+        // await docValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+      } catch (errors) {
+        return { errors };
+      }
+
+      if (!userVerified(context.user)) {
+        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAny(context.user, Role_ADMINISTRATORS, Role_MANAGERS)) {
+        const { doc } = await context.Docs.addDoc(payload);
+        // publish subscription notification
+        pubsub.publish('addDocChannel', doc);
+        return { doc, errors: {} };
+      }
+
+      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delDoc(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+        return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      const doc = await context.Docs.delDoc(id);
+      // publish subscription notification
+      pubsub.publish('delDocChannel', id);
+      return {};
+    },
+    async setManager(_, { id, manager }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+        const { doc, manager: user } = await context.Docs.setManager(id, manager);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc, manager : user };
+      }
+
+      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async setState(_, { id, state }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc } = await context.Docs.setState(id, state);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc };
+      }
+
+      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
   },
 
   Query: {
@@ -338,9 +562,9 @@ export const resolvers = {
       const topLevelFields = Object.keys(graphqlFields(info));
       return context.Docs.getDocs(query, topLevelFields);
     },
-    usersByRoles(obj, { queryString, roles }, context) {
-      return context.Docs.searchUsersByRoles(queryString, roles);
-    },
+    // usersByRoles(obj, { queryString, roles }, context) {
+    //   return context.Docs.searchUsersByRoles(queryString, roles);
+    // },
 
     esUsersByRoles(obj, { queryString, roles }, context) {
       return context.Docs.esSearchUsersByRoles(queryString, roles);
@@ -362,13 +586,14 @@ export const resolvers = {
         context.Now,
       );
     },
-    openDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+    openDashboard(_, { durationInDays, cursor = 0, sortConfig, validOnly }, context, info) {
       const selectionSet = Object.keys(graphqlFields(info));
       return context.Docs.openDashboard(
         durationInDays,
         cursor,
         sortConfig,
         selectionSet,
+        validOnly,
         context.Now,
       );
     },
@@ -392,6 +617,11 @@ export const resolvers = {
       const selectionSet = Object.keys(graphqlFields(info));
       return context.Docs.dashboard(selectionSet);
     },
+
+    getLastRefNo(_, {}, context) {
+      return context.Business.getLastRefNo();
+    },
+
   },
 
 };

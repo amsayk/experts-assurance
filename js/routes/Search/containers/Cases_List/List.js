@@ -1,6 +1,6 @@
 import React, { PropTypes as T } from 'react';
 
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
 import ScrollSpy from 'components/ScrollSpy';
 
@@ -92,7 +92,7 @@ class List extends React.Component {
     }
 
     let scrollSpy = null;
-    if (isReady && !isServer) {
+    if (isReady && !SERVER) {
       const { spy, fetchMore } = this.state;
       const disabled = (length < 30);
       scrollSpy = (

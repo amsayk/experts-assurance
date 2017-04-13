@@ -37,16 +37,18 @@ class PickUser extends React.Component {
       content = result.hits.map(({ _id, _source : user }) => (
         <li className={style.result}>
           <MenuItem onClick={onUser.bind(null, _id)} className={style.userLine} role='button'>
-            <span style={{ marginRight: 5 }}>
-              <ProfilePic size={18} user={{ displayName : user.name }}/>
-            </span>
-            <span className={style.text}>
-              <Highlighter
-                highlightClassName={style.hit}
-                searchWords={[queryString]}
-                textToHighlight={user.name}
-              />
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ marginRight: 5, display: 'flex', alignItems: 'center' }}>
+                <ProfilePic size={18} user={{ displayName : user.name }}/>
+              </span>
+              <span className={style.text}>
+                <Highlighter
+                  highlightClassName={style.hit}
+                  searchWords={[queryString]}
+                  textToHighlight={user.name}
+                />
+              </span>
+            </div>
           </MenuItem>
         </li>
       ))

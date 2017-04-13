@@ -1,2 +1,2 @@
-export { default } from './DocStateFilter';
+export default from './DocStateFilter';
 

@@ -1,9 +1,11 @@
-import { formatError, getOrCreateBusiness } from 'backend/utils';
+import Parse from 'parse/node';
 
-import { CLIENTS } from 'roles';
+import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
-export default async function signUp(request, response) {
-  const { email, password, locale, role } = request.params;
+import { Role_MANAGERS } from 'roles';
+
+export default async function signUp(request, done) {
+  const { email, password, locale } = request.params;
 
   try {
     const business = await getOrCreateBusiness();
@@ -13,13 +15,13 @@ export default async function signUp(request, response) {
         email,
         username: email,
         locale,
-        roles: [role || CLIENTS],
+        roles: [Role_MANAGERS],
         business,
       }).signUp(null, { useMasterKey: true });
 
-    response.success(user);
+    done(null, serializeParseObject(user));
   } catch (e) {
-    response.error(formatError(e));
+    done(formatError(e));
   }
 }
 

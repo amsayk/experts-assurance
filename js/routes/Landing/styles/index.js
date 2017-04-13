@@ -1,2 +1,2 @@
-export { default } from './Landing.scss';
+export default from './Landing.scss';
 

@@ -1,2 +1,2 @@
-export { default } from './Pending';
+export default from './Pending';
 

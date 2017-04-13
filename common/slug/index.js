@@ -1,7 +1,7 @@
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
 export default (s) => {
-  if (isServer) {
+  if (SERVER) {
     const getSlug = require('speakingurl');
     return Promise.resolve(getSlug(s));
   } else {

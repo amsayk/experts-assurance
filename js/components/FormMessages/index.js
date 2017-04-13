@@ -1,2 +1,2 @@
-export { default } from './FormMessages';
+export default from './FormMessages';
 

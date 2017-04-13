@@ -66,3 +66,5 @@ export { default as DownloadIcon } from './Download';
 // export { default as PersonIcon } from './Person';
 // export { default as ClockIcon } from './Clock';
 
+export { default as UndoIcon } from './Undo';
+

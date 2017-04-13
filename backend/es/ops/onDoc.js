@@ -1,11 +1,13 @@
+import Parse from 'parse/node';
+
 import client from 'backend/es/connection';
 
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
-  Role_AGENTS,
+  Role_MANAGERS,
   Role_CLIENTS,
-  Role_INSURERS,
+  Role_AGENTS,
 } from 'roles';
 
 import { DocType } from 'data/types';
@@ -17,10 +19,14 @@ export default function onDoc(id) {
     try {
       const doc = await new Parse.Query(DocType).get(id, { useMasterKey : true });
 
+      const lastModifiedFields = Object.keys(doc.attributes)
+        .filter((key) => key.startsWith('lastModified_'))
+        .map((key) => doc.get(key));
+
       client.index({
         index: 'fikrat',
         type: 'doc',
-        id: doc.get('refNo'),
+        id: String(doc.get('refNo')),
         body: {
           id           : doc.id,
           refNo        : doc.get('refNo'),
@@ -28,11 +34,12 @@ export default function onDoc(id) {
           vehicle      : doc.get('vehicle'),
           state        : doc.get('state'),
           date         : doc.get('date'),
-          lastModified : doc.get('updatedAt'),
-          agent        : (await indexedUser(doc.get('agent'), /* isEmployee = */true)),
+          manager      : doc.has('manager') ? (await indexedUser(doc.get('manager'), /* isEmployee = */true)) : null,
           client       : (await indexedUser(doc.get('client'))),
-          insurer      : (await indexedUser(doc.get('insurer'))),
+          agent        : (await indexedUser(doc.get('agent'))),
           user         : (await indexedUser(doc.get('user'), /* isEmployee = */true)),
+          lastModified : doc.get('lastModified') || doc.get('updatedAt'),
+          ...lastModifiedFields,
           ...(await getValidation(doc)),
           ...(await getClosure(doc)),
         }
@@ -58,7 +65,7 @@ async function indexedUser(user, isEmployee = false) {
       return await user.fetch({ useMasterKey: true }).then(user => ({
         id           : user.id,
         name         : user.get('displayName'),
-        email        : user.get('email'),
+        email        : user.get('email') || user.get('mail'),
         type         : getType(user),
         isAdmin      : (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1,
         date         : user.get('createdAt'),
@@ -79,7 +86,7 @@ async function getValidation(doc) {
   const validation_user = doc.get('validation_user');
 
   if (validation_date && validation_user) {
-    const isEmployee = (validation_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (validation_user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
+    const isEmployee = (validation_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (validation_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
     return {
       validation_date,
       validation_user : (await indexedUser(validation_user, isEmployee)),
@@ -96,7 +103,7 @@ async function getClosure(doc) {
   const closure_user = doc.get('closure_user');
 
   if (closure_date && closure_state && closure_user) {
-    const isEmployee = (closure_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (closure_user.get('roles') || []).indexOf(Role_AGENTS) !== -1;
+    const isEmployee = (closure_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (closure_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
     return {
       closure_state,
       closure_date,
@@ -110,7 +117,7 @@ async function getClosure(doc) {
 function getType(user) {
   const roles = user.get('roles') || [];
 
-  if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_AGENTS)) {
+  if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_MANAGERS)) {
     return 'EMPLOYEE';
   }
 
@@ -118,8 +125,8 @@ function getType(user) {
     return 'CLIENT';
   }
 
-  if (userHasRoleAny({ roles }, Role_INSURERS)) {
-    return 'INSURER';
+  if (userHasRoleAny({ roles }, Role_AGENTS)) {
+    return 'AGENT';
   }
 
   return 'CLIENT';

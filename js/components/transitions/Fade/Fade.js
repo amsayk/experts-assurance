@@ -4,7 +4,7 @@ import Transition from 'react-overlays/lib/Transition';
 
 import style from './Fade.scss';
 
-class Fade extends React.Component {
+class Fade extends React.PureComponent {
   render() {
     const { className, ...props } = this.props;
     return (

@@ -4,7 +4,7 @@ import { extrapolate } from 'routes/Landing/utils';
 
 const extrapolationSelector = () => extrapolate();
 const appSelector = (state) => state.get('app');
-const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options']).active;
 
 export default createSelector(
   extrapolationSelector,

@@ -11,22 +11,29 @@ import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
 
+import Button from 'components/bootstrap/Button';
+
 import ClientLine from './ClientLine';
+import ManagerLine from './ManagerLine';
 import AgentLine from './AgentLine';
-import InsurerLine from './InsurerLine';
 import StateLine from './StateLine';
 // import RefLine from './RefLine';
 // import VehicleLine from './VehicleLine';
 import LastActivityLine from './LastActivityLine';
 import DTValidationLine from './DTValidation';
 import DTSinisterLine from './DTSinister';
-import DTMissionLine from './DTMission';
+// import DTMissionLine from './DTMission';
+
+import {
+  UndoIcon,
+  TrashIcon,
+} from 'components/icons/MaterialIcons';
 
 class Overview extends React.Component {
   render() {
     const { intl, user, doc, loading } = this.props;
     return (
-      <div className={style.overview}>
+      <div className={cx(style.overview, loading ? undefined : (doc.deletion && style.deletedDoc))}>
         <div className={cx(style.overviewContent, style.card)}>
 
           <div className={style.docTitle}>
@@ -36,6 +43,13 @@ class Overview extends React.Component {
             <h4 className={style.h4}>
               {loading ? null : `${doc.vehicle.model}, ${doc.vehicle.plateNumber}`}
             </h4>
+            <div className={style.deleteOrRestoreDocAction}>
+              {loading ? null : <Button className={style.deleteOrRestoreDocButton} role='button'>
+                {doc.deletion
+                    ? <UndoIcon size={32}/>
+                    : <TrashIcon size={32}/>}
+              </Button>}
+            </div>
           </div>
 
           <div className={style.docContent}>
@@ -52,16 +66,16 @@ class Overview extends React.Component {
               {/*   loading={loading} */}
               {/*   doc={doc} */}
               {/* /> */}
-            <AgentLine
+            {user.isAdmin ? <ManagerLine
               loading={loading}
               doc={doc}
-            />
+            /> : null}
             <ClientLine
               label='Assureur'
               loading={loading}
               doc={doc}
             />
-            <InsurerLine
+            <AgentLine
               loading={loading}
               doc={doc}
             />
@@ -73,10 +87,10 @@ class Overview extends React.Component {
               loading={loading}
               doc={doc}
             />
-            <DTMissionLine
-              loading={loading}
-              doc={doc}
-            />
+            {/* <DTMissionLine */}
+              {/*   loading={loading} */}
+              {/*   doc={doc} */}
+              {/* /> */}
             <LastActivityLine
               loading={loading}
               doc={doc}

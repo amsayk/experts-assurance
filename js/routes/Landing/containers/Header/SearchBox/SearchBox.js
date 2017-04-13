@@ -85,24 +85,24 @@ function *intersperse(a, delim) {
   }
 }
 
-const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, state, date, lastModified, agent, client, insurer, user, validation, closure, vehicle } } }) => {
+const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
 
   const matches = highlight.reduce(function (matches, highlight) {
     switch (highlight) {
-      case 'agent.name':
-      // case 'agent.email':
+      case 'manager.name':
+        // case 'manager.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
               Gestionnaire:{' '}
             </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
+              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
                     searchWords={[q]}
-                    textToHighlight={agent.name}
+                    textToHighlight={manager.name}
                   />
                 </span>
               </Link>
@@ -112,7 +112,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'client.name':
-      // case 'client.email':
+        // case 'client.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -133,20 +133,20 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         );
         break;
 
-      case 'insurer.name':
-      // case 'insurer.email':
+      case 'agent.name':
+        // case 'agent.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
               Agent:{' '}
             </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + insurer.id}>
+              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
                     searchWords={[q]}
-                    textToHighlight={insurer.name}
+                    textToHighlight={agent.name}
                   />
                 </span>
               </Link>
@@ -156,7 +156,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'user.name':
-      // case 'user.email':
+        // case 'user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -178,7 +178,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'validation_user.name':
-      // case 'validation_user.email':
+        // case 'validation_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -200,7 +200,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         break;
 
       case 'closure_user.name':
-      // case 'closure_user.email':
+        // case 'closure_user.email':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -307,24 +307,24 @@ class SearchBox extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSearch             = this.onSearch.bind(this);
-    this.onLastModified             = this.onLastModified.bind(this);
-    this.onSearchAdvancedSearch             = this.onSearchAdvancedSearch.bind(this);
-    this.onTextInput          = this.onTextInput.bind(this);
-    this.onClearSearch        = this.onClearSearch.bind(this);
-    this._onKeyDown           = this._onKeyDown.bind(this);
-    this.onToggleAdvancedMode = this.onToggleAdvancedMode.bind(this);
+    this.onSearch                  = this.onSearch.bind(this);
+    this.onLastModified            = this.onLastModified.bind(this);
+    this.onSearchAdvancedSearch    = this.onSearchAdvancedSearch.bind(this);
+    this.onTextInput               = this.onTextInput.bind(this);
+    this.onClearSearch             = this.onClearSearch.bind(this);
+    this._onKeyDown                = this._onKeyDown.bind(this);
+    this.onToggleAdvancedMode      = this.onToggleAdvancedMode.bind(this);
 
-    this.onTextInputAdvancedSearch           = this.onTextInputAdvancedSearch.bind(this);
-    this.onState               = this.onState.bind(this);
-    this.onAgent               = this.onAgent.bind(this);
-    this.onClient              = this.onClient.bind(this);
-    this.onUser                = this.onUser.bind(this);
-    this.onCloser              = this.onCloser.bind(this);
-    this.onValidator           = this.onValidator.bind(this);
-    this.onRange               = this.onRange.bind(this);
-    this.onValidationRange     = this.onValidationRange.bind(this);
-    this.onClosureRange        = this.onClosureRange.bind(this);
+    this.onTextInputAdvancedSearch = this.onTextInputAdvancedSearch.bind(this);
+    this.onState                   = this.onState.bind(this);
+    this.onManager                 = this.onManager.bind(this);
+    this.onClient                  = this.onClient.bind(this);
+    this.onUser                    = this.onUser.bind(this);
+    this.onCloser                  = this.onCloser.bind(this);
+    this.onValidator               = this.onValidator.bind(this);
+    this.onRange                   = this.onRange.bind(this);
+    this.onValidationRange         = this.onValidationRange.bind(this);
+    this.onClosureRange            = this.onClosureRange.bind(this);
 
 
     this.onFocus = this.props.actions.onToggle.bind(null, true);
@@ -372,10 +372,10 @@ class SearchBox extends React.Component {
     }));
   }
 
-  onAgent(id) {
+  onManager(id) {
     this.setState(({ search }) => ({
       search : search.merge({
-        agent : id ? {id} : null,
+        manager : id ? {id} : null,
       }),
     }));
   }
@@ -563,7 +563,7 @@ class SearchBox extends React.Component {
         search={this.state.search}
         actions={{
           onState                 : this.onState,
-          onAgent                 : this.onAgent,
+          onManager               : this.onManager,
           onClient                : this.onClient,
           onUser                  : this.onUser,
           onCloser                : this.onCloser,
@@ -621,6 +621,7 @@ class SearchBox extends React.Component {
           </div> : null}
           <div className={style.inputWrapper}>
             <input
+              id='gSearchInput'
               ref={(input) => this.input = input}
               onFocus={this.onFocus}
               onBlur={this.onBlur}

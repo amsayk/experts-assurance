@@ -7,6 +7,8 @@ import {
   PASSWORD_RESET,
   SIGN_UP,
   CHANGE_EMAIL,
+
+  AUTHORIZE_MANAGER,
 } from 'backend/constants';
 
 export class Users {
@@ -37,6 +39,13 @@ export class Users {
     );
   }
 
+  authorizeManager(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: AUTHORIZE_MANAGER, args: { id } }
+    );
+  }
+
   signUp(info) {
     return Parse.Cloud.run(
       'routeOp',
@@ -61,6 +70,14 @@ export class Users {
 
   get(id) {
     return this.connector.get(id);
+  }
+
+  logIn(username, password) {
+    return this.connector.logIn(username, password);
+  }
+
+  logOut() {
+    return this.connector.logOut();
   }
 
 }

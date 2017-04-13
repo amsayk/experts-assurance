@@ -21,10 +21,13 @@ export default async function checkBusiness() {
     const business = await new Parse.Query(BusinessType)
       .equalTo('key', BUSINESS_KEY)
       .first({ sessionToken: user.sessionToken });
-    if (user.emailVerified === false ? business && business.has('displayName') && business.get('displayName') : true) {
-      store.dispatch(removeNotification('BusinessRequired'));
+    if (user.emailVerified) {
+      business
+        && business.has('displayName')
+        && business.get('displayName')
+        && store.dispatch(addNotification('BusinessRequired', { persist: true }));
     } else {
-      store.dispatch(addNotification('BusinessRequired', { persist: true }));
+      store.dispatch(removeNotification('BusinessRequired'));
     }
   }
 }

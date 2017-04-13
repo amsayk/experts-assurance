@@ -5,6 +5,11 @@ query settings_user__getUser($id: ID!) {
     email
     roles
 
+    authorization {
+      date
+      user { id }
+    }
+
     createdAt
     updatedAt
   }

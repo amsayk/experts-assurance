@@ -8,12 +8,8 @@ addValidation('currentPassword', (_, oldPassword, __, { user }) => {
   if (!oldPassword) {
     return false;
   }
-  try {
-    Parse.User.enableUnsafeCurrentUser();
-    return Parse.User.logIn(user.get('username'), oldPassword);
-  } finally {
-    Parse.User.disableUnsafeCurrentUser();
-  }
+  return Parse.User.logIn(
+    user.get('username'), oldPassword);
 });
 
 addValidation('minScore', (_, newPassword, minScore) => {

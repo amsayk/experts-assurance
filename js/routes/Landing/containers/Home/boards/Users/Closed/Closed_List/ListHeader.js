@@ -97,7 +97,7 @@ class ListHeader extends React.Component {
     <div style={{
       maxWidth: 140,
       minWidth: 140,
-    }} className={style.listHeaderItemAgent}>
+    }} className={style.listHeaderItemManager}>
     <div className={style.wrapper}>
       <div className={style.innerWrapper}>
         <div className={style.item}>
@@ -109,7 +109,7 @@ class ListHeader extends React.Component {
     </div>
   </div>
 
-  <div className={style.listHeaderItemAgent}>
+  <div className={style.listHeaderItemManager}>
     <div className={style.wrapper}>
       <div className={style.innerWrapper}>
         <div className={style.item}>

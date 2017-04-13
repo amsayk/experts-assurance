@@ -1,2 +1,2 @@
-export { default } from './VerificationPending';
+export default from './VerificationPending';
 

@@ -8,9 +8,13 @@ import PasswordResetRoute from './PasswordReset';
 import ChoosePasswordRoute from './ChoosePassword';
 import SettingsRoute from './Settings';
 
+import PublicRoute from './Public';
+
 import SearchRoute from './Search';
 
 import {
+  PUBLIC,
+
   PATH_LOGIN,
   PATH_INVALID_LINK,
   PATH_EMAIL_VERIFICATION_SUCCESS,
@@ -19,7 +23,7 @@ import {
 
 import { post as addNotification } from 'redux/reducers/notification/actions';
 
-export default (store) => [{
+export default PUBLIC ? PublicRoute : (store) => [{
   path          : '/',
   getComponent(nextState, cb) {
     cb(null, CoreLayout);

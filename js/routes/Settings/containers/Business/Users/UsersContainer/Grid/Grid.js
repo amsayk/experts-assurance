@@ -6,7 +6,7 @@ import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
 
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
 import ScrollSpy from 'components/ScrollSpy';
 
@@ -77,10 +77,10 @@ class Grid extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.cursor !== nextProps.cursor && nextProps.loading === false) {
+    if (nextProps.loading === false) {
       this.setState({
-        spy       : true,
-        fetchMore : nextProps.users.length < nextProps.length,
+        spy       : nextProps.cursor < nextProps.length,
+        fetchMore : nextProps.cursor < nextProps.length,
       });
     }
   }
@@ -116,17 +116,33 @@ class Grid extends React.Component {
     const { loading, cursor, length, users : items, isReady } = this.props;
 
     if (loading === false && length === 0) {
+      // return (
+      //   <Empty/>
+      // );
       return (
-        <Empty/>
+        <div className={style.usersContainer}>
+          <Toolbar cursor={cursor} length={length}/>
+          <Empty/>
+        </div>
       );
     }
 
     let scrollSpy = null;
-    if (isReady && !isServer) {
+    if (isReady && !SERVER) {
       const { spy, fetchMore } = this.state;
       const disabled = (length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle disabled={disabled}/>
+        spy ? <ScrollSpy.Spying
+          bubbles
+          fetchMore={fetchMore}
+          offset={NAVBAR_HEIGHT}
+          disabled={disabled}
+          onSpy={this.onSpy}
+        /> : <ScrollSpy.Idle
+          disabled={disabled}
+          done={length > 0 && cursor === length}
+          doneLabel='Utilisateurs chargés'
+        />
       );
     }
 

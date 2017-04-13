@@ -3,9 +3,9 @@ import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
 
-import { role as onRole } from 'redux/reducers/users/actions';
+import { roles as onRoles } from 'redux/reducers/users/actions';
 
-import { Role_ADMINISTRATORS, Role_AGENTS, Role_CLIENTS } from 'roles';
+import { Role_ADMINISTRATORS, Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
 
 import cx from 'classnames';
 
@@ -34,19 +34,19 @@ const ROLES = [{
   displayName: 'Tous',
 }, {
   displayName: 'Admins',
-  id: Role_ADMINISTRATORS,
+  id: [Role_ADMINISTRATORS],
 }, {
   displayName: 'Gestionaires',
-  id: Role_AGENTS,
+  id: [Role_MANAGERS],
 }, {
-  displayName: 'Assurés',
-  id: Role_CLIENTS,
+  displayName: 'Tiers',
+  id: [Role_AGENTS, Role_CLIENTS],
 }];
 
-function Role({ displayName, active, onRole }) {
+function Role({ displayName, active, onRoles }) {
   return (
     <li className={style.roleItem}>
-      <Button className={cx(style.roleButton, active && style.roleButtonActive)} onClick={onRole} role='button'>
+      <Button className={cx(style.roleButton, active && style.roleButtonActive)} onClick={onRoles} role='button'>
         {displayName}
       </Button>
     </li>
@@ -57,14 +57,14 @@ class Roles extends React.PureComponent {
   constructor() {
     super();
 
-    this.onRole = this.onRole.bind(this);
+    this.onRoles = this.onRoles.bind(this);
   }
-  onRole(role) {
-    this.props.actions.onRole(role);
+  onRoles(roles) {
+    this.props.actions.onRoles(roles);
   }
 
   render() {
-    const { role } = this.props;
+    const { roles } = this.props;
 
     return (
       <ul className={style.roles}>
@@ -78,8 +78,8 @@ class Roles extends React.PureComponent {
             <Role
               displayName={displayName}
               key={index}
-              onRole={this.onRole.bind(this, id)}
-              active={role ? id === role : typeof id === 'undefined'}
+              onRoles={this.onRoles.bind(this, id)}
+              active={Array.isArray(id) ? id.every((elem) => roles.indexOf(elem) > -1) : roles.length === 0}
             />
           );
         })}
@@ -90,10 +90,10 @@ class Roles extends React.PureComponent {
 
 Roles.propTypes = {
   actions : T.shape({
-    onRole: T.func.isRequired,
+    onRoles: T.func.isRequired,
   }),
   intl    : intlShape.isRequired,
-  role    : T.string.isRequired,
+  roles    : T.arrayOf(T.string.isRequired).isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -103,7 +103,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     actions : bindActionCreators({
-      onRole,
+      onRoles,
     }, dispatch),
   };
 }

@@ -4,6 +4,8 @@ import {
   APP_STATE_CHANGE,
   READY,
   TOGGLE_ALERTS,
+
+  ADD_DOC,
 } from './constants';
 
 export function resize() {
@@ -35,6 +37,26 @@ export function ready() {
 export function toggleAlerts() {
   return {
     type: TOGGLE_ALERTS,
+  };
+}
+
+export function startAddingDoc() {
+  return {
+    type      : ADD_DOC,
+    addingDoc : true,
+  };
+}
+
+export function finishAddingDoc() {
+  return {
+    type      : ADD_DOC,
+    addingDoc : false,
+  };
+}
+
+export function saveNewDoc(data) {
+  return async (dispatch, _, { client }) => {
+
   };
 }
 

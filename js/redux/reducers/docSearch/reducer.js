@@ -26,9 +26,9 @@ export class DocSearchState extends Record({
   state           : null,
   advancedMode    : false,
 
-  agent           : null,
+  manager         : null,
   client          : null,
-  insurer         : null,
+  agent           : null,
 
   validator       : null,
   closer          : null,

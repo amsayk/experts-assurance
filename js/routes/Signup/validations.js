@@ -35,10 +35,9 @@ const validations = {
     minLength : PASSWORD_MIN_LENGTH,
   },
 
-  // recaptcha: {
-  //   required : true,
-  //   equalTo  : true,
-  // },
+  recaptcha: {
+    required : ENABLE_RECAPTCHA,
+  },
 };
 
 export default generateValidation(validations);

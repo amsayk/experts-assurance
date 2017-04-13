@@ -1,6 +1,6 @@
 @import 'variables';
 
-$navbar-height: 60px;
+$navbar-height: 70px;
 
 .center {
   composes: center from 'styles/_base.scss';
@@ -8,6 +8,7 @@ $navbar-height: 60px;
 
 .navbar {
   composes: fixed-top navbar flex-row justify-content-between from 'styles/_base.scss';
+  top: -70px;
   z-index: 1;
   border-bottom: 0;
   margin-top: 0;

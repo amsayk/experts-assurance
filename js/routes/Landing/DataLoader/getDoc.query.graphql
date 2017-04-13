@@ -1,9 +1,15 @@
 query getDoc($id: ID!) {
   getDoc(id: $id) {
     id
+    key
     refNo
     date
     state
+
+    deletion {
+      date
+      user { id }
+    }
     vehicle {
       model
       plateNumber
@@ -11,10 +17,10 @@ query getDoc($id: ID!) {
     client {
       id
     }
-    agent {
+    manager {
       id
     }
-    insurer {
+    agent {
       id
     }
 

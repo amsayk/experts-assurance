@@ -20,6 +20,31 @@
   .docTitle {
     // height: 13.5rem;
     padding: 2.25rem;
+    position: relative;
+  }
+}
+
+.deleteOrRestoreDocAction {
+  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+  position: absolute;
+  right: 30px;
+  top: 35px;
+}
+
+.deleteOrRestoreDocButton {
+  composes: nav-item nav-link disable-selection from 'styles/_base.scss';
+  padding: 0;
+  transition: none;
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+  opacity: 0.5;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
   }
 }
 

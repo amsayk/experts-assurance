@@ -1,9 +1,9 @@
 import { createSelector } from 'utils/reselect';
 
-const roleSelector = (state) => state.getIn(['users', 'role']);
+const rolesSelector = (state) => state.getIn(['users', 'roles']);
 
 export default createSelector(
-  roleSelector,
-  (role) => ({ role }),
+  rolesSelector,
+  (roles) => ({ roles : roles ? roles.toJS() : [] }),
 );
 

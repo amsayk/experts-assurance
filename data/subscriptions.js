@@ -1,13 +1,31 @@
 import { PubSub, SubscriptionManager } from 'graphql-subscriptions';
-import schema from './schema';
+import schema from 'data/schema';
 
 const pubsub = new PubSub();
 const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
   setupFunctions: {
-    business: (options, {}, subscriptionName) => ({
-      businessChange: {
+    businessChanged: (options, { businessKey }) => ({
+      businessChangedChannel: {
+        filter: (business) => business.get('key') === businessKey,
+      },
+    }),
+
+    // Docs
+    addDoc: (options, {}) => ({
+      addDocChannel: {
+      },
+    }),
+    delDoc: (options, {}) => ({
+      delDocChannel: {
+      },
+    }),
+
+    // Auth
+    authChanged: (options, { id }) => ({
+      authChangedChannel: {
+        filter: (user) => user.id === id,
       },
     }),
   },

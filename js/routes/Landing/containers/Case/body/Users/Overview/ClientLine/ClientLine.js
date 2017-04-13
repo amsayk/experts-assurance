@@ -34,7 +34,7 @@ class ClientLine extends React.Component {
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
-          <Link className={cx(style.selectedUserButton, style.togglePickUser, style.selectedAgentButton)} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+          <Link className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             <div className={style.text}>
               {/* <span className={style.text}> */}
                 {user.displayName}

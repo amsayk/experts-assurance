@@ -1,2 +1,2 @@
-export { default } from './AppBrand';
+export default from './AppBrand';
 

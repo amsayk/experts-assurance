@@ -76,7 +76,7 @@ class Open extends React.Component {
               fontSize: 12,
               color: '#707070',
             }}>
-            Uniquement les dossiers avec pièces manquants{' '}
+            Pièces manquants{' '}
           </div>
           <div style={{
             marginLeft: 6,

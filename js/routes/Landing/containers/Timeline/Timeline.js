@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import emptyObject from 'emptyObject';
 
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
 import ScrollSpy from 'components/ScrollSpy';
 
@@ -55,25 +55,41 @@ class Timeline extends React.Component {
       spy : false,
     }, () => {
       this.props.loadMore();
+
+      setTimeout(() => {
+        this.setState({
+          spy: true,
+        });
+      }, 7 * 1000);
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.cursor !== nextProps.cursor && nextProps.loading === false) {
+    if (/*this.props.cursor !== nextProps.cursor && */nextProps.loading === false) {
       this.setState({
         spy : true,
       });
     }
   }
   render() {
-    const { intl, notificationOpen, timelineDisplayMatches, isReady, currentUser, loading, result : items, extrapolation : periods } = this.props;
+    const {
+      intl,
+      notificationOpen,
+      timelineDisplayMatches,
+      isReady,
+      currentUser,
+      loading,
+      cursor,
+      result : items,
+      extrapolation : periods,
+    } = this.props;
 
     if (loading || !timelineDisplayMatches) {
       return null;
     }
 
     let scrollSpy = null;
-    if (isReady && !isServer) {
+    if (isReady && !SERVER) {
       const { spy } = this.state;
       scrollSpy = (
         spy ? <ScrollSpy.Spying
@@ -90,6 +106,8 @@ class Timeline extends React.Component {
         ? to > item.timestamp && item.timestamp >= from
         : item.timestamp >= from
       );
+
+      acts.sort((a, b) => b.timestamp - a.timestamp);
 
       return acts.length ? (
         <div className={style.feedGroup} key={id}>

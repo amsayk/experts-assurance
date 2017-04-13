@@ -1,5 +1,7 @@
 import 'isomorphic-fetch';
 
+import Parse from 'parse/node';
+
 import kue from 'kue';
 import kueUiExpress from 'kue-ui-express';
 
@@ -42,10 +44,6 @@ import { Users } from 'data/user/models';
 import { Business } from 'data/business/models';
 import { Docs } from 'data/doc/models';
 import { Activities } from 'data/activity/models';
-
-// persisted queries
-import queryMap from 'extracted_queries';
-import invert from 'lodash.invert';
 
 import bodyParser from 'body-parser';
 
@@ -193,24 +191,8 @@ const api = new ParseServer({
   revokeSessionOnPasswordReset     : true,
   emailVerifyTokenValidityDuration : 2 * 24 * 60 * 60, // 2 days
   emailAdapter                     : {
-    module: 'parse-server-mailgun',
-    options: {
-      fromAddress: config.mailgun_from_address,
-      domain: config.mailgun_domain,
-      apiKey: config.mailgun_api_key,
-      templates: {
-        passwordResetEmail: {
-          subject: 'Reset your password for ' + config.appName,
-          pathPlainText: paths.server('email-templates/password_reset_email.txt'),
-          callback: (user) => ({}),
-        },
-        verificationEmail: {
-          subject: 'Please verify your e-mail for ' + config.appName,
-          pathPlainText: paths.server('email-templates/verification_email.txt'),
-          callback: (user) => ({}),
-        },
-      },
-    },
+    module: require.resolve('backend/mail/MailAdapter'),
+    options: config.mailAdapterOptions,
   },
 
   passwordPolicy : {
@@ -265,21 +247,27 @@ app.use(config.parse_dashboard_mount_point, dashboard);
 // ------------------------------------
 // Graphql server entrypoint
 // ------------------------------------
-const invertedMap = invert(queryMap);
-
 app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
   if (config.persistedQueries) {
     if (Array.isArray(req.body)) {
       // eslint-disable-next-line no-param-reassign
-      req.body = req.body.map(({ id, ...otherParams }) => ({ query: invertedMap[id], ...otherParams }));
+      req.body = req.body.map(({ id, ...otherParams }) => ({ query: config.queryMap[id], ...otherParams }));
     } else {
-      req.body.query = invertedMap[req.body.id]; // eslint-disable-line no-param-reassign
+      req.body.query = config.queryMap[req.body.id]; // eslint-disable-line no-param-reassign
     }
   }
   next();
 });
 
 app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
+  // Reload user everytime
+  Parse.User._clearCache();
+
+  const unplug = cookie.plugToRequest(req, res);
+  res.on('finish', function () {
+    unplug();
+  });
+
   // Get the query, the same way express-graphql does it
   // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
   const query = req.query.query || req.body.query;
@@ -289,9 +277,8 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
     throw new Error('Query too large.');
   }
 
-  cookie.plugToRequest(req, res);
-
   const user = getCurrentUser();
+
   return {
     schema,
     context: {

@@ -1,4 +1,4 @@
-export { default } from './ProfileButton';
+export default from './ProfileButton';
 
 export { default as MenuItem } from './MenuItem';
 

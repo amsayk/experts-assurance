@@ -5,7 +5,6 @@
 html {
   box-sizing: border-box;
   background-color: #ffffff;
-  overflow-x: hidden;
 }
 
 html,
@@ -55,6 +54,12 @@ mark {
 }
 
 :global {
+  // React date picker
+  @import 'react-date-picker/style/index.scss';
+
+}
+
+:global {
   // React dates
   @import 'react-dates/css/styles';
 
@@ -84,3 +89,4 @@ mark {
     cursor: pointer;
   }
 }
+

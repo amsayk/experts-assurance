@@ -1,2 +1,2 @@
-export { default } from './DashboardContainer';
+export default from './DashboardContainer';
 

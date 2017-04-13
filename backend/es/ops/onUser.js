@@ -1,11 +1,13 @@
+import Parse from 'parse/node';
+
 import client from 'backend/es/connection';
 
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
-  Role_AGENTS,
+  Role_MANAGERS,
   Role_CLIENTS,
-  Role_INSURERS,
+  Role_AGENTS,
 } from 'roles';
 
 const log = require('log')('app:backend:es:onUser');
@@ -47,7 +49,7 @@ export default function onUser(id) {
 function getType(user) {
   const roles = user.get('roles') || [];
 
-  if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_AGENTS)) {
+  if (userHasRoleAny({ roles }, Role_ADMINISTRATORS, Role_MANAGERS)) {
     return 'EMPLOYEE';
   }
 
@@ -55,9 +57,10 @@ function getType(user) {
     return 'CLIENT';
   }
 
-  if (userHasRoleAny({ roles }, Role_INSURERS)) {
-    return 'INSURER';
+  if (userHasRoleAny({ roles }, Role_AGENTS)) {
+    return 'AGENT';
   }
 
   return 'CLIENT';
 }
+

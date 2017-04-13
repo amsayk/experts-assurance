@@ -57,6 +57,8 @@
 }
 
 .RECENT_DOCUMENT,
+.DOCUMENT_DELETED,
+.DOCUMENT_MANAGER_CHANGED,
 .DOCUMENT_STATE_CHANGED,
 .DOCUMENT_CREATED {
   // composes: feedItem;
@@ -92,6 +94,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin: 3px 0;
   }
   .entry > .desc .docStateToggle svg {
     margin: 0;

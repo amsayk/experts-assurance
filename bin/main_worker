@@ -1,10 +1,28 @@
 #!/usr/bin/env node
 
-import { UPDATE_USER_BUSINESS } from 'backend/constants';
+import {
+  UPDATE_USER_BUSINESS,
+
+  SET_PASSWORD,
+  UPDATE_ACCOUNT_SETTINGS,
+  RESEND_EMAIL_VERIFICATION,
+  PASSWORD_RESET,
+  SIGN_UP,
+  CHANGE_EMAIL,
+
+  AUTHORIZE_MANAGER,
+
+  ADD_DOC,
+  DELETE_DOC,
+  SET_MANAGER,
+  SET_STATE,
+} from 'backend/constants';
 
 import config from 'build/config';
 
-import * as ops from 'backend/ops/business';
+import * as businessOps from 'backend/ops/business';
+import * as authOps from 'backend/ops/auth';
+import * as docOps from 'backend/ops/doc';
 
 import createWorker from 'backend/kue-mq/createWorker';
 
@@ -15,9 +33,23 @@ const opts = {
   concurrency : 1,
 };
 
-const SERVER_NAME = 'MAIN';
+createWorker(opts, 'MAIN', {
+  [UPDATE_USER_BUSINESS] : businessOps.updateUserBusiness,
 
-createWorker(opts, SERVER_NAME, {
-  [UPDATE_USER_BUSINESS] : ops.updateUserBusiness,
+  // auth
+  [SET_PASSWORD]              : authOps.setPassword,
+  [UPDATE_ACCOUNT_SETTINGS]   : authOps.updateAccountSettings,
+  [RESEND_EMAIL_VERIFICATION] : authOps.resendEmailVerification,
+  [PASSWORD_RESET]            : authOps.passwordReset,
+  [SIGN_UP]                   : authOps.signUp,
+  [CHANGE_EMAIL]              : authOps.changeEmail,
+
+  [AUTHORIZE_MANAGER]         : authOps.authorizeManager,
+
+  // docs
+  [ADD_DOC]     : docOps.addDoc,
+  [DELETE_DOC]  : docOps.delDoc,
+  [SET_MANAGER] : docOps.setManager,
+  [SET_STATE]   : docOps.setState,
 });
 

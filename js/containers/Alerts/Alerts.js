@@ -18,11 +18,6 @@ import { intlShape } from 'react-intl';
 
 const WIDTH = 300;
 
-const popupAlign = {
-  points: ['tc', 'bc'],
-  offset: [-55, 8],
-};
-
 const tooltipAlign = {
   offset: [0, -4],
 };
@@ -70,7 +65,7 @@ class Alerts extends React.Component {
 
   }
   render() {
-    const { number, isReady, toggleAlerts } = this.props;
+    const { number, isReady, scrolling, toggleAlerts } = this.props;
 
     let count = (
       <span className={style.jewelCount}>
@@ -87,7 +82,7 @@ class Alerts extends React.Component {
     }
 
     let content;
-    if (this.state.open) {
+    if (this.state.open && scrolling.scrollTop === 0) {
       content = (
         <Trigger
           onPopupVisibleChange={toggleAlerts}
@@ -95,11 +90,14 @@ class Alerts extends React.Component {
           hideAction={['click']}
           action={[]}
           popupVisible
-          popupAlign={popupAlign}
+          popupAlign={{
+            points: ['tc', 'bc'],
+            offset: [-66, 20],
+          }}
           popup={() => <AlertsPopup onClose={toggleAlerts}/>}
         >
           <div className={style.alertsWrapper}>
-            <BellIcon.Empty size={32}/>
+            <BellIcon.Empty size={36}/>
             {count}
           </div>
         </Trigger>
@@ -108,7 +106,7 @@ class Alerts extends React.Component {
       content = (
         <Tooltip align={tooltipAlign} placement='bottom' overlay={'Notifications'}>
           <div className={style.alertsWrapper}>
-            <BellIcon.Empty size={32}/>
+            <BellIcon.Empty size={36}/>
             {count}
           </div>
         </Tooltip>
@@ -127,7 +125,7 @@ class Alerts extends React.Component {
 }
 
 Alerts.defaultProps = {
-  number : 2,
+  number : '+99',
 };
 
 Alerts.propTypes = {

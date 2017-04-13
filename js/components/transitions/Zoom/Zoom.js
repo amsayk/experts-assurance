@@ -4,7 +4,7 @@ import Transition from 'react-overlays/lib/Transition';
 
 import style from './Zoom.scss';
 
-class Zoom extends React.Component {
+class Zoom extends React.PureComponent {
   render() {
     const { className, ...props } = this.props;
     return (

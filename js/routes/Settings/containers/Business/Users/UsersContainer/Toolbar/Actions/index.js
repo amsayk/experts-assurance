@@ -1,2 +1,2 @@
-export { default } from './Actions';
+export default from './Actions';
 

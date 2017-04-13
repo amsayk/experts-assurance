@@ -107,7 +107,7 @@
     "email": "mae.curtis@experts.ma",
     "createdAt": "1986-04-02T02:16:06+00:00",
     "updatedAt": "1986-04-02T02:16:06+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Sanchez Mooney",
@@ -173,7 +173,7 @@
     "email": "carrie.pace@experts.ma",
     "createdAt": "1981-10-21T02:47:29+00:00",
     "updatedAt": "1981-10-21T02:47:29+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Foley Soto",
@@ -195,7 +195,7 @@
     "email": "case.roth@experts.ma",
     "createdAt": "1972-10-30T10:09:18+00:00",
     "updatedAt": "1972-10-30T10:09:18+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Oneil Martinez",
@@ -206,7 +206,7 @@
     "email": "oneil.martinez@experts.ma",
     "createdAt": "2009-08-14T13:17:40+00:00",
     "updatedAt": "2009-08-14T13:17:40+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Hawkins Garrison",
@@ -305,7 +305,7 @@
     "email": "summer.meadows@experts.ma",
     "createdAt": "1990-08-27T16:09:59+00:00",
     "updatedAt": "1990-08-27T16:09:59+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Holder Chen",
@@ -327,7 +327,7 @@
     "email": "sherry.lynn@experts.ma",
     "createdAt": "1983-11-11T11:20:24+00:00",
     "updatedAt": "1983-11-11T11:20:24+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Briana Dixon",
@@ -338,7 +338,7 @@
     "email": "briana.dixon@experts.ma",
     "createdAt": "2002-03-20T05:36:15+00:00",
     "updatedAt": "2002-03-20T05:36:15+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Garrison Mercer",
@@ -360,7 +360,7 @@
     "email": "christian.nichols@experts.ma",
     "createdAt": "1975-08-04T02:21:19+00:00",
     "updatedAt": "1975-08-04T02:21:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Silva Quinn",
@@ -536,7 +536,7 @@
     "email": "weiss.hess@experts.ma",
     "createdAt": "1994-10-09T21:31:30+00:00",
     "updatedAt": "1994-10-09T21:31:30+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Vance Fitzpatrick",
@@ -602,7 +602,7 @@
     "email": "heather.pollard@experts.ma",
     "createdAt": "1997-05-16T10:10:01+00:00",
     "updatedAt": "1997-05-16T10:10:01+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Imelda Gibson",
@@ -624,7 +624,7 @@
     "email": "marla.robles@experts.ma",
     "createdAt": "2010-08-14T10:48:24+00:00",
     "updatedAt": "2010-08-14T10:48:24+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Cannon Kaufman",
@@ -635,7 +635,7 @@
     "email": "cannon.kaufman@experts.ma",
     "createdAt": "1995-06-25T21:52:45+00:00",
     "updatedAt": "1995-06-25T21:52:45+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Carney Flores",
@@ -910,7 +910,7 @@
     "email": "mcgee.harrison@experts.ma",
     "createdAt": "1997-02-08T07:52:09+00:00",
     "updatedAt": "1997-02-08T07:52:09+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Beth Walker",
@@ -921,7 +921,7 @@
     "email": "beth.walker@experts.ma",
     "createdAt": "2007-02-02T14:09:44+00:00",
     "updatedAt": "2007-02-02T14:09:44+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Meadows Benson",
@@ -976,7 +976,7 @@
     "email": "beard.drake@experts.ma",
     "createdAt": "1972-06-02T15:18:17+00:00",
     "updatedAt": "1972-06-02T15:18:17+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Munoz Thompson",
@@ -1031,7 +1031,7 @@
     "email": "bray.melton@experts.ma",
     "createdAt": "2011-05-04T01:00:50+00:00",
     "updatedAt": "2011-05-04T01:00:50+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Natalie Taylor",
@@ -1042,7 +1042,7 @@
     "email": "natalie.taylor@experts.ma",
     "createdAt": "1972-07-31T18:40:22+00:00",
     "updatedAt": "1972-07-31T18:40:22+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Adrienne Matthews",
@@ -1053,7 +1053,7 @@
     "email": "adrienne.matthews@experts.ma",
     "createdAt": "1983-06-30T03:17:56+00:00",
     "updatedAt": "1983-06-30T03:17:56+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Elsa Lucas",
@@ -1064,7 +1064,7 @@
     "email": "elsa.lucas@experts.ma",
     "createdAt": "1970-10-08T10:16:44+00:00",
     "updatedAt": "1970-10-08T10:16:44+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Mindy Mcfarland",
@@ -1075,7 +1075,7 @@
     "email": "mindy.mcfarland@experts.ma",
     "createdAt": "1996-10-25T21:25:20+00:00",
     "updatedAt": "1996-10-25T21:25:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Janna Strickland",
@@ -1097,7 +1097,7 @@
     "email": "simone.buckner@experts.ma",
     "createdAt": "1992-12-18T16:46:51+00:00",
     "updatedAt": "1992-12-18T16:46:51+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Patel Burks",
@@ -1119,7 +1119,7 @@
     "email": "celina.hartman@experts.ma",
     "createdAt": "1981-12-20T10:02:17+00:00",
     "updatedAt": "1981-12-20T10:02:17+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Padilla Hayes",
@@ -1141,7 +1141,7 @@
     "email": "melinda.potter@experts.ma",
     "createdAt": "1970-01-27T01:02:51+00:00",
     "updatedAt": "1970-01-27T01:02:51+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Pearlie Jacobs",
@@ -1218,7 +1218,7 @@
     "email": "teresa.solis@experts.ma",
     "createdAt": "1996-08-27T11:49:39+00:00",
     "updatedAt": "1996-08-27T11:49:39+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Finch Acosta",
@@ -1273,7 +1273,7 @@
     "email": "tameka.simpson@experts.ma",
     "createdAt": "2005-09-09T07:41:34+00:00",
     "updatedAt": "2005-09-09T07:41:34+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Ballard Espinoza",
@@ -1317,7 +1317,7 @@
     "email": "walsh.holman@experts.ma",
     "createdAt": "1998-12-22T08:50:15+00:00",
     "updatedAt": "1998-12-22T08:50:15+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Harrison Stuart",
@@ -1405,7 +1405,7 @@
     "email": "parsons.soto@experts.ma",
     "createdAt": "2003-10-28T03:47:53+00:00",
     "updatedAt": "2003-10-28T03:47:53+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Bass Mccullough",
@@ -1460,7 +1460,7 @@
     "email": "veronica.fitzgerald@experts.ma",
     "createdAt": "1989-10-02T20:38:59+00:00",
     "updatedAt": "1989-10-02T20:38:59+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Rosemarie Oconnor",
@@ -1471,7 +1471,7 @@
     "email": "rosemarie.oconnor@experts.ma",
     "createdAt": "1997-07-06T10:13:01+00:00",
     "updatedAt": "1997-07-06T10:13:01+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Corinne Booth",
@@ -1493,7 +1493,7 @@
     "email": "barlow.moss@experts.ma",
     "createdAt": "2012-08-13T04:14:23+00:00",
     "updatedAt": "2012-08-13T04:14:23+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Erna Bush",
@@ -1559,7 +1559,7 @@
     "email": "rodriquez.herring@experts.ma",
     "createdAt": "2006-03-15T14:10:27+00:00",
     "updatedAt": "2006-03-15T14:10:27+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Griffin Harding",
@@ -1570,7 +1570,7 @@
     "email": "griffin.harding@experts.ma",
     "createdAt": "1980-01-02T11:14:31+00:00",
     "updatedAt": "1980-01-02T11:14:31+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Wynn Lambert",
@@ -1625,7 +1625,7 @@
     "email": "cortez.savage@experts.ma",
     "createdAt": "1972-05-25T23:02:16+00:00",
     "updatedAt": "1972-05-25T23:02:16+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Mejia Eaton",
@@ -1658,7 +1658,7 @@
     "email": "angel.bolton@experts.ma",
     "createdAt": "1997-09-12T21:16:55+00:00",
     "updatedAt": "1997-09-12T21:16:55+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Austin Carter",
@@ -1757,7 +1757,7 @@
     "email": "taylor.greene@experts.ma",
     "createdAt": "2003-01-28T01:03:20+00:00",
     "updatedAt": "2003-01-28T01:03:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Sylvia Larson",
@@ -1823,7 +1823,7 @@
     "email": "hancock.randall@experts.ma",
     "createdAt": "2002-03-22T09:40:30+00:00",
     "updatedAt": "2002-03-22T09:40:30+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "James Saunders",
@@ -1834,7 +1834,7 @@
     "email": "james.saunders@experts.ma",
     "createdAt": "1987-08-21T15:31:42+00:00",
     "updatedAt": "1987-08-21T15:31:42+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Maureen Simon",
@@ -1856,7 +1856,7 @@
     "email": "henson.riggs@experts.ma",
     "createdAt": "2004-05-10T06:01:06+00:00",
     "updatedAt": "2004-05-10T06:01:06+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Levy Henderson",
@@ -1911,7 +1911,7 @@
     "email": "holland.kelly@experts.ma",
     "createdAt": "1993-07-27T05:49:10+00:00",
     "updatedAt": "1993-07-27T05:49:10+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Camacho Oliver",
@@ -1933,7 +1933,7 @@
     "email": "whitehead.patton@experts.ma",
     "createdAt": "1980-12-03T19:00:50+00:00",
     "updatedAt": "1980-12-03T19:00:50+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Heidi Weber",
@@ -2065,7 +2065,7 @@
     "email": "hull.ford@experts.ma",
     "createdAt": "2004-12-20T09:36:20+00:00",
     "updatedAt": "2004-12-20T09:36:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Jasmine Cote",
@@ -2087,7 +2087,7 @@
     "email": "sheppard.richards@experts.ma",
     "createdAt": "1978-07-29T21:14:25+00:00",
     "updatedAt": "1978-07-29T21:14:25+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lenore Lewis",
@@ -2109,7 +2109,7 @@
     "email": "gilda.mcdaniel@experts.ma",
     "createdAt": "2010-03-29T13:23:50+00:00",
     "updatedAt": "2010-03-29T13:23:50+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Natalia Nielsen",
@@ -2131,7 +2131,7 @@
     "email": "dudley.graham@experts.ma",
     "createdAt": "2001-07-06T05:42:05+00:00",
     "updatedAt": "2001-07-06T05:42:05+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Sparks Sharpe",
@@ -2153,7 +2153,7 @@
     "email": "downs.jensen@experts.ma",
     "createdAt": "1990-04-15T21:16:23+00:00",
     "updatedAt": "1990-04-15T21:16:23+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Erin Castillo",
@@ -2373,7 +2373,7 @@
     "email": "michael.kramer@experts.ma",
     "createdAt": "2008-10-01T08:58:20+00:00",
     "updatedAt": "2008-10-01T08:58:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Garner Petersen",
@@ -2384,7 +2384,7 @@
     "email": "garner.petersen@experts.ma",
     "createdAt": "1973-10-04T10:13:29+00:00",
     "updatedAt": "1973-10-04T10:13:29+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Garrett Griffith",
@@ -2395,7 +2395,7 @@
     "email": "garrett.griffith@experts.ma",
     "createdAt": "1994-03-19T08:27:14+00:00",
     "updatedAt": "1994-03-19T08:27:14+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Kristina Mendoza",
@@ -2439,7 +2439,7 @@
     "email": "tommie.dickson@experts.ma",
     "createdAt": "2004-10-12T11:18:19+00:00",
     "updatedAt": "2004-10-12T11:18:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Blackwell Good",
@@ -2494,7 +2494,7 @@
     "email": "maria.mcfarland@experts.ma",
     "createdAt": "2014-02-03T23:32:57+00:00",
     "updatedAt": "2014-02-03T23:32:57+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Delores Hoffman",
@@ -2516,7 +2516,7 @@
     "email": "mcdonald.contreras@experts.ma",
     "createdAt": "2004-08-09T13:07:16+00:00",
     "updatedAt": "2004-08-09T13:07:16+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Roman Garza",
@@ -2560,7 +2560,7 @@
     "email": "susie.watson@experts.ma",
     "createdAt": "1995-06-09T03:15:11+00:00",
     "updatedAt": "1995-06-09T03:15:11+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Jessie Myers",
@@ -2582,7 +2582,7 @@
     "email": "stone.walker@experts.ma",
     "createdAt": "1991-04-07T23:02:19+00:00",
     "updatedAt": "1991-04-07T23:02:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Blake Elliott",
@@ -2747,7 +2747,7 @@
     "email": "ewing.mitchell@experts.ma",
     "createdAt": "2003-03-17T04:35:21+00:00",
     "updatedAt": "2003-03-17T04:35:21+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Skinner Wilcox",
@@ -2758,7 +2758,7 @@
     "email": "skinner.wilcox@experts.ma",
     "createdAt": "1979-12-22T10:02:23+00:00",
     "updatedAt": "1979-12-22T10:02:23+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Bernice Hodge",
@@ -2769,7 +2769,7 @@
     "email": "bernice.hodge@experts.ma",
     "createdAt": "1972-10-06T18:12:19+00:00",
     "updatedAt": "1972-10-06T18:12:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Langley Drake",
@@ -2846,7 +2846,7 @@
     "email": "lea.fulton@experts.ma",
     "createdAt": "1974-09-07T06:43:43+00:00",
     "updatedAt": "1974-09-07T06:43:43+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Marylou Mills",
@@ -2879,7 +2879,7 @@
     "email": "autumn.cobb@experts.ma",
     "createdAt": "1978-03-19T18:57:57+00:00",
     "updatedAt": "1978-03-19T18:57:57+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Bruce Fitzpatrick",
@@ -2912,7 +2912,7 @@
     "email": "clarissa.morton@experts.ma",
     "createdAt": "2004-02-05T02:21:25+00:00",
     "updatedAt": "2004-02-05T02:21:25+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Clara Bonner",
@@ -2934,7 +2934,7 @@
     "email": "hillary.mercado@experts.ma",
     "createdAt": "1976-03-22T17:26:04+00:00",
     "updatedAt": "1976-03-22T17:26:04+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lucas Rutledge",
@@ -2978,7 +2978,7 @@
     "email": "burton.mcdonald@experts.ma",
     "createdAt": "1974-05-25T23:35:25+00:00",
     "updatedAt": "1974-05-25T23:35:25+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Stevens Roth",
@@ -2989,7 +2989,7 @@
     "email": "stevens.roth@experts.ma",
     "createdAt": "2013-03-29T05:00:37+00:00",
     "updatedAt": "2013-03-29T05:00:37+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Mueller King",
@@ -3022,7 +3022,7 @@
     "email": "kathryn.sweet@experts.ma",
     "createdAt": "1979-05-29T21:44:47+00:00",
     "updatedAt": "1979-05-29T21:44:47+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Briggs Bright",
@@ -3033,7 +3033,7 @@
     "email": "briggs.bright@experts.ma",
     "createdAt": "1974-07-08T02:39:52+00:00",
     "updatedAt": "1974-07-08T02:39:52+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "White Steele",
@@ -3055,7 +3055,7 @@
     "email": "morrow.greene@experts.ma",
     "createdAt": "1973-07-11T10:25:22+00:00",
     "updatedAt": "1973-07-11T10:25:22+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Hilary Meyers",
@@ -3088,7 +3088,7 @@
     "email": "loretta.chandler@experts.ma",
     "createdAt": "2014-08-01T16:49:58+00:00",
     "updatedAt": "2014-08-01T16:49:58+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Marva Camacho",
@@ -3143,7 +3143,7 @@
     "email": "elvia.greer@experts.ma",
     "createdAt": "2003-02-22T08:14:10+00:00",
     "updatedAt": "2003-02-22T08:14:10+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Carolina Ramirez",
@@ -3209,7 +3209,7 @@
     "email": "vanessa.odonnell@experts.ma",
     "createdAt": "1970-10-06T20:15:10+00:00",
     "updatedAt": "1970-10-06T20:15:10+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Myers Monroe",
@@ -3231,7 +3231,7 @@
     "email": "wood.wilkerson@experts.ma",
     "createdAt": "1978-08-07T10:18:36+00:00",
     "updatedAt": "1978-08-07T10:18:36+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Roberson Gibbs",
@@ -3286,7 +3286,7 @@
     "email": "aida.crawford@experts.ma",
     "createdAt": "2001-04-08T17:30:15+00:00",
     "updatedAt": "2001-04-08T17:30:15+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Michelle Dickerson",
@@ -3396,7 +3396,7 @@
     "email": "leblanc.larsen@experts.ma",
     "createdAt": "1985-09-29T01:55:16+00:00",
     "updatedAt": "1985-09-29T01:55:16+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Renee Lambert",
@@ -3418,7 +3418,7 @@
     "email": "flores.hahn@experts.ma",
     "createdAt": "1991-07-24T05:31:33+00:00",
     "updatedAt": "1991-07-24T05:31:33+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Aurora Bartlett",
@@ -3429,7 +3429,7 @@
     "email": "aurora.bartlett@experts.ma",
     "createdAt": "2006-06-20T19:03:40+00:00",
     "updatedAt": "2006-06-20T19:03:40+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Small Herrera",
@@ -3495,7 +3495,7 @@
     "email": "julianne.mccall@experts.ma",
     "createdAt": "1981-03-08T17:38:20+00:00",
     "updatedAt": "1981-03-08T17:38:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Opal Jenkins",
@@ -3528,7 +3528,7 @@
     "email": "carmela.david@experts.ma",
     "createdAt": "1985-11-03T02:16:20+00:00",
     "updatedAt": "1985-11-03T02:16:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Janie Sanders",
@@ -3572,7 +3572,7 @@
     "email": "britney.sosa@experts.ma",
     "createdAt": "1994-06-17T08:01:19+00:00",
     "updatedAt": "1994-06-17T08:01:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Vazquez Richards",
@@ -3968,7 +3968,7 @@
     "email": "stokes.shaw@experts.ma",
     "createdAt": "2011-04-18T00:25:44+00:00",
     "updatedAt": "2011-04-18T00:25:44+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Flora Vega",
@@ -4001,7 +4001,7 @@
     "email": "conner.turner@experts.ma",
     "createdAt": "1970-08-21T12:48:00+00:00",
     "updatedAt": "1970-08-21T12:48:00+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Roberta Decker",
@@ -4034,7 +4034,7 @@
     "email": "freeman.blevins@experts.ma",
     "createdAt": "1992-08-23T21:58:34+00:00",
     "updatedAt": "1992-08-23T21:58:34+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Janell Melendez",
@@ -4056,7 +4056,7 @@
     "email": "tara.arnold@experts.ma",
     "createdAt": "1987-05-15T16:03:39+00:00",
     "updatedAt": "1987-05-15T16:03:39+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Selma Floyd",
@@ -4089,7 +4089,7 @@
     "email": "compton.sandoval@experts.ma",
     "createdAt": "2015-08-25T00:13:26+00:00",
     "updatedAt": "2015-08-25T00:13:26+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Gallegos Powers",
@@ -4177,7 +4177,7 @@
     "email": "peggy.lowe@experts.ma",
     "createdAt": "1975-06-12T07:17:41+00:00",
     "updatedAt": "1975-06-12T07:17:41+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Webb Garrett",
@@ -4210,7 +4210,7 @@
     "email": "dominique.willis@experts.ma",
     "createdAt": "1999-10-25T11:07:11+00:00",
     "updatedAt": "1999-10-25T11:07:11+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Pittman Cotton",
@@ -4232,7 +4232,7 @@
     "email": "alisha.chang@experts.ma",
     "createdAt": "2004-01-19T22:41:04+00:00",
     "updatedAt": "2004-01-19T22:41:04+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Jeannie Blake",
@@ -4243,7 +4243,7 @@
     "email": "jeannie.blake@experts.ma",
     "createdAt": "2012-04-24T03:43:01+00:00",
     "updatedAt": "2012-04-24T03:43:01+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Sally Arnold",
@@ -4287,7 +4287,7 @@
     "email": "dickson.nguyen@experts.ma",
     "createdAt": "2004-02-15T07:03:50+00:00",
     "updatedAt": "2004-02-15T07:03:50+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Tricia Hurley",
@@ -4320,7 +4320,7 @@
     "email": "nixon.hatfield@experts.ma",
     "createdAt": "1987-03-28T15:56:54+00:00",
     "updatedAt": "1987-03-28T15:56:54+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Tucker Reynolds",
@@ -4353,7 +4353,7 @@
     "email": "nettie.gould@experts.ma",
     "createdAt": "2004-03-10T20:25:57+00:00",
     "updatedAt": "2004-03-10T20:25:57+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Marta Short",
@@ -4364,7 +4364,7 @@
     "email": "marta.short@experts.ma",
     "createdAt": "2015-08-30T19:29:17+00:00",
     "updatedAt": "2015-08-30T19:29:17+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Vaughan Nieves",
@@ -4375,7 +4375,7 @@
     "email": "vaughan.nieves@experts.ma",
     "createdAt": "2006-02-03T00:03:39+00:00",
     "updatedAt": "2006-02-03T00:03:39+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Kristine Patrick",
@@ -4386,7 +4386,7 @@
     "email": "kristine.patrick@experts.ma",
     "createdAt": "1989-05-09T01:47:56+00:00",
     "updatedAt": "1989-05-09T01:47:56+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Flowers Chase",
@@ -4507,7 +4507,7 @@
     "email": "sybil.small@experts.ma",
     "createdAt": "2013-08-21T05:55:47+00:00",
     "updatedAt": "2013-08-21T05:55:47+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Rasmussen Burnett",
@@ -4529,7 +4529,7 @@
     "email": "olson.frazier@experts.ma",
     "createdAt": "1998-05-02T01:39:30+00:00",
     "updatedAt": "1998-05-02T01:39:30+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Workman Mcgowan",
@@ -4584,7 +4584,7 @@
     "email": "hurst.mooney@experts.ma",
     "createdAt": "2015-11-11T05:13:23+00:00",
     "updatedAt": "2015-11-11T05:13:23+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Hays Munoz",
@@ -4628,7 +4628,7 @@
     "email": "greene.obrien@experts.ma",
     "createdAt": "2009-09-10T04:48:40+00:00",
     "updatedAt": "2009-09-10T04:48:40+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Reed Rowe",
@@ -4661,7 +4661,7 @@
     "email": "darla.crane@experts.ma",
     "createdAt": "2009-04-25T13:15:38+00:00",
     "updatedAt": "2009-04-25T13:15:38+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Josephine Cannon",
@@ -4683,7 +4683,7 @@
     "email": "helena.cantu@experts.ma",
     "createdAt": "2004-10-22T01:33:15+00:00",
     "updatedAt": "2004-10-22T01:33:15+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Knowles Vega",
@@ -4694,7 +4694,7 @@
     "email": "knowles.vega@experts.ma",
     "createdAt": "1986-12-14T20:49:52+00:00",
     "updatedAt": "1986-12-14T20:49:52+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Francisca Sanders",
@@ -4705,7 +4705,7 @@
     "email": "francisca.sanders@experts.ma",
     "createdAt": "2008-05-26T04:26:33+00:00",
     "updatedAt": "2008-05-26T04:26:33+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Hubbard Brady",
@@ -4782,7 +4782,7 @@
     "email": "madden.cummings@experts.ma",
     "createdAt": "1974-09-27T07:48:55+00:00",
     "updatedAt": "1974-09-27T07:48:55+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Walter Melton",
@@ -4793,7 +4793,7 @@
     "email": "walter.melton@experts.ma",
     "createdAt": "1995-09-20T13:52:10+00:00",
     "updatedAt": "1995-09-20T13:52:10+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Parks Cochran",
@@ -4804,7 +4804,7 @@
     "email": "parks.cochran@experts.ma",
     "createdAt": "2016-11-26T09:54:14+00:00",
     "updatedAt": "2016-11-26T09:54:14+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Victoria Malone",
@@ -4826,7 +4826,7 @@
     "email": "florine.palmer@experts.ma",
     "createdAt": "1987-12-21T07:56:16+00:00",
     "updatedAt": "1987-12-21T07:56:16+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Barnes Snow",
@@ -4870,7 +4870,7 @@
     "email": "christi.gates@experts.ma",
     "createdAt": "2003-08-16T14:56:43+00:00",
     "updatedAt": "2003-08-16T14:56:43+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Davidson Rhodes",
@@ -4903,7 +4903,7 @@
     "email": "stefanie.clarke@experts.ma",
     "createdAt": "2003-01-12T23:35:41+00:00",
     "updatedAt": "2003-01-12T23:35:41+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lyons Galloway",
@@ -4958,7 +4958,7 @@
     "email": "sherrie.frye@experts.ma",
     "createdAt": "2013-09-25T23:17:30+00:00",
     "updatedAt": "2013-09-25T23:17:30+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Caldwell Chaney",
@@ -4980,7 +4980,7 @@
     "email": "figueroa.barnett@experts.ma",
     "createdAt": "1994-02-05T05:55:41+00:00",
     "updatedAt": "1994-02-05T05:55:41+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Nellie Rutledge",
@@ -5002,7 +5002,7 @@
     "email": "leigh.freeman@experts.ma",
     "createdAt": "2007-07-12T16:13:30+00:00",
     "updatedAt": "2007-07-12T16:13:30+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lynnette Owen",
@@ -5024,7 +5024,7 @@
     "email": "wolf.vang@experts.ma",
     "createdAt": "1986-06-16T06:27:53+00:00",
     "updatedAt": "1986-06-16T06:27:53+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Cook Bean",
@@ -5134,7 +5134,7 @@
     "email": "brittney.booker@experts.ma",
     "createdAt": "2013-08-12T20:26:20+00:00",
     "updatedAt": "2013-08-12T20:26:20+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Jodie Townsend",
@@ -5156,7 +5156,7 @@
     "email": "weber.simon@experts.ma",
     "createdAt": "1978-04-26T15:38:32+00:00",
     "updatedAt": "1978-04-26T15:38:32+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lancaster Pittman",
@@ -5200,7 +5200,7 @@
     "email": "vega.whitney@experts.ma",
     "createdAt": "2016-06-14T21:46:05+00:00",
     "updatedAt": "2016-06-14T21:46:05+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Cynthia Bates",
@@ -5233,7 +5233,7 @@
     "email": "etta.goodman@experts.ma",
     "createdAt": "1976-08-30T19:53:23+00:00",
     "updatedAt": "1976-08-30T19:53:23+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Joni Spears",
@@ -5387,7 +5387,7 @@
     "email": "samantha.greene@experts.ma",
     "createdAt": "1997-04-12T11:05:59+00:00",
     "updatedAt": "1997-04-12T11:05:59+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Cooke Wiggins",
@@ -5398,7 +5398,7 @@
     "email": "cooke.wiggins@experts.ma",
     "createdAt": "1993-05-26T20:31:22+00:00",
     "updatedAt": "1993-05-26T20:31:22+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Dorothea Cochran",
@@ -5420,7 +5420,7 @@
     "email": "merrill.jones@experts.ma",
     "createdAt": "2004-05-15T21:13:51+00:00",
     "updatedAt": "2004-05-15T21:13:51+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Weeks King",
@@ -5442,7 +5442,7 @@
     "email": "courtney.forbes@experts.ma",
     "createdAt": "1981-07-13T02:21:32+00:00",
     "updatedAt": "1981-07-13T02:21:32+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Sellers Robinson",
@@ -5552,7 +5552,7 @@
     "email": "katie.burke@experts.ma",
     "createdAt": "2010-10-02T07:37:07+00:00",
     "updatedAt": "2010-10-02T07:37:07+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Alexis Glenn",
@@ -5618,7 +5618,7 @@
     "email": "mcmillan.bonner@experts.ma",
     "createdAt": "1975-09-16T09:27:06+00:00",
     "updatedAt": "1975-09-16T09:27:06+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Kramer Stanton",
@@ -5673,7 +5673,7 @@
     "email": "sanford.buck@experts.ma",
     "createdAt": "2012-08-19T15:54:21+00:00",
     "updatedAt": "2012-08-19T15:54:21+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lauri Yates",
@@ -5717,7 +5717,7 @@
     "email": "ramona.bryan@experts.ma",
     "createdAt": "2008-11-01T05:22:56+00:00",
     "updatedAt": "2008-11-01T05:22:56+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Vasquez Mueller",
@@ -5750,7 +5750,7 @@
     "email": "oneal.stout@experts.ma",
     "createdAt": "2006-07-23T17:24:29+00:00",
     "updatedAt": "2006-07-23T17:24:29+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Mccoy Clay",
@@ -5816,7 +5816,7 @@
     "email": "gamble.howe@experts.ma",
     "createdAt": "1981-07-12T09:15:41+00:00",
     "updatedAt": "1981-07-12T09:15:41+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Lila Castillo",
@@ -5860,7 +5860,7 @@
     "email": "fran.brown@experts.ma",
     "createdAt": "2004-10-11T17:00:58+00:00",
     "updatedAt": "2004-10-11T17:00:58+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Ava Farmer",
@@ -5904,7 +5904,7 @@
     "email": "dillon.benton@experts.ma",
     "createdAt": "1972-04-05T17:38:24+00:00",
     "updatedAt": "1972-04-05T17:38:24+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Madelyn Bernard",
@@ -5926,7 +5926,7 @@
     "email": "keisha.hammond@experts.ma",
     "createdAt": "2011-12-30T07:51:00+00:00",
     "updatedAt": "2011-12-30T07:51:00+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Kristi Flowers",
@@ -5937,7 +5937,7 @@
     "email": "kristi.flowers@experts.ma",
     "createdAt": "2012-10-26T09:27:19+00:00",
     "updatedAt": "2012-10-26T09:27:19+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Branch Jordan",
@@ -5981,7 +5981,7 @@
     "email": "mckenzie.day@experts.ma",
     "createdAt": "1998-10-10T03:41:39+00:00",
     "updatedAt": "1998-10-10T03:41:39+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Paula Oneil",
@@ -6047,7 +6047,7 @@
     "email": "deirdre.sanchez@experts.ma",
     "createdAt": "1985-05-07T07:35:32+00:00",
     "updatedAt": "1985-05-07T07:35:32+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Mildred Workman",
@@ -6058,7 +6058,7 @@
     "email": "mildred.workman@experts.ma",
     "createdAt": "1970-03-03T23:46:03+00:00",
     "updatedAt": "1970-03-03T23:46:03+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   },
   {
     "displayName": "Ashley Mcdonald",
@@ -6267,7 +6267,7 @@
     "email": "kelli.moses@experts.ma",
     "createdAt": "2008-10-17T02:13:53+00:00",
     "updatedAt": "2008-10-17T02:13:53+00:00",
-    "role": "AGENTS"
+    "role": "MANAGERS"
   }
 ]
 

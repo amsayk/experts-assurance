@@ -6,7 +6,7 @@ import config from 'build/config';
 
 import createWorker from 'backend/kue-mq/createWorker';
 
-import es from 'backend/es';
+import * as es from 'backend/es';
 
 const log = require('log')('app:backend:es_index');
 
@@ -34,9 +34,7 @@ if (cluster.isMaster) {
     concurrency : 20,
   };
 
-  const SERVER_NAME = 'ES_INDEX';
-
-  createWorker(opts, SERVER_NAME, {
+  createWorker(opts, 'ES_INDEX', {
     // docs
     async onDoc(req, done) {
       try {
@@ -46,17 +44,9 @@ if (cluster.isMaster) {
         done(new Error(e));
       }
     },
-    async onDocLastModified(req, done) {
+    async onDocDeleted(req, done) {
       try {
-        await es.onDocLastModified(req.params.id);
-        done();
-      } catch (e) {
-        done(new Error(e));
-      }
-    },
-    async onDocState(req, done) {
-      try {
-        await es.onDocState(req.params.id);
+        await es.onDocDeleted(req.params.id);
         done();
       } catch (e) {
         done(new Error(e));

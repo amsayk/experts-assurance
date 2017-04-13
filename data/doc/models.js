@@ -1,7 +1,10 @@
 import Parse from 'parse/node';
 
 import {
-
+  ADD_DOC,
+  DELETE_DOC,
+  SET_MANAGER,
+  SET_STATE,
 } from 'backend/constants';
 
 export class Docs {
@@ -14,13 +17,13 @@ export class Docs {
     return this.connector.get(id);
   }
 
-  getDocs({ queryString, cursor = 0, sortConfig, client, agent, state }, topLevelFields) {
-    return this.connector.getDocs(queryString, cursor, sortConfig, client, agent, state, this.user, topLevelFields);
+  getDocs({ queryString, cursor = 0, sortConfig, client, manager, state }, topLevelFields) {
+    return this.connector.getDocs(queryString, cursor, sortConfig, client, manager, state, this.user, topLevelFields);
   }
 
-  searchUsersByRoles(queryString, roles) {
-    return this.connector.searchUsersByRoles(queryString, roles);
-  }
+  // searchUsersByRoles(queryString, roles) {
+  //   return this.connector.searchUsersByRoles(queryString, roles);
+  // }
 
   esSearchUsersByRoles(queryString, roles) {
     return this.connector.esSearchUsersByRoles(queryString, roles);
@@ -44,7 +47,7 @@ export class Docs {
       selectionSet,
     );
   }
-  openDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
+  openDashboard(durationInDays, cursor, sortConfig, selectionSet, validOnly, now) {
     return this.connector.openDashboard(
       durationInDays,
       cursor,
@@ -52,6 +55,7 @@ export class Docs {
       this.user,
       now,
       selectionSet,
+      validOnly,
     );
   }
   closedDashboard(durationInDays, cursor, sortConfig, selectionSet, includeCanceled, now) {
@@ -72,6 +76,40 @@ export class Docs {
 
   dashboard(selectionSet) {
     return this.connector.dashboard(this.user, selectionSet);
+  }
+
+  // Mutations
+
+  addDoc(payload) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: ADD_DOC, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  delDoc(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DELETE_DOC, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  setManager(id, manager) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_MANAGER, args: { id, manager } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  setState(id, state) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_STATE, args: { id, state } },
+      { sessionToken: this.user.getSessionToken() }
+    );
   }
 }
 

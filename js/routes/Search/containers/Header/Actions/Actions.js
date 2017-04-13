@@ -40,7 +40,7 @@ class Actions extends React.PureComponent {
           <div key='download' className={style.download}>
             <Tooltip align={tooltipAlign} placement='bottom' overlay={'Télécharger'}>
               <Button className={style.downloadButton} onClick={null} role='button'>
-                <DownloadIcon size={28}/>
+                <DownloadIcon size={32}/>
               </Button>
             </Tooltip>
           </div>

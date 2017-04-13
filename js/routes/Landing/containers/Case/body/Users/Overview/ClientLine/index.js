@@ -1,2 +1,2 @@
-export { default } from './ClientLine';
+export default from './ClientLine';
 

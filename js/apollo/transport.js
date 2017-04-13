@@ -4,7 +4,7 @@ import {
 
 import { addPersistedQueries } from 'persistgraphql';
 
-import queryMap from 'extracted_queries';
+import queryMap from 'persisted_queries';
 
 import {
   PERSISTED_QUERIES,
@@ -49,7 +49,7 @@ export default function getNetworkInterface(apiUrl = '/graphql', headers = {}) {
   });
 
   if (PERSISTED_QUERIES) {
-    addPersistedQueries(iface, queryMap);
+    return addPersistedQueries(iface, queryMap);
   }
 
   return iface;

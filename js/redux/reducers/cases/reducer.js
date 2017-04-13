@@ -7,8 +7,8 @@ import {
   ON_SEARCH,
   ON_STATE,
   ON_CLIENT,
+  ON_MANAGER,
   ON_AGENT,
-  ON_INSURER,
 } from './constants';
 
 import { USER_LOGGED_OUT, USER_LOGGED_IN } from 'redux/reducers/user/constants';
@@ -33,8 +33,8 @@ export class CasesState extends Record({
   queryString  : '',
   state        : null,
   client       : null,
+  manager      : null,
   agent        : null,
-  insurer      : null,
 }) {}
 
 const initialState = new CasesState();
@@ -66,14 +66,14 @@ export default function reducer(state = initialState, action) {
         client: action.id,
       });
     }
+    case ON_MANAGER: {
+      return state.merge({
+        manager: action.id,
+      });
+    }
     case ON_AGENT: {
       return state.merge({
         agent: action.id,
-      });
-    }
-    case ON_INSURER: {
-      return state.merge({
-        insurer: action.id,
       });
     }
 

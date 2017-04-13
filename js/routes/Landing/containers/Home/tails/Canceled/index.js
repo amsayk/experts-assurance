@@ -1,2 +1,2 @@
-export { default } from './Canceled';
+export default from './Canceled';
 

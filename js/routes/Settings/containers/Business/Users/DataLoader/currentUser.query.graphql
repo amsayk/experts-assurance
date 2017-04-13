@@ -4,6 +4,11 @@ query settings_users__getUser($id: ID!) {
     id
     roles
 
+    authorization {
+      date
+      user { id }
+    }
+
     business {
       id
 

@@ -3,7 +3,7 @@ import {
   VIEW_TYPE_LIST,
   TOGGLE_SEARCH,
   ON_SEARCH,
-  ON_ROLE,
+  ON_ROLES,
 } from './constants';
 
 // Selection
@@ -24,9 +24,10 @@ export function search(queryString) {
   };
 }
 
-export function role(role) {
+export function roles(roles) {
   return {
-    type : ON_ROLE, role,
+    type : ON_ROLES,
+    roles,
   };
 }
 

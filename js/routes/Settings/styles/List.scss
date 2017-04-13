@@ -228,6 +228,7 @@
 }
 
 .emptyList {
+  transform: translate(-10%,50%)!important;
   // composes: d-flex flex-column center from 'styles/_base.scss';
   top: 61px;
   left: 240px;

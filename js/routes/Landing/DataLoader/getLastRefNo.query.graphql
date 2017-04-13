@@ -1,0 +1,10 @@
+query getLastRefNo {
+
+  getLastRefNo {
+    value
+
+  }
+}
+
+
+

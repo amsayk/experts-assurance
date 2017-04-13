@@ -1,2 +1,2 @@
-export { default } from './BusinessRequired';
+export default from './BusinessRequired';
 

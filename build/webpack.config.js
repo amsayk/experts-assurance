@@ -6,8 +6,15 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CompressionPlugin = require('compression-webpack-plugin');
 const sassyImport = require('postcss-sassy-import');
+
+// Show a nice little progress bar
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
+// Chalk lib, to add some multi-colour awesomeness to our progress messages
+const chalk = require('chalk');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HappyPack = require('happypack');
 const config = require('build/config');
 const merge = require('lodash.merge');
@@ -47,7 +54,10 @@ const APP_ENTRY = [paths.client('app.js')];
 webpackConfig.entry = {
   polyfills: ['babel-polyfill'],
   app : __DEV__
-  ? APP_ENTRY.concat(`webpack-hot-middleware/client?path=${config.compiler_public_path}__webpack_hmr`)
+  ? APP_ENTRY.concat([
+    // activate HMR for React
+    `webpack-hot-middleware/client?path=${config.compiler_public_path}__webpack_hmr`
+  ])
   : APP_ENTRY,
   vendor : config.compiler_vendors,
 };
@@ -91,6 +101,10 @@ const SASS_LOADERS = [{
 }];
 
 webpackConfig.plugins = [
+  // Progress bar + options
+  new ProgressBarPlugin({
+    format: ` ${chalk.magenta.bold(config.appName)} building [:bar] ${chalk.green.bold(':percent')} (:elapsed seconds)`,
+  }),
   new HappyPack({
     id: 'js',
     threadPool: happyThreadPool,
@@ -101,23 +115,13 @@ webpackConfig.plugins = [
     // make happy more verbose with HAPPY_VERBOSE=yes
     verbose: process.env.HAPPY_VERBOSE === 'yes',
   }),
-  new HappyPack({
-    id: 'styles',
-    threadPool: happyThreadPool,
-    loaders : __DEV__
-    ? [STYLE_LOADER, ...SASS_LOADERS]
-    : SASS_LOADERS,
-
-    // make happy more verbose with HAPPY_VERBOSE=yes
-    verbose: process.env.HAPPY_VERBOSE === 'yes',
-  }),
   new webpack.LoaderOptionsPlugin({
     debug    : __DEV__,
     minimize : !__DEV__,
     options  : {
       context: process.cwd(),
       postcss: [
-        sassyImport({}),
+        sassyImport(),
         cssnano({
           autoprefixer : {
             add      : true,
@@ -149,6 +153,7 @@ webpackConfig.plugins = [
     'process.env' : {
       PARSE_MODULE_PATH : JSON.stringify('parse'),
       SSR               : JSON.stringify(config.ssrEnabled),
+      PERSISTED_QUERIES : JSON.stringify(config.persistedQueries),
     },
   })),
   new HtmlWebpackPlugin({
@@ -199,6 +204,16 @@ if (argv.analyze) {
 if (__DEV__) {
   log('Enable plugins for live development (HMR, NoErrors).');
   webpackConfig.plugins.push(
+    new HappyPack({
+      id: 'styles',
+      threadPool: happyThreadPool,
+      loaders : __DEV__
+      ? [STYLE_LOADER, ...SASS_LOADERS]
+      : SASS_LOADERS,
+
+      // make happy more verbose with HAPPY_VERBOSE=yes
+      verbose: process.env.HAPPY_VERBOSE === 'yes',
+    }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
@@ -206,6 +221,13 @@ if (__DEV__) {
 } else {
   log('Enable plugins for production (Offline, AggressiveMergingPlugin & UglifyJS).');
   webpackConfig.plugins.push(
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js|css)$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
     new webpack.HashedModuleIdsPlugin(),
     new InlineManifestWebpackPlugin(),
     new WebpackMd5Hash(),
@@ -270,7 +292,9 @@ webpackConfig.module.rules = [{
   exclude : [
     path.resolve(process.cwd(), 'node_modules'),
   ],
-  loader: 'graphql-tag/loader',
+  use: [
+    'graphql-tag/loader',
+  ],
 }];
 
 // ------------------------------------

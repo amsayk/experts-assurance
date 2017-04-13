@@ -1,2 +1,2 @@
-export { default } from './RecentDocs';
+export default from './RecentDocs';
 

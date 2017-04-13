@@ -1,2 +1,2 @@
-export { default } from './DTMission';
+export default from './DTMission';
 

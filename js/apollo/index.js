@@ -50,7 +50,6 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 
 export const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
-  addTypename: true,
   customResolvers: {
     Query: {
       getUser: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
@@ -59,6 +58,5 @@ export const client = new ApolloClient({
   },
   dataIdFromObject,
   initialState: window.__APOLLO_STATE__ || {},
-  queryDeduplication : true,
 });
 

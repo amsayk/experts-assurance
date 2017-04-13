@@ -13,11 +13,11 @@ import cx from 'classnames';
 
 import SelectedUserToggle from '../SelectedUserToggle';
 
-import { Role_ADMINISTRATORS, Role_AGENTS } from 'roles';
+import { Role_AGENTS } from 'roles';
 
 import createUserPicker from '../PickUser';
 
-const PickUser = createUserPicker(Role_ADMINISTRATORS, Role_AGENTS);
+const PickUser = createUserPicker(Role_AGENTS);
 
 export default class Agent extends React.Component {
   state ={
@@ -27,7 +27,7 @@ export default class Agent extends React.Component {
     super();
 
     this.onToggle = this.onToggle.bind(this);
-    this.onUser = this.onUser.bind(this);
+    this.onUser   = this.onUser.bind(this);
     this._onInput = this._onInput.bind(this);
   }
   onToggle() {
@@ -54,7 +54,7 @@ export default class Agent extends React.Component {
     return (
       <div className={style.advancedSearch_field}>
         <div className={style.advancedSearch_field_label}>
-          Gestionnaire
+          Agent
         </div>
         <div className={style.advancedSearch_field_info}>
           <div className={style.filterGroup}>
@@ -65,7 +65,7 @@ export default class Agent extends React.Component {
               className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
             >
               {agent ? <SelectedUserToggle onClear={onAgent} id={agent.get('id')}/> : <Dropdown.Toggle className={style.togglePickUser}>
-                Filtre par un gestionnaire
+                Filtre par un agent
               </Dropdown.Toggle>}
               <Dropdown.Menu className={style.userPickerMenu}>
                 <MenuItem open={this.state.open} onInput={this._onInput} onUser={this.onUser} componentClass={PickUser}/>
@@ -77,4 +77,3 @@ export default class Agent extends React.Component {
     );
   }
 }
-

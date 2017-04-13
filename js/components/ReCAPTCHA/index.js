@@ -1,2 +1,2 @@
-export { default } from './ReCAPTCHA';
+export default from './ReCAPTCHA';
 

@@ -38,12 +38,12 @@ export default defineMessages({
     defaultMessage: 'Adresse e-mail ou mot de passe invalide.',
   },
 
-  loginQuestion: {
+  logInQuestion: {
     id: 'account.signup-form.signup-question',
     defaultMessage: 'Déjà membre?',
   },
 
-  login: {
+  logIn: {
     id: 'acccount.signup-form.login',
     defaultMessage: 'Connexion',
   },

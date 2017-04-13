@@ -24,7 +24,7 @@ export class BusinessConnector {
     return this.loader.load(id);
   }
 
-  getUsers(role, queryString, cursor = 0, sortConfig, user, topLevelFields) {
+  getUsers(roles, queryString, cursor = 0, sortConfig, user, topLevelFields) {
     if (!user) {
       return Promise.resolve({
         cursor : 0,
@@ -40,21 +40,33 @@ export class BusinessConnector {
     }));
 
     function getQuery() {
-      const q = new Parse.Query(Parse.User)
-        .matchesQuery('business', businessQuery)
-        .notEqualTo('objectId', user.id);
+      let q;
+
+      if (roles && roles.length > 0) {
+        if (roles.length == 1) {
+          q = new Parse.Query(Parse.User)
+            .equalTo('roles', roles[0]);
+        } else {
+          const queries = roles.map((role) => new Parse.Query(Parse.User).equalTo('roles', role));
+          q = Parse.Query.or.apply(Parse.Query, queries);
+        }
+      } else {
+        q = new Parse.Query(Parse.User);
+      }
+
+      // Match current business
+      q.matchesQuery('business', businessQuery());
+
+      // Don'r return current user
+      q.notEqualTo('objectId', user.id);
 
       if (!__DEV__) {
-        q.equalTo('emailVerified', true);
+        // q.equalTo('emailVerified', true);
       }
 
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
         !sortConfig.key || sortConfig.key === 'date' ? 'updatedAt' : sortConfig.key
       );
-
-      if (role) {
-        q.equalTo('roles', role);
-      }
 
       if (queryString) {
         q.matches('displayName', `.*${queryString}.*`);
@@ -81,32 +93,32 @@ export class BusinessConnector {
     }
 
   }
-  searchUsers(q, user) {
-    return doSearch();
-
-    function doSearch() {
-      if (q && user) {
-        const qry = new Parse.Query(Parse.User)
-          .notEqualTo('objectId', user.id)
-          .matchesQuery('business', businessQuery)
-          .limit(SEARCH_LIMIT)
-          .matches('displayName', `.*${q}.*`);
-
-        if (!__DEV__) {
-          qry.equalTo('emailVerified', true);
-        }
-
-        qry.descending(
-          'updatedAt'
-        );
-
-        return qry.find({ useMasterKey: true });
-      }
-
-      return Promise.resolve([]);
-    }
-
-  }
+  // searchUsers(q, user) {
+  //   return doSearch();
+  //
+  //   function doSearch() {
+  //     if (q && user) {
+  //       const qry = new Parse.Query(Parse.User)
+  //         .notEqualTo('objectId', user.id)
+  //         .matchesQuery('business', businessQuery())
+  //         .limit(SEARCH_LIMIT)
+  //         .matches('displayName', `.*${q}.*`);
+  //
+  //       if (!__DEV__) {
+  //         qry.equalTo('emailVerified', true);
+  //       }
+  //
+  //       qry.descending(
+  //         'updatedAt'
+  //       );
+  //
+  //       return qry.find({ useMasterKey: true });
+  //     }
+  //
+  //     return Promise.resolve([]);
+  //   }
+  //
+  // }
 
   esSearchUsers(q) {
     if (q) {
@@ -127,7 +139,7 @@ export class BusinessConnector {
             bool: {
               must: {
                 multi_match: {
-                  operator: 'or',
+                  operator: 'and',
                   fields: [
                     'name',
                     'email',
@@ -160,7 +172,6 @@ export class BusinessConnector {
 async function fetch(ids) {
   const objects = await new Parse.Query(BusinessType)
     .containedIn('objectId', ids)
-    // .matchesQuery('business', businessQuery)
     .find({ useMasterKey: true });
 
   return ids.map((id) => {

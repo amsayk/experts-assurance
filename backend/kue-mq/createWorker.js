@@ -26,25 +26,25 @@ export default function createWorker(opts, name, methods) {
     methods[serverMethod](job.data.req, done);
   });
 
-  queue.on('job complete', function (id) {
-    kue.Job.get(id, function (err, job){
-      if (err) { return; }
-      job.remove(function (err){
-        if (err) { throw err; }
-        log('removed completed job #%d', job.id);
-      });
-    });
-  });
+  // queue.on('job complete', function (id) {
+  //   kue.Job.get(id, function (err, job){
+  //     if (err) { return; }
+  //     job.remove(function (err){
+  //       if (err) { throw err; }
+  //       log('removed completed job #%d', job.id);
+  //     });
+  //   });
+  // });
 
-  queue.on('job failed', function (id) {
-    kue.Job.get(id, function (err, job){
-      if (err) { return; }
-      job.remove(function (err){
-        if (err) { throw err; }
-        log('removed completed job #%d', job.id);
-      });
-    });
-  });
+  // queue.on('job failed', function (id) {
+  //   kue.Job.get(id, function (err, job){
+  //     if (err) { return; }
+  //     job.remove(function (err){
+  //       if (err) { throw err; }
+  //       log('removed failed job #%d', job.id);
+  //     });
+  //   });
+  // });
 
   return queue;
 }

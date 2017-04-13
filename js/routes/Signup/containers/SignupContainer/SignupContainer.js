@@ -5,15 +5,15 @@ import { withApollo } from 'react-apollo';
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
+import checkBusiness from 'utils/checkBusiness';
+
 import cookie from 'react-cookie';
 
 import invariant from 'invariant';
 
-import Parse from 'parse';
-
 import isEmpty from 'isEmpty';
 
-import { login } from 'redux/reducers/user/actions';
+import { logIn } from 'redux/reducers/user/actions';
 
 import selector from './selector';
 
@@ -58,6 +58,7 @@ export class SignupContainer extends React.Component {
       mutate: T.func.isRequired,
     }),
     actions         : T.shape({
+      logIn : T.func.isRequired,
     }).isRequired,
   };
 
@@ -72,21 +73,17 @@ export class SignupContainer extends React.Component {
     if (e.key === 'Enter' && e.shiftKey === false) {
       const submit = this.props.handleSubmit(this.onSubmit);
       submit();
-      debugger;
     }
   }
 
   async onSubmit(data) {
-    debugger;
-
     try {
       await validations.asyncValidate(data);
     } catch (e) {
-      debugger;
       throw new SubmissionError(e);
     }
 
-    const { intl } = this.props;
+    const { intl, actions } = this.props;
 
     const { data: { signUp: { user, errors } } } = await this.props.client.mutate({
       mutation  : MUTATION,
@@ -94,7 +91,7 @@ export class SignupContainer extends React.Component {
         email                : data.get('email'),
         password             : data.get('password'),
         passwordConfirmation : data.get('passwordConfirmation'),
-        // recaptcha            : true,
+        recaptcha            : data.get('recaptcha'),
       } },
     });
 
@@ -105,18 +102,15 @@ export class SignupContainer extends React.Component {
     invariant(user, '`user` must be defined at this point.');
 
     try {
-      const parseObject = await Parse.User.logIn(user.username, data.get('password'));
-      if (parseObject) {
-        const loggedInUser = {
-          id: parseObject.id,
-          email: parseObject.get('email'),
-        };
-        cookie.save('app.login', parseObject.get('username'), { path: '/' });
-        this.props.actions.login(loggedInUser);
-        this.props.router.push('/');
-      } else {
-        throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
+      await actions.logIn(
+        user.username, data.get('password'));
+
+      if (process.env.NODE_ENV !== 'production') {
+        cookie.save('app.logIn', email, { path: '/' });
       }
+
+      // async: Notify busines info
+      checkBusiness();
     } catch (e) {
       throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
     }
@@ -144,9 +138,9 @@ export class SignupContainer extends React.Component {
         placeholder={intl.formatMessage(messages.password)}
         onKeyDown={this.onKeyDown} />,
 
-      // ENABLE_RECAPTCHA ? <Field
-      //   name={'recaptcha'}
-      //   component={ReCAPTCHAField} /> : null,
+      ENABLE_RECAPTCHA ? <Field
+        name={'recaptcha'}
+        component={ReCAPTCHAField} /> : null,
 
       <p className={style.tos}>
         <FormattedMessage
@@ -184,10 +178,10 @@ export class SignupContainer extends React.Component {
           </div>
           <div className={style.navLoginWrapper}>
             <span className={style.navbarText}>
-              {intl.formatMessage(messages.loginQuestion)}
+              {intl.formatMessage(messages.logInQuestion)}
             </span>{' '}
             <Link className={style.logIn} to={PATH_LOGIN}>
-              {intl.formatMessage(messages.login)}
+              {intl.formatMessage(messages.logIn)}
             </Link>
           </div>
         </div>
@@ -201,7 +195,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ login }, dispatch)};
+  return {actions: bindActionCreators({ logIn }, dispatch)};
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);

@@ -14,7 +14,7 @@ import style from 'routes/Settings/styles';
 import { injectIntl, intlShape } from 'react-intl';
 
 const scrollingSelector = (state) => state.get('scrolling');
-const notificationOpenSelector = (state) => state.getIn(['notification', 'options', 'active']);
+const notificationOpenSelector = (state) => state.getIn(['notification', 'options']).active;
 
 const selector = createSelector(
   scrollingSelector,

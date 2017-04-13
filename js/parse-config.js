@@ -6,7 +6,7 @@ import {
   SERVER_URL,
 } from 'vars';
 
-import CookieStorageController from 'utils/StorageController.cookie';
+import CookieStorageController from 'StorageController.cookie';
 
 Parse.initialize(
   APPLICATION_ID,

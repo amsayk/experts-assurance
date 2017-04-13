@@ -1,2 +1,2 @@
-export { default } from './InvalidLink';
+export default from './InvalidLink';
 

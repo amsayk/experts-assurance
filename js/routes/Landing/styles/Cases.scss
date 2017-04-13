@@ -33,7 +33,7 @@
 
 
 .pickUserDropdown [role='menu'] {
-  z-index: 1051;
+  z-index: 1061;
 }
 
 .togglePickUser,
@@ -162,12 +162,12 @@ a.selectedUserButton:hover {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1050;
+  z-index: 1055;
 
 }
 
 .pickUserOpen .selectedStateButton,
-.pickUserOpen .selectedAgentButton {
+.pickUserOpen .selectedManagerButton {
   border-bottom-right-radius: 0!important;
   border-bottom-left-radius: 0!important;
 }

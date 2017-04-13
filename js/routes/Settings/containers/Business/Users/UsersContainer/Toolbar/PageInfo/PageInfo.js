@@ -27,7 +27,7 @@ class PageInfo extends React.PureComponent {
   render() {
     const { length, cursor } = this.state;
 
-    if (length === 0) {
+    if (!length) {
       return null;
     }
 

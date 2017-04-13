@@ -1,2 +1,2 @@
-export { default } from './Search.scss';
+export default from './Search.scss';
 

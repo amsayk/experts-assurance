@@ -1,12 +1,11 @@
 import React, { PropTypes as T } from 'react';
 
-import Clients from './Clients';
 import Users from './Users';
 
 export default function Body (props) {
-  return props.user.isAdminOrAgent
-    ? <Users {...props}/>
-    : <Clients {...props}/>;
+  return (
+    <Users {...props}/>
+  );
 }
 
 Body.displayName = 'CasesBody';

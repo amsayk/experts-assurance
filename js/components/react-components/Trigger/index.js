@@ -1,6 +1,6 @@
-import { isServer } from 'vars';
+import { SERVER } from 'vars';
 
-export default isServer
+export default SERVER
   ? ({ children }) => children
   : require('./Trigger').default;
 

@@ -118,15 +118,15 @@ const middlewares = [
     },
 
     [`${SORT}/pendingDashboard`]: {
-      reducerKey : (store) => pick(store.getState().get('dashboard').pendingSortConfig, ['key', 'direction']),
+      reducerKey : (state) => pick(state.get('dashboard').pendingSortConfig, ['key', 'direction']),
       cookieKey  : 'dashboard.pendingSortConfig',
     },
     [`${SORT}/openDashboard`]: {
-      reducerKey : (store) => pick(store.getState().get('dashboard').openSortConfig, ['key', 'direction']),
+      reducerKey : (state) => pick(state.get('dashboard').openSortConfig, ['key', 'direction']),
       cookieKey  : 'dashboard.openSortConfig',
     },
     [`${SORT}/closedDashboard`]: {
-      reducerKey : (store) => pick(store.getState().get('dashboard').closedSortConfig, ['key', 'direction']),
+      reducerKey : (state) => pick(state.get('dashboard').closedSortConfig, ['key', 'direction']),
       cookieKey  : 'dashboard.closedSortConfig',
     },
   }),
@@ -153,22 +153,24 @@ const enhancer = composeEnhancers(
 
 export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { app: { lang: DEFAULT_LANG } }, function (key, value) {
   switch (key) {
-    case ''             : return new Map(value);
-    case 'app'          : return new AppState(value);
-    case 'docSearch'    : return new DocSearchState(value);
-    case 'dashboard'    : return new DashboardState(value);
-    case 'notification' : return new NotificationState(value);
-    case 'scrolling'    : return new ScrollState(value);
-    case 'snackbar'     : return new SnackState(value);
-    case 'user'         : return new User(value);
-    case 'users'        : return new UsersState(value);
-    case 'cases'        : return new CasesState(value);
-    case 'selection'    : return new SelectionState(value);
-    case 'sortConfig'   : return new SortConfig(value);
-    case 'keys'         : return new Set(value);
-    case 'form'         : return new Map(value);
-    case 'options'      : return value;
-    case 'roles'        : return value;
+    case ''              : return new Map(value);
+    case 'app'           : return new AppState(value);
+    case 'docSearch'     : return new DocSearchState(value);
+    case 'dashboard'     : return new DashboardState(value);
+    case 'notification'  : return new NotificationState(value);
+    case 'scrolling'     : return new ScrollState(value);
+    case 'snackbar'      : return new SnackState(value);
+    case 'user'          : return new User(value);
+    case 'users'         : return new UsersState(value);
+    case 'cases'         : return new CasesState(value);
+    case 'selection'     : return new SelectionState(value);
+    case 'sortConfig'    : return new SortConfig(value);
+    case 'keys'          : return new Set(value);
+    case 'form'          : return new Map(value);
+    case 'options'       : return value;
+    case 'roles'         : return value;
+    case 'business'      : return value;
+    case 'authorization' : return value;
   }
 
   return new Map(value);

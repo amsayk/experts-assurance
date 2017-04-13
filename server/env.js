@@ -19,6 +19,14 @@ const babelOptions = require('scripts/getBabelOptions')({
     'countries'                          : 'common/countries',
     'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
     'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
+
+    // TODO: remove when subscriptions-transport-ws gets updated
+    'graphql-tag/printer'                : 'graphql/language/printer',
+
+    // cookie storage
+    'StorageController.cookie'           : 'common/utils/StorageController.cookie',
+
+    'result-codes'                       : 'common/result-codes',
   },
   plugins: [
     'transform-async-to-generator',
@@ -49,35 +57,33 @@ babelRegister(objectAssign(babelOptions, {
 
 const config = require('build/config');
 
-if (config.ssrEnabled) {
-  const sass = require('node-sass');
+const sass = require('node-sass');
 
-  const cssRequireHook = require('css-modules-require-hook');
+const cssRequireHook = require('css-modules-require-hook');
 
-  cssRequireHook({
-    extensions: ['.scss'],
-    generateScopedName: config.env === 'production' ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]',
-    prepend: [
-      // adding CSS Next plugin
+cssRequireHook({
+  extensions: ['.scss'],
+  generateScopedName: config.env === 'production' ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]',
+  prepend: [
+    // adding CSS Next plugin
+  ],
+  preprocessCss: (data) => sass.renderSync({
+    data         : '$env: ' + config.env + ';\n' + data,
+    outputStyle  : 'expanded',
+    includePaths : [
+      config.utils_paths.client(),
+      config.utils_paths.base('node_modules'),
+      config.utils_paths.client('styles'),
     ],
-    preprocessCss: (data) => sass.renderSync({
-      data         : '$env: ' + config.env + ';\n' + data,
-      outputStyle  : 'expanded',
-      includePaths : [
-        config.utils_paths.client(),
-        config.utils_paths.base('node_modules'),
-        config.utils_paths.client('styles'),
-      ],
-    }).css,
-  });
+  }).css,
+});
 
-  // Graphql require hook
-  const graphqlTransform = require('scripts/jest/transform/graphql');
-  require.extensions['.graphql'] = function graphqlModulesHook(m, filename) {
-    const data = require('fs').readFileSync(filename, 'utf8');
-    return m._compile(graphqlTransform.process(data, filename), filename);
-  };
-}
+// Graphql require hook
+const graphqlTransform = require('scripts/jest/transform/graphql');
+require.extensions['.graphql'] = function graphqlModulesHook(m, filename) {
+  const data = require('fs').readFileSync(filename, 'utf8');
+  return m._compile(graphqlTransform.process(data, filename), filename);
+};
 
 // Set envs for `vars`
 const vars = config.globals['process.env'];

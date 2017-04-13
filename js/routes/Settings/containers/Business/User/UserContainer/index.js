@@ -1,2 +1,2 @@
-export { default } from './UserContainer'
+export default from './UserContainer'
 

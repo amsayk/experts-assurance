@@ -1,2 +1,2 @@
-export { default } from './Align';
+export default from './Align';
 

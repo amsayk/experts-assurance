@@ -1,2 +1,2 @@
-export { default } from './PageInfo';
+export default from './PageInfo';
 

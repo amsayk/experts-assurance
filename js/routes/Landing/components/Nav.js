@@ -16,7 +16,7 @@ export default class Nav extends React.Component {
   render() {
     const { intl, user, selectedNavItem } = this.props;
 
-    if (user.isAdminOrAgent) {
+    if (user.isAdminOrManager) {
       return (
         <nav className={style.navgroup}>
           <Title title={getTitle(selectedNavItem)}/>

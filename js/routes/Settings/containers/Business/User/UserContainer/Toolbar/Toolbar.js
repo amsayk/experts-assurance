@@ -64,7 +64,7 @@ class Toolbar extends React.Component {
     const menus = searchOpen ? [
       <SearchBox key='searchBox' intl={intl} onClose={toggleSearch}/>,
     ] : [
-      <Actions key='actions'/>,
+      <Actions user={user} key='actions'/>,
       <SearchButton key='searchButton' intl={intl} toggleSearch={toggleSearch}/>,
     ];
 

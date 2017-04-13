@@ -1,2 +1,2 @@
-export { default } from './Alerts';
+export default from './Alerts';
 

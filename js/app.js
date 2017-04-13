@@ -3,6 +3,9 @@ import 'parse-config';
 
 import refreshCurrentUser from 'utils/refreshCurrentUser';
 
+import getMuiTheme from 'components/material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'components/material-ui/styles/MuiThemeProvider';
+
 import checkBusiness from 'utils/checkBusiness';
 
 import React, { PropTypes as T } from 'react';
@@ -42,10 +45,14 @@ const log = debug('app:client');
 const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
 
+const muiTheme = getMuiTheme({
+});
+
 let render = async function render() {
   store.dispatch(scrolling());
 
-  await refreshCurrentUser();
+  // Watch for expired session
+  refreshCurrentUser();
 
   const locale = store.getState().getIn(['app', 'lang']);
 
@@ -92,12 +99,20 @@ let render = async function render() {
   if (SSR) {
     match({ history, routes }, (error, redirectLocation, renderProps) => {
       ReactDOM.render(
-        <Application routerProps={renderProps}/>, APP_MOUNT_NODE, () => store.dispatch(ready())
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <Application routerProps={renderProps}/>
+        </MuiThemeProvider>,
+        APP_MOUNT_NODE,
+        () => store.dispatch(ready())
       );
     });
   } else {
     ReactDOM.render(
-      <Application routerProps={{ history, routes }}/>, APP_MOUNT_NODE, () => store.dispatch(ready())
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <Application routerProps={{ history, routes }}/>
+      </MuiThemeProvider>,
+      APP_MOUNT_NODE,
+      () => store.dispatch(ready())
     );
 
   }
@@ -106,11 +121,13 @@ let render = async function render() {
   checkBusiness();
 
   ReactDOM.render(
-    <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
-      <Provider store={store}>
-        {snackbar.render()}
-      </Provider>
-    </IntlProvider>,
+    <MuiThemeProvider muiTheme={muiTheme}>
+      <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
+        <Provider store={store}>
+          {snackbar.render()}
+        </Provider>
+      </IntlProvider>
+    </MuiThemeProvider>,
     SNACKBAR_MOUNT_NODE
   );
 };

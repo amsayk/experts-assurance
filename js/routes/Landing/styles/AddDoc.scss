@@ -1,0 +1,129 @@
+.addDocFormInner {
+  composes: d-flex flex-column center from 'styles/_base.scss';
+  position: relative;
+  width: 850px;
+  background: #ffffff;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1077;
+  height: 100%;
+
+  border-left: rgba(255, 255, 255, .1) 1px solid;
+  border-right: rgba(255, 255, 255, .1) 1px solid;
+}
+
+.addDocFormMask {
+  background: rgba(0,0,0,0.9);
+  bottom: 0;
+  filter: alpha(opacity=90);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1076;
+
+}
+
+.addDocFormWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+
+  z-index: 1075;
+
+}
+
+.addDocForm {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  height: 100%;
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+.addDocFormTitleWrapper {
+
+  .addDocFormTitle {
+    padding: 2.25rem;
+    position: relative;
+  }
+
+  h6 {
+    font-size: .8125rem;
+    line-height: 1.5rem;
+    letter-spacing: .125rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #7d97ad;
+  }
+
+  h6:before {
+    top: 1.75rem;
+    content: "";
+    left: -.125rem;
+    width: .25rem;
+    height: 2.25rem;
+    position: absolute;
+    background: #02b3e4;
+  }
+
+  h5 {
+    margin: 0 auto;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+    // line-height: 2.25rem;
+    font-weight: 400;
+  }
+}
+
+.addDocSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.addDocSection + .addDocSection {
+  margin-top: 2.5rem;
+}
+
+.addDocTextField + .addDocTextField {
+  margin-left: 1.3rem;
+}
+
+.addDocFormActions {
+  composes: fixed-bottom from 'styles/_base.scss';
+  // top: calc(100% - 50px);
+  z-index: 1077;
+  padding: 1rem 2.2rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-basis: 25%;
+  transition: top .7s ease-in-out;
+  background: #ffffff;
+
+  &.invalid {
+    // top: 999px;
+
+  }
+}
+
+.addDocFormActions_saveButton {
+  font-weight: 500;
+}
+
+.addDocFormActions_cancelButton {
+  composes: btn btn-link from 'styles/_base.scss';
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+
+}
+

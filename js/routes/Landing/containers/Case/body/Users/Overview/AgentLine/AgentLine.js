@@ -12,11 +12,13 @@ import { injectIntl } from 'react-intl';
 
 import style from 'routes/Landing/styles';
 
+import cx from 'classnames';
+
 import selector from './selector';
 
-import AgentChanger from './AgentChanger';
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
-const LABEL = 'Gestionnaire';
+const LABEL = 'Agent';
 
 class AgentLine extends React.Component {
   render() {
@@ -34,7 +36,13 @@ class AgentLine extends React.Component {
           {LABEL}
         </div>
         <div className={style.overviewValue}>
-          <AgentChanger agent={user}/>
+          <Link className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+            <div className={style.text}>
+              {/* <span className={style.text}> */}
+                {user.displayName}
+                {/* </span> */}
+            </div>
+          </Link>
         </div>
       </div>
     );

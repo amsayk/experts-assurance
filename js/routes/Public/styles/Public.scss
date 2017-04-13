@@ -1,0 +1,12 @@
+@import 'variables';
+
+.center {
+  composes: center flex-column from 'styles/_base.scss';
+}
+
+.root {
+  composes: d-flex flex-column from 'styles/_base.scss';
+  background-color: #fff;
+  height: 100%;
+}
+

@@ -1,2 +1,2 @@
-export { default } from './StateLine';
+export default from './StateLine';
 

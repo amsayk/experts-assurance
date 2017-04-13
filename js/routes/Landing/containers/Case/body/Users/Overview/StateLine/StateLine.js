@@ -29,15 +29,17 @@ function StateUser({ doc }) {
     user = doc.closure.user;
   }
 
-  if (doc.agent ? doc.agent.id === user.id : false) {
+  if (doc.manager ? doc.manager.id === user.id : false) {
     return null;
   }
 
   return (
-    <span style={{ marginLeft: 5 }}>
-      par{' '}
+    <span style={{ marginLeft: 5, display: 'flex', alignItems: 'center' }}>
+      <span>
+        par{' '}
+      </span>
       <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
-        <span className={style.text}>
+        <span style={{ marginLeft: 5, display: 'flex', alignItems: 'center' }} className={style.text}>
           {user.displayName}
         </span>
       </Link>
@@ -76,7 +78,7 @@ class StateLine extends React.Component {
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValueState}>
-          <StateChanger state={doc.state}/>
+          <StateChanger deletion={doc.deletion} state={doc.state}/>
           <StateUser doc={doc}/>
           <StateDate intl={intl} doc={doc}/>
         </div>

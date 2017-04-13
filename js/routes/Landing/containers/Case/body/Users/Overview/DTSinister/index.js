@@ -1,2 +1,2 @@
-export { default } from './DTSinister';
+export default from './DTSinister';
 

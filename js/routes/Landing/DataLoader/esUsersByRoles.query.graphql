@@ -10,7 +10,6 @@ query esUsersByRoles($queryString: String, $roles: [Role!]!) {
       _score
       _source {
         name
-        email
         username
         isAdmin
         type

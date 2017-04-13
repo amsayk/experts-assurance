@@ -1,0 +1,9 @@
+mutation LogOut {
+  logOut {
+    error {
+      code
+    }
+
+  }
+}
+

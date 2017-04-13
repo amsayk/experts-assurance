@@ -66,9 +66,9 @@ $sidebar-width: 240px;
 .control {
   composes: formControl from 'styles/_base.scss';
   font-size: inherit;
-  height: 2.14285714em;
+  height: 2.54285714em;
   max-width: 240px;
-  padding: 10px;
+  // padding: 10px;
   position: relative;
 }
 

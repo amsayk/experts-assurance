@@ -1,2 +1,2 @@
-export { default } from './Agent';
+export default from './Agent';
 

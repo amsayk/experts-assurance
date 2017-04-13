@@ -259,6 +259,7 @@
 
 .emptyGrid {
   // composes: d-flex flex-column center from 'styles/_base.scss';
+  transform: translate(-10%,50%)!important;
   top: 61px;
   left: 240px;
   position: absolute;

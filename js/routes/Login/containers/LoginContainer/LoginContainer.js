@@ -1,8 +1,6 @@
 import React, { PropTypes as T } from 'react';
 import { Link } from 'react-router';
 
-import Parse from 'parse';
-
 import cookie from 'react-cookie';
 
 import {compose, bindActionCreators} from 'redux';
@@ -12,7 +10,7 @@ import selector from './selector';
 
 import checkBusiness from 'utils/checkBusiness';
 
-import { login } from 'redux/reducers/user/actions';
+import { logIn } from 'redux/reducers/user/actions';
 
 import style from '../../Login.scss';
 
@@ -29,7 +27,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import messages from '../../messages';
+import messages from 'routes/Login/messages';
 
 import {
   APP_NAME,
@@ -45,7 +43,7 @@ export class LoginContainer extends React.Component {
     ...formPropTypes,
     intl            : intlShape.isRequired,
     actions         : T.shape({
-      login : T.func.isRequired,
+      logIn : T.func.isRequired,
     }).isRequired,
   };
 
@@ -63,22 +61,20 @@ export class LoginContainer extends React.Component {
     }
   }
 
-  async onSubmit(credentials) {
+  async onSubmit(data) {
     const { intl, actions } = this.props;
-    const { email, password } = credentials.toJS();
+    const { email, password } = data.toJS();
 
     try {
-      const parseObject = await Parse.User.logIn(
+      await actions.logIn(
         email, /*password = */isEmpty(password) && __DEV__ ? process.env.DEV_PASSWORD : password);
-      if (parseObject) {
-        const user = { id: parseObject.id, ...parseObject.toJSON() };
-        cookie.save('app.login', email, { path: '/' });
-        actions.login(user);
 
-        checkBusiness();
-      } else {
-        throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
+      if (process.env.NODE_ENV !== 'production') {
+        cookie.save('app.logIn', email, { path: '/' });
       }
+
+      // async: Notify busines info
+      checkBusiness();
     } catch (e) {
       throw new SubmissionError({ _error: intl.formatMessage(messages.error) });
     }
@@ -120,7 +116,7 @@ export class LoginContainer extends React.Component {
         </div>,
 
       <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn} role='button'>
-        {intl.formatMessage(messages.login)}
+        {intl.formatMessage(messages.logIn)}
       </button>,
 
       <div className={ style.passwordReset }>
@@ -175,13 +171,13 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ login }, dispatch)};
+  return {actions: bindActionCreators({ logIn }, dispatch)};
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const WithForm = reduxForm({
-  form: 'login',
+  form: 'logIn',
 });
 
 export default compose(

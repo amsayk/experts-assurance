@@ -96,7 +96,6 @@ async function onListening() {
     log('Server initialized.');
   } catch (e) {
     log.error('Error initializing server:', e);
-    throw e;
   }
 
   const addr = server.address();

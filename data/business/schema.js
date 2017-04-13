@@ -36,7 +36,7 @@ export const schema = [`
   }
 
   input UsersFetchQuery {
-    role: String
+    roles: [String!]
     queryString: String
     cursor: Int
     sortConfig: UsersSortConfig!
@@ -46,14 +46,14 @@ export const schema = [`
 
   enum ESUserType {
     EMPLOYEE
-    INSURER
+    AGENT
     CLIENT
   }
 
   type ESUserSource {
     id: ID
     name: String!
-    email: String!
+    email: String
     username: String!
     isAdmin: Boolean!
     type: ESUserType!
@@ -177,7 +177,7 @@ export const resolvers = {
       }
       const business = await context.Business.updateUserBusiness(payload);
       // publish subscription notification
-      pubsub.publish('businessChange', business);
+      pubsub.publish('businessChangedChannel', business);
       return { business, errors: {} };
     },
   },
@@ -187,9 +187,9 @@ export const resolvers = {
       const topLevelFields = Object.keys(graphqlFields(info));
       return context.Business.getUsers(query, topLevelFields);
     },
-    searchUsers(obj, { queryString : q }, context) {
-      return context.Business.searchUsers(q);
-    },
+    // searchUsers(obj, { queryString : q }, context) {
+    //   return context.Business.searchUsers(q);
+    // },
     esSearchUsers(obj, { queryString : q }, context) {
       return context.Business.esSearchUsers(q);
     },

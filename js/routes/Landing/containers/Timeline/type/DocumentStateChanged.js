@@ -42,27 +42,13 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En cours',    <UnknownIcon  size={12}/>),
-  OPEN     : getState('OPEN',     'Validé',      <WatchIcon    size={12}/>),
+  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon  size={12}/>),
+  OPEN     : getState('OPEN',     'En cours',    <WatchIcon    size={12}/>),
   CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
   CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
 };
 
 export default function DocumentStateChanged({ intl, doc, user, timestamp, metadata }, { currentUser }) {
-  // let user = doc.user;
-  //
-  // if (doc.state === 'OPEN' && doc.validation) {
-  //   user = doc.validation.user;
-  // }
-  //
-  // if ((doc.state === 'CANCELED' || doc.state === 'CLOSED') && doc.closure) {
-  //   user = doc.closure.user;
-  // }
-  //
-  // if (doc.agent ? doc.agent.id === user.id : false) {
-  //   return null;
-  // }
-
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 

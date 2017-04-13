@@ -62,7 +62,7 @@ export default class LoadingItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemAgent}>
+        <div className={style.listItemManager}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
@@ -78,7 +78,7 @@ export default class LoadingItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemInsurer}>
+        <div className={style.listItemAgent}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
