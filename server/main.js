@@ -178,7 +178,7 @@ const api = new ParseServer({
   javascriptKey            : process.env.JAVASCRIPT_KEY,
   masterKey                : process.env.MASTER_KEY,
   serverURL                : config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
-  publicServerURL          : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  publicServerURL          : config.parse_public_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
   enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
   allowClientClassCreation : true,
   maxUploadSize            : '25mb',
