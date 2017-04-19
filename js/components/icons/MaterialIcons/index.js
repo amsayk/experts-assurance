@@ -68,3 +68,5 @@ export { default as DownloadIcon } from './Download';
 
 export { default as UndoIcon } from './Undo';
 
+export { default as ErrorIcon } from './Error';
+

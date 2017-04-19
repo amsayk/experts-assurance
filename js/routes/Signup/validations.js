@@ -6,7 +6,7 @@ const validations = {
   email: {
     required  : true,
     email     : true,
-    promise   : function (fieldName, fieldValue, { email }, dispatch) {
+    promise   : function (fieldName, fieldValue, { email }) {
       return new Promise((resolve, reject) => {
         if (!email) {
           return resolve();

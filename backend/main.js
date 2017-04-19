@@ -44,8 +44,11 @@ Parse.Cloud.define('routeOp', async function (request, response) {
   switch (operationKey) {
     case ADD_DOC: {
       try {
-        const { data : { doc } } = await publish('MAIN', operationKey, req);
-        response.success({ doc : deserializeParseObject(doc) });
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
       } catch(e) {
         response.error(e);
       }
@@ -110,8 +113,8 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case CHANGE_EMAIL: {
       try {
-        await publish('MAIN', operationKey, req);
-        response.success({});
+        const { data : user } = await publish('MAIN', operationKey, req);
+        response.success(user);
       } catch(e) {
         response.error(e);
       }

@@ -32,7 +32,7 @@ responseMiddlewareNetworkInterface.use({
     }
     next();
   },
-  applyBatchAfterware: (response, next) => {
+  applyBatchAfterware(response, next) {
     if (response.errors) {
       if (typeof window !== 'undefined') {
         log.error(JSON.stringify(response.errors));
@@ -49,6 +49,7 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 );
 
 export const client = new ApolloClient({
+  connectToDevTools : __DEV__,
   networkInterface: networkInterfaceWithSubscriptions,
   customResolvers: {
     Query: {

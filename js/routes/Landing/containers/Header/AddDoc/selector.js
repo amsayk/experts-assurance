@@ -1,4 +1,3 @@
-
 import { createSelector } from 'utils/reselect';
 
 const appSelector = state => state.get('app');

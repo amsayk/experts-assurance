@@ -1,7 +1,8 @@
 import validUrl from 'valid-url';
+import dateIsValid from 'date-is-valid';
 
 export function required(field, value, prop) {
-  return prop ? !value : false;
+  return prop ? (typeof value === 'undefined' || value === null) : false;
 }
 
 export function matchField(field, value, prop, allValues) {
@@ -10,6 +11,10 @@ export function matchField(field, value, prop, allValues) {
 
 export function minLength(field, value, prop) {
   return prop && value ? value.length < prop : false;
+}
+
+export function date(field, value) {
+  return value ? !dateIsValid(value instanceof Date ? value : new Date(value)) : false;
 }
 
 export function email(field, value, prop) {

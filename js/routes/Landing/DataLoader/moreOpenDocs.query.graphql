@@ -21,7 +21,7 @@ query moreOpenDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConf
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }

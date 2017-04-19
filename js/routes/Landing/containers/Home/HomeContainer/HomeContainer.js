@@ -8,7 +8,6 @@ import { logOut } from 'redux/reducers/user/actions';
 import style from 'routes/Landing/styles';
 
 import Header from 'routes/Landing/containers/Header';
-// import Nav from 'routes/Landing/components/Nav';
 
 import Tails from '../tails';
 import Boards from '../boards';
@@ -21,6 +20,7 @@ export class HomeContainer extends React.PureComponent {
   getChildContext() {
     return {
       currentUser : this.props.user,
+      route       : this.props.route,
     };
   }
   render() {
@@ -28,7 +28,6 @@ export class HomeContainer extends React.PureComponent {
     return (
       <div className={style.root}>
         <Header user={user} onLogOut={actions.logOut}/>
-        {/* <Nav user={user} selectedNavItem='app.home'/> */}
         <Tails user={user}/>
         <Boards user={user}/>
         <RecentDocs/>
@@ -43,6 +42,7 @@ HomeContainer.propTypes = {
 
 HomeContainer.childContextTypes = {
   currentUser : T.object.isRequired,
+  route       : T.object.isRequired,
 };
 
 function mapStateToProps(state, props) {

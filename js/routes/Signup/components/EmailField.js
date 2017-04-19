@@ -19,7 +19,6 @@ function EmailField({ intl, placeholder, onKeyDown, input, meta: { touched, erro
         {...input}
         placeholder={placeholder}
         onKeyDown={onKeyDown}
-        autoFocus
         autoComplete={'off'}
         type={'text'}
         className={cx(style.control, { [style.formControlDanger]: touched && error })}

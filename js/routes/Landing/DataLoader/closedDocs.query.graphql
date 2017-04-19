@@ -22,7 +22,7 @@ query closedDocs($durationInDays: Int!, $sortConfig: ESSortConfig!, $includeCanc
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }

@@ -14,7 +14,7 @@ query morePendingDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortC
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }

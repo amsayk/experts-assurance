@@ -28,6 +28,26 @@ const defaultColors = [
   '#ff5722',
   '#795548',
   '#607d8b',
+
+  // 'red',
+  // 'pink',
+  // 'purple',
+  // 'deep-purple',
+  // 'indigo',
+  // 'blue',
+  // 'light-blue',
+  // 'cyan',
+  // 'teal',
+  // 'green',
+  // 'light-green',
+  // 'lime',
+  // 'yellow',
+  // 'amber',
+  // 'orange',
+  // 'deep-orange',
+  // 'brown',
+  // 'grey',
+  // 'blue-grey',
 ];
 
 function getRandomColor(value, colors = defaultColors) {

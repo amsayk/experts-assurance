@@ -9,6 +9,10 @@ import { pubsub } from '../subscriptions';
 
 import graphqlFields from 'graphql-fields';
 
+import getDocValidations from './docValidations';
+
+import { fromJS } from 'immutable';
+
 export const schema = [`
 
   type RefNo {
@@ -22,37 +26,29 @@ export const schema = [`
     userData
   }
 
-  input UserData {
-    displayName: String
-    email: String
-  }
-
-  input UserIn {
-    key: UserInKey!
-    id: ID
-    userData: UserData
-  }
-
-  input VehicleIn {
-    model: String
-    plateNumber: String
-  }
-
   input AddDocPayload {
-    vehicle: VehicleIn
+    vehicleModel : String
+    vehiclePlateNumber : String
 
-    isOpen: Boolean
+    clientKey : UserInKey
+    clientId : String
+    clientDisplayName : String
+    clientEmail : String
 
-    manager: UserIn
-    agent: UserIn!
-    client: UserIn!
+    agentKey : UserInKey
+    agentId : String
+    agentDisplayName : String
+    agentEmail : String
 
     date: Date
+    isOpen: Boolean!
   }
 
   type AddDocResponse {
     doc: Doc
+    activities : [Activity!]!
     errors: JSON!
+    error: Error
   }
 
   type DelDocResponse {
@@ -429,7 +425,9 @@ export const resolvers = {
       'doc',
     ]),
     parseGraphqlScalarFields([
+      'activities',
       'errors',
+      'error',
     ])
   ),
 
@@ -471,24 +469,70 @@ export const resolvers = {
       if (!context.user) {
         throw new Error('A user is required.');
       }
+
       try {
-        // await docValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+        const docValidations = getDocValidations(context);
+        await docValidations.asyncValidate(fromJS({ ...payload }));
       } catch (errors) {
         return { errors };
       }
 
       if (!userVerified(context.user)) {
-        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED }, errors: {} };
       }
 
       if (userHasRoleAny(context.user, Role_ADMINISTRATORS, Role_MANAGERS)) {
-        const { doc } = await context.Docs.addDoc(payload);
+
+        function getUser({
+          key,
+          id,
+          displayName,
+          email,
+        }) {
+
+          if (key === 'id') {
+            return { key, id };
+          }
+
+          if (key === 'userData') {
+            return { key, userData : {displayName, email} };
+          }
+
+          throw new Error(`addDoc: Invalid user entry`);
+        }
+
+        const data = {
+          date : payload.date,
+
+          vehicle : {
+            model       : payload.vehicleModel,
+            plateNumber : payload.vehiclePlateNumber,
+          },
+
+          client : getUser({
+            key         : payload.clientKey,
+            id          : payload.clientId,
+            displayName : payload.clientDisplayName,
+            email       : payload.clientEmail,
+          }),
+
+          agent : getUser({
+            key         : payload.agentKey,
+            id          : payload.agentId,
+            displayName : payload.agentDisplayName,
+            email       : payload.agentEmail,
+          }),
+
+          isOpen : payload.isOpen,
+        };
+
+        const { doc, activities } = await context.Docs.addDoc(data);
         // publish subscription notification
         pubsub.publish('addDocChannel', doc);
-        return { doc, errors: {} };
+        return { doc, activities, errors: {} };
       }
 
-      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED }, errors: {} };
     },
     async delDoc(_, { id }, context) {
       if (!context.user) {

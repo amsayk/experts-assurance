@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes as T } from 'react'
 
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -11,6 +11,9 @@ import Button from 'components/bootstrap/Button';
 
 import { startAddingDoc, finishAddingDoc, saveNewDoc } from 'redux/reducers/app/actions';
 
+import focusNode from 'focusNode';
+import raf from 'requestAnimationFrame';
+
 import style from 'routes/Landing/styles';
 
 import AddDocForm from './AddDocForm';
@@ -18,14 +21,21 @@ import AddDocForm from './AddDocForm';
 import selector from './selector';
 
 class AddDoc extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.onOpen = this.onOpen.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.onDTField = this.onDTField.bind(this);
+
   }
-  get button() {
-    const { addingDoc, actions } = this.props;
+
+  onDTField(ref) {
+    this.dateField = ref;
+  }
+
+  get AddButton() {
+    const { addingDoc } = this.props;
 
     return (
       <Button disabled={addingDoc} className={style.addButton} role='button'>
@@ -41,6 +51,13 @@ class AddDoc extends React.Component {
   onOpen() {
     try {
       document.body.style.overflowY = 'hidden';
+      setTimeout(() => {
+        raf(
+          () => {
+            focusNode(this.dateField);
+          }
+        );
+      }, 100);
     } catch(e) {}
     finally {
       this.props.actions.startAddingDoc();
@@ -51,14 +68,21 @@ class AddDoc extends React.Component {
     try {
       document.body.style.overflowY = 'visible';
     } catch(e) {}
+
   }
   render() {
     const { addingDoc, actions } = this.props;
 
     return (
-      <Portal openByClickOn={this.button} onClose={this.onClose} onOpen={this.onOpen} isOpen={addingDoc}>
+      <Portal openByClickOn={this.AddButton} onClose={this.onClose} onOpen={this.onOpen} isOpened={addingDoc}>
         <AddDocForm
+          addingDoc={addingDoc}
+          initialValues={{
+            isOpen : false,
+            date   : Date.now(),
+          }}
           actions={actions}
+          onDTField={this.onDTField}
         />
       </Portal>
     );

@@ -1,0 +1,20 @@
+@import './variables.scss';
+@import './animation.scss';
+@import './confirm.scss';
+
+:global {
+
+  body.toastr-confirm-active {
+    overflow: hidden;
+  }
+}
+
+.reduxToastr {
+  z-index: 1177;
+
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
+
+}

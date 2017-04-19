@@ -28,6 +28,8 @@ import DASHBOARD_QUERY from './dashboard.query.graphql';
 
 import LAST_REFNO_QUERY from './getLastRefNo.query.graphql';
 
+import SEARCH_MATCHING_USERS_QUERY from './searchMatchingUsers.query.graphql';
+
 const currentUser = graphql(CURRENT_USER_QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
   skip: ({ user }) => user.isEmpty,
@@ -202,11 +204,9 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
 
 
 const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
-  options: () => ({
-  }),
-  props: ({ data: { loading, recentDocs = [] } }) => ({
+  props: ({ data: { loading, docs = [] } }) => ({
     loading,
-    docs: recentDocs,
+    docs,
   }),
 });
 
@@ -370,10 +370,26 @@ const dashboard = graphql(DASHBOARD_QUERY, {
 
 const lastRefNo = graphql(LAST_REFNO_QUERY, {
   options: ({}) => ({
+    fetchPolicy : 'network-only',
   }),
   props: ({ data: { loading, getLastRefNo = { value: 0 } } }) => ({
     loading,
     lastRefNo : getLastRefNo.value,
+  }),
+});
+
+const searchMatchingUsers = graphql(SEARCH_MATCHING_USERS_QUERY, {
+  options: (ownProps) => ({
+    variables : {
+      type        : ownProps.type,
+      displayName : ownProps.displayName || '',
+      email       : ownProps.email       || '',
+    },
+  }),
+  skip: ({ userKey, displayName, email }) => userKey === 'id' || (!displayName && !email),
+  props: ({ data: { loading, users = [] } }) => ({
+    loading,
+    users,
   }),
 });
 
@@ -391,5 +407,6 @@ export default {
   closedDocs,
   dashboard,
   lastRefNo,
+  searchMatchingUsers,
 };
 

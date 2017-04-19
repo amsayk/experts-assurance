@@ -1,8 +1,10 @@
 import React, { PropTypes as T } from 'react';
-import cx from 'classnames';
+
 import Transition from 'react-overlays/lib/Transition';
 
 import style from './Zoom.scss';
+
+import cx from 'classnames';
 
 class Zoom extends React.PureComponent {
   render() {
@@ -12,9 +14,9 @@ class Zoom extends React.PureComponent {
         {...props}
         className={cx(className)}
         enteringClassName={style.enter}
-        enteredClassName={cx(style.enter, style.active)}
+        enteredClassName={cx(style.enter, style['enter-active'])}
         exitingClassName={style.leave}
-        exitedClassName={cx(style.leave, style.active)}
+        exitedClassName={cx(style.leave, style['leave-active'])}
       />
     );
   }

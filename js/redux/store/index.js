@@ -31,6 +31,7 @@ import { DashboardState } from 'redux/reducers/dashboard/reducer';
 import { NotificationState } from 'redux/reducers/notification/reducer';
 import { ScrollState } from 'redux/reducers/scrolling/reducer';
 import { SnackState } from 'redux/reducers/snackbar/reducer';
+import { ToastrState } from 'redux/reducers/toastr/reducer';
 import { User } from 'redux/reducers/user/reducer';
 import { UsersState } from 'redux/reducers/users/reducer';
 import { CasesState } from 'redux/reducers/cases/reducer';
@@ -160,6 +161,7 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
     case 'notification'  : return new NotificationState(value);
     case 'scrolling'     : return new ScrollState(value);
     case 'snackbar'      : return new SnackState(value);
+    case 'toastr'        : return new ToastrState(value);
     case 'user'          : return new User(value);
     case 'users'         : return new UsersState(value);
     case 'cases'         : return new CasesState(value);
@@ -171,6 +173,7 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
     case 'roles'         : return value;
     case 'business'      : return value;
     case 'authorization' : return value;
+    case 'confirm'       : return value;
   }
 
   return new Map(value);

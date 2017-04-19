@@ -1,0 +1,8 @@
+query searchUsersByDisplayNameAndEmail ($type: String!, $displayName: String, $email: String) {
+  users : searchUsersByDisplayNameAndEmail (type: $type, displayName: $displayName, email: $email) {
+    id
+    displayName
+    email
+  }
+}
+

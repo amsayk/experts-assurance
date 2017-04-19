@@ -2,6 +2,8 @@ import {
   HTTPBatchedNetworkInterface,
 } from 'apollo-client/transport/batchedNetworkInterface';
 
+import { addUploads } from './uploads';
+
 import { addPersistedQueries } from 'persistgraphql';
 
 import queryMap from 'persisted_queries';
@@ -39,7 +41,7 @@ export default function getNetworkInterface(apiUrl = '/graphql', headers = {}) {
   const batchInterval = APOLLO_QUERY_BATCH_INTERVAL
     ? parseInt(APOLLO_QUERY_BATCH_INTERVAL, 10)
     : 10;
-  const iface = new NetworkInterface({
+  let iface = new NetworkInterface({
     uri: apiUrl,
     batchInterval,
     opts: {
@@ -47,6 +49,8 @@ export default function getNetworkInterface(apiUrl = '/graphql', headers = {}) {
       headers,
     },
   });
+
+  iface = addUploads(iface);
 
   if (PERSISTED_QUERIES) {
     return addPersistedQueries(iface, queryMap);

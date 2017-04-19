@@ -87,6 +87,7 @@ export const schema = [`
   }
 
   input CreateUserPayload {
+    displayName: String
     email: String
     password: String
     role: String
@@ -404,6 +405,12 @@ export const resolvers = {
     getUser(_, { id }, context) {
       return context.Users.get(id);
     },
+    getUsersByDisplayNameAndEmail(_, { type, displayName, email }, context) {
+      return context.Users.getUsersByDisplayNameAndEmail({ type, displayName, email });
+    },
+    searchUsersByDisplayNameAndEmail(_, { type, displayName, email }, context) {
+      return context.Users.searchUsersByDisplayNameAndEmail({ type, displayName, email });
+    }
   },
 
 };

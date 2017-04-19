@@ -3,6 +3,7 @@ mutation signUp($info: CreateUserPayload!) {
   signUp(info: $info) {
     user {
       id
+      displayName
       username
       email
     }

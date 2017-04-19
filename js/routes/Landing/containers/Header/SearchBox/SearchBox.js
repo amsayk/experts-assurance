@@ -226,7 +226,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
-              Vehicle:{' '}
+              Véhicule:{' '}
             </span>
             <span className={style.highlightGroupLinkWrapper}>
               <span>

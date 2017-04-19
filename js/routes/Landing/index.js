@@ -12,10 +12,12 @@ const getIndexRoute = (store) => (partialNextState, cb) => {
 
     const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
     const { default : dashboardReducer } = require('redux/reducers/dashboard/reducer');
+    const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
     store.injectReducers([
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'dashboard', reducer: dashboardReducer },
+      { key: 'toastr',    reducer: toastrReducer },
     ]);
 
     /* Return Component */
@@ -34,10 +36,12 @@ const getRoutes = (store) => [{
 
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
       const { default : dashboardReducer } = require('redux/reducers/dashboard/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
         { key: 'docSearch', reducer: docSearchReducer },
         { key: 'dashboard', reducer: dashboardReducer },
+        { key: 'toastr',    reducer: toastrReducer },
       ]);
 
       /* Return Component */
@@ -54,6 +58,7 @@ const getRoutes = (store) => [{
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
         { key: 'docSearch', reducer: docSearchReducer },
@@ -74,10 +79,12 @@ const getRoutes = (store) => [{
 
       const { default : casesReducer } = require('redux/reducers/cases/reducer');
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
-        { key: 'cases', reducer: casesReducer },
+        { key: 'cases',     reducer: casesReducer },
         { key: 'docSearch', reducer: docSearchReducer },
+        { key: 'toastr',    reducer: toastrReducer },
       ]);
 
       /* Return Component */
@@ -96,10 +103,12 @@ const getRoutes = (store) => [{
 
       const { default : casesReducer } = require('redux/reducers/cases/reducer');
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
-        { key: 'cases', reducer: casesReducer },
+        { key: 'cases',     reducer: casesReducer },
         { key: 'docSearch', reducer: docSearchReducer },
+        { key: 'toastr',    reducer: toastrReducer },
       ]);
 
       const Case = UserIsAuthenticated(Component);

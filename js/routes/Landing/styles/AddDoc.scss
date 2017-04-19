@@ -1,12 +1,12 @@
 .addDocFormInner {
-  composes: d-flex flex-column center from 'styles/_base.scss';
+  composes: d-flex flex-column from 'styles/_base.scss';
   position: relative;
   width: 850px;
   background: #ffffff;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1077;
-  height: 100%;
+  min-height: 900px;
 
   border-left: rgba(255, 255, 255, .1) 1px solid;
   border-right: rgba(255, 255, 255, .1) 1px solid;
@@ -26,14 +26,14 @@
 }
 
 .addDocFormWrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-
   z-index: 1075;
+  transform-origin: 80% 5%;
 
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
 }
 
 .addDocForm {
@@ -83,10 +83,14 @@
 .addDocSection {
   display: flex;
   flex-direction: column;
+
+  article {
+    display: flex;
+  }
 }
 
 .addDocSection + .addDocSection {
-  margin-top: 2.5rem;
+  margin-top: 3.2rem;
 }
 
 .addDocTextField + .addDocTextField {
@@ -94,26 +98,26 @@
 }
 
 .addDocFormActions {
-  composes: fixed-bottom from 'styles/_base.scss';
-  // top: calc(100% - 50px);
+  composes: fixed-bottom d-flex align-items-center justify-content-center from 'styles/_base.scss';
   z-index: 1077;
   padding: 1rem 2.2rem;
   border-top: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   flex-basis: 25%;
   transition: top .7s ease-in-out;
   background: #ffffff;
 
-  &.invalid {
-    // top: 999px;
+  div:first-child {
+    margin-right: 12px;
+  }
+
+  &.hideActions {
+    top: 999px;
 
   }
 }
 
 .addDocFormActions_saveButton {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .addDocFormActions_cancelButton {
@@ -127,3 +131,51 @@
 
 }
 
+.addDocFormClose {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  z-index: 1077;
+}
+
+.addDocFormCloseButton {
+  composes: btn btn-link from 'styles/_base.scss';
+  cursor: pointer;
+  transition: opacity 1s cubic-bezier(.23, 1, .32, 1);
+  opacity: .54;
+  color: #fff;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+    opacity: 1;
+    color: #fff;
+    transition: opacity 1s cubic-bezier(.23, 1, .32, 1);
+  }
+
+}
+
+.addDocFormMatchingUsersContainer {
+  margin-top: 36px;
+  transition: height 1s cubic-bezier(.23, 1, .32, 1);
+  width: 60%;
+
+  .addDocFormMatchingUsersHeading {
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: #637282;
+    text-align: left;
+  }
+
+  ul.addDocFormMatchingUsersItems {
+    border-left: .25rem solid #02b3e4;
+    padding-left: 5px;
+    margin-top: 17px;
+  }
+
+  li.addDocFormMatchingUsersItem {
+
+  }
+
+}

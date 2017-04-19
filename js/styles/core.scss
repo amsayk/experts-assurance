@@ -15,17 +15,23 @@ body {
   padding: 0;
 }
 
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
 button {
   background-color: transparent;
 }
 
 * {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-font-smoothing: antialiased;
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
 }
 
 .root {
@@ -57,6 +63,20 @@ mark {
   // React date picker
   @import 'react-date-picker/style/index.scss';
 
+  .react-date-field--theme-default,
+  .react-date-field--focused,
+  .react-date-field__picker {
+    border: none!important;
+  }
+
+  .react-date-field__calendar-icon {
+    display: none;
+  }
+
+  .react-date-field__input {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 :global {

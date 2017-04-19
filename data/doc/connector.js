@@ -37,8 +37,8 @@ export class DocConnector {
       .include([
         'manager',
         'client',
-        'user',
         'agent',
+        'user',
         'validation_user',
         'closure_user',
       ])

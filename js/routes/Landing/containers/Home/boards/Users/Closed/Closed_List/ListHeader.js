@@ -114,7 +114,7 @@ class ListHeader extends React.Component {
       <div className={style.innerWrapper}>
         <div className={style.item}>
           <div className={cx(style.text)}>
-            Vehicle
+            Véhicule
           </div>
         </div>
       </div>

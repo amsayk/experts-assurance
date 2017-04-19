@@ -15,9 +15,6 @@ const babelOptions = require('../getBabelOptions')({
     'log'                   : 'common/log/server',
     'countries'             : 'common/countries',
 
-    // TODO: remove when subscriptions-transport-ws gets updated
-    'graphql-tag/printer'   : 'graphql/language/printer',
-
     // cookie storage
     'StorageController.cookie' : 'common/utils/StorageController.cookie',
 

@@ -21,7 +21,7 @@ query moreClosedDocs($durationInDays: Int!, $cursor: Int, $sortConfig: ESSortCon
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }

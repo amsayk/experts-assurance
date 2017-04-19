@@ -13,7 +13,7 @@ class Title extends React.Component {
         <div className={style.addDocFormTitle}>
           <h6>Ajouter dossier <b>{loading ? null : (lastRefNo + 1)}</b>
           </h6>
-          <h4>Entrer les informations réquises pour créer le dossier.
+          <h4>Entrer les informations pré-réquises pour pouvoir enregistrer le dossier.
           </h4>
         </div>
       </div>

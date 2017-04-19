@@ -33,6 +33,8 @@ import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { subscriptionManager } from 'data/subscriptions';
 
+import { apolloUploadExpress } from 'apollo-upload-server';
+
 // Connectors
 import { UserConnector } from 'data/user/connector';
 import { BusinessConnector } from 'data/business/connector';
@@ -259,7 +261,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
   next();
 });
 
-app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) => {
+app.use(config.graphql_endpoint, bodyParser.json(), apolloUploadExpress(config.uploadOptions), graphqlExpress((req, res) => {
   // Reload user everytime
   Parse.User._clearCache();
 
@@ -296,7 +298,8 @@ app.use(config.graphql_endpoint, bodyParser.json(), graphqlExpress((req, res) =>
 }));
 
 app.use(config.graphiql_endpoint, graphiqlExpress({
-  endpointURL : config.graphql_endpoint,
+  endpointURL           : config.graphql_endpoint,
+  subscriptionsEndpoint : config.graphql_subscriptions_endpoint,
 }));
 
 // ------------------------------------

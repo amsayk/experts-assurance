@@ -5,12 +5,18 @@ import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/
 import { Role_MANAGERS } from 'roles';
 
 export default async function signUp(request, done) {
-  const { email, password, locale } = request.params;
+  const {
+    displayName,
+    email,
+    password,
+    locale,
+  } = request.params;
 
   try {
     const business = await getOrCreateBusiness();
     const user = await new Parse.User()
       .set({
+        displayName,
         password,
         email,
         username: email,

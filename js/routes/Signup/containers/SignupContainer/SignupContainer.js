@@ -34,6 +34,7 @@ import {
 import messages from '../../messages';
 
 import EmailField from '../../components/EmailField';
+import DisplayNameField from '../../components/DisplayNameField';
 import PasswordField from '../../components/PasswordField';
 import ReCAPTCHAField from '../../components/ReCAPTCHAField';
 
@@ -62,6 +63,12 @@ export class SignupContainer extends React.Component {
     }).isRequired,
   };
 
+  static defaultProps = {
+    initialValues : {
+      displayName : null,
+    },
+  };
+
   constructor(props) {
     super(props);
 
@@ -88,6 +95,7 @@ export class SignupContainer extends React.Component {
     const { data: { signUp: { user, errors } } } = await this.props.client.mutate({
       mutation  : MUTATION,
       variables : { info: {
+        displayName          : data.get('displayName'),
         email                : data.get('email'),
         password             : data.get('password'),
         passwordConfirmation : data.get('passwordConfirmation'),
@@ -125,6 +133,12 @@ export class SignupContainer extends React.Component {
       <h1 className={ style.heading }>{intl.formatMessage(messages.title, { appName: APP_NAME })}</h1>,
 
       <p className={style.tagLine}>{intl.formatMessage(messages.tagLine)}</p>,
+
+      <Field
+        name='displayName'
+        component={DisplayNameField}
+        placeholder={intl.formatMessage(messages.displayName)}
+        onKeyDown={this.onKeyDown} />,
 
       <Field
         name='email'

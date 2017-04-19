@@ -1,0 +1,80 @@
+mutation addDoc($payload: AddDocPayload!) {
+
+  addDoc(payload: $payload) {
+    doc {
+      id
+      key
+      refNo
+      date
+      state
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    error {
+      code
+    }
+
+    errors
+  }
+}
+

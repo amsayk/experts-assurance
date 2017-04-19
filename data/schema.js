@@ -22,6 +22,13 @@ const log = require('log')('app:server:graphql');
 
 const rootSchema = [`
 
+  input File {
+    name: String!
+    type: String!
+    size: Int!
+    path: String!
+  }
+
   type Error {
     code: Int
   }
@@ -46,7 +53,7 @@ const rootSchema = [`
     # searchUsers(queryString: String): [User!]!
     esSearchUsers(queryString: String): ESUsersQueryResponse!
 
-    # Activites
+    # activities
     timeline(cursor: Date, query: TimelineQuery!): TimelineResponse!
 
     # Docs
@@ -81,6 +88,10 @@ const rootSchema = [`
     ): DocsFetchResponse!
 
     getLastRefNo: RefNo!
+
+    # Doc validation
+    getUsersByDisplayNameAndEmail(type: String!, displayName: String, email: String): [User!]!
+    searchUsersByDisplayNameAndEmail(type: String!, displayName: String, email: String): [User!]!
   }
 
   type Mutation {

@@ -95,6 +95,24 @@ Object.keys(vars).forEach((key) => {
   });
 });
 
+// Fix kue error handling
+const worker = require('kue/lib/queue/worker');
+
+const oldFn = worker.prototype.process;
+worker.prototype.process = function (job, fn) {
+  const self = this;
+  const args = arguments;
+
+  const domain = require('domain').create();
+  domain.on('error', function (err) {
+    self.failed(job, err, fn);
+  });
+
+  domain.run(function () {
+    return oldFn.apply(self, args);
+  });
+};
+
 // Initialize parse
 require('./parse-config');
 

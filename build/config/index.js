@@ -23,9 +23,6 @@ const moduleMap = {
   'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
   'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
 
-  // TODO: remove when subscriptions-transport-ws gets updated
-  'graphql-tag/printer'                : 'graphql/language/printer',
-
   // cookie storage
   'StorageController.cookie'           : 'common/utils/StorageController.cookie',
 
@@ -101,6 +98,10 @@ const config = {
   parse_public_server_url     : process.env.PUBLIC_SERVER_URL || process.env.SERVER_URL,
   parse_database_uri          : process.env.DATABASE_URI,
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/parse-dashboard',
+
+  get uploadOptions() {
+    return {};
+  },
 
   // Recaptcha
   get recaptcha() {
@@ -209,7 +210,7 @@ const config = {
     return this._queryMap;
   },
   graphql_endpoint  : process.env.GRAPHQL_ENDPOINT || '/graphql',
-  graphql_subscriptions_endpoint : process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT || '/ws',
+  graphql_subscriptions_endpoint : process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT || '/subscriptions',
   graphiql_endpoint : process.env.GRAPHIQL_ENDPOINT || '/graphiql',
   persistedQueries  : process.env.PERSISTED_QUERIES !== 'no',
 
@@ -291,6 +292,7 @@ Object.defineProperty(config, 'queue', {
     if (!global.__queue) {
       log('Creating queue');
       global.__queue = kue.createQueue(config.kue_opts);
+      global.__queue.watchStuckJobs();
     }
 
     return global.__queue;

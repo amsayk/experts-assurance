@@ -80,5 +80,12 @@ export class Users {
     return this.connector.logOut();
   }
 
+  getUsersByDisplayNameAndEmail({ type, displayName, email }) {
+    return this.connector.getUsersByDisplayNameAndEmail({ type, displayName, email }, this.user);
+  }
+
+  searchUsersByDisplayNameAndEmail({ type, displayName, email }) {
+    return this.connector.searchUsersByDisplayNameAndEmail({ type, displayName, email }, this.user);
+  }
 }
 

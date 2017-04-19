@@ -1,6 +1,6 @@
 import { createSelector } from 'utils/reselect';
 
-const getSnackbar = (state) => state.get('snackbar');
+const getSnackbar = (state) => state.get('snackbar').toJS();
 
 export default createSelector(
   [getSnackbar],

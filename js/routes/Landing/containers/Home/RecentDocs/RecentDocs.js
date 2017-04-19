@@ -51,8 +51,8 @@ class RecentDocs extends React.Component {
   render() {
     const { intl, notificationOpen, isReady, currentUser, loading, docs : items, extrapolation : periods } = this.props;
 
-    if (loading) {
-      return null;
+    if (items.length === 0) {
+      // return null;
     }
 
     const groups = periods.map(({ id, title, to, from }) => {

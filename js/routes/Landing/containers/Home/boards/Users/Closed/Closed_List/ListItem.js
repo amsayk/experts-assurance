@@ -28,7 +28,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, client, agent, vehicle, closure, date } = item;
+    const { id, refNo, client, manager, vehicle, closure, date } = item;
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
@@ -41,7 +41,7 @@ class ListItem extends React.Component {
             <div className={style.item}>
               <div className={style.text}>
                 <Link to={PATH_CASES_CASE + '/' + id}>
-                  <b>#{refNo}</b>
+                  <b>{refNo}</b>
                 </Link>
               </div>
             </div>
@@ -74,8 +74,8 @@ class ListItem extends React.Component {
       <div className={style.innerWrapper}>
         <div className={style.item}>
           <div className={style.text}>
-            {agent ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
-              {agent.displayName}
+            {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
+              {manager.displayName}
             </Link> : '—'}
           </div>
         </div>

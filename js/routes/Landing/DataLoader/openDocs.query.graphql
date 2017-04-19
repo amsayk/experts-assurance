@@ -22,7 +22,7 @@ query openDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
         id
         displayName
       }
-      agent {
+      manager {
         id
         displayName
       }

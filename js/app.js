@@ -32,6 +32,8 @@ import { IntlProvider } from 'react-intl';
 
 import intlLoader from 'utils/intl-loader';
 
+import Toastr from 'containers/Toastr';
+
 import { client as apolloClient } from 'apollo';
 
 import { ready } from 'redux/reducers/app/actions';
@@ -44,6 +46,7 @@ const log = debug('app:client');
 
 const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
+const TOASTR_MOUNT_NODE = document.querySelector('#toastr');
 
 const muiTheme = getMuiTheme({
 });
@@ -130,6 +133,15 @@ let render = async function render() {
     </MuiThemeProvider>,
     SNACKBAR_MOUNT_NODE
   );
+
+  ReactDOM.render(
+    <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
+      <Provider store={store}>
+        <Toastr />
+      </Provider>
+    </IntlProvider>,
+    TOASTR_MOUNT_NODE
+  );
 };
 
 if (__DEV__) {
@@ -156,6 +168,7 @@ if (__DEV__) {
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(APP_MOUNT_NODE);
         ReactDOM.unmountComponentAtNode(SNACKBAR_MOUNT_NODE);
+        ReactDOM.unmountComponentAtNode(TOASTR_MOUNT_NODE);
         render();
       })
     );

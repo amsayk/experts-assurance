@@ -133,9 +133,34 @@ export default async function addDoc(request, done) {
       publish('ES_INDEX', 'onDoc', req);
     }, 0);
 
+    const [ newDoc, newActivities ] = await Promise.all([
+      // new doc
+      new Parse.Query(DocType)
+      .include([
+        'manager',
+        'client',
+        'agent',
+        'user',
+        'validation_user',
+        'closure_user',
+      ])
+      .get(doc.id, { useMasterKey : true }),
+
+      // activities
+      new Parse.Query(ActivityType)
+      .equalTo('document', doc)
+      .include([
+        'document',
+        'user',
+      ])
+      .find({ useMasterKey : true })
+    ]);
+
     done(null, {
-      doc : serializeParseObject(doc),
+      doc        : serializeParseObject(newDoc),
+      activities : newActivities.map(serializeParseObject),
     });
+
   } catch (e) {
     done(formatError(e));
   }

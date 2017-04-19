@@ -47,10 +47,11 @@ export default function createRenderEngine(app) {
         Business: new Business({ user, connector: new BusinessConnector() }),
         Docs: new Docs({ user, connector: new DocConnector() }),
         Activities: new Activities({ user, connector: new ActivityConnector() }),
-        Now: new Date().getTime(),
+        Now: Date.now(),
       },
     });
     const client = new ApolloClient({
+      connectToDevTools : __DEV__,
       ssrMode: true,
       // Remember that this is the interface the SSR server will use to connect to the
       // API server, so we need to ensure it isn't firewalled, etc
