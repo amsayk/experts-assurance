@@ -9,6 +9,7 @@ query usersByRoles($queryString: String, $roles: [Role!]!) {
 
     createdAt
     updatedAt
+    lastModified
 
   }
 }

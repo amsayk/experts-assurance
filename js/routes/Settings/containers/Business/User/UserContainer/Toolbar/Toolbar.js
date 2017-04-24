@@ -56,7 +56,7 @@ class Toolbar extends React.Component {
     }
   }
   render() {
-    const { intl, user, searchOpen, scrolling, notificationOpen, actions } = this.props;
+    const { intl, user, currentUser, searchOpen, scrolling, notificationOpen, actions } = this.props;
     const {
       toggleSearch,
     } = actions;
@@ -64,7 +64,7 @@ class Toolbar extends React.Component {
     const menus = searchOpen ? [
       <SearchBox key='searchBox' intl={intl} onClose={toggleSearch}/>,
     ] : [
-      <Actions user={user} key='actions'/>,
+      <Actions currentUser={currentUser} user={user} key='actions'/>,
       <SearchButton key='searchButton' intl={intl} toggleSearch={toggleSearch}/>,
     ];
 

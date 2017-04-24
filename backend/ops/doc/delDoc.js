@@ -21,7 +21,7 @@ export default async function delDoc(request, done) {
     if (doc) {
       await doc.set({
         deletion_user: request.user,
-        deletion_date: new Date(),
+        deletion_date: new Date(request.now),
       }).save(null, { useMasterKey: true });
 
       const activities = [
@@ -40,7 +40,7 @@ export default async function delDoc(request, done) {
         });
       });
 
-      await Parse.Object.saveAll(objects);
+      await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 
       setTimeout(() => {
         // publish to es_index
@@ -52,6 +52,33 @@ export default async function delDoc(request, done) {
         publish('ES_INDEX', 'onDocDeleted', req);
       }, 0);
 
+      const [ newDoc, newActivities ] = await Promise.all([
+        // new doc
+        new Parse.Query(DocType)
+        .include([
+          'manager',
+          'client',
+          'agent',
+          'user',
+          'validation_user',
+          'closure_user',
+        ])
+        .get(doc.id, { useMasterKey : true }),
+
+        // activities
+        new Parse.Query(ActivityType)
+        .equalTo('document', doc)
+        .include([
+          'document',
+          'user',
+        ])
+        .find({ useMasterKey : true })
+      ]);
+
+      done(null, {
+        doc        : serializeParseObject(newDoc),
+        activities : newActivities.map(serializeParseObject),
+      });
     }
 
     done(null, {});

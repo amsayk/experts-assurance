@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { PropTypes as T } from 'react'
+import { withApollo } from 'react-apollo';
 
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
+import arrayFindIndex from 'array-find-index';
+
 import DataLoader from 'routes/Landing/DataLoader';
 
+import ActivityIndicator from 'components/ActivityIndicator';
+
 import { injectIntl } from 'react-intl';
+
+import raf from 'requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 
@@ -22,14 +29,409 @@ import StateLine from './StateLine';
 import LastActivityLine from './LastActivityLine';
 import DTValidationLine from './DTValidation';
 import DTSinisterLine from './DTSinister';
+import DTClosureLine from './DTClosure';
 // import DTMissionLine from './DTMission';
+import DeletionLine from './DeletionLine';
+
+import { toastr } from 'containers/Toastr';
 
 import {
   UndoIcon,
   TrashIcon,
 } from 'components/icons/MaterialIcons';
 
+import DEL_MUTATION from './delDoc.mutation.graphql';
+import RESTORE_MUTATION from './restoreDoc.mutation.graphql';
+
+const CONFIRM_MSG = <div style={style.confirmToastr}>
+  <h5>Êtes-vous sûr?</h5>
+  </div>;
+
 class Overview extends React.Component {
+  static contextTypes = {
+    snackbar : T.shape({
+      show : T.func.isRequired,
+    }),
+  };
+
+  constructor() {
+    super();
+
+    this.onDeleteOrRestoreDoc = this.onDeleteOrRestoreDoc.bind(this);
+
+    this.state = {
+      busyDeletion : false,
+    };
+  }
+  onDeleteOrRestoreDoc() {
+    const self = this;
+    const { doc } = self.props;
+    if (doc) {
+      toastr.confirm(CONFIRM_MSG, {
+        cancelText : 'Non',
+        okText     : 'Oui',
+        onOk       : () => {
+          const isDeletion = !doc.deletion;
+          self.setState({
+            busyDeletion : true,
+          }, async () => {
+
+            async function undoDeletion() {
+
+            }
+
+            function retry() {
+
+            }
+
+            function onError(errorText) {
+              self.context.snackbar.show({
+                message   : errorText,
+                persist   : true,
+                closeable : true,
+                action    : {
+                  title : 'Réessayer',
+                  click : function () {
+                    this.dismiss();
+                    setTimeout(() => {
+                      raf(() => {
+                        retry();
+                      });
+                    }, 0);
+                  },
+                },
+              });
+            }
+
+            const { data: { [isDeletion ? 'delDoc' : 'restoreDoc']: { error } } } = await self.props.client.mutate({
+              mutation  : isDeletion ? DEL_MUTATION : RESTORE_MUTATION,
+              variables : { id : doc.id },
+              updateQueries : {
+                dashboard(prev, { mutationResult }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc) {
+                    if (newDoc.state === 'PENDING') {
+                      return {
+                        dashboard : {
+                          ...prev.dashboard,
+                          pending : {
+                            count : prev.dashboard.pending.count - 1,
+                          },
+                        },
+                      };
+                    }
+
+                    if (newDoc.state === 'OPEN') {
+                      return {
+                        dashboard : {
+                          ...prev.dashboard,
+                          open : {
+                            count : prev.dashboard.open.count - 1,
+                          },
+                        },
+                      };
+                    }
+
+                    if (newDoc.state === 'CLOSED') {
+                      return {
+                        dashboard : {
+                          ...prev.dashboard,
+                          closed : {
+                            count : prev.dashboard.closed.count - 1,
+                          },
+                        },
+                      };
+                    }
+
+                    if (newDoc.state === 'CANCELED') {
+                      return {
+                        dashboard : {
+                          ...prev.dashboard,
+                          canceled : {
+                            count : prev.dashboard.canceled.count - 1,
+                          },
+                        },
+                      };
+                    }
+
+                  }
+
+                  return prev;
+                },
+                pendingDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && newDoc.state === 'PENDING') {
+                    const index = arrayFindIndex(prev.pendingDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.pendingDashboard.docs
+                      ];
+
+                    return {
+                      pendingDashboard : {
+                        length : prev.pendingDashboard.length - 1,
+                        cursor : prev.pendingDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                morePendingDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && newDoc.state === 'PENDING') {
+                    const index = arrayFindIndex(prev.pendingDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.pendingDashboard.docs
+                      ];
+
+                    return {
+                      pendingDashboard : {
+                        cursor : prev.pendingDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                openDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && newDoc.state === 'OPEN') {
+                    const index = arrayFindIndex(prev.openDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.openDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.openDashboard.docs
+                      ];
+
+                    return {
+                      openDashboard : {
+                        length : prev.openDashboard.length - 1,
+                        cursor : prev.openDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                moreOpenDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && newDoc.state === 'OPEN') {
+                    const index = arrayFindIndex(prev.openDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.openDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.openDashboard.docs
+                      ];
+
+                    return {
+                      openDashboard : {
+                        cursor : prev.openDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                closedDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && (newDoc.state === 'CLOSED' || newDoc.state === 'CANCELED')) {
+                    const index = arrayFindIndex(prev.closedDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.closedDashboard.docs
+                      ];
+
+                    return {
+                      openDashboard : {
+                        length : prev.closedDashboard.length - 1,
+                        cursor : prev.closedDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                moreClosedDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc && (newDoc.state === 'CLOSED' || newDoc.state === 'CANCELED')) {
+                    const index = arrayFindIndex(prev.closedDashboard.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.closedDashboard.docs
+                      ];
+
+                    return {
+                      openDashboard : {
+                        cursor : prev.closedDashboard.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                recentDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc) {
+                    const index = arrayFindIndex(prev.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.docs
+                      ];
+                    return {
+                      docs,
+                    };
+                  }
+
+                  return prev;
+                },
+                getTimeline(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  const newActivities = isDeletion
+                    ? mutationResult.data.delDoc.activities
+                    : mutationResult.data.restoreDoc.activities;
+
+
+                  if (prev && newActivities && newActivities.length) {
+
+                    if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+                      return prev;
+                    }
+
+                    return {
+                      timeline : {
+                        cursor : prev.timeline.cursor + 1,
+                        result : [
+                          ...newActivities,
+                          ...prev.timeline.result,
+                        ],
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                getDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc) {
+                    const index = arrayFindIndex(prev.getDocs.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.getDocs.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.getDocs.docs
+                      ];
+
+                    return {
+                      getDocs : {
+                        cursor : prev.getDocs.cursor - 1,
+                        length : prev.getDocs.length - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+                moreDocs(prev, { mutationResult, queryVariables }) {
+                  const newDoc = isDeletion
+                    ? mutationResult.data.delDoc.doc
+                    : mutationResult.data.restoreDoc.doc;
+
+                  if (prev && newDoc) {
+                    const index = arrayFindIndex(prev.getDocs.docs, (id) => newDoc.id === id);
+                    const docs = index !== -1
+                      ? prev.getDocs.docs.filter((doc) => doc.id !== newDoc.id)
+                      : [
+                        ...prev.getDocs.docs
+                      ];
+
+                    return {
+                      getDocs : {
+                        cursor : prev.getDocs.cursor - 1,
+                        docs,
+                      },
+                    };
+                  }
+
+                  return prev;
+                },
+              },
+            });
+
+            if (error) {
+              switch (error.code) {
+                case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+                case codes.ERROR_NOT_AUTHORIZED:
+                  onError(`Vous n'êtes pas authorisé.`);
+                default:
+                  onError(`Erreur inconnu, veuillez réessayer à nouveau.`);
+              }
+            } else {
+              self.setState({ busyDeletion : false });
+              self.context.snackbar.show({
+                message  : 'Succès',
+                duration : 7 * 1000,
+                action   : isDeletion ? {
+                  title : 'Annuler la suppression',
+                  click : function () {
+                    this.dismiss();
+                    setTimeout(() => {
+                      raf(() => {
+                        undoDeletion();
+                      });
+                    }, 0);
+                  },
+                } : null,
+              });
+            }
+          });
+
+        },
+      });
+    }
+  }
   render() {
     const { intl, user, doc, loading } = this.props;
     return (
@@ -44,60 +446,80 @@ class Overview extends React.Component {
               {loading ? null : `${doc.vehicle.model}, ${doc.vehicle.plateNumber}`}
             </h4>
             <div className={style.deleteOrRestoreDocAction}>
-              {loading ? null : <Button className={style.deleteOrRestoreDocButton} role='button'>
+              {loading ? null : (this.state.busyDeletion ? <ActivityIndicator size='large'/> : <Button onClick={this.onDeleteOrRestoreDoc} className={style.deleteOrRestoreDocButton} role='button'>
                 {doc.deletion
                     ? <UndoIcon size={32}/>
                     : <TrashIcon size={32}/>}
-              </Button>}
+                  </Button>)}
+                </div>
+              </div>
+
+              <div className={style.docContent}>
+                {/* <RefLine */}
+                  {/*   loading={loading} */}
+                  {/*   doc={doc} */}
+                  {/* /> */}
+                <StateLine
+                  loading={loading}
+                  doc={doc}
+                  user={user}
+                />
+                {/* <VehicleLine */}
+                  {/*   loading={loading} */}
+                  {/*   doc={doc} */}
+                  {/* /> */}
+                {user.isAdmin ? <ManagerLine
+                  loading={loading}
+                  doc={doc}
+                /> : null}
+                <ClientLine
+                  label='Assureur'
+                  loading={loading}
+                  doc={doc}
+                />
+                <AgentLine
+                  loading={loading}
+                  doc={doc}
+                />
+                <DTValidationLine
+                  loading={loading}
+                  doc={doc}
+                />
+                <DTClosureLine
+                  loading={loading}
+                  doc={doc}
+                />
+                <DTSinisterLine
+                  loading={loading}
+                  doc={doc}
+                />
+                {/* <DTMissionLine */}
+                  {/*   loading={loading} */}
+                  {/*   doc={doc} */}
+                  {/* /> */}
+                <LastActivityLine
+                  loading={loading}
+                  doc={doc}
+                />
+                {(() => {
+                  if (loading || (doc && !doc.deletion)) {
+                    return null;
+                  }
+
+                  if (user.isAdmin || user.isManager(doc)) {
+                    return (
+                      <DeletionLine
+                        loading={loading}
+                        doc={doc}
+                      />
+                    );
+                  }
+
+                  return null;
+                })()}
+              </div>
             </div>
           </div>
-
-          <div className={style.docContent}>
-            {/* <RefLine */}
-              {/*   loading={loading} */}
-              {/*   doc={doc} */}
-              {/* /> */}
-            <StateLine
-              loading={loading}
-              doc={doc}
-              user={user}
-            />
-            {/* <VehicleLine */}
-              {/*   loading={loading} */}
-              {/*   doc={doc} */}
-              {/* /> */}
-            {user.isAdmin ? <ManagerLine
-              loading={loading}
-              doc={doc}
-            /> : null}
-            <ClientLine
-              label='Assureur'
-              loading={loading}
-              doc={doc}
-            />
-            <AgentLine
-              loading={loading}
-              doc={doc}
-            />
-            <DTValidationLine
-              loading={loading}
-              doc={doc}
-            />
-            <DTSinisterLine
-              loading={loading}
-              doc={doc}
-            />
-            {/* <DTMissionLine */}
-              {/*   loading={loading} */}
-              {/*   doc={doc} */}
-              {/* /> */}
-            <LastActivityLine
-              loading={loading}
-              doc={doc}
-            />
-          </div>
-        </div>
-      </div>
     );
   }
 }
@@ -110,6 +532,7 @@ const Connect = connect(null, mapDispatchToProps);
 
 export default compose(
   injectIntl,
+  withApollo,
   Connect,
   DataLoader.doc,
 )(Overview);

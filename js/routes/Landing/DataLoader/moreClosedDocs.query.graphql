@@ -28,6 +28,7 @@ query moreClosedDocs($durationInDays: Int!, $cursor: Int, $sortConfig: ESSortCon
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

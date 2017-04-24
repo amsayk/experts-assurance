@@ -34,7 +34,7 @@ function UsersContainer({ intl, user, viewType, notificationOpen, actions }) {
       <Header onLogOut={actions.logOut}/>
       {/* <div className={style.body}> */}
         <Sidebar user={user} selectedMenuItem={'business.users'}/>
-        {isList ? <List/> : <Grid/>}
+        {isList ? <List user={user}/> : <Grid user={user}/>}
       {/* </div> */}
     </div>
   );

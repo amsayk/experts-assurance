@@ -27,6 +27,7 @@ query moreDocs($query: DocsFetchQuery!) {
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

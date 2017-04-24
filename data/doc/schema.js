@@ -51,18 +51,22 @@ export const schema = [`
     error: Error
   }
 
-  type DelDocResponse {
+  type DelOrRestoreDocResponse {
     error: Error
+    doc: Doc
+    activities : [Activity!]!
   }
 
   type SetManagerResponse {
     doc: Doc
     manager: User
+    activities : [Activity!]!
     error: Error
   }
 
   type SetStateResponse {
     doc: Doc
+    activities : [Activity!]!
     error: Error
   }
 
@@ -431,12 +435,14 @@ export const resolvers = {
     ])
   ),
 
-  DelDocResponse: Object.assign(
+  DelOrRestoreDocResponse: Object.assign(
     {
     },
     parseGraphqlObjectFields([
+      'doc',
     ]),
     parseGraphqlScalarFields([
+      'activities',
       'error',
     ])
   ),
@@ -449,6 +455,7 @@ export const resolvers = {
       'manager',
     ]),
     parseGraphqlScalarFields([
+      'activities',
       'error',
     ])
   ),
@@ -460,6 +467,7 @@ export const resolvers = {
       'doc',
     ]),
     parseGraphqlScalarFields([
+      'activities',
       'error',
     ])
   ),
@@ -540,17 +548,35 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
-      const doc = await context.Docs.delDoc(id);
+      const { doc, activities } = await context.Docs.delDoc(id);
       // publish subscription notification
       pubsub.publish('delDocChannel', id);
-      return {};
+      return { activities, doc };
+    },
+    async restoreDoc(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      const { doc, activities } = await context.Docs.restoreDoc(id);
+      // publish subscription notification
+      pubsub.publish('restoreDocChannel', id);
+      return { activities, doc };
     },
     async setManager(_, { id, manager }, context) {
       if (!context.user) {
@@ -558,17 +584,17 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
       }
 
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        const { doc, manager: user } = await context.Docs.setManager(id, manager);
+        const { doc, manager: user, activities } = await context.Docs.setManager(id, manager);
         // publish subscription notification
         pubsub.publish('docChangeChannel', id);
-        return { doc, manager : user };
+        return { doc, manager : user, activities };
       }
 
-      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async setState(_, { id, state }, context) {
       if (!context.user) {
@@ -584,17 +610,17 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
       }
 
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
-        const { doc } = await context.Docs.setState(id, state);
+        const { doc, activities } = await context.Docs.setState(id, state);
         // publish subscription notification
         pubsub.publish('docChangeChannel', id);
-        return { doc };
+        return { doc, activities };
       }
 
-      return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
   },
 

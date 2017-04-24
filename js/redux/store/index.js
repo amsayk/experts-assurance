@@ -25,6 +25,7 @@ import {
   ACTION as SORT,
 } from 'redux/reducers/sorting/constants';
 
+import { IntlState } from 'redux/reducers/intl/reducer';
 import { AppState } from 'redux/reducers/app/reducer';
 import { DocSearchState } from 'redux/reducers/docSearch/reducer';
 import { DashboardState } from 'redux/reducers/dashboard/reducer';
@@ -152,9 +153,10 @@ const enhancer = composeEnhancers(
   ...enhancers
 );
 
-export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { app: { lang: DEFAULT_LANG } }, function (key, value) {
+export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { intl: { locale: DEFAULT_LANG } }, function (key, value) {
   switch (key) {
     case ''              : return new Map(value);
+    case 'intl'          : return new IntlState(value);
     case 'app'           : return new AppState(value);
     case 'docSearch'     : return new DocSearchState(value);
     case 'dashboard'     : return new DashboardState(value);

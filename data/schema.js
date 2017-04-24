@@ -97,7 +97,8 @@ const rootSchema = [`
   type Mutation {
     # mutations
     addDoc(payload: AddDocPayload!): AddDocResponse!
-    delDoc(id: ID!): DelDocResponse!
+    delDoc(id: ID!): DelOrRestoreDocResponse!
+    restoreDoc(id: ID!): DelOrRestoreDocResponse!
     setManager(id: ID!, manager: ID!): SetManagerResponse!
     setState(id: ID!, state: DocState!): SetStateResponse!
 
@@ -113,6 +114,7 @@ const rootSchema = [`
     resendEmailVerification: ResendEmailVerificationResponse!
 
     authorizeManager(id: ID!): AuthorizeManagerResponse!
+    revokeManagerAuthorization(id: ID!): AuthorizeManagerResponse!
 
     # auth
     logIn(username: String, password: String): LogInResponse!

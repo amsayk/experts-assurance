@@ -12,6 +12,7 @@ import Users from 'routes/Settings/containers/Business/Users';
 import User from 'routes/Settings/containers/Business/User';
 
 import usersReducer from 'redux/reducers/users/reducer';
+import toastrReducer from 'redux/reducers/toastr/reducer';
 
 export default (store) => [{
   path: PATH_SETTINGS_BUSINESS_DETAILS,
@@ -33,6 +34,7 @@ export default (store) => [{
   getComponent(nextState, cb) {
     store.injectReducers([
       { key: 'users', reducer: usersReducer },
+      { key: 'toastr', reducer: toastrReducer },
     ]);
     cb(null, User);
   },

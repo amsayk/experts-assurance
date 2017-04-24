@@ -29,7 +29,7 @@ import { SubmissionError, isDirty } from 'redux-form/immutable';
 
 import MUTATION from './addDoc.mutation.graphql';
 
-import { toastr } from 'containers/Toastr';
+// import { toastr } from 'containers/Toastr';
 
 import Form from './Form';
 
@@ -53,12 +53,12 @@ const styles = {
   confirmToastr : {},
 };
 
-const CONFIRM_MSG = <div style={style.confirmToastr}>
-  <h5>Voulez-vous quitter?</h5>
-  <div>
-    Les modifications que vous avez effectuées peuvent ne pas être sauvegardées.
-  </div>
-</div>;
+// const CONFIRM_MSG = <div style={style.confirmToastr}>
+//   <h5>Voulez-vous quitter?</h5>
+//   <div>
+//     Les modifications que vous avez effectuées peuvent ne pas être sauvegardées.
+//   </div>
+// </div>;
 
 class FormWrapper extends React.Component {
   static displayName = 'AddDocFormWrapper';
@@ -95,7 +95,7 @@ class FormWrapper extends React.Component {
     }
   }
   onClose() {
-    const { dirty } = this.props;
+    // const { dirty } = this.props;
     const self = this;
 
     function doClose() {
@@ -112,13 +112,13 @@ class FormWrapper extends React.Component {
       });
     }
 
-    if (dirty) {
-      toastr.confirm(CONFIRM_MSG, {
-        onOk : doClose,
-      });
-    } else {
-      doClose();
-    }
+    // if (dirty) {
+    //   toastr.confirm(CONFIRM_MSG, {
+    //     onOk : doClose,
+    //   });
+    // } else {
+    doClose();
+    // }
   }
   componentWillReceiveProps(nextProps) {
     if (this.state.show === true && nextProps.addingDoc === false) {
@@ -300,7 +300,7 @@ class FormWrapper extends React.Component {
           });
         default:
           throw new SubmissionError({
-            _error : 'Erreur inconnu, veuillez ré-essayer à nouveau.',
+            _error : 'Erreur inconnu, veuillez réessayer à nouveau.',
           });
       }
     }

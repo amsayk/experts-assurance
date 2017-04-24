@@ -29,6 +29,7 @@ query closedDocs($durationInDays: Int!, $sortConfig: ESSortConfig!, $includeCanc
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

@@ -1,0 +1,26 @@
+mutation revokeManagerAuthorization($id: ID!) {
+  revokeManagerAuthorization(id: $id) {
+    error {
+      code
+    }
+
+    user {
+      id
+      username
+      email
+      displayName
+
+      authorization {
+        date
+        user {
+          id
+        }
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+

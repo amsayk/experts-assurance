@@ -94,13 +94,14 @@ export function createSnackbarController(store) {
 
       this.timer = setTimeout(function () {
         store.dispatch(update({
-          active    : false,
-          type      : null,
-          animation : null,
-          message   : null,
-          persist   : false,
-          action    : null,
-          duration  : null,
+          active     : false,
+          type       : null,
+          animation  : null,
+          message    : null,
+          persist    : false,
+          closeable  : false,
+          action     : null,
+          duration   : null,
         }));
         if (done) {
           done();

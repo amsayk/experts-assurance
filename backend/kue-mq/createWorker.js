@@ -13,10 +13,11 @@ const log = require('log')('app:backend:mq:backend');
  * @returns {object} with property queue and method send
  */
 export default function createWorker(opts, name, methods) {
-  log('Creating worker for', name);
+  log('Creating worker for', name, Object.keys(methods));
   const queue = kue.createQueue(opts);
 
   queue.process(name, opts.concurrency || 1, function (job, done) {
+    log(`${name}.${job.data.__serverMethod}(...)`);
     const serverMethod = job.data.__serverMethod;
     if (!methods.hasOwnProperty(serverMethod)) {
       done('This method does not support by this server');

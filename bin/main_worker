@@ -11,9 +11,11 @@ import {
   CHANGE_EMAIL,
 
   AUTHORIZE_MANAGER,
+  REVOKE_MANAGER_AUTHORIZATION,
 
   ADD_DOC,
   DELETE_DOC,
+  RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
 } from 'backend/constants';
@@ -44,11 +46,13 @@ createWorker(opts, 'MAIN', {
   [SIGN_UP]                   : authOps.signUp,
   [CHANGE_EMAIL]              : authOps.changeEmail,
 
-  [AUTHORIZE_MANAGER]         : authOps.authorizeManager,
+  [AUTHORIZE_MANAGER]            : authOps.authorizeManager,
+  [REVOKE_MANAGER_AUTHORIZATION] : authOps.revokeManagerAuthorization,
 
   // docs
   [ADD_DOC]     : docOps.addDoc,
   [DELETE_DOC]  : docOps.delDoc,
+  [RESTORE_DOC] : docOps.restoreDoc,
   [SET_MANAGER] : docOps.setManager,
   [SET_STATE]   : docOps.setState,
 });

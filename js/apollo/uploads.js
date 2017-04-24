@@ -14,18 +14,22 @@ export function addUploads(networkInterface) {
       const batchFiles = []
       const batchOperations = requests.map((request, operationIndex) => {
         const {operation, files} = extractRequestFiles(request)
-        batchFiles.push({
-          operationIndex,
-          files
-        })
+        if (files.length) {
+          batchFiles.push({
+            operationIndex,
+            files
+          })
+        }
         return operation
       })
 
       // Only initiate a multipart form request if there are uploads
       if (batchFiles.length) {
         // For each operation, convert query AST to string for transport
-        batchOperations.forEach(operation => {
-          operation.query = printAST(operation.query)
+        batchOperations.forEach((operation) => {
+          if (operation.query) {
+            operation.query = printAST(operation.query)
+          }
         })
 
         // Build the form
@@ -64,8 +68,8 @@ function extractRequestFiles (request) {
 
   // Recursively search GraphQL input variables for FileList or File objects
   for (let {node, path} of new RecursiveIterator(request.variables)) {
-    const isFileList = node instanceof window.FileList
-    const isFile = node instanceof window.File
+    const isFileList = node instanceof FileList
+    const isFile = node instanceof File
 
     if (isFileList || isFile) {
       // Only populate when necessary

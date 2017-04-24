@@ -75,7 +75,7 @@ export function Sidebar({ intl, user, selectedMenuItem, scrolling, notificationO
       </ul>
 
       {/* Business settings */}
-      {user && user.isAdmin && user.emailVerified ? [
+      {user && user.isAdminOrManager && user.emailVerified ? [
         <hr key='divider'/>,
         <h1 key='business.title' className={style.heading}>{intl.formatMessage(messages.headingBusiness)}</h1>,
         <ul key='business.links'>

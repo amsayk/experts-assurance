@@ -54,7 +54,7 @@ const config = {
   secure : process.env.NODE_ENV === 'production' && process.env.IS_SECURE === 'yes',
 
   // Cluster
-  get clusterSize() {
+  get clusterWorkerSize() {
     return require('os').cpus().length;
   },
 
@@ -72,8 +72,12 @@ const config = {
   country     : nullthrows(process.env.COUNTRY),
 
   // Locales
-  supportedLangs : ['fr'],
-  lang           : 'fr',
+  supportedLangs : ['fr', 'en'],
+  get lang() {
+    return typeof process.env.DEFAULT_LANG !== 'undefined' && this.supportedLangs.includes(process.env.DEFAULT_LANG)
+      ? process.env.DEFAULT_LANG
+      : 'fr';
+  },
 
   // ----------------------------------
   // Project Structure
@@ -99,6 +103,10 @@ const config = {
   parse_database_uri          : process.env.DATABASE_URI,
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/parse-dashboard',
 
+  // Elasticsearch config
+  elasticsearch_host : process.env.ES_HOST || 'localhost:9200',
+
+  // Uploads
   get uploadOptions() {
     return {};
   },
@@ -164,6 +172,7 @@ const config = {
   path_password_reset_success       : process.env.PATH_PASSWORD_RESET_SUCCESS || '/password_reset_success',
   path_invalid_link                 : process.env.PATH_INVALID_LINK || '/invalid_link',
   path_activation                   : process.env.PATH_ACTIVATION || '/activation',
+  path_authorization                : process.env.PATH_AUTHORIZATION || '/authorization',
 
   // dashboard
   path_dashboard                    : process.env.PATH_DASHBOARD || '/dashboard',
@@ -339,6 +348,7 @@ config.globals = {
     PATH_PASSWORD_RESET_SUCCESS       : JSON.stringify(config.path_password_reset_success),
     PATH_INVALID_LINK                 : JSON.stringify(config.path_invalid_link),
     PATH_ACTIVATION                   : JSON.stringify(config.path_activation),
+    PATH_AUTHORIZATION                : JSON.stringify(config.path_authorization),
 
     // Dasboard
     PATH_DASHBOARD                    : JSON.stringify(config.path_dashboard),

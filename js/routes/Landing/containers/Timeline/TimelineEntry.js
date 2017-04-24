@@ -4,6 +4,7 @@ import memoizeStringOnly from 'memoizeStringOnly';
 
 import DocumentCreated from './type/DocumentCreated';
 import DocumentDeleted from './type/DocumentDeleted';
+import DocumentRestored from './type/DocumentRestored';
 import DocumentManagerChanged from './type/DocumentManagerChanged';
 import DocumentStateChanged from './type/DocumentStateChanged';
 
@@ -11,6 +12,7 @@ const getComponent = memoizeStringOnly(function getComponent(type) {
   switch (type) {
     case 'DOCUMENT_CREATED'         : return DocumentCreated;
     case 'DOCUMENT_DELETED'         : return DocumentDeleted;
+    case 'DOCUMENT_RESTORED'        : return DocumentRestored;
     case 'DOCUMENT_MANAGER_CHANGED' : return DocumentManagerChanged;
     case 'DOCUMENT_STATE_CHANGED'   : return DocumentStateChanged;
     default:

@@ -26,21 +26,23 @@ class SelectedUserToggle extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { doc, user } = this.props;
 
     return (
       <div style={{display: 'inline-flex'}}>
-        <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} role='button'>
+        {doc.deletion ? '—' : <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} role='button'>
           <div className={style.text} style={{}}>
-            {user ? user.displayName : 'Clicker pour affecter le gestionnaire'}
-          </div>
-        </Button>
-        {user ? <div style={{ marginLeft: 5, color: '#eee', display: 'flex', alignItems: 'flex-end' }}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
-            <LinkExternalIcon size={18}/>
-          </Link>
-        </div> : null}
-      </div>
+            {user
+              ? user.displayName
+              : 'Affecter le gestionnaire'}
+            </div>
+          </Button>}
+          {user ? <div style={{ marginLeft: 5, color: '#eee', display: 'flex', alignItems: 'flex-end' }}>
+            <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+              <LinkExternalIcon size={18}/>
+            </Link>
+          </div> : null}
+        </div>
     );
   }
 }

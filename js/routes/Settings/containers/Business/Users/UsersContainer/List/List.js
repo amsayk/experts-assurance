@@ -98,7 +98,7 @@ class List extends React.Component {
     setSelection(activeIndex - 1);
   }
   render() {
-    const { cursor, loading, length, users : items, isReady } = this.props;
+    const { user, cursor, loading, length, users : items, isReady } = this.props;
 
     if (loading === false && length === 0) {
       // return (
@@ -106,7 +106,7 @@ class List extends React.Component {
       // );
       return (
         <div className={style.usersContainer}>
-          <Toolbar cursor={cursor} length={length}/>
+          <Toolbar user={user} cursor={cursor} length={length}/>
           <Empty/>
         </div>
       );
@@ -125,7 +125,7 @@ class List extends React.Component {
           onSpy={this.onSpy}
         /> : <ScrollSpy.Idle
           disabled={disabled}
-          done={length > 0 && cursor === length}
+          done={cursor === length}
           doneLabel='Utilisateurs chargés'
         />
       );
@@ -133,7 +133,7 @@ class List extends React.Component {
 
     return (
       <div className={style.usersContainer}>
-        <Toolbar cursor={cursor} length={length}/>
+        <Toolbar user={user} cursor={cursor} length={length}/>
         <Dropdown
           defaultOpen
           onNext={this.onNext}

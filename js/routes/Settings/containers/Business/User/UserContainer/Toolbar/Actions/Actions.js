@@ -32,25 +32,25 @@ const tooltipAlign = {
 
 class Actions extends React.PureComponent {
   render() {
-    const { user } = this.props;
+    const { user, currentUser } = this.props;
     return (
-      user ? <div className={style.actions}>
-        {user.deletion ? null : <div key='edit' className={style.edit}>
-          <Tooltip align={tooltipAlign} placement='bottom' overlay={'Modifier'}>
-            <Button className={style.editButton} onClick={null} role='button'>
-              <PencilIcon size={24}/>
-            </Button>
-          </Tooltip>
-        </div>}
-        <div key='delete' className={style.delete}>
-          <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}>
-            <Button className={style.deleteButton} onClick={null} role='button'>
-              {user.deletion
-                  ? <UndoIcon size={24}/>
-                  : <TrashIcon size={24}/>}
-                </Button>
-              </Tooltip>
-            </div>
+      user && currentUser.isAdmin ? <div className={style.actions}>
+        {/* {user.deletion ? null : <div key='edit' className={style.edit}> */}
+        {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Modifier'}> */}
+        {/*     <Button className={style.editButton} onClick={null} role='button'> */}
+        {/*       <PencilIcon size={24}/> */}
+        {/*     </Button> */}
+        {/*   </Tooltip> */}
+        {/* </div>} */}
+        {/* <div key='delete' className={style.delete}> */}
+        {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
+        {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
+        {/*       {user.deletion */}
+        {/*           ? <UndoIcon size={24}/> */}
+        {/*           : <TrashIcon size={24}/>} */}
+        {/*         </Button> */}
+        {/*       </Tooltip> */}
+        {/*     </div> */}
             {/* <div key='more' className={style.more}> */}
               {/*   <Dropdown> */}
                 {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}

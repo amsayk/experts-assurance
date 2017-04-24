@@ -79,7 +79,7 @@ class RecentDocs extends React.Component {
 
     return (
       <div className={style.recentDocs} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        <h2>Dossiers récents
+        <h2>Récemment modifiés
         </h2>
         <div className={style.feed}>
           {groups}
@@ -126,10 +126,10 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En cours',  <UnknownIcon   size={12}/>),
-  OPEN     : getState('OPEN',     'Validé',    <WatchIcon     size={12}/>),
-  CLOSED   : getState('CLOSED',   'Clos',      <DoneIcon      size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',    <CanceledIcon  size={12}/>),
+  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon   size={12}/>),
+  OPEN     : getState('OPEN',     'En cours',    <WatchIcon     size={12}/>),
+  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon      size={12}/>),
+  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon  size={12}/>),
 };
 
 const TYPE = 'RECENT_DOCUMENT';

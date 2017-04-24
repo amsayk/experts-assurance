@@ -15,9 +15,15 @@ import SelectedUserToggle from './SelectedUserToggle';
 
 import { Role_ADMINISTRATORS, Role_MANAGERS } from 'roles';
 
+import { toastr } from 'containers/Toastr';
+
 import createUserPicker from './PickManager';
 
 const PickManager = createUserPicker(Role_ADMINISTRATORS, Role_MANAGERS);
+
+const CONFIRM_MSG = <div style={style.confirmToastr}>
+  <h5>Êtes-vous sûr?</h5>
+</div>;
 
 class ManagerChanger extends React.Component {
   state ={
@@ -54,17 +60,28 @@ class ManagerChanger extends React.Component {
     }));
   }
   onAction() {
-    this.setState({
-      open : false,
-      selectedUserId : null,
-      queryString : '',
-    });
+    const self = this;
+    if (!self.state.busy) {
+      toastr.confirm(CONFIRM_MSG, {
+        cancelText : 'Non',
+        okText     : 'Oui',
+        onOk       : () => {
+          const id = self.state.selectedUserId;
+          self.setState({
+            open : false,
+            selecteduserid : null,
+            querystring : '',
+          });
+          self.props.onSetManager(id);
+        },
+      });
+    }
   }
   _onInput(input) {
     this._input = input;
   }
   render() {
-    const { manager, actions } = this.props;
+    const { busy, doc, manager, actions } = this.props;
     return (
       <div className={style.filterGroup}>
         <div className={cx(this.state.open && style.mask)}></div>
@@ -73,7 +90,7 @@ class ManagerChanger extends React.Component {
           onToggle={this.onToggle}
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
-          <SelectedUserToggle onOpen={this.onToggle} user={manager}/>
+          <SelectedUserToggle onOpen={this.onToggle} doc={doc} user={manager}/>
           <Dropdown.Menu className={style.userPickerMenu}>
             <MenuItem
               onAction={this.onAction}

@@ -1,16 +1,17 @@
-import {mapToToastrMessage} from './utils';
-import EventEmitter from 'eventemitter3';
-const emitter = new EventEmitter();
+import { store } from 'redux/store';
+
+import { mapToToastrMessage } from './utils';
+
+import { showConfirm } from 'redux/reducers/toastr/actions';
 
 const actions = {};
 
 actions.confirm = (...args) => {
-  emitter.emit('toastr/confirm', {
+  store.dispatch(showConfirm({
     message: args[0],
     options: args[1] || {}
-  });
+  }));
 };
 
-export const EE = emitter;
 export const toastrEmitter = actions;
 

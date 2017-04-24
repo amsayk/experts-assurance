@@ -3,6 +3,7 @@ import CoreLayout from 'layouts/CoreLayout';
 import Landing from 'routes/Landing';
 import LoginRoute from 'routes/Login';
 import ActivationRoute from 'routes/Activation';
+import AuthorizationRoute from 'routes/Authorization';
 import SignupRoute from 'routes/Signup';
 import PasswordResetRoute from 'routes/PasswordReset';
 import ChoosePasswordRoute from 'routes/ChoosePassword';
@@ -30,6 +31,7 @@ export default PUBLIC ? PublicRoute : (store) => [{
   childRoutes   : [
     LoginRoute(store),
     ActivationRoute(store),
+    AuthorizationRoute(store),
     SignupRoute(store),
     PasswordResetRoute(store),
     ChoosePasswordRoute(store),

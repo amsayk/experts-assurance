@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { compose, createStore, applyMiddleware } from 'redux';
 
 import {
   DEFAULT_LANG,
@@ -8,7 +8,7 @@ import {
 
 import { fromJS } from 'immutable';
 
-import { AppState } from 'redux/reducers/app/reducer';
+import { IntlState } from 'redux/reducers/intl/reducer';
 
 import { composeWithDevTools } from 'remote-redux-devtools';
 
@@ -29,7 +29,7 @@ const middlewares = [
 const enhancers = [
 ];
 
-const composeEnhancers = composeWithDevTools({ realtime: true, name: APP_NAME });
+const composeEnhancers = __DEV__ ? composeWithDevTools({ realtime: true, name: APP_NAME }) : compose;
 
 const enhancer = composeEnhancers(
   applyMiddleware(...middlewares),
@@ -37,7 +37,7 @@ const enhancer = composeEnhancers(
 );
 
 export default (opts = {}) => {
-  const store = createStore(makeRootReducer(), fromJS({ app: new AppState({ lang: opts.lang || DEFAULT_LANG }) }), enhancer);
+  const store = createStore(makeRootReducer(), fromJS({ intl: new IntlState({ locale: opts.lang || DEFAULT_LANG }) }), enhancer);
 
   store.asyncReducers = {};
   store.injectReducers = (reducers) => injectReducers(store, reducers);

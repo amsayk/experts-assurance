@@ -85,7 +85,7 @@ class ListItem extends React.Component {
                 />
                 <div className={style.text}>
                   <Link to={PATH_CASES_CASE + '/' + id}>
-                    #{refNo}
+                    <b>{refNo}</b>
                   </Link>
                 </div>
               </div>

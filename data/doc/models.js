@@ -3,6 +3,7 @@ import Parse from 'parse/node';
 import {
   ADD_DOC,
   DELETE_DOC,
+  RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
 } from 'backend/constants';
@@ -92,6 +93,14 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DELETE_DOC, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  restoreDoc(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: RESTORE_DOC, args: { id } },
       { sessionToken: this.user.getSessionToken() }
     );
   }

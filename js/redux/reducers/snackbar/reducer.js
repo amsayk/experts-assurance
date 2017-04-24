@@ -5,13 +5,14 @@ import {
 import { Record } from 'immutable';
 
 export class SnackState extends Record({
-  active    : false,
-  type      : null,
-  message   : null,
-  animation : null,
-  persist   : false,
-  action    : null,
-  duration  : undefined,
+  active      : false,
+  type        : null,
+  message     : null,
+  animation   : null,
+  persist     : false,
+  closeable   : false,
+  action      : null,
+  duration    : undefined,
 }) {}
 
 export default function reducer(state = new SnackState(), action) {

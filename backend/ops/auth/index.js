@@ -5,3 +5,6 @@ export { default as passwordReset } from './passwordReset';
 export { default as updateAccountSettings } from './updateAccountSettings';
 export { default as changeEmail } from './changeEmail';
 
+export { default as authorizeManager } from './authorizeManager';
+export { default as revokeManagerAuthorization } from './revokeManagerAuthorization';
+

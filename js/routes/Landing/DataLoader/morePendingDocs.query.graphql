@@ -21,6 +21,7 @@ query morePendingDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortC
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

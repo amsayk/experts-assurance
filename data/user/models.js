@@ -9,6 +9,7 @@ import {
   CHANGE_EMAIL,
 
   AUTHORIZE_MANAGER,
+  REVOKE_MANAGER_AUTHORIZATION,
 } from 'backend/constants';
 
 export class Users {
@@ -43,6 +44,12 @@ export class Users {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: AUTHORIZE_MANAGER, args: { id } }
+    );
+  }
+  revokeManagerAuthorization(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: REVOKE_MANAGER_AUTHORIZATION, args: { id } }
     );
   }
 

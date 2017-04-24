@@ -2,6 +2,7 @@
 .timeline {
   position: absolute;
   width: calc(100% - #{$content-width});
+  max-width: calc(100% - #{$content-width});
   right: 0;
   left: auto;
   // top: calc(#{$navbar-height} + #{$toolbar-height} + 25px);
@@ -58,6 +59,7 @@
 
 .RECENT_DOCUMENT,
 .DOCUMENT_DELETED,
+.DOCUMENT_RESTORED,
 .DOCUMENT_MANAGER_CHANGED,
 .DOCUMENT_STATE_CHANGED,
 .DOCUMENT_CREATED {
@@ -81,6 +83,7 @@
   }
 
   .entry > .title {
+    max-width: 250px;
     font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;

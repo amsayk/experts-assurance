@@ -180,12 +180,12 @@ class Snackbar extends React.Component {
    * @return {Object}
    */
   render() {
-    const { message } = this.props.snackbar;
+    const { closeable, message } = this.props.snackbar;
     return (
       <div className={ this.getClass() } style={ this.getStyle() } ref='snackbar'>
         <span>{ message }</span>
         { this.getAction() }
-        { this.getCloseButton() }
+        { closeable ? this.getCloseButton() : null }
       </div>
     );
   }

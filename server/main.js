@@ -74,7 +74,7 @@ app.use(createLocaleMiddleware({
 }));
 
 // webpack compiler in devMode
-const compiler = config.env === 'development' && webpack(webpackConfig);
+const compiler = __DEV__ && webpack(webpackConfig);
 
 // These are the current endpoints
 // New endpoints must be added here in order for them to work.
@@ -82,6 +82,7 @@ const APP_PATHS = [
   '/',
 
   config.path_activation,
+  config.path_authorization,
 
   config.path_login,
   config.path_signup,
@@ -124,7 +125,7 @@ if (config.ssrEnabled) {
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
-if (config.env === 'development') {
+if (__DEV__) {
   log('Enable webpack dev and HMR middleware');
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath  : webpackConfig.output.publicPath,
@@ -213,7 +214,9 @@ const api = new ParseServer({
   },
 
   // Only log errors during production
-  logLevel: config.env === 'development' ? 'info' : 'error',
+  logLevel : __DEV__ ? 'info' : 'error',
+  verbose  : false,
+  silent   : __DEV__,
 });
 
 // Serve the Parse API on the /parse URL prefix
@@ -266,7 +269,7 @@ app.use(config.graphql_endpoint, bodyParser.json(), apolloUploadExpress(config.u
   Parse.User._clearCache();
 
   const unplug = cookie.plugToRequest(req, res);
-  res.on('finish', function () {
+  res.once('finish', function () {
     unplug();
   });
 

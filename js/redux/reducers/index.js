@@ -3,6 +3,7 @@ import app from './app/reducer';
 import snackbar from './snackbar/reducer';
 import notification from './notification/reducer';
 import scrolling from './scrolling/reducer';
+import intl from './intl/reducer';
 
 import { USER_LOGGED_OUT } from './user/constants';
 
@@ -17,6 +18,7 @@ import routerReducer from './routing/reducer';
 import { reducer as formReducer, actionTypes } from 'redux-form/immutable';
 
 const reducers = {
+  intl,
   app,
   notification,
   scrolling,

@@ -14,7 +14,13 @@ export default async function signUp(request, done) {
 
   try {
     const business = await getOrCreateBusiness();
+
+    const ACL = new Parse.ACL()
+      .setPublicReadAccess(false)
+      .setPublicWriteAccess(false);
+
     const user = await new Parse.User()
+      .setACL(ACL)
       .set({
         displayName,
         password,

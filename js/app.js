@@ -28,7 +28,7 @@ import { Provider } from 'react-redux';
 
 import { store, history } from 'redux/store';
 
-import { IntlProvider } from 'react-intl';
+import IntlProvider from 'IntlProvider';
 
 import intlLoader from 'utils/intl-loader';
 
@@ -39,6 +39,8 @@ import { client as apolloClient } from 'apollo';
 import { ready } from 'redux/reducers/app/actions';
 
 import { scrolling } from 'redux/reducers/scrolling/actions';
+
+import { updateIntl } from 'redux/reducers/intl/actions';
 
 import { SSR, DEFAULT_LANG } from 'vars';
 
@@ -57,12 +59,19 @@ let render = async function render() {
   // Watch for expired session
   refreshCurrentUser();
 
-  const locale = store.getState().getIn(['app', 'lang']);
+  const locale = store.getState().getIn(['intl', 'locale']);
 
   const { messages : translations } = await intlLoader(locale);
 
   const formats = {
   };
+
+  // Update messages if not default locale
+  if (locale !== DEFAULT_LANG) {
+    store.dispatch(updateIntl({ messages : translations, formats }));
+  }
+
+  const intlSelector = (state) => state.get('intl').toJS();
 
   const routes = getRoutes(store);
   const snackbar = createSnackbarController(store);
@@ -90,11 +99,11 @@ let render = async function render() {
     render() {
       const { routerProps } = this.props;
       return (
-        <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
-          <ApolloProvider store={store} client={apolloClient} immutable>
+        <ApolloProvider store={store} client={apolloClient} immutable>
+          <IntlProvider intlSelector={intlSelector}>
             <Router {...routerProps}/>
-          </ApolloProvider>
-        </IntlProvider>
+          </IntlProvider>
+        </ApolloProvider>
       );
     }
   }
@@ -123,23 +132,26 @@ let render = async function render() {
   // Did you enter business details?
   checkBusiness();
 
+  // check for pending authorizations
+  // TODO:
+
   ReactDOM.render(
     <MuiThemeProvider muiTheme={muiTheme}>
-      <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <IntlProvider intlSelector={intlSelector}>
           {snackbar.render()}
-        </Provider>
-      </IntlProvider>
+        </IntlProvider>
+      </Provider>
     </MuiThemeProvider>,
     SNACKBAR_MOUNT_NODE
   );
 
   ReactDOM.render(
-    <IntlProvider defaultLocale={DEFAULT_LANG} locale={locale} messages={translations} formats={formats}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <IntlProvider intlSelector={intlSelector}>
         <Toastr />
-      </Provider>
-    </IntlProvider>,
+      </IntlProvider>
+    </Provider>,
     TOASTR_MOUNT_NODE
   );
 };

@@ -10,6 +10,9 @@ export const schema = [`
   enum ActivityType {
     DOCUMENT_CREATED
     DOCUMENT_STATE_CHANGED
+    DOCUMENT_DELETED
+    DOCUMENT_RESTORED
+    DOCUMENT_MANAGER_CHANGED
   }
 
   # Queries

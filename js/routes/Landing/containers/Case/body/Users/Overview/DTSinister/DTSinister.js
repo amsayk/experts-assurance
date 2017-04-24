@@ -27,7 +27,7 @@ class DTSinister extends React.Component {
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
-          {doc.date ? intl.formatDate(doc.date) : '—'}
+          {doc.date ? <span>{intl.formatDate(doc.date)}{' à '}{intl.formatTime(doc.date)}</span> : '—'}
         </div>
       </div>
     );

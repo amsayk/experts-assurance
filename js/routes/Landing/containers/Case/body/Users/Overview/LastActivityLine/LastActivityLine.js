@@ -27,9 +27,9 @@ class StateLine extends React.Component {
     return (
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
-        <div tile={intl.formatDate(doc.date)} className={style.overviewValue}>
+        <div tile={intl.formatDate(doc.lastModified || doc.date)} className={style.overviewValue}>
           <span title={intl.formatDate(doc.date)} className={style.overviewDate}>
-            {intl.formatRelative(doc.date)}
+            {intl.formatRelative(doc.lastModified || doc.date)}
           </span>
         </div>
       </div>

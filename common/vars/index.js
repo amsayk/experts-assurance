@@ -42,6 +42,7 @@ export const PATH_EMAIL_VERIFICATION_SUCCESS  = process.env.PATH_EMAIL_VERIFICAT
 export const PATH_PASSWORD_RESET_SUCCESS      = process.env.PATH_PASSWORD_RESET_SUCCESS;
 export const PATH_INVALID_LINK                = process.env.PATH_INVALID_LINK;
 export const PATH_ACTIVATION                  = process.env.PATH_ACTIVATION;
+export const PATH_AUTHORIZATION               = process.env.PATH_AUTHORIZATION;
 
 // Dashboard
 export const PATH_DASHBOARD                   = process.env.PATH_DASHBOARD;

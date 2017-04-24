@@ -29,12 +29,17 @@ export class User extends Record({
     return userHasRoleAny(this, Role_ADMINISTRATORS, Role_MANAGERS);
   }
 
-  get isClient() {
-    return userHasRoleAny(this, Role_CLIENTS);
+  isManager(doc) {
+    if (doc && doc.manager) {
+      return doc.manager.id === this.id;
+    }
+    return false;
   }
 
-  get isAgent() {
-    return userHasRoleAny(this, Role_AGENTS);
+  isSelf(user) {
+    return user
+      ? this.id === user.id
+      : false;
   }
 
 }

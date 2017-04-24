@@ -21,6 +21,7 @@ export const schema = [`
 
   type AuthorizeManagerResponse {
     user: User
+    activities : [Activity!]!
     error: Error
   }
 
@@ -152,8 +153,8 @@ export const resolvers = {
         return user.get('email') || user.get('mail');
       },
       authorization(user) {
-        const authorization_date = user.authorization_date;
-        const authorization_user = user.authorization_user;
+        const authorization_date = user.get('authorization_date');
+        const authorization_user = user.get('authorization_user');
 
         if (authorization_date && authorization_user) {
           return {
@@ -185,6 +186,9 @@ export const resolvers = {
       'user',
       'error',
     ]),
+    parseGraphqlScalarFields([
+      'activities',
+    ])
   ),
 
   ChangeEmailResponse : Object.assign(
@@ -270,11 +274,11 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       async function isManager(id) {
@@ -286,14 +290,46 @@ export const resolvers = {
       }
 
       if (! (await isManager(id)) || isAuthorized(await context.Users.get(id))) {
-        return { error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+        return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
       }
 
       try {
-        const user = await context.Users.authorizeManager(id);
-        return { user };
+        const { user, activities } = await context.Users.authorizeManager(id);
+        return { user, activities };
       } catch (e) {
-        return { error: { code: e.code } };
+        return { activities : [], error: { code: e.code } };
+      }
+    },
+    async revokeManagerAuthorization(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      async function isManager(id) {
+        const user = await context.Users.get(id);
+        if (user) {
+          return userHasRoleAll(user, Role_MANAGERS);
+        }
+        return false;
+      }
+
+      if (! (await isManager(id)) || isAuthorized(await context.Users.get(id))) {
+        return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+      }
+
+      try {
+        const { user, activities } = await context.Users.revokeManagerAuthorization(id);
+        return { user, activities };
+      } catch (e) {
+        return { activities : [], error: { code: e.code } };
       }
     },
     async updateAccountSettings(_, { payload }, context) {

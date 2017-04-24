@@ -4,7 +4,9 @@ import style from 'routes/Settings/styles';
 
 import cx from 'classnames';
 
-import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS } from 'roles';
+import Authorization from './Authorization';
+
+import { userHasRoleAll, Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS } from 'roles';
 
 const ROLE_TITLE = {
   [Role_MANAGERS]       : 'Gestionnaire',
@@ -15,12 +17,12 @@ const ROLE_TITLE = {
 
 export default class Overview extends React.Component {
   render() {
-    const { intl, user, loading } = this.props;
+    const { intl, currentUser, user, loading } = this.props;
     return (
       <div className={cx(style.overview, loading ? undefined : (user.deletion && style.deletedUser))}>
         {/* <h3 className={style.overviewTitle}> */}
-        {/*   Aperçu */}
-        {/* </h3> */}
+          {/*   Aperçu */}
+          {/* </h3> */}
 
         <div className={style.overviewContent}>
           <div className={style.overviewLine}>
@@ -51,12 +53,28 @@ export default class Overview extends React.Component {
             </div>
           </div>
 
-          <div className={style.overviewLine}>
-            <div className={style.overviewLabel}>Authorization</div>
-            <div className={style.overviewValue}>
-              {loading ? null : <span>{'TODO'}</span>}
-            </div>
-          </div>
+          {(() => {
+            if (loading) {
+              return null;
+            }
+
+            if (!userHasRoleAll(currentUser, Role_ADMINISTRATORS) && !currentUser.isSelf(user)) {
+              return null;
+            }
+
+            if (!userHasRoleAll(user, Role_MANAGERS)) {
+              return null;
+            }
+
+            return (
+              <div className={style.overviewLine}>
+                <div className={style.overviewLabelAuthorization}>Autorization</div>
+                <div className={style.overviewValue}>
+                  {loading ? null : <Authorization currentUser={currentUser} user={user}/>}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
     );

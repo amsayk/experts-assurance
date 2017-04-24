@@ -48,8 +48,8 @@ class Actions extends React.PureComponent {
   }
 
   render() {
-    const { hasSelection } = this.props;
-    if (!hasSelection) {
+    const { user, hasSelection } = this.props;
+    if (!hasSelection || !user.isAdmin) {
       return null;
     }
 
@@ -63,13 +63,13 @@ class Actions extends React.PureComponent {
               </Button>
             </Tooltip>
           </div>
-          <div key='delete' className={style.delete}>
-            <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}>
-              <Button className={style.deleteButton} onClick={null} role='button'>
-                <TrashIcon size={24}/>
-              </Button>
-            </Tooltip>
-          </div>
+          {/* <div key='delete' className={style.delete}> */}
+          {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
+          {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
+          {/*       <TrashIcon size={24}/> */}
+          {/*     </Button> */}
+          {/*   </Tooltip> */}
+          {/* </div> */}
           {/* <div key='more' className={style.more}> */}
           {/*   <Dropdown> */}
           {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}

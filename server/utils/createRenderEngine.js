@@ -43,11 +43,11 @@ export default function createRenderEngine(app) {
     const networkInterface = createLocalInterface(graphql, schema, {
       context: {
         user,
-        Users: new Users({ user, connector: new UserConnector() }),
-        Business: new Business({ user, connector: new BusinessConnector() }),
-        Docs: new Docs({ user, connector: new DocConnector() }),
-        Activities: new Activities({ user, connector: new ActivityConnector() }),
-        Now: Date.now(),
+        Users      : new Users({ user, connector: new UserConnector() }),
+        Business   : new Business({ user, connector: new BusinessConnector() }),
+        Docs       : new Docs({ user, connector: new DocConnector() }),
+        Activities : new Activities({ user, connector: new ActivityConnector() }),
+        Now        : Date.now(),
       },
     });
     const client = new ApolloClient({

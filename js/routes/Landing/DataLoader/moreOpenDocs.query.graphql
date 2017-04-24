@@ -28,6 +28,7 @@ query moreOpenDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConf
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

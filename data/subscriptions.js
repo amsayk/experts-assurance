@@ -21,6 +21,18 @@ const subscriptionManager = new SubscriptionManager({
       delDocChannel: {
       },
     }),
+    restoreDoc: (options, {}) => ({
+      restoreDocChannel: {
+      },
+    }),
+    setManager: (options, {}) => ({
+      docChangeChannel: {
+      },
+    }),
+    setState: (options, {}) => ({
+      docChangeChannel: {
+      },
+    }),
 
     // Auth
     authChanged: (options, { id }) => ({

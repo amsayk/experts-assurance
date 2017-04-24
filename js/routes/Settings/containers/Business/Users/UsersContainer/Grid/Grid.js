@@ -113,7 +113,7 @@ class Grid extends React.Component {
     setSelection(activeIndex - 1);
   }
   render() {
-    const { loading, cursor, length, users : items, isReady } = this.props;
+    const { user, loading, cursor, length, users : items, isReady } = this.props;
 
     if (loading === false && length === 0) {
       // return (
@@ -121,7 +121,7 @@ class Grid extends React.Component {
       // );
       return (
         <div className={style.usersContainer}>
-          <Toolbar cursor={cursor} length={length}/>
+          <Toolbar user={user} cursor={cursor} length={length}/>
           <Empty/>
         </div>
       );
@@ -148,7 +148,7 @@ class Grid extends React.Component {
 
     return (
       <div className={style.usersContainer}>
-        <Toolbar cursor={cursor} length={length}/>
+        <Toolbar user={user} cursor={cursor} length={length}/>
         <Dropdown
           ref={(dropdown) => this.dropdown = dropdown}
           defaultOpen

@@ -1,7 +1,9 @@
 import elasticsearch from 'elasticsearch';
 
+import config from 'build/config';
+
 export default new elasticsearch.Client({
-  host: 'localhost:9200',
-  // log: 'trace'
+  host: config.elasticsearch_host,
+  // log: __DEV__ ? 'trace' : null,
 });
 

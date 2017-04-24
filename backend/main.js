@@ -24,9 +24,11 @@ import {
   CHANGE_EMAIL,
 
   AUTHORIZE_MANAGER,
+  REVOKE_MANAGER_AUTHORIZATION,
 
   ADD_DOC,
   DELETE_DOC,
+  RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
 } from './constants';
@@ -56,8 +58,23 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case DELETE_DOC: {
       try {
-        await publish('MAIN', operationKey, req);
-        response.success({});
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case RESTORE_DOC: {
+      try {
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
       } catch(e) {
         response.error(e);
       }
@@ -65,10 +82,11 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case SET_MANAGER: {
       try {
-        const { data: { manager, doc } } = await publish('MAIN', operationKey, req);
+        const { data: { manager, doc, activities } } = await publish('MAIN', operationKey, req);
         response.success({
-          manager : deserializeParseObject(manager),
-          doc     : deserializeParseObject(doc),
+          doc        : deserializeParseObject(doc),
+          manager    : deserializeParseObject(manager),
+          activities : activities.map(deserializeParseObject),
         });
       } catch(e) {
         response.error(e);
@@ -77,8 +95,11 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case SET_STATE: {
       try {
-        const { data: { doc } } = await publish('MAIN', operationKey, req);
-        response.success({ doc : deserializeParseObject(doc) });
+        const { data: { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
       } catch(e) {
         response.error(e);
       }
@@ -86,8 +107,23 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case AUTHORIZE_MANAGER: {
       try {
-        const { data: { user } } = await publish('MAIN', operationKey, req);
-        response.success(deserializeParseObject(user));
+        const { data: { user, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          user       : deserializeParseObject(user),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case REVOKE_MANAGER_AUTHORIZATION: {
+      try {
+        const { data: { user, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          user       : deserializeParseObject(user),
+          activities : activities.map(deserializeParseObject),
+        });
       } catch(e) {
         response.error(e);
       }

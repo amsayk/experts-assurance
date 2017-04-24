@@ -1,8 +1,10 @@
+import { userHasRoleAll, Role_ADMINISTRATORS } from 'roles';
+
 import getCurrentUser from 'getCurrentUser';
 
 import { compose } from 'redux';
 
-import { PATH_LOGIN, PATH_ACTIVATION } from 'vars';
+import { PATH_LOGIN, PATH_ACTIVATION, PATH_AUTHORIZATION } from 'vars';
 import { UserAuthWrapper } from 'redux-auth-wrapper';
 
 export const UserIsAuthenticated = UserAuthWrapper({
@@ -26,7 +28,7 @@ export const EmailIsVerified = UserAuthWrapper({
     if (user) {
       return !user.get('emailVerified');
     }
-    return true;
+    return false;
   },
   failureRedirectPath    : (_, { location }) => {
     const redirect = location.query && location.query.redirect;
@@ -39,6 +41,55 @@ EmailIsVerified._onEnter = EmailIsVerified.onEnter;
 EmailIsVerified.onEnter = (store) => {
   const connect = (fn) => (nextState, replaceState) => fn(store, nextState, replaceState);
   return connect(EmailIsVerified._onEnter);
+};
+
+export const UserIsAuthorized = UserAuthWrapper({
+  wrapperDisplayName     : 'UserIsAuthorized',
+  authSelector           : state => state.get('user'),
+  predicate              : () => {
+    const user = getCurrentUser();
+    if (
+      user &&
+      !userHasRoleAll(user, Role_ADMINISTRATORS)
+    ) {
+      return !(user.get('authorization_date') && user.get('authorization_user'));
+    }
+    return false;
+  },
+  failureRedirectPath    : (_, { location }) => {
+    const redirect = location.query && location.query.redirect;
+    return redirect || '/';
+  },
+  allowRedirectBack      : false,
+});
+
+UserIsAuthorized._onEnter = UserIsAuthorized.onEnter;
+UserIsAuthorized.onEnter = (store) => {
+  const connect = (fn) => (nextState, replaceState) => fn(store, nextState, replaceState);
+  return connect(UserIsAuthorized._onEnter);
+};
+
+export const UserIsNotAuthorized = UserAuthWrapper({
+  wrapperDisplayName     : 'UserIsNotAuthorized',
+  authSelector           : state => state.get('user'),
+  predicate              : () => {
+    const user = getCurrentUser();
+    if (
+      user &&
+      !userHasRoleAll(user, Role_ADMINISTRATORS)
+    ) {
+      return !!(user.get('authorization_date') && user.get('authorization_user'));
+    }
+    return true;
+  },
+  failureRedirectPath    : PATH_AUTHORIZATION,
+  allowRedirectBack      : false,
+});
+
+UserIsNotAuthorized._onEnter = UserIsNotAuthorized.onEnter;
+UserIsNotAuthorized.onEnter = (store) => {
+  const connect = (fn) => (nextState, replaceState) => fn(store, nextState, replaceState);
+  return connect(UserIsNotAuthorized._onEnter);
 };
 
 export const EmailIsNotVerified = UserAuthWrapper({
@@ -61,9 +112,19 @@ EmailIsNotVerified.onEnter = (store) => {
   return connect(EmailIsNotVerified._onEnter);
 };
 
-export default compose(UserIsAuthenticated, EmailIsNotVerified);
+export default compose(
+  UserIsAuthenticated,
+  EmailIsNotVerified,
+  UserIsNotAuthorized,
+);
 
-export const onEnter = (store) => {
+export const onEnter = (store) => connect(store)(
+  UserIsAuthenticated._onEnter,
+  EmailIsNotVerified._onEnter,
+  UserIsNotAuthorized._onEnter,
+);
+
+export const connect = (store) => (...components) => {
   const connect = (fn) => (nextState, replaceState) => fn(store, nextState, replaceState);
   //This executes the parent onEnter first, going from left to right.
   // `replace` has to be wrapped because we want to stop executing `onEnter` hooks
@@ -80,6 +141,8 @@ export const onEnter = (store) => {
       }
     });
   };
-  return connect(onEnterChain(UserIsAuthenticated._onEnter, EmailIsNotVerified._onEnter));
+  return connect(onEnterChain(
+    ...components,
+  ));
 };
 

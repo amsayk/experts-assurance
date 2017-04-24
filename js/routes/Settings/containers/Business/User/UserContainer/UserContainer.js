@@ -37,9 +37,9 @@ function UserContainer({ intl, user, loading, selectedUser, notificationOpen, ac
       <div className={style.body}>
         <Sidebar user={user} selectedMenuItem={'business.users'}/>
         <div className={style.userContainer}>
-          <Toolbar user={selectedUser}/>
+          <Toolbar currentUser={user} user={selectedUser}/>
           <Nav user={selectedUser} selectedNavItem={'user.overview'}/>
-          <Overview intl={intl} user={selectedUser} loading={loading}/>
+          <Overview intl={intl} currentUser={user} user={selectedUser} loading={loading}/>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ class Spying extends React.Component {
     bubbles         : false,
     fetchMore       : false,
     manual          : false,
-    loadMoreLabel   : 'Plus d\'actualité',
+    loadMoreLabel   : 'Plus d\'événements',
   }
   constructor(props) {
     super(props);

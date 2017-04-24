@@ -14,10 +14,10 @@ export default async function setManager(request, done) {
     return;
   }
 
-  const { payload: {
+  const {
     id,
     manager, // ID!
-  } } = request.params;
+  } = request.params;
 
   try {
     const doc = await new Parse.Query(DocType)
@@ -67,7 +67,7 @@ export default async function setManager(request, done) {
       });
     });
 
-    await Parse.Object.saveAll(objects);
+    await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 
     setTimeout(() => {
       // publish to es_index
@@ -79,10 +79,35 @@ export default async function setManager(request, done) {
       publish('ES_INDEX', 'onDoc', req);
     }, 0);
 
+    const [ newDoc, newActivities ] = await Promise.all([
+      // new doc
+      new Parse.Query(DocType)
+      .include([
+        'manager',
+        'client',
+        'agent',
+        'user',
+        'validation_user',
+        'closure_user',
+      ])
+      .get(doc.id, { useMasterKey : true }),
+
+      // activities
+      new Parse.Query(ActivityType)
+      .equalTo('document', doc)
+      .include([
+        'document',
+        'user',
+      ])
+      .find({ useMasterKey : true })
+    ]);
+
     done(null, {
-      doc : serializeParseObject(doc),
-      manager : serializeParseObject(manager),
+      doc        : serializeParseObject(newDoc),
+      manager    : serializeParseObject(user),
+      activities : newActivities.map(serializeParseObject),
     });
+
   } catch (e) {
     done(formatError(e));
   }

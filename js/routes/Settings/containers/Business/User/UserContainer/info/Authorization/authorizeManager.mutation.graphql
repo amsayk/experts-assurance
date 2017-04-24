@@ -1,0 +1,25 @@
+mutation authorizeManager($id: ID!) {
+  authorizeManager(id: $id) {
+    error {
+      code
+    }
+
+    user {
+      id
+      username
+      email
+      displayName
+
+      authorization {
+        date
+        user {
+          id
+        }
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+}
+

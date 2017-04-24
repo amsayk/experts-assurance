@@ -29,6 +29,10 @@ export default async function addDoc(request, done) {
   const date = new Date(dateMS);
   const state = isOpen ? 'OPEN' : 'PENDING';
 
+  const ACL = new Parse.ACL()
+    .setPublicReadAccess(false)
+    .setPublicWriteAccess(false);
+
   async function getUser(business, _in, role) {
     if (_in && _in.key === 'id') {
       return Parse.User.createWithoutData(_in[_in.key]);
@@ -79,6 +83,7 @@ export default async function addDoc(request, done) {
     }
 
     return await new DocType()
+      .setACL(ACL)
       .set(props).save(null, { useMasterKey: true });
   }
 
@@ -101,15 +106,17 @@ export default async function addDoc(request, done) {
     }
 
     const objects = activities.map(({ type, date, user, ...metadata }) => {
-      return new ActivityType().set({
-        ns        : 'DOCUMENTS',
-        type      : type,
-        metadata  : { ...metadata },
-        timestamp : date,
-        document  : doc,
-        user,
-        business,
-      });
+      return new ActivityType()
+        .setACL(ACL)
+        .set({
+          ns        : 'DOCUMENTS',
+          type      : type,
+          metadata  : { ...metadata },
+          timestamp : date,
+          document  : doc,
+          user,
+          business,
+        });
     });
 
     if (validation) {
@@ -121,7 +128,7 @@ export default async function addDoc(request, done) {
       objects.push(doc);
     }
 
-    await Parse.Object.saveAll(objects);
+    await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 
     setTimeout(() => {
       // publish to es_index

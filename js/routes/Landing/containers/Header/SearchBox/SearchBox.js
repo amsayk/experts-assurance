@@ -61,8 +61,8 @@ import selector from './selector';
 import { injectIntl } from 'react-intl';
 
 const STATE_MAP = {
-  PENDING  : 'Dossiers en cours',
-  OPEN     : 'Dossiers validés',
+  PENDING  : 'Dossiers en attente',
+  OPEN     : 'Dossiers en cours',
   CLOSED   : 'Dossiers clos',
   CANCELED : 'Dossiers annulés',
 };
@@ -252,7 +252,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
       <div style={{ marginLeft: 12 }} className={style.docSearchDocInfo}>
         <div className={style.docSearchDocTop}>
           <Link to={PATH_CASES_CASE + '/' + id}>
-            Dossier #{refNo}
+            Dossier <b>{refNo}</b>
           </Link>
         </div>
         <div className={style.docSearchDocMiddle}>
@@ -297,10 +297,10 @@ const STATES_2 = {
 };
 
 const STATES = {
-  PENDING  : getState('PENDING',  'Dossiers en cours',   <UnknownIcon   size={24}/>),
-  OPEN     : getState('OPEN',     'Dossiers validés',    <WatchIcon     size={24}/>),
-  CLOSED   : getState('CLOSED',   'Dossiers clos',       <DoneIcon      size={24}/>),
-  CANCELED : getState('CANCELED', 'Dossiers annulés',    <CanceledIcon  size={24}/>),
+  PENDING  : getState('PENDING',  'Dossiers en attente',  <UnknownIcon   size={24}/>),
+  OPEN     : getState('OPEN',     'Dossiers en cours',    <WatchIcon     size={24}/>),
+  CLOSED   : getState('CLOSED',   'Dossiers clos',        <DoneIcon      size={24}/>),
+  CANCELED : getState('CANCELED', 'Dossiers annulés',     <CanceledIcon  size={24}/>),
 };
 
 class SearchBox extends React.Component {

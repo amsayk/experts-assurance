@@ -1,0 +1,86 @@
+mutation delDoc($id: ID!) {
+
+  delDoc(id: $id) {
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    doc {
+      id
+      key
+      refNo
+      date
+      state
+
+      deletion {
+        date
+        user { id }
+      }
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+    }
+
+    error {
+      code
+    }
+
+  }
+}
+
+

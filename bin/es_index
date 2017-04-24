@@ -10,11 +10,9 @@ import * as es from 'backend/es';
 
 const log = require('log')('app:backend:es_index');
 
-const clusterWorkerSize = require('os').cpus().length;
-
 if (cluster.isMaster) {
 
-  for (let i = 0; i < clusterWorkerSize; i++) {
+  for (let i = 0; i < config.clusterWorkerSize; i++) {
     cluster.fork();
   }
 

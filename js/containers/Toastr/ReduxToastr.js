@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import cx from 'classnames';
 import ToastrConfirm from './ToastrConfirm';
 import * as actions from 'redux/reducers/toastr/actions';
-import {EE} from './toastrEmitter';
 import {updateConfig} from './utils';
 import {TRANSITIONS} from './constants';
 
@@ -14,14 +13,12 @@ export class ReduxToastr extends React.Component {
   static displayName = 'ReduxToastr';
 
   static propTypes = {
-    position: PropTypes.string,
     confirmOptions: PropTypes.object,
     transitionIn: PropTypes.oneOf(TRANSITIONS.in),
     transitionOut: PropTypes.oneOf(TRANSITIONS.out),
   };
 
   static defaultProps = {
-    position: 'top-right',
     timeOut: 5000,
     transitionIn: TRANSITIONS.in[0],
     transitionOut: TRANSITIONS.out[0],
@@ -37,12 +34,9 @@ export class ReduxToastr extends React.Component {
   }
 
   componentDidMount() {
-    const {showConfirm} = this.props;
-    EE.on('toastr/confirm', showConfirm);
   }
 
   componentWillUnmount() {
-    EE.removeListener('toastr/confirm');
   }
 
   render() {

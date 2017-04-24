@@ -1,6 +1,6 @@
 import { PATH_ACTIVATION } from 'vars';
 
-import { UserIsAuthenticated } from 'authWrappers/UserIsAuthenticated';
+import { connect, UserIsAuthenticated, EmailIsVerified } from 'authWrappers/UserIsAuthenticated';
 
 import Activation from 'routes/Activation/containers/ActivationContainer';
 
@@ -9,6 +9,9 @@ export default (store) => ({
   getComponent(nextState, cb) {
     cb(null, Activation);
   },
-  onEnter: UserIsAuthenticated.onEnter(store),
+  onEnter: connect(store)(
+    UserIsAuthenticated.onEnter,
+    EmailIsVerified.onEnter,
+  ),
 });
 

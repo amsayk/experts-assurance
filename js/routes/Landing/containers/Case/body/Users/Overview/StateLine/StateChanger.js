@@ -16,11 +16,17 @@ import {
   CanceledIcon,
 } from 'components/icons/MaterialIcons';
 
+import { toastr } from 'containers/Toastr';
+
 import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
 
 import selector from './selector';
+
+const CONFIRM_MSG = <div style={style.confirmToastr}>
+  <h5>Êtes-vous sûr?</h5>
+</div>;
 
 function getState(state, stateText, icon) {
   return (
@@ -35,12 +41,64 @@ function getState(state, stateText, icon) {
   )
 }
 
-const STATES = {
+const STATE_COMPONENT = {
   PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
   OPEN     : getState('OPEN',     'En cours',   <WatchIcon     size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',     <CanceledIcon  size={18}/>),
 };
+
+const STATE_MENUITEM = {
+  PENDING  : <MenuItem eventKey='PENDING'>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div className={style['PENDING']}>
+        <UnknownIcon size={18}/>
+      </div>
+      <div style={{ marginLeft: 9 }}>
+        En attente
+      </div>
+    </div>
+  </MenuItem>,
+  OPEN     : <MenuItem eventKey='OPEN'>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div className={style['OPEN']}>
+        <WatchIcon size={18}/>
+      </div>
+      <div style={{ marginLeft: 9 }}>
+        En cours
+      </div>
+    </div>
+  </MenuItem>,
+  CLOSED   : <MenuItem eventKey='CLOSED'>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div className={style['CLOSED']}>
+        <DoneIcon size={18}/>
+      </div>
+      <div style={{ marginLeft: 9 }}>
+        Clos
+      </div>
+    </div>
+  </MenuItem>,
+  CANCELED : <MenuItem eventKey='CANCELED'>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div className={style['CANCELED']}>
+        <CanceledIcon size={18}/>
+      </div>
+      <div style={{ marginLeft: 9 }}>
+        Annulé
+      </div>
+    </div>
+  </MenuItem>,
+};
+
+const STATE_LEVEL = {
+  PENDING  : 1,
+  OPEN     : 2,
+  CLOSED   : 3,
+  CANCELED : 3,
+};
+
+const STATES = Object.keys(STATE_MENUITEM);
 
 class StateToggle extends React.Component {
   constructor() {
@@ -58,7 +116,7 @@ class StateToggle extends React.Component {
 
     return (
       <Button onClick={this.onOpen} className={cx(style.selectedStateButton, style.togglePickUser)} role='button'>
-        {STATES[state]}
+        {STATE_COMPONENT[state]}
       </Button>
     );
   }
@@ -80,6 +138,7 @@ class StateChanger extends React.Component {
     this.state ={
       state : props.state,
       open  : false,
+      keys  : STATES.filter((key) => STATE_LEVEL[key] > STATE_LEVEL[props.state]),
     };
   }
 
@@ -87,19 +146,31 @@ class StateChanger extends React.Component {
     if (this.state.state !== nextProps.state) {
       this.setState({
         state : nextProps.state,
+        keys  : STATES.filter((key) => STATE_LEVEL[key] > STATE_LEVEL[nextProps.state]),
       });
     }
   }
 
   onSelect(state) {
-    this.setState({
-      state,
-    });
+    const self = this;
+    if (!self.state.busy) {
+      toastr.confirm(CONFIRM_MSG, {
+        cancelText : 'Non',
+        okText     : 'Oui',
+        onOk       : () => {
+          self.setState({
+            state,
+          });
+          self.props.onStateChange(state);
+        },
+      });
+    }
+
   }
 
   render() {
-    const { state } = this.state;
-    const { actions } = this.props;
+    const { keys, state } = this.state;
+    const { busy, actions } = this.props;
     return (
       <div className={style.filterGroup}>
         <div className={cx(this.state.open && style.mask)}></div>
@@ -114,46 +185,7 @@ class StateChanger extends React.Component {
             État
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.stateMenu}>
-            <MenuItem eventKey='PENDING'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['PENDING']}>
-                  <UnknownIcon size={18}/>
-                </div>
-                <div style={{ marginLeft: 9 }}>
-                  En attente
-                </div>
-              </div>
-            </MenuItem>
-            <MenuItem eventKey='OPEN'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['OPEN']}>
-                  <WatchIcon size={18}/>
-                </div>
-                <div style={{ marginLeft: 9 }}>
-                  En cours
-                </div>
-              </div>
-            </MenuItem>
-            <MenuItem eventKey='CLOSED'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['CLOSED']}>
-                  <DoneIcon size={18}/>
-                </div>
-                <div style={{ marginLeft: 9 }}>
-                  Clos
-                </div>
-              </div>
-            </MenuItem>
-            <MenuItem eventKey='CANCELED'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['CANCELED']}>
-                  <CanceledIcon size={18}/>
-                </div>
-                <div style={{ marginLeft: 9 }}>
-                  Annulé
-                </div>
-              </div>
-            </MenuItem>
+            {keys.map((key) => STATE_MENUITEM[key])}
           </Dropdown.Menu>
         </Dropdown>
       </div>

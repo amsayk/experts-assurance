@@ -60,7 +60,7 @@ function Toolbar({ intl, cursor, length, user, loading, users, scrolling, notifi
   const menus = searchOpen ? [
     <SearchBox key='searchBox' intl={intl} onClose={toggleSearch}/>,
   ] : [
-    <Actions key='actions'/>,
+    <Actions user={user} key='actions'/>,
     <ViewTypeButton intl={intl} viewType={viewType} viewTypeList={viewTypeList} viewTypeGrid={viewTypeGrid}/>,
     <SearchButton key='searchButton' intl={intl} toggleSearch={toggleSearch}/>,
   ];

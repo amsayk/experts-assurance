@@ -29,6 +29,7 @@ query openDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

@@ -76,6 +76,10 @@
   text-transform: uppercase;
   font-weight: 600;
   color: #7d97ad;
+
+  .deletedDoc & {
+    text-decoration: line-through;
+  }
 }
 
 .h6::before {
@@ -92,6 +96,10 @@
   font-size: 1.5rem;
   line-height: 2.25rem;
   font-weight: 400;
+
+  .deletedDoc & {
+    text-decoration: line-through;
+  }
 }
 
 .backButton {

@@ -21,7 +21,6 @@ const TIMELINE_MEDIA_QUERY = '(min-width: 1232px)';
 export class AppState extends Record({
   displayMatches         : SERVER || matchMedia(MEDIA_QUERY).matches,
   timelineDisplayMatches : SERVER || matchMedia(TIMELINE_MEDIA_QUERY).matches,
-  lang                   : undefined,
   onLine                 : true,
   isReady                : false,
   alertsOpen             : false,

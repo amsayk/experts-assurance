@@ -43,9 +43,11 @@ export default (store) => [{
       const { default : Component } = require('./User');
 
       const { default : usersReducer } = require('redux/reducers/users/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
         { key: 'users', reducer: usersReducer },
+        { key: 'toastr', reducer: toastrReducer },
       ]);
 
       cb(null, UserIsAuthenticated(Component));

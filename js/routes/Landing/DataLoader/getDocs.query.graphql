@@ -28,6 +28,7 @@ query getDocs($query: DocsFetchQuery!) {
 
       createdAt
       updatedAt
+      lastModified
     }
   }
 }

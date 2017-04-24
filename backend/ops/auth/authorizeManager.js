@@ -24,7 +24,20 @@ export default async function authorizeManager(request, done) {
         authorization_date : new Date(request.now),
         authorization_user : request.user,
       }).save(null, { useMasterKey : true });
-      done(null, { user : serializeParseObject(user) });
+
+      // const activities = await new Parse.Query(ActivityType)
+      //   .equalTo('document', doc)
+      //   .include([
+      //     'document',
+      //     'user',
+      //   ])
+      //   .find({ useMasterKey : true });
+
+      done(null, {
+        user       : serializeParseObject(user),
+        activities : [], // activities.map(serializeParseObject),
+      });
+
     } else {
       done(new Error(codes.ERROR_ILLEGAL_OPERATION));
     }

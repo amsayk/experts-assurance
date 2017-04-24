@@ -57,8 +57,8 @@ const tooltipAlign = {
 };
 
 const STATE_MAP = {
-  PENDING  : 'Dossiers en cours',
-  OPEN     : 'Dossiers validés',
+  PENDING  : 'Dossiers en attente',
+  OPEN     : 'Dossiers en cours',
   CLOSED   : 'Dossiers clos',
   CANCELED : 'Dossiers annulés',
 };

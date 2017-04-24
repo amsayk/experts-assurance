@@ -127,7 +127,7 @@ class Timeline extends React.Component {
 
     return (
       <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        <h2>Actualité
+        <h2>Événements
         </h2>
         <div className={style.feed}>
           {groups}
