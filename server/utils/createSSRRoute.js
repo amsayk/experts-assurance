@@ -28,7 +28,7 @@ export default function createSSRRoute(app, compiler) {
   const mainRegExp = /(<\/main>)/i;
 
   const indexHtml = new Promise((resolve, reject) => {
-    if (config.env === 'development') {
+    if (__DEV__) {
       compiler.plugin('done', function () {
         // Webpack is done compiling
         const filename = path.join(compiler.outputPath, 'index.html');
