@@ -9,6 +9,8 @@ import * as codes from 'result-codes';
 
 import emptyObject from 'emptyObject';
 
+import { SERVER } from 'vars';
+
 import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
@@ -302,7 +304,7 @@ class NewFileEntry extends React.PureComponent {
 
           if (dragging || dropzoneEnter) {
             return [
-              <EventListener
+              SERVER ? null : <EventListener
                 key='eventListener'
                 target={document}
                 onDragEnterCapture={this.onDrag}
@@ -322,7 +324,7 @@ class NewFileEntry extends React.PureComponent {
 
 
           return [
-            <EventListener
+            SERVER ? null : <EventListener
               key='eventListener'
               target={document}
               onDragEnterCapture={this.onDrag}
