@@ -104,6 +104,7 @@ class DropdownMenu extends React.Component {
       className,
       rootCloseEvent,
       children,
+      noRootClose,
       ...props
     } = this.props;
 
@@ -114,27 +115,29 @@ class DropdownMenu extends React.Component {
       [getLocalCSSClassName(style, prefix(bsProps, 'right'))]: pullRight,
     };
 
+    const content = <div
+      {...elementProps}
+      role='menu'
+      className={classNames(className, classes)}
+      aria-labelledby={labelledBy}
+    >
+      {ValidComponentChildren.map(children, child => (
+        React.cloneElement(child, {
+          onKeyDown: createChainedFunction(
+            child.props.onKeyDown, this.handleKeyDown
+          ),
+          onSelect: createChainedFunction(child.props.onSelect, onSelect),
+        })
+      ))}
+    </div>;
+
     return (
-      <RootCloseWrapper
+      noRootClose ? content : <RootCloseWrapper
         disabled={!open}
         onRootClose={onClose}
         event={rootCloseEvent}
       >
-        <div
-          {...elementProps}
-          role='menu'
-          className={classNames(className, classes)}
-          aria-labelledby={labelledBy}
-        >
-          {ValidComponentChildren.map(children, child => (
-            React.cloneElement(child, {
-              onKeyDown: createChainedFunction(
-                child.props.onKeyDown, this.handleKeyDown
-              ),
-              onSelect: createChainedFunction(child.props.onSelect, onSelect),
-            })
-          ))}
-        </div>
+        {content}
       </RootCloseWrapper>
     );
   }

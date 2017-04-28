@@ -125,7 +125,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  componentClass: ButtonGroup,
+  componentClass : ButtonGroup,
+  noRootClose    : false,
 };
 
 class Dropdown extends React.Component {
@@ -314,6 +315,7 @@ class Dropdown extends React.Component {
       children,
       onNext,
       onPrevious,
+      noRootClose,
       ...props
     } = this.props;
 
@@ -346,7 +348,7 @@ class Dropdown extends React.Component {
               });
             case MENU_ROLE:
               return this.renderMenu(child, {
-                id, open, pullRight, bsClass, onClose, onSelect, rootCloseEvent, onNext, onPrevious,
+                id, open, pullRight, bsClass, onClose, onSelect, rootCloseEvent, onNext, onPrevious, noRootClose,
               });
             default:
               return child;

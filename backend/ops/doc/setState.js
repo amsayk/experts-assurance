@@ -23,8 +23,7 @@ export default async function setState(request, done) {
     const doc = await new Parse.Query(DocType)
       .get(id);
     if (!doc) {
-      done(new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND));
-      return;
+      throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
 
     const oldState = doc.get('state');

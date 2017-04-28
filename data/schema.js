@@ -22,13 +22,6 @@ const log = require('log')('app:server:graphql');
 
 const rootSchema = [`
 
-  input File {
-    name: String!
-    type: String!
-    size: Int!
-    path: String!
-  }
-
   type Error {
     code: Int
   }
@@ -61,6 +54,11 @@ const rootSchema = [`
     getDocs(query: DocsFetchQuery!): DocsFetchResponse!
     esSearchDocs(queryString: String, state: DocState): ESDocsQueryResponse!
     esQueryDocs(query: ESDocsQueryPayload!): ESDocsQueryResponse!
+
+    # Files
+    getDocFiles(id: ID!): [File!]!
+    getFile(id: ID!): File
+    validateDoc(id: ID!):Boolean!
 
     recentDocs: [Doc!]!
 
@@ -101,6 +99,11 @@ const rootSchema = [`
     restoreDoc(id: ID!): DelOrRestoreDocResponse!
     setManager(id: ID!, manager: ID!): SetManagerResponse!
     setState(id: ID!, state: DocState!): SetStateResponse!
+
+    # Files
+    uploadFile(docId: ID!, category: String!, metadata: FileInput!): UploadFileResponse!
+    delFile(id: ID!): DelOrRestoreFileResponse!
+    restoreFile(id: ID!): DelOrRestoreFileResponse!
 
     # Business
     updateUserBusiness(payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!

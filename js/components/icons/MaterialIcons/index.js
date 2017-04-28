@@ -63,10 +63,16 @@ export { default as ArrowDropdownIcon } from './ArrowDropdown';
 export { default as DownloadIcon } from './Download';
 
 // export { default as CarIcon } from './Car';
-// export { default as PersonIcon } from './Person';
+export { default as PersonIcon } from './Person';
 // export { default as ClockIcon } from './Clock';
 
 export { default as UndoIcon } from './Undo';
 
 export { default as ErrorIcon } from './Error';
+
+export { default as FileIcon } from './File';
+
+export { default as UploadIcon } from './Upload';
+
+export { default as AttachmentIcon } from './Attachment';
 

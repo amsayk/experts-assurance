@@ -23,7 +23,7 @@ import selector from './selector';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import RootCloseWrapper from 'components/bootstrap/RootCloseWrapper';
+// import RootCloseWrapper from 'components/bootstrap/RootCloseWrapper';
 
 const tooltipAlign = {
   offset: [0, -4],
@@ -49,12 +49,12 @@ class Actions extends React.PureComponent {
 
   render() {
     const { user, hasSelection } = this.props;
-    if (!hasSelection || !user.isAdmin) {
-      return null;
-    }
+    // if (!hasSelection) {
+    //   return null;
+    // }
 
     return (
-      <RootCloseWrapper event='mousedown' onRootClose={this.onClose}>
+      // <RootCloseWrapper event='mousedown' onRootClose={this.onClose}>
         <div className={style.actions}>
           <div key='refresh' className={style.refresh}>
             <Tooltip align={tooltipAlign} placement='bottom' overlay={'Rafraîchir'}>
@@ -82,7 +82,7 @@ class Actions extends React.PureComponent {
           {/* </div> */}
           <div key='divider' className={style.divider}></div>
         </div>
-      </RootCloseWrapper>
+      // </RootCloseWrapper>
     );
   }
 }

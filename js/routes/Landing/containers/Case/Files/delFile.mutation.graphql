@@ -1,0 +1,79 @@
+mutation delFile($id: ID!) {
+
+  delFile(id: $id) {
+    file {
+      id
+      name
+      category
+      type
+      url
+
+      deletion {
+        date
+        user {
+          id
+        }
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      date
+    }
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      file {
+        id
+        name
+        category
+        type
+        date
+        url
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    error {
+      code
+    }
+
+  }
+}

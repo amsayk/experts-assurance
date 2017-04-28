@@ -1,0 +1,72 @@
+mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
+
+  uploadFile(docId: $docId, category: $category, metadata: $metadata) {
+    file {
+      id
+      name
+      category
+      type
+      url
+
+      user {
+        id
+        displayName
+      }
+
+      date
+    }
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      file {
+        id
+        name
+        category
+        type
+        date
+        url
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    error {
+      code
+    }
+
+  }
+}

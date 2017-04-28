@@ -19,12 +19,10 @@
     "start": "NODE_PATH=.:./js bnr start",
     "main_worker": "NODE_PATH=.:./js bnr main_worker",
     "es_index": "NODE_PATH=.:./js bnr es_index",
-    "auth_worker": "NODE_PATH=.:./js bnr auth_worker",
     "mail": "NODE_PATH=.:./js bnr mail",
     "dev": "NODE_PATH=.:./js bnr dev",
     "dev:main_worker": "NODE_PATH=.:./js bnr dev:main_worker",
     "dev:es_index": "NODE_PATH=.:./js bnr dev:es_index",
-    "dev:auth_worker": "NODE_PATH=.:./js bnr dev:auth_worker",
     "dev:mail": "NODE_PATH=.:./js bnr dev:mail",
     "test": "NODE_PATH=.:./js bnr test",
     "test:dev": "NODE_PATH=.:./js bnr test --watch",
@@ -62,7 +60,7 @@
       }
     },
     "dev:main_worker": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/main_worker --exec node",
+      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env --inspect bin/main_worker --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"
@@ -70,13 +68,6 @@
     },
     "dev:es_index": {
       "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/es_index --exec node",
-      "env": {
-        "NODE_ENV": "development",
-        "DEBUG": "app:*,ioredis:cluster"
-      }
-    },
-    "dev:auth_worker": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/auth_worker --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"
@@ -132,12 +123,6 @@
     },
     "es_index": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/es_index",
-      "env": {
-        "DEBUG": "ioredis:cluster"
-      }
-    },
-    "auth_worker": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/auth_worker",
       "env": {
         "DEBUG": "ioredis:cluster"
       }
@@ -227,6 +212,7 @@
     "react-date-picker": "^5.3.28",
     "react-dates": "^10.1.1",
     "react-dom": "^15.5.4",
+    "react-dropzone": "^3.13.1",
     "react-event-listener": "^0.4.5",
     "react-helmet": "5.0.3",
     "react-highlight-words": "^0.6.0",

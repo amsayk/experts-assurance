@@ -14,7 +14,7 @@ import {
 
 import { businessQuery } from 'data/utils';
 
-import { DocType } from 'data/types';
+import { DocType, FileType } from 'data/types';
 
 import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
@@ -26,6 +26,8 @@ const RECENT_DOCS_LIMIT = 5;
 export class DocConnector {
   constructor() {
     this.loader = new DataLoader(this.fetch.bind(this), {
+    });
+    this.fileLoader = new DataLoader(this.fetchFile.bind(this), {
     });
     this.countByStateLoader = new DataLoader(this.countByState.bind(this), {
     });
@@ -47,6 +49,22 @@ export class DocConnector {
     return ids.map((id) => {
       const index = docs.findIndex((doc) => doc.id === id);
       return index !== -1 ? docs[index] : new Error(`Doc ${id} not found`);
+    })
+  }
+  async fetchFile(ids) {
+    const files = await new Parse.Query(FileType)
+      .containedIn('objectId', ids)
+      .matchesQuery('business', businessQuery())
+      .include([
+        'document',
+        'fileObj',
+        'user',
+      ])
+      .find({ useMasterKey: true });
+
+    return ids.map((id) => {
+      const index = files.findIndex((file) => file.id === id);
+      return index !== -1 ? files[index] : new Error(`File ${id} not found`);
     })
   }
   async countByState(states) {
@@ -73,6 +91,32 @@ export class DocConnector {
 
   get(id) {
     return this.loader.load(id);
+  }
+  getFile(id) {
+    return this.fileLoader.load(id);
+  }
+
+  getDocFiles(id) {
+    return getQuery().find({ useMasterKey : true });
+
+    function getQuery() {
+      const q = new Parse.Query(FileType)
+        .matchesQuery('business', businessQuery())
+        .equalTo('document', DocType.createWithoutData(id))
+        .doesNotExist('deletion_user')
+        .doesNotExist('deletion_date')
+        .include([
+          'document',
+          'fileObj',
+          'user',
+        ]);
+
+      return q;
+    }
+  }
+
+  validateDoc() {
+    return false;
   }
 
   // searchUsersByRoles(queryString, roles) {

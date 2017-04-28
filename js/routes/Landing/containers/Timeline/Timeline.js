@@ -17,6 +17,8 @@ import DataLoader from 'routes/Landing/DataLoader';
 
 import selector from './selector';
 
+import Nav from 'routes/Landing/components/Nav';
+
 import TimelineEntry from './TimelineEntry';
 
 import style from 'routes/Landing/styles';
@@ -82,9 +84,10 @@ class Timeline extends React.Component {
       cursor,
       result : items,
       extrapolation : periods,
+      id,
     } = this.props;
 
-    if (loading || !timelineDisplayMatches) {
+    if (loading || (!timelineDisplayMatches && !id)) {
       return null;
     }
 
@@ -127,8 +130,12 @@ class Timeline extends React.Component {
 
     return (
       <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        <h2>Événements
-        </h2>
+        {this.props.onNav ? <Nav
+          intl={intl}
+          onChange={this.props.onNav}
+          selectedNavItem='timeline.events'
+        /> : <h2>Événements
+        </h2>}
         <div className={style.feed}>
           {groups}
           {scrollSpy}

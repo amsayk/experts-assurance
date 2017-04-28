@@ -13,7 +13,40 @@ import getDocValidations from './docValidations';
 
 import { fromJS } from 'immutable';
 
+const log = require('log')('app:backend:docs');
+
 export const schema = [`
+
+  type UploadFileResponse {
+    file: File
+    activities : [Activity!]!
+    error: Error
+  }
+
+  type DelOrRestoreFileResponse {
+    file: File
+    activities : [Activity!]!
+    error: Error
+  }
+
+  input FileInput {
+    name: String!
+    type: String!
+    size: Int!
+    path: String!
+  }
+
+  type File {
+    id: ID!
+    name: String!
+    category: String!
+    type: String!
+    size: Int!
+    url: String!
+    date: Date!
+    user: User!
+    deletion: Deletion
+  }
 
   type RefNo {
     value: Int!
@@ -276,6 +309,47 @@ export const schema = [`
 
 export const resolvers = {
 
+  File: Object.assign(
+    {
+    },
+    {
+      deletion: (file) => {
+        const deletion_date  = file.get('deletion_date');
+        const deletion_user  = file.get('deletion_user');
+
+        if (deletion_date && deletion_user) {
+          return {
+            date  : deletion_date,
+            user  : deletion_user,
+          };
+        }
+
+        return null;
+      },
+      url: (file) => {
+        if (file.has('fileObj')) {
+          try {
+            return file.get('fileObj').url();
+          } catch (e) {
+            log.error('File.url threw error', e);
+          }
+        }
+
+        return null;
+      },
+    },
+    parseGraphqlObjectFields([
+      'user',
+    ]),
+    parseGraphqlScalarFields([
+      'name',
+      'category',
+      'type',
+      'size',
+      'date',
+    ])
+  ),
+
   Vehicle: Object.assign(
     {
     },
@@ -440,6 +514,30 @@ export const resolvers = {
     },
     parseGraphqlObjectFields([
       'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'activities',
+      'error',
+    ])
+  ),
+
+  UploadFileResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'file',
+    ]),
+    parseGraphqlScalarFields([
+      'activities',
+      'error',
+    ])
+  ),
+
+  DelOrRestoreFileResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'file',
     ]),
     parseGraphqlScalarFields([
       'activities',
@@ -622,11 +720,102 @@ export const resolvers = {
 
       return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
+    async uploadFile(_, { docId, category, metadata }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      async function isManager() {
+        const doc = await context.Docs.get(docId);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === context.user.id);
+        }
+        return false;
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS)
+        || (userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
+
+        const { file, activities } = await context.Docs.uploadFile({ docId, category, metadata });
+        // publish subscription notification
+        pubsub.publish('uploadFileChannel', file);
+        return { file, activities, errors: {} };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delFile(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      async function isManager() {
+        const file = await context.Docs.getFile(id);
+        if (file) {
+          const doc = await context.Docs.get(file.get('document').id);
+          if (doc) {
+            return doc.has('manager') && (doc.get('manager').id === context.user.id);
+          }
+        }
+        return false;
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
+        && !(userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      const { file, activities } = await context.Docs.delFile(id);
+      // publish subscription notification
+      pubsub.publish('delFileChannel', id);
+      return { activities, file };
+    },
+    async restoreFile(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      async function isManager() {
+        const file = await context.Docs.getFile(id);
+        if (file) {
+          const doc = await context.Docs.get(file.get('document').id);
+          if (doc) {
+            return doc.has('manager') && (doc.get('manager').id === context.user.id);
+          }
+        }
+        return false;
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
+        && !(userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
+        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      const { file, activities } = await context.Docs.restoreFile(id);
+      // publish subscription notification
+      pubsub.publish('restoreFileChannel', id);
+      return { activities, file };
+    },
   },
 
   Query: {
     getDoc(obj, { id }, context) {
       return context.Docs.get(id);
+    },
+    getFile(obj, { id }, context) {
+      return context.Docs.getFile(id);
     },
     getDocs(obj, { query }, context, info) {
       const topLevelFields = Object.keys(graphqlFields(info));
@@ -690,6 +879,13 @@ export const resolvers = {
 
     getLastRefNo(_, {}, context) {
       return context.Business.getLastRefNo();
+    },
+
+    getDocFiles(_, { id }, context) {
+      return context.Docs.getDocFiles(id);
+    },
+    validateDoc(_, { id }, context) {
+      return context.Docs.valideDoc(id);
     },
 
   },

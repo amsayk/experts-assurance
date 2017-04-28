@@ -73,6 +73,7 @@ export class ActivityConnector {
 
       q.include([
         'document',
+        'file',
         // 'document.user',
         // 'document.agent',
         // 'document.client',

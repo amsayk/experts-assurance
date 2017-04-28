@@ -27,6 +27,20 @@ query getTimeline($cursor: Date, $query: TimelineQuery!) {
         #   displayName
         # }
       }
+      file {
+        id
+        name
+        category
+        type
+        url
+
+        # user {
+        #   id
+        #   displayName
+        # }
+
+        date
+      }
       ns
       type
       metadata

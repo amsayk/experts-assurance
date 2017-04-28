@@ -10,6 +10,8 @@ import DataLoader from 'routes/Landing/DataLoader';
 
 import ActivityIndicator from 'components/ActivityIndicator';
 
+import Clipboard from 'Clipboard';
+
 import { injectIntl } from 'react-intl';
 
 import raf from 'requestAnimationFrame';
@@ -45,7 +47,7 @@ import RESTORE_MUTATION from './restoreDoc.mutation.graphql';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-  </div>;
+</div>;
 
 class Overview extends React.Component {
   static contextTypes = {
@@ -58,10 +60,28 @@ class Overview extends React.Component {
     super();
 
     this.onDeleteOrRestoreDoc = this.onDeleteOrRestoreDoc.bind(this);
+    this.copyKeyToClipboard = this.copyKeyToClipboard.bind(this);
 
     this.state = {
       busyDeletion : false,
     };
+  }
+
+  copyKeyToClipboard () {
+    const { doc } = this.props;
+    if (doc) {
+      const ok = Clipboard.setString(doc.key);
+      this.context.snackbar.show({
+        message  : ok ? 'Copié' : 'Impossible de copier…',
+        duration : 2 * 1000,
+      });
+
+      if (ok) {
+        setTimeout(() => {
+          Clipboard.setString('');
+        }, 5 * 60 * 1000);
+      }
+    }
   }
   onDeleteOrRestoreDoc() {
     const self = this;
@@ -439,8 +459,15 @@ class Overview extends React.Component {
         <div className={cx(style.overviewContent, style.card)}>
 
           <div className={style.docTitle}>
-            <h6 className={style.h6}>
-              {loading ? null : `Dossier ${doc.refNo}`}
+            <h6 style={{ display : 'flex' }} className={style.h6}>
+              {loading ? null : [
+                <div className={style.docRefNo}>
+                  Dossier {doc.refNo}
+                </div>,
+                <div onClick={this.copyKeyToClipboard} className={style.docKeyBadge}>
+                  {doc.key}
+                </div>
+              ]}
             </h6>
             <h4 className={style.h4}>
               {loading ? null : `${doc.vehicle.model}, ${doc.vehicle.plateNumber}`}

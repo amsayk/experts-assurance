@@ -20,8 +20,6 @@ import cookie from 'react-cookie';
 import createLocaleMiddleware from 'express-locale';
 import cors from 'cors';
 
-import createSSRRoute from './utils/createSSRRoute';
-
 import { ParseServer } from 'parse-server';
 import ParseDashboard from 'parse-dashboard';
 
@@ -108,6 +106,8 @@ const APP_PATHS = [
 ];
 
 if (config.ssrEnabled) {
+  const createSSRRoute = require('./utils/createSSRRoute');
+
   // Setup SSR
   log('Initializing server side rendering');
   const ssrRoute = createSSRRoute(app, compiler);

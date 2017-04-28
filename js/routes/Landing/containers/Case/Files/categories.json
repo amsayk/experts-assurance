@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "requete",
+    "displayName": "Requète"
+  },
+  {
+    "slug": "constate-pv",
+    "displayName": "Constate/PV"
+  },
+  {
+    "slug": "contrat",
+    "displayName": "Contrat"
+  },
+  {
+    "slug": "carte-grise",
+    "displayName": "Carte grise"
+  },
+  {
+    "slug": "devis",
+    "displayName": "Devis"
+  },
+  {
+    "slug": "photos-av",
+    "displayName": "Photos AV"
+  },
+  {
+    "slug": "photos-en",
+    "displayName": "Photos EN"
+  },
+  {
+    "slug": "photos-ap",
+    "displayName": "Photos AP"
+  },
+  {
+    "slug": "facture",
+    "displayName": "Facture"
+  },
+  {
+    "slug": "relance-med",
+    "displayName": "Relance/MED"
+  },
+  {
+    "slug": "facture-d-achat",
+    "displayName": "Facture d'achat"
+  },
+  {
+    "slug": "rapport",
+    "displayName": "Rapport"
+  }
+]

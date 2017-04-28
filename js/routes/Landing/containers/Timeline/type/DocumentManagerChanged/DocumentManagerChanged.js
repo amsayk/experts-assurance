@@ -14,21 +14,44 @@ import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
 
-import ProfilePic from 'components/Profile/ProfilePic';
+import { PersonIcon } from 'components/icons/MaterialIcons';
+
+// import ProfilePic from 'components/Profile/ProfilePic';
 
 const TYPE = 'DOCUMENT_MANAGER_CHANGED';
+
+const ICON_WRAPPER_STYLE = {
+  color: 'rgb(0, 0, 0)',
+  backgroundColor: 'rgb(255, 64, 128)',
+  userSelect: 'none',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontStyle: 'normal',
+  fontVariant: 'normal',
+  fontWeight: 'bolder',
+  fontStretch: 'normal',
+  fontSize: 13,
+  lineHeight: 'normal',
+  fontFamily: 'Helvetica, Arial, sans-serif',
+  borderRadius: '50%',
+  textTransform: 'uppercase',
+  height: 24,
+  width: 24,
+};
 
 export default function DocumentManagerChanged({ intl, doc, user, timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 
-      <div className={style.profilePic}>
-        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
-          <ProfilePic
-            user={user}
-            size={24}
-          />
-        </Link>
+      <div style={ICON_WRAPPER_STYLE} className={style.profilePic}>
+        {/* <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}> */}
+        {/*   <ProfilePic */}
+        {/*     user={user} */}
+        {/*     size={24} */}
+        {/*   /> */}
+        {/* </Link> */}
+        <PersonIcon size={18}/>
       </div>
 
       <div className={style.entry}>

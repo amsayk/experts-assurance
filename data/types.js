@@ -6,3 +6,5 @@ export const DocType = Parse.Object.extend('Doc');
 
 export const ActivityType = Parse.Object.extend('Activity');
 
+export const FileType = Parse.Object.extend('Attachment');
+

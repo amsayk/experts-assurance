@@ -6,6 +6,8 @@ import { formatError, getOrCreateBusiness, genDocKey, serializeParseObject } fro
 import { BusinessType, ActivityType, DocType } from 'data/types';
 import { getRefNo } from 'backend/utils';
 
+import codes from 'result-codes';
+
 import { Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
 
 export default async function addDoc(request, done) {
@@ -29,9 +31,9 @@ export default async function addDoc(request, done) {
   const date = new Date(dateMS);
   const state = isOpen ? 'OPEN' : 'PENDING';
 
-  const ACL = new Parse.ACL()
-    .setPublicReadAccess(false)
-    .setPublicWriteAccess(false);
+  const ACL = new Parse.ACL();
+  ACL.setPublicReadAccess(false);
+  ACL.setPublicWriteAccess(false);
 
   async function getUser(business, _in, role) {
     if (_in && _in.key === 'id') {
@@ -84,7 +86,8 @@ export default async function addDoc(request, done) {
 
     return await new DocType()
       .setACL(ACL)
-      .set(props).save(null, { useMasterKey: true });
+      .set(props)
+      .save(null, { useMasterKey: true });
   }
 
   const business = request.user.get('business');

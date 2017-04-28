@@ -2,7 +2,7 @@ import kue from 'kue';
 
 import { deserializeParseObject } from 'backend/utils';
 
-const log = require('log')('app:backend:mq:backend');
+const log = require('log')('app:backend:mq');
 
 /**
  * Create new kue-mq server
@@ -22,30 +22,33 @@ export default function createWorker(opts, name, methods) {
     if (!methods.hasOwnProperty(serverMethod)) {
       done('This method does not support by this server');
     }
-    job.data.req.user = deserializeParseObject(job.data.req.user);
+    const request = job.data.req;
 
-    methods[serverMethod](job.data.req, done);
+    request.user = deserializeParseObject(job.data.req.user);
+    request.log = (...args) => log(serverMethod, ...args);
+
+    methods[serverMethod](request, done);
   });
 
-  // queue.on('job complete', function (id) {
-  //   kue.Job.get(id, function (err, job){
-  //     if (err) { return; }
-  //     job.remove(function (err){
-  //       if (err) { throw err; }
-  //       log('removed completed job #%d', job.id);
-  //     });
-  //   });
-  // });
+  queue.on('job complete', function (id) {
+    kue.Job.get(id, function (err, job){
+      if (err) { return; }
+      job.remove(function (err){
+        if (err) { throw err; }
+        log('removed completed job #%d', job.id);
+      });
+    });
+  });
 
-  // queue.on('job failed', function (id) {
-  //   kue.Job.get(id, function (err, job){
-  //     if (err) { return; }
-  //     job.remove(function (err){
-  //       if (err) { throw err; }
-  //       log('removed failed job #%d', job.id);
-  //     });
-  //   });
-  // });
+  queue.on('job failed', function (id) {
+    kue.Job.get(id, function (err, job){
+      if (err) { return; }
+      job.remove(function (err){
+        if (err) { throw err; }
+        log('removed failed job #%d', job.id);
+      });
+    });
+  });
 
   return queue;
 }

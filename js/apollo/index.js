@@ -53,8 +53,9 @@ export const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
   customResolvers: {
     Query: {
-      getUser: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
-      getDoc: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+      getUser : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
+      getDoc  : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+      getFile : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'File', id })),
     },
   },
   dataIdFromObject,

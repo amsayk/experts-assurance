@@ -30,6 +30,8 @@ import LAST_REFNO_QUERY from './getLastRefNo.query.graphql';
 
 import SEARCH_MATCHING_USERS_QUERY from './searchMatchingUsers.query.graphql';
 
+import GET_DOC_FILES_QUERY from './getDocFiles.query.graphql';
+
 const currentUser = graphql(CURRENT_USER_QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
   skip: ({ user }) => user.isEmpty,
@@ -158,7 +160,7 @@ const searchDocs = graphql(ES_SEARCH_DOCS_QUERY, {
 });
 
 const timeline = graphql(GET_TIMELINE_QUERY, {
-  skip: ({ timelineDisplayMatches }) => !timelineDisplayMatches,
+  skip: ({ timelineDisplayMatches, id }) => !timelineDisplayMatches && !id,
   options: (ownProps) => ({
     variables: {
       query : {
@@ -393,6 +395,18 @@ const searchMatchingUsers = graphql(SEARCH_MATCHING_USERS_QUERY, {
   }),
 });
 
+const docFiles = graphql(GET_DOC_FILES_QUERY, {
+  options: (ownProps) => ({
+    variables : {
+      id : ownProps.id,
+    },
+  }),
+  props: ({ data: { loading, getDocFiles = [] } }) => ({
+    loading,
+    files : getDocFiles,
+  }),
+});
+
 export default {
   currentUser/*, usersByRoles*/,
   esUsersByRoles,
@@ -408,5 +422,6 @@ export default {
   dashboard,
   lastRefNo,
   searchMatchingUsers,
+  docFiles,
 };
 

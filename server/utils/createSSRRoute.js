@@ -21,7 +21,7 @@ const log = require('log')('app:backend:ssr');
 
 const decoder = new StringDecoder('utf8');
 
-export default function createSSRRoute(app, compiler) {
+module.exports = function createSSRRoute(app, compiler) {
   const renderEngine = createRenderEngine(app);
 
   const headRegExp = /(<\/head>)/i;

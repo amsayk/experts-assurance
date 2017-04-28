@@ -199,3 +199,11 @@
 .overviewTitle {
   flex-shrink: 0;
 }
+
+.docRefNo {}
+
+.docKeyBadge {
+  composes: d-flex align-items-center badge badge-danger from 'styles/_base.scss';
+  margin-left: 15px;
+  cursor: pointer;
+}

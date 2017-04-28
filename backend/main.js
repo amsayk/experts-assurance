@@ -31,6 +31,11 @@ import {
   RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
+
+  // Files
+  UPLOAD_FILE,
+  DELETE_FILE,
+  RESTORE_FILE,
 } from './constants';
 
 const log = require('log')('app:backend');
@@ -44,6 +49,42 @@ Parse.Cloud.define('routeOp', async function (request, response) {
   };
 
   switch (operationKey) {
+    case UPLOAD_FILE: {
+      try {
+        const { data : { file, activities } } = await publish('MAIN', operationKey, req, { timeout: 15 * 60 * 1000 });
+        response.success({
+          file       : deserializeParseObject(file),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case DELETE_FILE: {
+      try {
+        const { data : { file, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          file       : deserializeParseObject(file),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case RESTORE_FILE: {
+      try {
+        const { data : { file, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          file       : deserializeParseObject(file),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
     case ADD_DOC: {
       try {
         const { data : { doc, activities } } = await publish('MAIN', operationKey, req);

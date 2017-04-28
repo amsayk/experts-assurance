@@ -1,5 +1,7 @@
 import React, { PropTypes as T } from 'react';
 
+import cookie from 'react-cookie';
+
 import {compose, bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
@@ -19,7 +21,11 @@ import Body from '../body';
 
 import Timeline from '../../Timeline';
 
+import Files from '../Files';
+
 import { APP_NAME } from 'vars';
+
+const KEY = 'timeline.key';
 
 export class CaseContainer extends React.PureComponent {
   state: State = {
@@ -29,10 +35,27 @@ export class CaseContainer extends React.PureComponent {
     super();
 
     this.onNav = this.onNav.bind(this);
+
+    this.state = {
+      showFiles : function () {
+        const value = cookie.load(KEY, /* doNotParse = */false);
+
+        if (typeof value === 'undefined' || value !== null) {
+          return value === 1;
+        }
+
+        return true;
+      }(),
+    }
   }
-  onNav(nav) {
+
+  onNav(selectedNavItem) {
     this.setState({
-      nav,
+      showFiles : selectedNavItem === 'timeline.files',
+    }, () => {
+      setTimeout(() => {
+        cookie.save(KEY, this.state.showFiles ? 1 : 0);
+      }, 0);
     });
   }
   getChildContext() {
@@ -56,8 +79,10 @@ export class CaseContainer extends React.PureComponent {
           id={id}
           nav={this.state.nav}
         />
-        <Timeline id={id}/>
-      </div>
+        {this.state.showFiles
+            ? <Files onNav={this.onNav} id={id}/>
+            : <Timeline onNav={this.onNav} id={id}/>}
+          </div>
     );
   }
 }

@@ -6,6 +6,11 @@ import {
   RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
+
+  // Files
+  UPLOAD_FILE,
+  DELETE_FILE,
+  RESTORE_FILE,
 } from 'backend/constants';
 
 export class Docs {
@@ -16,6 +21,18 @@ export class Docs {
 
   get(id) {
     return this.connector.get(id);
+  }
+
+  getFile(id) {
+    return this.connector.getFile(id);
+  }
+
+  getDocFiles(id) {
+    return this.connector.getDocFiles(id);
+  }
+
+  validateDoc(id) {
+    return this.connector.validateDoc(id);
   }
 
   getDocs({ queryString, cursor = 0, sortConfig, client, manager, state }, topLevelFields) {
@@ -117,6 +134,32 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_STATE, args: { id, state } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  // Files
+
+  uploadFile(payload) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: UPLOAD_FILE, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  delFile(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DELETE_FILE, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  restoreFile(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: RESTORE_FILE, args: { id } },
       { sessionToken: this.user.getSessionToken() }
     );
   }

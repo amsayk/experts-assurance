@@ -23,8 +23,7 @@ export default async function setManager(request, done) {
     const doc = await new Parse.Query(DocType)
       .get(id);
     if (!doc) {
-      done(new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND));
-      return;
+      throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
 
     const oldManager = doc.get('manager');
@@ -32,8 +31,7 @@ export default async function setManager(request, done) {
     const user = await new Parse.Query(Parse.User)
       .get(manager);
     if (!user) {
-      done(new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND));
-      return;
+      throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
 
     await doc.set({

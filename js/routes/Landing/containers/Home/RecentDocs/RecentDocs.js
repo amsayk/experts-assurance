@@ -51,15 +51,18 @@ class RecentDocs extends React.Component {
   render() {
     const { intl, notificationOpen, isReady, currentUser, loading, docs : items, extrapolation : periods } = this.props;
 
-    if (items.length === 0) {
-      // return null;
-    }
+    // if (items.length === 0) {
+    // return null;
+    // }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter((item) => to
-        ? to > item.date && item.date >= from
-        : item.date >= from
-      );
+      const acts = items.filter(({ date : timestamp }) => {
+        const res = to
+          ? to > timestamp && timestamp >= from
+          : timestamp >= from;
+
+        return res;
+      });
 
       return acts.length ? (
         <div className={style.feedGroup} key={id}>
@@ -163,8 +166,8 @@ function Entry({ intl, doc }, { currentUser }) {
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
             {doc.user.displayName}
           </Link> ·{' '}
-          <time title={intl.formatDate(doc.date)} dateTime={new Date(new Date(doc.date)).toISOString()}>
-            {intl.formatRelative(new Date(doc.date))}
+          <time title={intl.formatDate(doc.date)} dateTime={new Date(doc.date).toISOString()}>
+            {intl.formatRelative(doc.date)}
           </time>
         </div>
       </div>

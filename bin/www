@@ -16,40 +16,55 @@ if (cluster.isMaster) {
 
   process.title = `${config.appName} (master)`;
 
+  async function onStart() {
+    try {
+      await Promise.all([
+        Parse.Cloud.run('onStart', {}),
+      ]);
+      log('Server initialized.');
+    } catch (e) {
+      log.error('Error initializing server:', e);
+    }
+  }
+
   if (__DEV__) {
     onChildProcess();
+    setTimeout(onStart, 3 * 1000);
   } else {
+
+    function gracefulShutdown() {
+      log('Master stopping.');
+
+      for (const id in cluster.workers) {
+        cluster.workers[id].kill();
+      }
+
+      process.exit(0);
+    }
+
+    // Listen for dying workers
+    cluster.on('exit', function (worker, code, signal) {
+      log.error('Worker %d died :(', worker.process.id);
+
+      // Replace the dead worker,
+      // we're not sentimental
+      cluster.fork();
+
+    });
+
+    // Master can be terminated by either SIGTERM
+    // or SIGINT. The latter is used by CTRL+C on console.
+
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGINT', gracefulShutdown);
+
+    // A child is loaded
+    cluster.once('listening', onStart);
 
     for (let i = 0; i < config.clusterWorkerSize; i++) {
       cluster.fork();
     }
   }
-
-  function gracefulShutdown() {
-    log('Master stopping.');
-
-    for (const id in cluster.workers) {
-      cluster.workers[id].kill();
-    }
-
-    process.exit(0);
-  }
-
-  // Master can be terminated by either SIGTERM
-  // or SIGINT. The latter is used by CTRL+C on console.
-
-  process.on('SIGTERM', gracefulShutdown);
-  process.on('SIGINT', gracefulShutdown);
-
-  // Listen for dying workers
-  cluster.on('exit', function (worker, code, signal) {
-    log.error('Worker %d died :(', worker.process.id);
-
-    // Replace the dead worker,
-    // we're not sentimental
-    cluster.fork();
-
-  });
 } else {
 
   process.title = `${config.appName} (slave)`;
@@ -71,13 +86,16 @@ function onChildProcess() {
 
   // http://www.oesmith.co.uk/post/15532216845
 
-  process.on('SIGTERM', function () {
+  process.on('SIGTERM', onStop);
+  process.on('SIGINT', onStop);
+
+  function onStop() {
     log('Stopping worker ' + process.pid);
 
     // Allow requests finish.
 
     server.close();
-  });
+  }
 
   // When requests are finished, stop the server.
 
@@ -140,16 +158,7 @@ function onError(error) {
  * Event listener for HTTP server 'listening' event.
  */
 
-async function onListening() {
-  try {
-    await Promise.all([
-      Parse.Cloud.run('onStart', {}),
-    ]);
-    log('Server initialized.');
-  } catch (e) {
-    log.error('Error initializing server:', e);
-  }
-
+function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr

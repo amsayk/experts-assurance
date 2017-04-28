@@ -8,6 +8,10 @@ export const schema = [`
   }
 
   enum ActivityType {
+    FILE_UPLOADED
+    FILE_DELETED
+    FILE_RESTORED
+
     DOCUMENT_CREATED
     DOCUMENT_STATE_CHANGED
     DOCUMENT_DELETED
@@ -36,6 +40,7 @@ export const schema = [`
     id: ID!
 
     document: Doc
+    file: File
 
     ns: ActivityNS!
 
@@ -61,6 +66,7 @@ export const resolvers = {
     parseGraphqlObjectFields([
       'business',
       'document',
+      'file',
       'metadata',
       'user',
     ]),

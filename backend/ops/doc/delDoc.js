@@ -4,6 +4,8 @@ import publish from 'backend/kue-mq/publish';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
+import codes from 'result-codes';
+
 import { DocType, ActivityType } from 'data/types';
 
 export default async function delDoc(request, done) {
@@ -79,9 +81,9 @@ export default async function delDoc(request, done) {
         doc        : serializeParseObject(newDoc),
         activities : newActivities.map(serializeParseObject),
       });
+    } else {
+      throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
-
-    done(null, {});
   } catch (e) {
     done(formatError(e));
   }

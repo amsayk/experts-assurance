@@ -19,6 +19,7 @@ const moduleMap = {
   'slug'                               : 'common/slug',
   'NetInfo'                            : 'utils/NetInfo',
   'AppState'                           : 'utils/AppState',
+  'Clipboard'                          : 'utils/Clipboard',
   'countries'                          : 'common/countries',
   'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
   'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',

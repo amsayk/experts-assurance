@@ -18,6 +18,11 @@ import {
   RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
+
+  // Files
+  UPLOAD_FILE,
+  DELETE_FILE,
+  RESTORE_FILE,
 } from 'backend/constants';
 
 import config from 'build/config';
@@ -49,11 +54,16 @@ createWorker(opts, 'MAIN', {
   [AUTHORIZE_MANAGER]            : authOps.authorizeManager,
   [REVOKE_MANAGER_AUTHORIZATION] : authOps.revokeManagerAuthorization,
 
-  // docs
+  // Docs
   [ADD_DOC]     : docOps.addDoc,
   [DELETE_DOC]  : docOps.delDoc,
   [RESTORE_DOC] : docOps.restoreDoc,
   [SET_MANAGER] : docOps.setManager,
   [SET_STATE]   : docOps.setState,
+
+  // Files
+  [UPLOAD_FILE]  : docOps.uploadFile,
+  [DELETE_FILE]  : docOps.delFile,
+  [RESTORE_FILE] : docOps.restoreFile,
 });
 

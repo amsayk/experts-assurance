@@ -1,0 +1,20 @@
+query getDocFiles($id: ID!) {
+  getDocFiles(id: $id) {
+
+      id
+      name
+      category
+      type
+      url
+
+      user {
+        id
+        displayName
+      }
+
+      date
+  }
+}
+
+
+
