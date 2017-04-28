@@ -145,7 +145,7 @@ class FileEntry extends React.PureComponent {
       switch (key) {
         case 'download' : {
           const a = document.createElement('a');
-          a.download = true;
+          a.download = this.props.entry.name;
           a.href = this.props.entry.url;
           document.body.appendChild(a);
           a.click();
