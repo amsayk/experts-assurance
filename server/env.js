@@ -20,6 +20,8 @@ const babelOptions = require('scripts/getBabelOptions')({
     'authWrappers/UserIsAuthenticated'   : 'utils/auth/authWrappers/UserIsAuthenticated',
     'authWrappers/NotAuthenticated'      : 'utils/auth/authWrappers/NotAuthenticated',
 
+    'Clipboard'                          : 'utils/Clipboard',
+
     // TODO: remove when subscriptions-transport-ws gets updated
     'graphql-tag/printer'                : 'graphql/language/printer',
 

@@ -25,6 +25,8 @@ import Files from '../Files';
 
 import { APP_NAME } from 'vars';
 
+import { SECURE } from 'vars';
+
 const KEY = 'timeline.key';
 
 export class CaseContainer extends React.PureComponent {
@@ -54,7 +56,7 @@ export class CaseContainer extends React.PureComponent {
       showFiles : selectedNavItem === 'timeline.files',
     }, () => {
       setTimeout(() => {
-        cookie.save(KEY, this.state.showFiles ? 1 : 0);
+        cookie.save(KEY, this.state.showFiles ? 1 : 0, { path: '/', httpOnly: false, secure: SECURE });
       }, 0);
     });
   }
