@@ -2,7 +2,7 @@ import Parse from 'parse/node';
 
 import { formatError, serializeParseObject } from 'backend/utils';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 const log = require('log')('app:backend:revokeManagerAuthorization');
 

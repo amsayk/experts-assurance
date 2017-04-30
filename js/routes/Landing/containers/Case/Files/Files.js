@@ -92,7 +92,7 @@ class Files extends React.PureComponent {
       return (
         <div className={style.feedGroup} key={slug}>
           <h5 className={style.feedGroupTitle}>{title}</h5>
-          <section style={{ minHeight: height }} className={style.filesFeedGroupItems}>
+          <section style={{ minHeight: Math.max(height, 50) }} className={style.filesFeedGroupItems}>
             {files}
           </section>
         </div>

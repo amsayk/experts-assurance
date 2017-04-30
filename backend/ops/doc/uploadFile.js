@@ -2,7 +2,7 @@ import Parse from 'parse/node';
 
 import fs from 'fs';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 import { BusinessType, ActivityType, DocType, FileType } from 'data/types';

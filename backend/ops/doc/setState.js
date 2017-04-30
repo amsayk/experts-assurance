@@ -6,7 +6,7 @@ import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/
 
 import { DocType, ActivityType } from 'data/types';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 export default async function setState(request, done) {
   if (!request.user) {

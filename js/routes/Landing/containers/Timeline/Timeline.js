@@ -40,6 +40,7 @@ class Timeline extends React.Component {
   static defaultProps = {
     cursor  : 0,
     loading : false,
+    result  : [],
   };
 
   constructor(props) {
@@ -87,7 +88,7 @@ class Timeline extends React.Component {
       id,
     } = this.props;
 
-    if (loading || (!timelineDisplayMatches && !id)) {
+    if (/*loading || */(!timelineDisplayMatches && !id)) {
       return null;
     }
 

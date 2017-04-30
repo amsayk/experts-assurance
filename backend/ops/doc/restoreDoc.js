@@ -4,7 +4,7 @@ import publish from 'backend/kue-mq/publish';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 import { DocType, ActivityType } from 'data/types';
 

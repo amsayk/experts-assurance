@@ -3,7 +3,9 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
 import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, userVerified } from 'roles';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
+
+import config from 'build/config';
 
 import { pubsub } from '../subscriptions';
 
@@ -329,7 +331,7 @@ export const resolvers = {
       url: (file) => {
         if (file.has('fileObj')) {
           try {
-            return file.get('fileObj').url();
+            return file.get('fileObj').url({ forceSecure : config.secure });
           } catch (e) {
             log.error('File.url threw error', e);
           }

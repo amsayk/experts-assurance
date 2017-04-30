@@ -60,7 +60,7 @@
       }
     },
     "dev:main_worker": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env --inspect bin/main_worker --exec node",
+      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/main_worker --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"

@@ -6,7 +6,7 @@ import { formatError, getOrCreateBusiness, genDocKey, serializeParseObject } fro
 import { BusinessType, ActivityType, DocType } from 'data/types';
 import { getRefNo } from 'backend/utils';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 import { Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
 

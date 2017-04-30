@@ -3,7 +3,7 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
 import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, isAuthorized, userVerified } from 'roles';
 
-import codes from 'result-codes';
+import * as codes from 'result-codes';
 
 import signUpValidations from 'routes/Signup/validations';
 import passwordResetValidations from 'routes/PasswordReset/validations';
