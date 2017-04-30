@@ -8,10 +8,14 @@ import {
   SET_STATE,
 
   // Files
-  UPLOAD_FILE,
+  // UPLOAD_FILE,
   DELETE_FILE,
   RESTORE_FILE,
 } from 'backend/constants';
+
+import { deserializeParseObject } from 'backend/utils';
+
+import uploadFile from 'backend/ops/doc/uploadFile';
 
 export class Docs {
   constructor({ user, connector }) {
@@ -141,11 +145,30 @@ export class Docs {
   // Files
 
   uploadFile(payload) {
-    return Parse.Cloud.run(
-      'routeOp',
-      { __operationKey: UPLOAD_FILE, args: { payload } },
-      { sessionToken: this.user.getSessionToken() }
-    );
+    // return Parse.Cloud.run(
+    //   'routeOp',
+    //   { __operationKey: UPLOAD_FILE, args: { payload } },
+    //   { sessionToken: this.user.getSessionToken() }
+    // );
+
+    const request = {
+      now    : Date.now(),
+      params : { payload },
+      user   : this.user,
+    };
+
+    return new Promise((resolve, reject) => {
+      uploadFile(request, (err, response) => {
+        if (err) {
+          reject(err);
+        }
+        const { file, activities } = response;
+        resolve({
+          file       : deserializeParseObject(file),
+          activities : activities.map(deserializeParseObject),
+        });
+      })
+    })
   }
 
   delFile(id) {

@@ -6,7 +6,7 @@ export { default as setState } from './setState';
 
 // Files
 
-export { default as uploadFile } from './uploadFile';
+// export { default as uploadFile } from './uploadFile';
 export { default as delFile } from './delFile';
 export { default as restoreFile } from './restoreFile';
 

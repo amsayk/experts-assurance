@@ -20,7 +20,7 @@ import {
   SET_STATE,
 
   // Files
-  UPLOAD_FILE,
+  // UPLOAD_FILE,
   DELETE_FILE,
   RESTORE_FILE,
 } from 'backend/constants';
@@ -62,7 +62,7 @@ createWorker(opts, 'MAIN', {
   [SET_STATE]   : docOps.setState,
 
   // Files
-  [UPLOAD_FILE]  : docOps.uploadFile,
+  // [UPLOAD_FILE]  : docOps.uploadFile,
   [DELETE_FILE]  : docOps.delFile,
   [RESTORE_FILE] : docOps.restoreFile,
 });

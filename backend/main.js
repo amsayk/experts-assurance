@@ -33,7 +33,7 @@ import {
   SET_STATE,
 
   // Files
-  UPLOAD_FILE,
+  // UPLOAD_FILE,
   DELETE_FILE,
   RESTORE_FILE,
 } from './constants';
@@ -49,18 +49,18 @@ Parse.Cloud.define('routeOp', async function (request, response) {
   };
 
   switch (operationKey) {
-    case UPLOAD_FILE: {
-      try {
-        const { data : { file, activities } } = await publish('MAIN', operationKey, req, { timeout: 15 * 60 * 1000 });
-        response.success({
-          file       : deserializeParseObject(file),
-          activities : activities.map(deserializeParseObject),
-        });
-      } catch(e) {
-        response.error(e);
-      }
-      break;
-    }
+    // case UPLOAD_FILE: {
+    //   try {
+    //     const { data : { file, activities } } = await publish('MAIN', operationKey, req, { timeout: 15 * 60 * 1000 });
+    //     response.success({
+    //       file       : deserializeParseObject(file),
+    //       activities : activities.map(deserializeParseObject),
+    //     });
+    //   } catch(e) {
+    //     response.error(e);
+    //   }
+    //   break;
+    // }
     case DELETE_FILE: {
       try {
         const { data : { file, activities } } = await publish('MAIN', operationKey, req);

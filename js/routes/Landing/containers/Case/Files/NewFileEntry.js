@@ -260,6 +260,7 @@ class NewFileEntry extends React.PureComponent {
     const { status, dragging, dropzoneEnter } = this.state;
     return (
       <Dropzone
+        disableClick={status !== null}
         style={dragging || dropzoneEnter || status ? {height : height + 13} : emptyObject}
         className={cx(style.newFileEntry, !status && dragging && style.newFileEntryDrag, !status && dropzoneEnter && style.newFileEntryDragEnter)}
         accept={ACCEPT}
@@ -275,7 +276,7 @@ class NewFileEntry extends React.PureComponent {
             return (
               <div className={style.newFileEntry__uploading}>
                 <BlinkingDots>
-                  Chargement
+                  Sauvegarde en cours
                 </BlinkingDots>
               </div>
             );
