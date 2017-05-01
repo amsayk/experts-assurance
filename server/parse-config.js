@@ -3,6 +3,8 @@ import config from 'build/config';
 
 import CookieStorageController from 'StorageController.cookie';
 
+import FileController from 'FileController';
+
 Parse.initialize(
   process.env.APPLICATION_ID,
   process.env.JAVASCRIPT_KEY,
@@ -13,6 +15,10 @@ Parse.User.enableUnsafeCurrentUser();
 
 Parse.CoreManager.setStorageController(
   CookieStorageController
+);
+
+Parse.CoreManager.setFileController(
+  FileController
 );
 
 Parse.CoreManager.set(

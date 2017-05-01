@@ -108,82 +108,79 @@ class NewFileEntry extends React.PureComponent {
     }, async () => {
 
       try {
-        await this.state.files.reduce(async (promise, metadata) => {
-          return promise.then(async () => {
-            const { data: { uploadFile: { error } } } = await this.props.client.mutate({
-              mutation  : MUTATION,
-              variables : {
-                docId    : this.props.id,
-                category : this.props.category,
-                metadata : metadata,
-              },
-              updateQueries : {
-                getTimeline(prev, { mutationResult, queryVariables }) {
-                  const newFile = mutationResult.data.uploadFile.file;
-                  const newActivities = mutationResult.data.uploadFile.activities;
+        await Promise.all(this.state.files.map(async (metadata) => {
+          const { data: { uploadFile: { error } } } = await this.props.client.mutate({
+            mutation  : MUTATION,
+            variables : {
+              docId    : this.props.id,
+              category : this.props.category,
+              metadata : metadata,
+            },
+            updateQueries : {
+              getTimeline(prev, { mutationResult, queryVariables }) {
+                const newFile = mutationResult.data.uploadFile.file;
+                const newActivities = mutationResult.data.uploadFile.activities;
 
-                  if (prev && newActivities && newActivities.length) {
+                if (prev && newActivities && newActivities.length) {
 
-                    if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
-                      return prev;
-                    }
-
-                    return {
-                      timeline : {
-                        cursor : prev.timeline.cursor + 1,
-                        result : [
-                          ...newActivities,
-                          ...prev.timeline.result,
-                        ],
-                      },
-                    };
+                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+                    return prev;
                   }
 
-                  return prev;
-                },
-                getDocFiles(prev, { mutationResult, queryVariables }) {
-                  const newFile = mutationResult.data.uploadFile.file;
+                  return {
+                    timeline : {
+                      cursor : prev.timeline.cursor + 1,
+                      result : [
+                        ...newActivities,
+                        ...prev.timeline.result,
+                      ],
+                    },
+                  };
+                }
 
-                  if (prev && newFile) {
+                return prev;
+              },
+              getDocFiles(prev, { mutationResult, queryVariables }) {
+                const newFile = mutationResult.data.uploadFile.file;
 
-                    if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
-                      return prev;
-                    }
+                if (prev && newFile) {
 
-                    const files = [
-                      newFile,
-                      ...prev.getDocFiles,
-                    ];
-                    return {
-                      getDocFiles : files,
-                    };
+                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+                    return prev;
                   }
 
-                  return prev;
-                },
+                  const files = [
+                    newFile,
+                    ...prev.getDocFiles,
+                  ];
+                  return {
+                    getDocFiles : files,
+                  };
+                }
+
+                return prev;
               },
-            });
-
-            if (error) {
-              switch (error.code) {
-                case codes.ERROR_ACCOUNT_NOT_VERIFIED:
-                case codes.ERROR_NOT_AUTHORIZED:
-                  throw new Error(
-                    `Vous n'êtes pas authorisé`,
-                  );
-                default:
-                  throw new Error(
-                    'Erreur inconnu, veuillez réessayer à nouveau.',
-                  );
-              }
-            }
-
-            this.setState(({ files }) => ({
-              files : files.filter((f) => f.name !== metadata.name),
-            }));
+            },
           });
 
-        }, Promise.resolve());
+          if (error) {
+            switch (error.code) {
+              case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+              case codes.ERROR_NOT_AUTHORIZED:
+                throw new Error(
+                  `Vous n'êtes pas authorisé`,
+                );
+              default:
+                throw new Error(
+                  'Erreur inconnu, veuillez réessayer à nouveau.',
+                );
+            }
+          }
+
+          // this.setState(({ files }) => ({
+          //   files : files.filter((f) => f.name !== metadata.name),
+          // }));
+        }));
 
         // Successfully saved!
         this.setState({

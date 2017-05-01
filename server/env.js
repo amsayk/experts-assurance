@@ -27,6 +27,7 @@ const babelOptions = require('scripts/getBabelOptions')({
 
     // cookie storage
     'StorageController.cookie'           : 'common/utils/StorageController.cookie',
+    'FileController'                     : 'common/utils/FileController',
 
     'result-codes'                       : 'common/result-codes',
   },

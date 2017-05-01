@@ -17,8 +17,9 @@ const babelOptions = require('../getBabelOptions')({
 
     // cookie storage
     'StorageController.cookie' : 'common/utils/StorageController.cookie',
+    'FileController'           : 'common/utils/FileController',
 
-    'result-codes'                       : 'common/result-codes',
+    'result-codes'             : 'common/result-codes',
   },
   plugins: [
     jestPluginHoist,

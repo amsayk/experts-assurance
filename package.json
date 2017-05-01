@@ -53,7 +53,7 @@
       }
     },
     "dev": {
-      "command": "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/www --exec node",
+      "command": "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env --inspect bin/www --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster,apollo-local,-app:server:history"

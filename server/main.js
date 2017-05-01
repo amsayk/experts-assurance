@@ -49,11 +49,6 @@ import bodyParser from 'body-parser';
 
 const log = require('log')('app:server');
 
-const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
-if (!databaseUri) {
-  log('DATABASE_URI not specified, falling back to localhost.');
-}
-
 const app = express();
 const paths = config.utils_paths;
 
@@ -184,7 +179,7 @@ const api = new ParseServer({
   publicServerURL          : config.parse_public_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
   enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
   allowClientClassCreation : true,
-  maxUploadSize            : '25mb',
+  maxUploadSize            : '100mb',
 
   // Retricts sesssions to 15 days
   sessionLength            : 15 * 24 * 60 * 60,
@@ -196,6 +191,14 @@ const api = new ParseServer({
   emailAdapter                     : {
     module: require.resolve('backend/mail/MailAdapter'),
     options: config.mailAdapterOptions,
+  },
+
+  // File uploads
+  filesAdapter : {
+    module  : require.resolve('parse-server-fs-adapter'),
+    options : {
+      filesSubDirectory : config.businessKey,
+    },
   },
 
   passwordPolicy : {
@@ -252,7 +255,7 @@ app.use(config.parse_dashboard_mount_point, dashboard);
 // ------------------------------------
 // Graphql server entrypoint
 // ------------------------------------
-app.use(config.graphql_endpoint, bodyParser.json({ limit: '25mb' }), (req, resp, next) => {
+app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
   if (config.persistedQueries) {
     if (Array.isArray(req.body)) {
       // eslint-disable-next-line no-param-reassign
