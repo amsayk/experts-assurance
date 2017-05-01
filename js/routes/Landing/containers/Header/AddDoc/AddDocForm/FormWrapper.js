@@ -315,7 +315,7 @@ class FormWrapper extends React.Component {
     const { snackbar } = this.context;
     if (snackbar) {
       snackbar.show({
-        message  : 'Ajouter avec succès',
+        message  : 'Ajouté avec succès',
         duration : 7 * 1000,
         action   : {
           title : 'Afficher',

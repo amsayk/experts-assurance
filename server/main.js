@@ -252,7 +252,7 @@ app.use(config.parse_dashboard_mount_point, dashboard);
 // ------------------------------------
 // Graphql server entrypoint
 // ------------------------------------
-app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
+app.use(config.graphql_endpoint, bodyParser.json({ limit: '25mb' }), (req, resp, next) => {
   if (config.persistedQueries) {
     if (Array.isArray(req.body)) {
       // eslint-disable-next-line no-param-reassign
@@ -264,7 +264,8 @@ app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
   next();
 });
 
-app.use(config.graphql_endpoint, bodyParser.json(), apolloUploadExpress(config.uploadOptions), graphqlExpress((req, res) => {
+// json is already parsed in previous middleware
+app.use(config.graphql_endpoint, apolloUploadExpress(config.uploadOptions), graphqlExpress((req, res) => {
   // Reload user everytime
   Parse.User._clearCache();
 
