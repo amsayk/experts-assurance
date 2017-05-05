@@ -334,7 +334,7 @@ config.globals = {
   'process.env'  : {
     NODE_ENV              : JSON.stringify(config.env),
 
-    PUBLIC                : JSON.stringify(config.env),
+    PUBLIC                : JSON.stringify(config.public),
 
     APPLICATION_ID        : JSON.stringify(process.env.APPLICATION_ID),
     JAVASCRIPT_KEY        : JSON.stringify(process.env.JAVASCRIPT_KEY),

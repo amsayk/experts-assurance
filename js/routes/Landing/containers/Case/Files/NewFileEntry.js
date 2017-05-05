@@ -98,8 +98,9 @@ class NewFileEntry extends React.PureComponent {
   }
 
   onFiles(files) {
-    this.dragCount = 0;
-    this.setState({
+    const self = this;
+    self.dragCount = 0;
+    self.setState({
       error  : null,
       dropzoneEnter : false,
       dragging : false,
@@ -108,12 +109,12 @@ class NewFileEntry extends React.PureComponent {
     }, async () => {
 
       try {
-        await Promise.all(this.state.files.map(async (metadata) => {
-          const { data: { uploadFile: { error } } } = await this.props.client.mutate({
+        await Promise.all(self.state.files.map(async (metadata) => {
+          const { data: { uploadFile: { error } } } = await self.props.client.mutate({
             mutation  : MUTATION,
             variables : {
-              docId    : this.props.id,
-              category : this.props.category,
+              docId    : self.props.id,
+              category : self.props.category,
               metadata : metadata,
             },
             updateQueries : {
@@ -123,7 +124,7 @@ class NewFileEntry extends React.PureComponent {
 
                 if (prev && newActivities && newActivities.length) {
 
-                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
                     return prev;
                   }
 
@@ -145,7 +146,7 @@ class NewFileEntry extends React.PureComponent {
 
                 if (prev && newFile) {
 
-                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
                     return prev;
                   }
 
@@ -177,19 +178,19 @@ class NewFileEntry extends React.PureComponent {
             }
           }
 
-          // this.setState(({ files }) => ({
+          // self.setState(({ files }) => ({
           //   files : files.filter((f) => f.name !== metadata.name),
           // }));
         }));
 
         // Successfully saved!
-        this.setState({
+        self.setState({
           status : STATUS.SUCCESS,
           files  : [],
           error  : null,
         }, () => {
           setTimeout(() => {
-            this.setState({
+            self.setState({
               status : null,
               files  : [],
               error  : null,
@@ -198,12 +199,12 @@ class NewFileEntry extends React.PureComponent {
         });
       } catch (e) {
 
-        this.setState({
+        self.setState({
           status : STATUS.ERROR,
           error  : e.message,
         }, () => {
           setTimeout(() => {
-            this.setState({
+            self.setState({
               status : null,
               // files  : [],
               error  : null,
