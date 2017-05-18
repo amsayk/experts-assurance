@@ -21,7 +21,7 @@ export default async function setManager(request, done) {
 
   try {
     const doc = await new Parse.Query(DocType)
-      .get(id);
+      .get(id, { useMasterKey: true });
     if (!doc) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
@@ -29,7 +29,7 @@ export default async function setManager(request, done) {
     const oldManager = doc.get('manager');
 
     const user = await new Parse.Query(Parse.User)
-      .get(manager);
+      .get(manager, { useMasterKey: true });
     if (!user) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
@@ -85,6 +85,7 @@ export default async function setManager(request, done) {
         'client',
         'agent',
         'user',
+        'payment_user',
         'validation_user',
         'closure_user',
       ])

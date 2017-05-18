@@ -23,6 +23,8 @@ import Timeline from '../../Timeline';
 
 import Files from '../Files';
 
+import Observations from '../Observations';
+
 import { APP_NAME } from 'vars';
 
 import { SECURE } from 'vars';
@@ -39,24 +41,33 @@ export class CaseContainer extends React.PureComponent {
     this.onNav = this.onNav.bind(this);
 
     this.state = {
-      showFiles : function () {
-        const value = cookie.load(KEY, /* doNotParse = */false);
+      selectedNavItem : function () {
+        try {
+          const value = cookie.load(KEY, /* doNotParse = */false);
 
-        if (typeof value === 'undefined' || value !== null) {
-          return value === 1;
+          if (typeof value !== 'undefined' && value !== null) {
+            if (typeof value === 'string') {
+              return value;
+            } else {
+              cookie.remove(KEY);
+            }
+          }
+
+          return 'timeline.events';
+        } catch (e) {
+          cookie.remove(KEY);
+          return 'timeline.events';
         }
-
-        return true;
       }(),
     }
   }
 
   onNav(selectedNavItem) {
     this.setState({
-      showFiles : selectedNavItem === 'timeline.files',
+      selectedNavItem,
     }, () => {
       setTimeout(() => {
-        cookie.save(KEY, this.state.showFiles ? 1 : 0, { path: '/', httpOnly: false, secure: SECURE });
+        cookie.save(KEY, this.state.selectedNavItem, { path: '/', httpOnly: false, secure: SECURE });
       }, 0);
     });
   }
@@ -81,10 +92,24 @@ export class CaseContainer extends React.PureComponent {
           id={id}
           nav={this.state.nav}
         />
-        {this.state.showFiles
-            ? <Files onNav={this.onNav} id={id}/>
-            : <Timeline onNav={this.onNav} id={id}/>}
-          </div>
+        {(() => {
+          if (this.state.selectedNavItem === 'timeline.files') {
+            return (
+              <Files onNav={this.onNav} id={id}/>
+            );
+          }
+          if (this.state.selectedNavItem === 'timeline.events') {
+            return (
+              <Timeline onNav={this.onNav} id={id}/>
+            );
+          }
+          if (this.state.selectedNavItem === 'timeline.comments') {
+            return (
+              <Observations onNav={this.onNav} id={id}/>
+            );
+          }
+        })()}
+      </div>
     );
   }
 }

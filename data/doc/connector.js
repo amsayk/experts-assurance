@@ -14,7 +14,7 @@ import {
 
 import { businessQuery } from 'data/utils';
 
-import { DocType, FileType } from 'data/types';
+import { DocType, FileType, ObservationType } from 'data/types';
 
 import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
@@ -41,6 +41,7 @@ export class DocConnector {
         'client',
         'agent',
         'user',
+        'payment_user',
         'validation_user',
         'closure_user',
       ])
@@ -115,8 +116,65 @@ export class DocConnector {
     }
   }
 
-  validateDoc() {
+  getDocObservations({ cursor, id, user }) {
+    if (!user) {
+      return Promise.resolve({
+        prevCursor : 0,
+        cursor     : 0,
+        items      : [],
+      });
+    }
+
+    return doFetch().then((observations) => ({
+      prevCursor: cursor,
+      cursor: observations.length > 0 ? observations[observations.length - 1].get('date') : 0,
+      items: observations,
+    }));
+
+    function getQuery() {
+      const q = new Parse.Query(ObservationType);
+      return q;
+    }
+
+    function doFetch() {
+      const q = getQuery()
+        .matchesQuery('business', businessQuery())
+        .descending('date')
+        .limit(LIMIT_PER_PAGE);
+
+      q.equalTo('document', DocType.createWithoutData(id));
+
+      if (cursor) {
+        q.lessThan('date', cursor);
+      }
+
+      q.include([
+        'document',
+        'user',
+      ]);
+
+      return q.find({ useMasterKey: true });
+    }
+
+  }
+
+  async validateDoc() {
     return false;
+  }
+
+  async getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+    return {
+      length : 0,
+      cursor : 0,
+      docs   : [],
+    };
+  }
+  async getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+    return {
+      length : 0,
+      cursor : 0,
+      docs   : [],
+    };
   }
 
   // searchUsersByRoles(queryString, roles) {
@@ -170,7 +228,7 @@ export class DocConnector {
     lastModified = null,
 
     range = null,
-    validationRange = null,
+    // validationRange = null,
     closureRange = null,
 
     validator = null,
@@ -238,23 +296,23 @@ export class DocConnector {
       }
     }
 
-    if (validationRange && (state !== 'PENDING')) {
-      if (validationRange.from || validationRange.to) {
-        const range = {};
-
-        if (validationRange.from) {
-          range.gte = validationRange.from;
-        }
-        if (validationRange.to) {
-          range.lte = validationRange.to;
-        }
-        must.push({
-          range : {
-            'validation_date' : range,
-          },
-        });
-      }
-    }
+    // if (validationRange && (state !== 'PENDING')) {
+    //   if (validationRange.from || validationRange.to) {
+    //     const range = {};
+    //
+    //     if (validationRange.from) {
+    //       range.gte = validationRange.from;
+    //     }
+    //     if (validationRange.to) {
+    //       range.lte = validationRange.to;
+    //     }
+    //     must.push({
+    //       range : {
+    //         'validation_date' : range,
+    //       },
+    //     });
+    //   }
+    // }
 
     if (closureRange && (state === 'CLOSED' || state === 'CANCELED')) {
       if (closureRange.from || closureRange.to) {
@@ -438,6 +496,8 @@ export class DocConnector {
           'validation_user.name',
           // 'validation_user.email',
 
+          'payment_user.name',
+
           'closure_user.name',
           // 'closure_user.email',
         ],
@@ -490,6 +550,8 @@ export class DocConnector {
 
               'validation_user.name'         : {},
               // 'validation_user.email'        : {},
+
+              'payment_user.name'         : {},
 
               'closure_user.name'            : {},
               // 'closure_user.email'           : {},
@@ -640,7 +702,7 @@ export class DocConnector {
 
     function count() {
       if (topLevelFields.indexOf('length') !== -1) {
-        return getQuery().count();
+        return getQuery().count({ useMasterKey : true });
       }
       return Promise.resolve(0);
     }
@@ -669,69 +731,69 @@ export class DocConnector {
 
   }
 
-  pendingDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet) {
-    if (!user) {
-      return Promise.resolve({
-        length: 0,
-        docs: [],
-        cursor: 0,
-      });
-    }
-
-    return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
-      length,
-      docs,
-      cursor: cursor + docs.length,
-    }));
-
-    function getQuery() {
-      const q = new Parse.Query(DocType)
-        .equalTo('state', 'PENDING')
-        .matchesQuery('business', businessQuery());
-
-      if (durationInDays === -1) {
-        q.greaterThanOrEqualTo('date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
-      } else {
-        q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-      }
-
-      // Not deleted
-      q.doesNotExist('deletion_date');
-      q.doesNotExist('deletion_user');
-
-      return q;
-    }
-
-    function doFetch() {
-      const q = getQuery()
-        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
-        .include([
-          'user',
-          'manager',
-          'client',
-          'agent',
-        ])
-
-      if (cursor) {
-        q.skip(cursor);
-      }
-
-      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
-      );
-
-      return q.find({ useMasterKey : true });
-    }
-
-    function doCount() {
-      if (selectionSet.indexOf('length') !== -1){
-        return getQuery().count();
-      }
-
-      return Promise.resolve(0);
-    }
-
-  }
+  // pendingDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet) {
+  //   if (!user) {
+  //     return Promise.resolve({
+  //       length: 0,
+  //       docs: [],
+  //       cursor: 0,
+  //     });
+  //   }
+  //
+  //   return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
+  //     length,
+  //     docs,
+  //     cursor: cursor + docs.length,
+  //   }));
+  //
+  //   function getQuery() {
+  //     const q = new Parse.Query(DocType)
+  //       .equalTo('state', 'PENDING')
+  //       .matchesQuery('business', businessQuery());
+  //
+  //     if (durationInDays === -1) {
+  //       q.greaterThanOrEqualTo('date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+  //     } else {
+  //       q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+  //     }
+  //
+  //     // Not deleted
+  //     q.doesNotExist('deletion_date');
+  //     q.doesNotExist('deletion_user');
+  //
+  //     return q;
+  //   }
+  //
+  //   function doFetch() {
+  //     const q = getQuery()
+  //       .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
+  //       .include([
+  //         'user',
+  //         'manager',
+  //         'client',
+  //         'agent',
+  //       ])
+  //
+  //     if (cursor) {
+  //       q.skip(cursor);
+  //     }
+  //
+  //     q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+  //       !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+  //     );
+  //
+  //     return q.find({ useMasterKey : true });
+  //   }
+  //
+  //   function doCount() {
+  //     if (selectionSet.indexOf('length') !== -1){
+  //       return getQuery().count({ useMasterKey : true });
+  //     }
+  //
+  //     return Promise.resolve(0);
+  //   }
+  //
+  // }
   openDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet, validOnly) {
     if (!user) {
       return Promise.resolve({
@@ -769,6 +831,7 @@ export class DocConnector {
       const q = getQuery()
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
+          'payment_user',
           'validation_user',
           'manager',
           'client',
@@ -788,84 +851,84 @@ export class DocConnector {
 
     function doCount() {
       if (selectionSet.indexOf('length') !== -1){
-        return getQuery().count();
+        return getQuery().count({ useMasterKey : true });
       }
 
       return Promise.resolve(0);
     }
 
   }
-  closedDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet, includeCanceled) {
-    if (!user) {
-      return Promise.resolve({
-        length: 0,
-        docs: [],
-        cursor: 0,
-      });
-    }
-
-    return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
-      length,
-      docs,
-      cursor: cursor + docs.length,
-    }));
-
-    function getQuery() {
-      let q = new Parse.Query(DocType).equalTo('state', 'CLOSED');
-
-      if (includeCanceled) {
-        q = [
-          q,
-          new Parse.Query(DocType).equalTo('state', 'CANCELED'),
-        ];
-      }
-
-      q = (Array.isArray(q) ? Parse.Query.or.apply(Parse.Query, q) : q)
-        .matchesQuery('business', businessQuery());
-
-      if (durationInDays === -1) {
-        q.greaterThanOrEqualTo('closure_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
-      } else {
-        q.greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)));
-      }
-
-      // Not deleted
-      q.doesNotExist('deletion_date');
-      q.doesNotExist('deletion_user');
-
-      return q;
-    }
-
-    function doFetch() {
-      const q = getQuery()
-        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
-        .include([
-          'closure_user',
-          'manager',
-          'client',
-          'agent',
-        ]);
-
-      if (cursor) {
-        q.skip(cursor);
-      }
-
-      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
-      );
-
-      return q.find({ useMasterKey : true });
-    }
-
-    function doCount() {
-      if (selectionSet.indexOf('length') !== -1){
-        return getQuery().count();
-      }
-
-      return Promise.resolve(0);
-    }
-
-  }
+  // closedDashboard(durationInDays, cursor, sortConfig, user, now, selectionSet, includeCanceled) {
+  //   if (!user) {
+  //     return Promise.resolve({
+  //       length: 0,
+  //       docs: [],
+  //       cursor: 0,
+  //     });
+  //   }
+  //
+  //   return Promise.all([doFetch(), doCount()]).then(([ docs, length ]) => ({
+  //     length,
+  //     docs,
+  //     cursor: cursor + docs.length,
+  //   }));
+  //
+  //   function getQuery() {
+  //     let q = new Parse.Query(DocType).equalTo('state', 'CLOSED');
+  //
+  //     if (includeCanceled) {
+  //       q = [
+  //         q,
+  //         new Parse.Query(DocType).equalTo('state', 'CANCELED'),
+  //       ];
+  //     }
+  //
+  //     q = (Array.isArray(q) ? Parse.Query.or.apply(Parse.Query, q) : q)
+  //       .matchesQuery('business', businessQuery());
+  //
+  //     if (durationInDays === -1) {
+  //       q.greaterThanOrEqualTo('closure_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+  //     } else {
+  //       q.greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)));
+  //     }
+  //
+  //     // Not deleted
+  //     q.doesNotExist('deletion_date');
+  //     q.doesNotExist('deletion_user');
+  //
+  //     return q;
+  //   }
+  //
+  //   function doFetch() {
+  //     const q = getQuery()
+  //       .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
+  //       .include([
+  //         'closure_user',
+  //         'manager',
+  //         'client',
+  //         'agent',
+  //       ]);
+  //
+  //     if (cursor) {
+  //       q.skip(cursor);
+  //     }
+  //
+  //     q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+  //       !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+  //     );
+  //
+  //     return q.find({ useMasterKey : true });
+  //   }
+  //
+  //   function doCount() {
+  //     if (selectionSet.indexOf('length') !== -1){
+  //       return getQuery().count({ useMasterKey : true });
+  //     }
+  //
+  //     return Promise.resolve(0);
+  //   }
+  //
+  // }
 
   recentDocs(user) {
     if (!user) {
@@ -884,7 +947,7 @@ export class DocConnector {
       .include([
         'user',
       ])
-      .find();
+      .find({ useMasterKey : true });
   }
 
   async dashboard(user, selectionSet) {

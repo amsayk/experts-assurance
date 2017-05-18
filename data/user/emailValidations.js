@@ -13,14 +13,14 @@ const validations = {
         new Parse.Query(Parse.User)
           .equalTo('email', email)
           .notEqualTo('objectId', user.id)
-          .first()
+          .first({ useMasterKey : true })
           .then(
             function (object) {
               if (object) {
                 reject(true);
-                return;
+              } else {
+                resolve();
               }
-              resolve();
             },
             function () {
               reject(true);

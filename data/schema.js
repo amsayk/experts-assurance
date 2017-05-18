@@ -49,6 +49,9 @@ const rootSchema = [`
     # activities
     timeline(cursor: Date, query: TimelineQuery!): TimelineResponse!
 
+    # Observations
+    getDocObservations(id: ID!, cursor: Date): DocObservationsResponse!
+
     # Docs
     getDoc(id: ID!): Doc
     getDocs(query: DocsFetchQuery!): DocsFetchResponse!
@@ -58,18 +61,17 @@ const rootSchema = [`
     # Files
     getDocFiles(id: ID!): [File!]!
     getFile(id: ID!): File
-    validateDoc(id: ID!):Boolean!
 
     recentDocs: [Doc!]!
 
     dashboard: Dashboard!
 
     # Docs dashboard
-    pendingDashboard(
-      durationInDays: Int!,
-      cursor: Int = 0,
-      sortConfig: ESSortConfig!
-    ): DocsFetchResponse!
+    # pendingDashboard(
+    #   durationInDays: Int!,
+    #   cursor: Int = 0,
+    #   sortConfig: ESSortConfig!
+    # ): DocsFetchResponse!
 
     openDashboard(
       durationInDays: Int!,
@@ -78,11 +80,23 @@ const rootSchema = [`
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
-    closedDashboard(
-      durationInDays: Int!,
+    # closedDashboard(
+    #   durationInDays: Int!,
+    #   cursor: Int = 0,
+    #   sortConfig: ESSortConfig!
+    #   includeCanceled: Boolean = false,
+    # ): DocsFetchResponse!
+
+    validateDoc(id: ID!): Boolean!
+    getInvalidDocs(
+      durationInDays: Int!
       cursor: Int = 0,
       sortConfig: ESSortConfig!
-      includeCanceled: Boolean = false,
+    ): DocsFetchResponse!
+    getUnpaidDocs(
+      durationInDays: Int!
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
     getLastRefNo: RefNo!
@@ -98,7 +112,14 @@ const rootSchema = [`
     delDoc(id: ID!): DelOrRestoreDocResponse!
     restoreDoc(id: ID!): DelOrRestoreDocResponse!
     setManager(id: ID!, manager: ID!): SetManagerResponse!
+
     setState(id: ID!, state: DocState!): SetStateResponse!
+
+    closeDoc(id: ID!, closureDate: Date!, info: DocPaymentInfo): SetStateResponse!
+    cancelDoc(id: ID!): SetStateResponse!
+
+    setPay(id: ID!, info: DocPaymentInfo!): SetOrDelPayResponse!
+    delPay(id: ID!): SetOrDelPayResponse!
 
     # Files
     uploadFile(docId: ID!, category: String!, metadata: FileInput!): UploadFileResponse!

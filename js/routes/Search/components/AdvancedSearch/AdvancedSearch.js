@@ -9,7 +9,7 @@ import Manager from './fields/Manager';
 import Client from './fields/Client';
 import Agent from './fields/Agent';
 import DTSinister from './fields/DTSinister';
-import DTValidation from './fields/DTValidation';
+// import DTValidation from './fields/DTValidation';
 import DTClosure from './fields/DTClosure';
 // import Q from './fields/Q';
 import LastModified from './fields/LastModified';
@@ -31,11 +31,11 @@ export default class AdvancedSearch extends React.Component {
           range={search.range ? search.range.toJS() : {}}
           onRange={actions.onRange}
         />
-        <DTValidation
-          state={search.state}
-          range={search.validationRange ? search.validationRange.toJS() : {}}
-          onRange={actions.onValidationRange}
-        />
+        {/* <DTValidation */}
+        {/*   state={search.state} */}
+        {/*   range={search.validationRange ? search.validationRange.toJS() : {}} */}
+        {/*   onRange={actions.onValidationRange} */}
+        {/* /> */}
         <DTClosure
           state={search.state}
           range={search.closureRange ? search.closureRange.toJS() : {}}

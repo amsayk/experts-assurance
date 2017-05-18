@@ -15,16 +15,24 @@ import GET_TIMELINE_QUERY from './getTimeline.query.graphql';
 
 import GET_RECENT_DOCS_QUERY from './recentDocs.query.graphql';
 
-import GET_PENDING_DOCS from './pendingDocs.query.graphql';
-import GET_MORE_PENDING_DOCS from './morePendingDocs.query.graphql';
+// import GET_PENDING_DOCS from './pendingDocs.query.graphql';
+// import GET_MORE_PENDING_DOCS from './morePendingDocs.query.graphql';
 
 import GET_OPEN_DOCS from './openDocs.query.graphql';
 import GET_MORE_OPEN_DOCS from './moreOpenDocs.query.graphql';
 
-import GET_CLOSED_DOCS from './closedDocs.query.graphql';
-import GET_MORE_CLOSED_DOCS from './moreClosedDocs.query.graphql';
+import GET_UNPAID_DOCS from './unpaidDocs.query.graphql';
+import GET_MORE_UNPAID_DOCS from './moreUnpaidDocs.query.graphql';
+
+import GET_INVALID_DOCS from './invalidDocs.query.graphql';
+import GET_MORE_INVALID_DOCS from './moreInvalidDocs.query.graphql';
+
+// import GET_CLOSED_DOCS from './closedDocs.query.graphql';
+// import GET_MORE_CLOSED_DOCS from './moreClosedDocs.query.graphql';
 
 import DASHBOARD_QUERY from './dashboard.query.graphql';
+
+import GET_DOC_OBSERVATIONS_QUERY from './getDocObservations.query.graphql';
 
 import LAST_REFNO_QUERY from './getLastRefNo.query.graphql';
 
@@ -212,51 +220,51 @@ const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
   }),
 });
 
-const pendingDocs = graphql(GET_PENDING_DOCS, {
-  options: (ownProps) => ({
-    variables: {
-      durationInDays : ownProps.durationInDays,
-      sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
-    },
-  }),
-  props: ({ ownProps, data: { loading, pendingDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
-    data: {
-      loading,
-      docs,
-      cursor,
-      length,
-    },
-    loadMore() {
-      return fetchMore({
-        query: GET_MORE_PENDING_DOCS,
-        variables: {
-          cursor,
-          durationInDays : ownProps.durationInDays,
-          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.pendingDashboard.docs;
-
-          return {
-            pendingDashboard : {
-              // By returning `cursor` here, we update the `loadMore` function
-              // to the new cursor.
-              cursor: fetchMoreResult.pendingDashboard.cursor,
-
-              // length: fetchMoreResult.data.pendingDashboard.length,
-
-              // Put the new docs at the end of the list
-              docs: [
-                ...previousResult.pendingDashboard.docs,
-                ...newDocs,
-              ],
-            },
-          };
-        },
-      });
-    },
-  }),
-});
+// const pendingDocs = graphql(GET_PENDING_DOCS, {
+//   options: (ownProps) => ({
+//     variables: {
+//       durationInDays : ownProps.durationInDays,
+//       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+//     },
+//   }),
+//   props: ({ ownProps, data: { loading, pendingDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+//     data: {
+//       loading,
+//       docs,
+//       cursor,
+//       length,
+//     },
+//     loadMore() {
+//       return fetchMore({
+//         query: GET_MORE_PENDING_DOCS,
+//         variables: {
+//           cursor,
+//           durationInDays : ownProps.durationInDays,
+//           sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+//         },
+//         updateQuery: (previousResult, { fetchMoreResult }) => {
+//           const newDocs = fetchMoreResult.pendingDashboard.docs;
+//
+//           return {
+//             pendingDashboard : {
+//               // By returning `cursor` here, we update the `loadMore` function
+//               // to the new cursor.
+//               cursor: fetchMoreResult.pendingDashboard.cursor,
+//
+//               // length: fetchMoreResult.data.pendingDashboard.length,
+//
+//               // Put the new docs at the end of the list
+//               docs: [
+//                 ...previousResult.pendingDashboard.docs,
+//                 ...newDocs,
+//               ],
+//             },
+//           };
+//         },
+//       });
+//     },
+//   }),
+// });
 
 const openDocs = graphql(GET_OPEN_DOCS, {
   options: (ownProps) => ({
@@ -304,15 +312,14 @@ const openDocs = graphql(GET_OPEN_DOCS, {
   }),
 });
 
-const closedDocs = graphql(GET_CLOSED_DOCS, {
+const unpaidDocs = graphql(GET_UNPAID_DOCS, {
   options: (ownProps) => ({
     variables: {
-      includeCanceled : ownProps.includeCanceled,
       durationInDays : ownProps.durationInDays,
       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
     },
   }),
-  props: ({ ownProps, data: { loading, closedDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+  props: ({ ownProps, data: { loading, getUnpaidDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
     data: {
       loading,
       docs,
@@ -321,27 +328,26 @@ const closedDocs = graphql(GET_CLOSED_DOCS, {
     },
     loadMore() {
       return fetchMore({
-        query: GET_MORE_CLOSED_DOCS,
+        query: GET_MORE_UNPAID_DOCS,
         variables: {
           cursor,
-          includeCanceled : ownProps.includeCanceled,
-          durationInDays  : ownProps.durationInDays,
-          sortConfig      : pick(ownProps.sortConfig, ['key', 'direction']),
+          durationInDays : ownProps.durationInDays,
+          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const newDocs = fetchMoreResult.closedDashboard.docs;
+          const newDocs = fetchMoreResult.getUnpaidDocs.docs;
 
           return {
-            closedDashboard : {
+            openDashboard : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
-              cursor: fetchMoreResult.closedDashboard.cursor,
+              cursor: fetchMoreResult.getUnpaidDocs.cursor,
 
-              // length: fetchMoreResult.closedDashboard.length,
+              // length: fetchMoreResult.getUnpaidDocs.length,
 
               // Put the new docs at the end of the list
               docs: [
-                ...previousResult.closedDashboard.docs,
+                ...previousResult.getUnpaidDocs.docs,
                 ...newDocs,
               ],
             },
@@ -352,16 +358,110 @@ const closedDocs = graphql(GET_CLOSED_DOCS, {
   }),
 });
 
+const invalidDocs = graphql(GET_INVALID_DOCS, {
+  options: (ownProps) => ({
+    variables: {
+      durationInDays : ownProps.durationInDays,
+      sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+    },
+  }),
+  props: ({ ownProps, data: { loading, getInvalidDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+    data: {
+      loading,
+      docs,
+      cursor,
+      length,
+    },
+    loadMore() {
+      return fetchMore({
+        query: GET_MORE_INVALID_DOCS,
+        variables: {
+          cursor,
+          durationInDays : ownProps.durationInDays,
+          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          const newDocs = fetchMoreResult.getInvalidDocs.docs;
+
+          return {
+            openDashboard : {
+              // By returning `cursor` here, we update the `loadMore` function
+              // to the new cursor.
+              cursor: fetchMoreResult.getInvalidDocs.cursor,
+
+              // length: fetchMoreResult.getInvalidDocs.length,
+
+              // Put the new docs at the end of the list
+              docs: [
+                ...previousResult.getInvalidDocs.docs,
+                ...newDocs,
+              ],
+            },
+          };
+        },
+      });
+    },
+  }),
+});
+
+// const closedDocs = graphql(GET_CLOSED_DOCS, {
+//   options: (ownProps) => ({
+//     variables: {
+//       includeCanceled : ownProps.includeCanceled,
+//       durationInDays : ownProps.durationInDays,
+//       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+//     },
+//   }),
+//   props: ({ ownProps, data: { loading, closedDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+//     data: {
+//       loading,
+//       docs,
+//       cursor,
+//       length,
+//     },
+//     loadMore() {
+//       return fetchMore({
+//         query: GET_MORE_CLOSED_DOCS,
+//         variables: {
+//           cursor,
+//           includeCanceled : ownProps.includeCanceled,
+//           durationInDays  : ownProps.durationInDays,
+//           sortConfig      : pick(ownProps.sortConfig, ['key', 'direction']),
+//         },
+//         updateQuery: (previousResult, { fetchMoreResult }) => {
+//           const newDocs = fetchMoreResult.closedDashboard.docs;
+//
+//           return {
+//             closedDashboard : {
+//               // By returning `cursor` here, we update the `loadMore` function
+//               // to the new cursor.
+//               cursor: fetchMoreResult.closedDashboard.cursor,
+//
+//               // length: fetchMoreResult.closedDashboard.length,
+//
+//               // Put the new docs at the end of the list
+//               docs: [
+//                 ...previousResult.closedDashboard.docs,
+//                 ...newDocs,
+//               ],
+//             },
+//           };
+//         },
+//       });
+//     },
+//   }),
+// });
+
 
 const dashboard = graphql(DASHBOARD_QUERY, {
   options: ({}) => ({
     variables: {
     },
   }),
-  props: ({ ownProps, data: { loading, dashboard: { pending = {}, open = {}, closed = {}, canceled = {} } = {} } }) => ({
+  props: ({ ownProps, data: { loading, dashboard: { /*pending = {}, */open = {}, closed = {}, canceled = {} } = {} } }) => ({
     loading,
     info: {
-      pending,
+      // pending,
       open,
       closed,
       canceled,
@@ -407,6 +507,18 @@ const docFiles = graphql(GET_DOC_FILES_QUERY, {
   }),
 });
 
+const docObserations = graphql(GET_DOC_OBSERVATIONS_QUERY, {
+  options: (ownProps) => ({
+    variables : {
+      id : ownProps.id,
+    },
+  }),
+  props: ({ data: { loading, getDocObservations = { items : [], cursor : 0, prevCursor : 0 } } }) => ({
+    loading,
+    observations : getDocObservations,
+  }),
+});
+
 export default {
   currentUser/*, usersByRoles*/,
   esUsersByRoles,
@@ -416,12 +528,15 @@ export default {
   docs,
   timeline,
   recentDocs,
-  pendingDocs,
+  // pendingDocs,
   openDocs,
-  closedDocs,
+  // closedDocs,
   dashboard,
   lastRefNo,
   searchMatchingUsers,
   docFiles,
+  docObserations,
+  unpaidDocs,
+  invalidDocs,
 };
 

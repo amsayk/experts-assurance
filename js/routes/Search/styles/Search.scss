@@ -198,7 +198,7 @@ $navbar-height: 70px;
 }
 
 .stateFilterAdvancedSearch,
-.stateFilter_PENDING,
+// .stateFilter_PENDING,
 .stateFilter_OPEN,
 .stateFilter_CLOSED,
 .stateFilter_CANCELED {
@@ -218,13 +218,13 @@ $navbar-height: 70px;
   composes: d-flex align-items-center from 'styles/_base.scss';
 }
 
-.PENDING:not(.selecting){
-  margin: 0;
-  padding: 0;
-  svg {
-    color: $brand-warning;
-  }
-}
+// .PENDING:not(.selecting){
+//   margin: 0;
+//   padding: 0;
+//   svg {
+//     color: $brand-warning;
+//   }
+// }
 .OPEN:not(.selecting){
   margin: 0;
   padding: 0;
@@ -278,16 +278,16 @@ $navbar-height: 70px;
   user-select: none;
 }
 
-.docSearchState_PENDING,
+// .docSearchState_PENDING,
 .docSearchState_OPEN,
 .docSearchState_CLOSED,
 .docSearchState_CANCELED {
   composes: docSearchState;
 }
 
-.docSearchState_PENDING {
-  color: $brand-warning;
-}
+// .docSearchState_PENDING {
+//   color: $brand-warning;
+// }
 .docSearchState_OPEN {
   color: $brand-info;
 }

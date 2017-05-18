@@ -26,7 +26,7 @@ import MUTATION from './setState.mutation.graphql';
 const LABEL = 'État';
 
 const DASHBOARD_KEY_TO_DOC_STATE = {
-  pending  : 'PENDING',
+  // pending  : 'PENDING',
   open     : 'OPEN',
   closed   : 'CLOSED',
   canceled : 'CANCELED',
@@ -170,66 +170,66 @@ class StateLine extends React.Component {
 
               return prev;
             },
-            pendingDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setState.doc;
-
-              if (prev && newDoc) {
-                // Remove
-                if (oldDoc.state === 'PENDING') {
-                  const index = arrayFindIndex(prev.pendingDashboard.docs, (doc) => newDoc.id === doc.id);
-                  const docs = index !== -1
-                    ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-                    : [
-                      ...prev.pendingDashboard.docs
-                    ];
-
-                  return {
-                    pendingDashboard : {
-                      length : prev.pendingDashboard.length - 1,
-                      cursor : prev.pendingDashboard.cursor - 1,
-                      docs,
-                    },
-                  };
-                }
-
-                // Add
-                if (newDoc.state === 'PENDING') {
-                  const docs = [
-                    newDoc,
-                    ...prev.pendingDashboard.docs
-                  ];
-
-                  return {
-                    pendingDashboard : {
-                      length : prev.pendingDashboard.length + 1,
-                      cursor : prev.pendingDashboard.cursor + 1,
-                      docs,
-                    },
-                  };
-                }
-              }
-
-              return prev;
-            },
-            morePendingDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setState.doc;
-
-              if (prev && newDoc && oldDoc.state === 'PENDING') {
-                const index = arrayFindIndex(prev.pendingDashboard.docs, (doc) => newDoc.id === doc.id);
-                if (index !== -1) {
-                  const docs = prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id);
-
-                  return {
-                    pendingDashboard : {
-                      cursor : prev.pendingDashboard.cursor - 1,
-                      docs,
-                    },
-                  };
-                }
-              }
-
-              return prev;
-            },
+            // pendingDocs(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.setState.doc;
+            //
+            //   if (prev && newDoc) {
+            //     // Remove
+            //     if (oldDoc.state === 'PENDING') {
+            //       const index = arrayFindIndex(prev.pendingDashboard.docs, (doc) => newDoc.id === doc.id);
+            //       const docs = index !== -1
+            //         ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+            //         : [
+            //           ...prev.pendingDashboard.docs
+            //         ];
+            //
+            //       return {
+            //         pendingDashboard : {
+            //           length : prev.pendingDashboard.length - 1,
+            //           cursor : prev.pendingDashboard.cursor - 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //
+            //     // Add
+            //     if (newDoc.state === 'PENDING') {
+            //       const docs = [
+            //         newDoc,
+            //         ...prev.pendingDashboard.docs
+            //       ];
+            //
+            //       return {
+            //         pendingDashboard : {
+            //           length : prev.pendingDashboard.length + 1,
+            //           cursor : prev.pendingDashboard.cursor + 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //   }
+            //
+            //   return prev;
+            // },
+            // morePendingDocs(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.setState.doc;
+            //
+            //   if (prev && newDoc && oldDoc.state === 'PENDING') {
+            //     const index = arrayFindIndex(prev.pendingDashboard.docs, (doc) => newDoc.id === doc.id);
+            //     if (index !== -1) {
+            //       const docs = prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id);
+            //
+            //       return {
+            //         pendingDashboard : {
+            //           cursor : prev.pendingDashboard.cursor - 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //   }
+            //
+            //   return prev;
+            // },
             openDocs(prev, { mutationResult, queryVariables }) {
               const newDoc = mutationResult.data.setState.doc;
 
@@ -290,66 +290,66 @@ class StateLine extends React.Component {
 
               return prev;
             },
-            closedDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setState.doc;
-
-              if (prev && newDoc) {
-                // Remove
-                if (oldDoc.state === 'CLOSED' || oldDoc.state === 'CANCELED') {
-                  const index = arrayFindIndex(prev.closedDashboard.docs, (doc) => newDoc.id === doc.id);
-                  const docs = index !== -1
-                    ? prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-                    : [
-                      ...prev.closedDashboard.docs
-                    ];
-
-                  return {
-                    closedDashboard : {
-                      length : prev.closedDashboard.length - 1,
-                      cursor : prev.closedDashboard.cursor - 1,
-                      docs,
-                    },
-                  };
-                }
-
-                // Add
-                if (newDoc.state === 'CLOSED' || newDoc.state === 'CANCELED') {
-                  const docs = [
-                    newDoc,
-                    ...prev.closedDashboard.docs
-                  ];
-
-                  return {
-                    closedDashboard : {
-                      length : prev.closedDashboard.length + 1,
-                      cursor : prev.closedDashboard.cursor + 1,
-                      docs,
-                    },
-                  };
-                }
-              }
-
-              return prev;
-            },
-            moreClosedDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setState.doc;
-
-              if (prev && newDoc && (oldDoc.state === 'CLOSED' && oldDoc.state === 'CANCELED')) {
-                const index = arrayFindIndex(prev.closedDashboard.docs, (doc) => newDoc.id === doc.id);
-                if (index !== -1) {
-                  const docs = prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id);
-
-                  return {
-                    closedDashboard : {
-                      cursor : prev.closedDashboard.cursor - 1,
-                      docs,
-                    },
-                  };
-                }
-              }
-
-              return prev;
-            },
+            // closedDocs(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.setState.doc;
+            //
+            //   if (prev && newDoc) {
+            //     // Remove
+            //     if (oldDoc.state === 'CLOSED' || oldDoc.state === 'CANCELED') {
+            //       const index = arrayFindIndex(prev.closedDashboard.docs, (doc) => newDoc.id === doc.id);
+            //       const docs = index !== -1
+            //         ? prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id)
+            //         : [
+            //           ...prev.closedDashboard.docs
+            //         ];
+            //
+            //       return {
+            //         closedDashboard : {
+            //           length : prev.closedDashboard.length - 1,
+            //           cursor : prev.closedDashboard.cursor - 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //
+            //     // Add
+            //     if (newDoc.state === 'CLOSED' || newDoc.state === 'CANCELED') {
+            //       const docs = [
+            //         newDoc,
+            //         ...prev.closedDashboard.docs
+            //       ];
+            //
+            //       return {
+            //         closedDashboard : {
+            //           length : prev.closedDashboard.length + 1,
+            //           cursor : prev.closedDashboard.cursor + 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //   }
+            //
+            //   return prev;
+            // },
+            // moreClosedDocs(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.setState.doc;
+            //
+            //   if (prev && newDoc && (oldDoc.state === 'CLOSED' && oldDoc.state === 'CANCELED')) {
+            //     const index = arrayFindIndex(prev.closedDashboard.docs, (doc) => newDoc.id === doc.id);
+            //     if (index !== -1) {
+            //       const docs = prev.closedDashboard.docs.filter((doc) => doc.id !== newDoc.id);
+            //
+            //       return {
+            //         closedDashboard : {
+            //           cursor : prev.closedDashboard.cursor - 1,
+            //           docs,
+            //         },
+            //       };
+            //     }
+            //   }
+            //
+            //   return prev;
+            // },
             recentDocs(prev, { mutationResult, queryVariables }) {
               const newDoc = mutationResult.data.setState.doc;
 
@@ -377,7 +377,7 @@ class StateLine extends React.Component {
 
                 return {
                   timeline : {
-                    cursor : prev.timeline.cursor + 1,
+                    cursor : prev.timeline.cursor,
                     result : [
                       ...newActivities,
                       ...prev.timeline.result,

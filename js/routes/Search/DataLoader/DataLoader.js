@@ -41,7 +41,7 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
         user            : search.user,
 
         range           : rangeToDate(search.range),
-        validationRange : rangeToDate(search.validationRange),
+        // validationRange : rangeToDate(search.validationRange),
         closureRange    : momentToDate(search.closureRange),
 
         state           : search.state,
@@ -75,7 +75,7 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
             user            : ownProps.search.user,
 
             range           : rangeToDate(ownProps.search.range),
-            validationRange : rangeToDate(ownProps.search.validationRange),
+            // validationRange : rangeToDate(ownProps.search.validationRange),
             closureRange    : momentToDate(ownProps.search.closureRange),
 
             state           : ownProps.search.state,

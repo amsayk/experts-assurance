@@ -16,8 +16,14 @@ export const DELETE_DOC                   = keyOf({DELETE_DOC: null});
 export const RESTORE_DOC                  = keyOf({RESTORE_DOC: null});
 export const SET_MANAGER                  = keyOf({SET_MANAGER: null});
 export const SET_STATE                    = keyOf({SET_STATE: null});
+export const CLOSE_DOC                    = keyOf({CLOSE_DOC: null});
+export const CANCELE_DOC                  = keyOf({CANCELE_DOC: null});
 
-// export const UPLOAD_FILE                  = keyOf({UPLOAD_FILE: null});
+export const UPLOAD_FILE                  = keyOf({UPLOAD_FILE: null});
 export const DELETE_FILE                  = keyOf({DELETE_FILE: null});
 export const RESTORE_FILE                 = keyOf({RESTORE_FILE: null});
+
+// Payments
+export const SET_PAY                 = keyOf({SET_PAY: null});
+export const DEL_PAY                 = keyOf({DEL_PAY: null});
 

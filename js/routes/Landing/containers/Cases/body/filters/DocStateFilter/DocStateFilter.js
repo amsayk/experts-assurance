@@ -10,7 +10,7 @@ import Button from 'components/bootstrap/Button';
 import {
   CloseIcon,
 
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -38,7 +38,7 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En attente',   <UnknownIcon   size={18}/>),
+  // PENDING  : getState('PENDING',  'En attente',   <UnknownIcon   size={18}/>),
   OPEN     : getState('OPEN',     'En cours',     <WatchIcon     size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',         <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',       <CanceledIcon  size={18}/>),
@@ -109,16 +109,16 @@ class DocStateFilter extends React.Component {
             État
           </Dropdown.Toggle>}
           <Dropdown.Menu className={style.stateMenu}>
-            <MenuItem eventKey='PENDING'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div className={style['PENDING']}>
-                  <UnknownIcon size={18}/>
-                </div>
-                <div style={{ marginLeft: 9 }}>
-                  En attente
-                </div>
-              </div>
-            </MenuItem>
+            {/* <MenuItem eventKey='PENDING'> */}
+            {/*   <div style={{ display: 'flex', flexDirection: 'row' }}> */}
+            {/*     <div className={style['PENDING']}> */}
+            {/*       <UnknownIcon size={18}/> */}
+            {/*     </div> */}
+            {/*     <div style={{ marginLeft: 9 }}> */}
+            {/*       En attente */}
+            {/*     </div> */}
+            {/*   </div> */}
+            {/* </MenuItem> */}
             <MenuItem eventKey='OPEN'>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div className={style['OPEN']}>

@@ -1,14 +1,18 @@
 import Parse from 'parse/node';
 
+import uuid from 'uuid';
+
 import publish from 'backend/kue-mq/publish';
 
-import { formatError, getOrCreateBusiness, genDocKey, serializeParseObject } from 'backend/utils';
+import { formatError, getOrCreateBusiness, genDocKey, deserializeParseObject, serializeParseObject } from 'backend/utils';
 import { BusinessType, ActivityType, DocType } from 'data/types';
 import { getRefNo } from 'backend/utils';
 
 import * as codes from 'result-codes';
 
 import { Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
+
+import { SIGN_UP } from 'backend/constants';
 
 export default async function addDoc(request, done) {
   if (!request.user) {
@@ -19,17 +23,21 @@ export default async function addDoc(request, done) {
   const { payload: {
     vehicle,
 
-    isOpen,
+    // isOpen,
+
+    company,
 
     manager,
     agent,
     client,
 
+    dateMission,
     date : dateMS,
   } } = request.params;
 
   const date = new Date(dateMS);
-  const state = isOpen ? 'OPEN' : 'PENDING';
+  // const state = isOpen ? 'OPEN' : 'PENDING';
+  const state = 'OPEN';
 
   const ACL = new Parse.ACL();
   ACL.setPublicReadAccess(false);
@@ -42,12 +50,33 @@ export default async function addDoc(request, done) {
 
     if (_in && _in.key === 'userData') {
       const { displayName, email } = _in[_in.key];
-      return await new Parse.User().set({
-        displayName,
-        mail: email,
-        roles: [role],
-        business,
-      }).save(null, { useMasterKey: true });
+      // return await new Parse.User().set({
+      //   username : uuid.v4(),
+      //   password : uuid.v4(),
+      //   displayName,
+      //   mail: email,
+      //   roles: [role],
+      //   business,
+      // }).save(null, { useMasterKey: true });
+
+      return await new Promise(async (resolve, reject) => {
+        try {
+          const signUpRequest = {
+            now : request.now,
+            user : serializeParseObject(request.user),
+            params : {
+              password : uuid.v4(),
+              displayName,
+              email : email || `${uuid.v4()}@epsilon.ma`,
+              role,
+            },
+          };
+          const { data : user } = await publish('AUTH', SIGN_UP, signUpRequest);
+          resolve(deserializeParseObject(user));
+        } catch (e) {
+          reject(e);
+        }
+      })
     }
 
     return null;
@@ -63,6 +92,8 @@ export default async function addDoc(request, done) {
 
       vehicle,
 
+      company,
+
       refNo,
 
       state,
@@ -71,6 +102,7 @@ export default async function addDoc(request, done) {
 
       user: request.user,
 
+      dateMission : new Date(dateMission),
       date,
 
       key,
@@ -97,10 +129,14 @@ export default async function addDoc(request, done) {
     let activities = [
       { type : 'DOCUMENT_CREATED', user: request.user, state, date },
     ];
-    let validation = isOpen && {
+    let validation = {
       date,
       user: request.user,
     };
+    // let validation = isOpen && {
+    //   date,
+    //   user: request.user,
+    // };
 
     if (business) {
       doc = await add(await business.fetch({ useMasterKey: true }));
@@ -136,7 +172,7 @@ export default async function addDoc(request, done) {
     setTimeout(() => {
       // publish to es_index
       const req = {
-        user   : request.user,
+        user   : serializeParseObject(request.user),
         now    : request.now,
         params : { id: doc.id },
       };
@@ -151,6 +187,7 @@ export default async function addDoc(request, done) {
         'client',
         'agent',
         'user',
+        'payment_user',
         'validation_user',
         'closure_user',
       ])

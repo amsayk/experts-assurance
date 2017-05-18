@@ -27,7 +27,7 @@ class DTMission extends React.Component {
       <div className={style.overviewLine}>
         <div className={style.overviewLabel}>{LABEL}</div>
         <div className={style.overviewValue}>
-          {doc.dtMission ? intl.formatDate(doc.dtMission) : '—'}
+          {doc.dateMission ? intl.formatDate(doc.dateMission) : '—'}
         </div>
       </div>
     );

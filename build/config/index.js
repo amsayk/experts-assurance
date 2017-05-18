@@ -4,6 +4,8 @@ const log = require('log')('app:config');
 const objectAssign = require('object-assign');
 const nullthrows = require('nullthrows');
 
+const { loadAdapter } = require('parse-server/lib/Adapters/AdapterLoader');
+
 const kue = require('kue');
 const Redis = require('ioredis');
 
@@ -75,7 +77,7 @@ const config = {
   // Locales
   supportedLangs : ['fr', 'en'],
   get lang() {
-    return typeof process.env.DEFAULT_LANG !== 'undefined' && this.supportedLangs.includes(process.env.DEFAULT_LANG)
+    return typeof process.env.DEFAULT_LANG !== 'undefined' && this.supportedLangs.indexOf(process.env.DEFAULT_LANG) !== -1
       ? process.env.DEFAULT_LANG
       : 'fr';
   },
@@ -113,7 +115,10 @@ const config = {
   parse_dashboard_mount_point : process.env.PARSE_DASHBOARD_MOUNT || '/parse-dashboard',
 
   // Elasticsearch config
-  elasticsearch_host : process.env.ES_HOST || 'localhost:9200',
+  get esIndex() {
+    return String(this.appName + '-' + this.businessKey).toLowerCase();
+  },
+  elasticsearch_host_1 : process.env.ES_HOST || 'localhost:9200',
 
   // Uploads
   get uploadOptions() {
@@ -130,6 +135,38 @@ const config = {
       })
     }
     return this._recaptcha;
+  },
+
+  get filesAdapterConfig() {
+    return {
+      module  : require.resolve('parse-server-fs-adapter'),
+      options : {
+        filesSubDirectory : this.businessKey,
+      },
+    };
+  },
+
+  get filesController() {
+    if (!this._filesController) {
+      const Parse = require('parse/node');
+      // Get access to Parse Server's cache
+      const { AppCache } = require('parse-server/lib/cache');
+      // Get a reference to the MailgunAdapter
+      // NOTE: It's best to do this inside the Parse.Cloud.define(...) method body and not at the top of your file with your other imports. This gives Parse Server time to boot, setup cloud code and the email adapter.
+      const app = AppCache.get(Parse.applicationId);
+      if (app) {
+        this._filesController = app['filesController'];
+      } else {
+        const filesAdapter = loadAdapter(this.filesAdapterConfig, () => {
+          throw new Error('Could not load filesAdapter');
+        });
+        const { FilesController } = require('parse-server/lib/Controllers/FilesController');
+        this._filesController = new FilesController(filesAdapter, Parse.applicationId);
+      }
+
+    }
+
+    return this._filesController;
   },
 
   // mail adapter
@@ -155,19 +192,33 @@ const config = {
     }
     return this._mailAdapterOptions;
   },
-
+  get mailAdapterConfig() {
+    return {
+      module  : require.resolve('backend/mail/MailAdapter'),
+      options : this.mailAdapterOptions,
+    };
+  },
   get mailAdapter() {
-    const Parse = require('parse/node');
-    const MailAdapter = require('backend/mail/MailAdapter');
-    // Get access to Parse Server's cache
-    const { AppCache } = require('parse-server/lib/cache');
-    // Get a reference to the MailgunAdapter
-    // NOTE: It's best to do this inside the Parse.Cloud.define(...) method body and not at the top of your file with your other imports. This gives Parse Server time to boot, setup cloud code and the email adapter.
-    const app = AppCache.get(Parse.applicationId);
-    const MailgunAdapter = app
-      ? app['userController']['adapter']
-      : new MailAdapter(this.mailAdapterOptions);
-    return MailgunAdapter;
+    if (!this._mailAdaper) {
+      const Parse = require('parse/node');
+      const MailAdapter = require('backend/mail/MailAdapter');
+      // Get access to Parse Server's cache
+      const { AppCache } = require('parse-server/lib/cache');
+      // Get a reference to the MailgunAdapter
+      // NOTE: It's best to do this inside the Parse.Cloud.define(...) method body and not at the top of your file with your other imports. This gives Parse Server time to boot, setup cloud code and the email adapter.
+      const app = AppCache.get(Parse.applicationId);
+      if (app) {
+        this._mailAdaper = app['userController']['adapter'];
+      } else {
+        const mailAdapter = loadAdapter(this.mailAdapterConfig, () => {
+          throw new Error('Could not load mailAdapter');
+        });
+        this._mailAdaper = mailAdapter;
+      }
+
+    }
+
+    return this._mailAdaper;
   },
 
   // App config

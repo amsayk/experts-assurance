@@ -17,7 +17,7 @@ export default async function revokeManagerAuthorization(request, done) {
   } = request.params;
 
   try {
-    const user = await new Parse.Query(Parse.User).get(id);
+    const user = await new Parse.Query(Parse.User).get(id, { useMasterKey: true });
 
     if (user) {
       await user.set({

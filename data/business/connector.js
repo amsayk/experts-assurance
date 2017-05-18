@@ -76,7 +76,7 @@ export class BusinessConnector {
 
     function count() {
       if (topLevelFields.indexOf('length') !== -1) {
-        return getQuery().count();
+        return getQuery().count({ useMasterKey : true });
       }
       return Promise.resolve(0);
     }

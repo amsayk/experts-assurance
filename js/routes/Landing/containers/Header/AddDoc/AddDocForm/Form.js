@@ -23,6 +23,7 @@ import { SubmissionError, Field, reduxForm, submit, propTypes as formPropTypes }
 import TextField from 'components/material-ui/TextField';
 
 import DT from './DT';
+import Company from './Company';
 import Vehicle from './Vehicle';
 import Agent from './Agent';
 import Client from './Client';
@@ -70,19 +71,35 @@ class Form extends React.Component {
     super(props);
 
     this.onKeyDown = this._onKeyDown.bind(this);
-    this.onNext = this.onNext.bind(this);
-    this.onVehicleModelInput = this.onVehicleModelInput.bind(this);
+    this.onNext1 = this.onNext1.bind(this);
+    this.onNext2 = this.onNext2.bind(this);
+    this.onDTField = this.onDTField.bind(this);
+    this.onCompanyRef = this.onCompanyRef.bind(this);
   }
 
-  onVehicleModelInput(ref) {
-    this.vehicleModel = ref;
+  onDTField(ref) {
+    this.date = ref;
   }
-  onNext() {
+
+  onCompanyRef(ref) {
+    this.companyRef = ref;
+  }
+  onNext1() {
     const activeElement = getActiveElement(document);
     if (!activeElement || activeElement.nodeName !== 'INPUT') {
       setTimeout(() => {
         raf(
-          () => focusNode(this.vehicleModel)
+          () => focusNode(this.date)
+        );
+      }, 0);
+    }
+  }
+  onNext2() {
+    const activeElement = getActiveElement(document);
+    if (!activeElement || activeElement.nodeName !== 'INPUT') {
+      setTimeout(() => {
+        raf(
+          () => focusNode(this.companyRef)
         );
       }, 0);
     }
@@ -101,10 +118,19 @@ class Form extends React.Component {
   componentWillReceiveProps(nextProps) {
   }
   render() {
-    const { error, dirty, lang, onDTField, invalid, pristine, asyncValidate, closePortal } = this.props;
+    const {
+      error,
+      dirty,
+      lang,
+      onDTField,
+      invalid,
+      pristine,
+      asyncValidate,
+      closePortal,
+    } = this.props;
 
     const fields = [
-      error ? <div style={styles.error}>
+      error ? <div key='error' style={styles.error}>
         <ErrorIcon size={32}/> <div style={{marginLeft: 9}}>{error}</div>
       </div> : null,
 
@@ -113,25 +139,63 @@ class Form extends React.Component {
       //   component={State}
       // />,
 
-      <section className={style.addDocSection}>
+      <section key='dateMission' className={style.addDocSection}>
         <Field
-          name='date'
+          name='dateMission'
           parse={parseDate}
-          props={{locale : lang, onRef : onDTField, onKeyDown : this.onKeyDown, onNext: this.onNext}}
+          props={{
+            asyncValidate,
+            locale    : lang,
+            onRef     : onDTField,
+            onKeyDown : this.onKeyDown,
+            onNext    : this.onNext1,
+            label     : 'DT Mission',
+          }}
           component={DT}
         />
       </section>,
 
+      <section key='date' className={style.addDocSection}>
+        <Field
+          name='date'
+          parse={parseDate}
+          props={{
+            asyncValidate,
+            locale    : lang,
+            onKeyDown : this.onKeyDown,
+            onRef     : this.onDTField,
+            onNext    : this.onNext2,
+            label     : 'DT Sinistre',
+          }}
+          component={DT}
+        />
+      </section>,
+
+      <section key='company' className={style.addDocSection}>
+        <Field
+          name='company'
+          props={{
+            onKeyDown : this.onKeyDown,
+            onRef     : this.onCompanyRef,
+            label     : 'COMPAGNIE',
+          }}
+          component={Company}
+        />
+      </section>,
+
       <Vehicle
-        onVehicleModelInput={this.onVehicleModelInput}
+        key='vehicle'
+        onKeyDown={this.onKeyDown}
       />,
 
       <Client
+        key='client'
         onKeyDown={this.onKeyDown}
         asyncValidate={asyncValidate}
       />,
 
       <Agent
+        key='agent'
         onKeyDown={this.onKeyDown}
         asyncValidate={asyncValidate}
       />,
@@ -164,8 +228,12 @@ const WithForm = reduxForm({
   forceUnregisterOnUnmount  : true,
   asyncValidate             : validations.asyncValidate,
   asyncBlurFields           : [
+    'dateMission',
     'date',
 
+    'company',
+
+    'vehicleManufacturer',
     'vehicleModel',
     'vehiclePlateNumber',
 

@@ -170,7 +170,7 @@ if (!config.parse_database_uri) {
 }
 const api = new ParseServer({
   appName                  : config.appName,
-  databaseURI              : config.parse_database_uri || 'mongodb://localhost:27017/Experts-Assurance',
+  databaseURI              : config.parse_database_uri || `mongodb://localhost:27017/${config.appName}`,
   cloud                    : path.resolve(process.cwd(), 'backend', 'main.js'),
   appId                    : process.env.APPLICATION_ID,
   javascriptKey            : process.env.JAVASCRIPT_KEY,
@@ -188,18 +188,10 @@ const api = new ParseServer({
   verifyUserEmails                 : config.verifyUserEmails,
   revokeSessionOnPasswordReset     : true,
   emailVerifyTokenValidityDuration : 2 * 24 * 60 * 60, // 2 days
-  emailAdapter                     : {
-    module: require.resolve('backend/mail/MailAdapter'),
-    options: config.mailAdapterOptions,
-  },
+  emailAdapter                     : config.mailAdapterConfig,
 
   // File uploads
-  filesAdapter : {
-    module  : require.resolve('parse-server-fs-adapter'),
-    options : {
-      filesSubDirectory : config.businessKey,
-    },
-  },
+  filesAdapter : config.filesAdapterConfig,
 
   passwordPolicy : {
     doNotAllowUsername         : true,
@@ -314,7 +306,7 @@ app.use(config.graphiql_endpoint, graphiqlExpress({
 // ------------------------------------
 kueUiExpress(app, '/kue/', '/api');
 
-// Create queue
+// lazy create queue
 config.queue;
 
 kue.app.set('title', config.appName);

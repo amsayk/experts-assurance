@@ -51,23 +51,21 @@ class AddDoc extends React.Component {
   onOpen() {
     try {
       document.body.style.overflowY = 'hidden';
+      this.props.actions.startAddingDoc();
       setTimeout(() => {
         raf(
           () => {
             focusNode(this.dateField);
           }
         );
-      }, 100);
-    } catch(e) {}
-    finally {
-      this.props.actions.startAddingDoc();
-    }
+      }, 1000);
+    } catch (e) {}
   }
   onClose() {
     this.props.actions.finishAddingDoc();
     try {
       document.body.style.overflowY = 'visible';
-    } catch(e) {}
+    } catch (e) {}
 
   }
   render() {
@@ -78,8 +76,8 @@ class AddDoc extends React.Component {
         <AddDocForm
           addingDoc={addingDoc}
           initialValues={{
-            isOpen : false,
-            date   : Date.now(),
+            dateMission   : Date.now(),
+            date          : Date.now(),
           }}
           actions={actions}
           onDTField={this.onDTField}

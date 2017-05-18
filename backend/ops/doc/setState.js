@@ -21,7 +21,7 @@ export default async function setState(request, done) {
 
   try {
     const doc = await new Parse.Query(DocType)
-      .get(id);
+      .get(id, { useMasterKey: true });
     if (!doc) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
@@ -143,6 +143,7 @@ export default async function setState(request, done) {
         'client',
         'agent',
         'user',
+        'payment_user',
         'validation_user',
         'closure_user',
       ])

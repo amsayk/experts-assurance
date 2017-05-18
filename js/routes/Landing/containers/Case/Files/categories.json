@@ -46,5 +46,9 @@
   {
     "slug": "rapport",
     "displayName": "Rapport"
+  },
+  {
+    "slug": "autres",
+    "displayName": "Autres"
   }
 ]

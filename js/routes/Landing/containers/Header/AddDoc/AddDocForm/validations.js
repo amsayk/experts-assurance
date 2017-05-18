@@ -5,8 +5,13 @@ import { client as apolloClient } from 'apollo';
 import GET_MATCHING_USERS_QUERY from './getMatchingUsers.query.graphql';
 
 const validations = {
-  isOpen: {
+  // isOpen: {
+  //   required : true,
+  // },
+
+  dateMission: {
     required : true,
+    date     : true,
   },
 
   date: {
@@ -14,11 +19,19 @@ const validations = {
     date     : true,
   },
 
+  vehicleManufacturer : {
+    required : true,
+  },
+
   vehicleModel : {
     required : true,
   },
 
   vehiclePlateNumber : {
+    required : true,
+  },
+
+  company : {
     required : true,
   },
 
@@ -53,7 +66,7 @@ const validations = {
     required : true,
   },
   clientEmail : {
-    required : true,
+    // required : true,
     email    : true,
   },
 
@@ -88,7 +101,7 @@ const validations = {
     required : true,
   },
   agentEmail : {
-    required : true,
+    // required : true,
     email    : true,
   },
 };

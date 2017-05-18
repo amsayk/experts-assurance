@@ -1,5 +1,7 @@
 import Parse from 'parse/node';
 
+import config from 'build/config';
+
 import Config from 'parse-server/lib/Config';
 
 const FileController = {
@@ -11,10 +13,10 @@ const FileController = {
       throw new Error('saveBase64 can only be used with Base64-type sources.');
     }
 
-    const config = new Config(Parse.applicationId);
+    const parseConfig = new Config(Parse.applicationId);
 
     const op = config.filesController.createFile(
-      config,
+      parseConfig,
       name,
       Buffer.from(source.base64, 'base64'),
       source.type,

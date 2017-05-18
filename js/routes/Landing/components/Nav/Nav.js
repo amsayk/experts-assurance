@@ -10,6 +10,7 @@ export default class Nav extends React.PureComponent {
 
     this.onFiles  = props.onChange.bind(this, 'timeline.files');
     this.onEvents = props.onChange.bind(this, 'timeline.events');
+    this.onObservations = props.onChange.bind(this, 'timeline.comments');
   }
   render() {
     const { id, intl, selectedNavItem, onChange } = this.props;
@@ -20,7 +21,7 @@ export default class Nav extends React.PureComponent {
           <li className={cx(selectedNavItem === 'timeline.files' && style.navSelected)}>
             <a onClick={this.onFiles}>
               <h2>
-                Pièces jointes
+                Fichiers
               </h2>
             </a>
           </li>
@@ -29,6 +30,14 @@ export default class Nav extends React.PureComponent {
             <a onClick={this.onEvents}>
               <h2>
                 Événements
+              </h2>
+            </a>
+          </li>
+
+          <li className={cx(selectedNavItem === 'timeline.comments' && style.navSelected)}>
+            <a onClick={this.onObservations}>
+              <h2>
+               Observations
               </h2>
             </a>
           </li>

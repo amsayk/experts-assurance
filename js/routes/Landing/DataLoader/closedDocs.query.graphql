@@ -6,6 +6,7 @@ query closedDocs($durationInDays: Int!, $sortConfig: ESSortConfig!, $includeCanc
       id
       refNo
       date
+      dateMission
       state
       vehicle {
         model
@@ -25,6 +26,12 @@ query closedDocs($durationInDays: Int!, $sortConfig: ESSortConfig!, $includeCanc
       manager {
         id
         displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt

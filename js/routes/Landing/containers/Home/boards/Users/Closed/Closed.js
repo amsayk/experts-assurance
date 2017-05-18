@@ -19,7 +19,7 @@ import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
   DoneIcon,
-  DownloadIcon,
+  // DownloadIcon,
 } from 'components/icons/MaterialIcons';
 
 import Switch from 'components/Switch';

@@ -13,11 +13,33 @@ import graphqlFields from 'graphql-fields';
 
 import getDocValidations from './docValidations';
 
+import payValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
+import closureValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
+
 import { fromJS } from 'immutable';
 
 const log = require('log')('app:backend:docs');
 
 export const schema = [`
+
+  type Observation {
+    id: ID!
+    text: String!
+    user: User!
+    document: Doc!
+    date: Date!
+  }
+
+  type DocObservationsResponse {
+    items: [Observation!]!
+    prevCursor: Date
+    cursor: Date
+  }
+
+  input DocPaymentInfo {
+    date   : Date
+    amount : Float
+  }
 
   type UploadFileResponse {
     file: File
@@ -62,8 +84,14 @@ export const schema = [`
   }
 
   input AddDocPayload {
+    vehicleManufacturer : String
     vehicleModel : String
     vehiclePlateNumber : String
+    vehicleSeries : String
+    vehicleMileage : String
+    vehicleDMC : String
+    vehicleEnergy : String
+    vehiclePower : String
 
     clientKey : UserInKey
     clientId : String
@@ -75,8 +103,12 @@ export const schema = [`
     agentDisplayName : String
     agentEmail : String
 
+    dateMission: Date
     date: Date
-    isOpen: Boolean!
+
+    company: String
+
+    # isOpen: Boolean!
   }
 
   type AddDocResponse {
@@ -87,6 +119,12 @@ export const schema = [`
   }
 
   type DelOrRestoreDocResponse {
+    error: Error
+    doc: Doc
+    activities : [Activity!]!
+  }
+
+  type SetOrDelPayResponse {
     error: Error
     doc: Doc
     activities : [Activity!]!
@@ -153,9 +191,16 @@ export const schema = [`
 
   type ESDocSource {
     id: ID!
+    company: String!
+
     refNo: Int!
     refNo_string: String!
+
     state: DocState!
+    dateMission: Date!
+
+    paymentInfo: Payment
+
     vehicle: Vehicle!
 
     manager: ESUserSource
@@ -203,7 +248,7 @@ export const schema = [`
     agent: UserQuery
 
     range: DateRange
-    validationRange: DateRange
+    # validationRange: DateRange
     closureRange: DateRange
 
     validator: UserQuery
@@ -245,18 +290,34 @@ export const schema = [`
   # DocState type
   # ------------------------------------
   enum DocState {
-    PENDING
+    # PENDING
     OPEN
     CLOSED
     CANCELED
   }
 
   # ------------------------------------
+  # Payment type
+  # ------------------------------------
+  type Payment {
+    date: Date!
+    user: User!
+    amount: Float!
+    meta: JSON!
+  }
+
+  # ------------------------------------
   # Vehicle type
   # ------------------------------------
   type Vehicle {
-    model: String!
+    manufacturer: String
+    model: String! # Type
     plateNumber: String!
+    series: String
+    mileage: String
+    DMC: String
+    energy: String
+    power: String
   }
 
   # ------------------------------------
@@ -282,11 +343,19 @@ export const schema = [`
   type Doc {
     id: ID!
 
+    company: String!
+
     key: ID!
 
     refNo: Int!
+
     date: Date!
+    dateMission: Date!
+
     state: DocState!
+
+    paymentInfo: Payment
+
     vehicle: Vehicle!
 
     client: User!
@@ -352,14 +421,17 @@ export const resolvers = {
     ])
   ),
 
-  Vehicle: Object.assign(
+  Observation: Object.assign(
     {
     },
     parseGraphqlObjectFields([
+      'user',
+      'document',
     ]),
     parseGraphqlScalarFields([
-      'model',
-      'plateNumber',
+      'id',
+      'text',
+      'date',
     ])
   ),
 
@@ -375,6 +447,23 @@ export const resolvers = {
           return {
             date : validation_date,
             user : validation_user,
+          };
+        }
+
+        return null;
+      },
+      paymentInfo: (doc) => {
+        const payment_date   = doc.payment_date   || doc.get('payment_date');
+        const payment_amount = doc.payment_amount || doc.get('payment_amount');
+        const payment_user   = doc.payment_user   || doc.get('payment_user');
+        const payment_meta   = doc.payment_meta   || doc.get('payment_meta');
+
+        if (payment_date && payment_amount && payment_user) {
+          return {
+            date   : payment_date,
+            amount : payment_amount,
+            user   : payment_user,
+            meta   : payment_meta || {},
           };
         }
 
@@ -436,9 +525,11 @@ export const resolvers = {
     ]),
     parseGraphqlScalarFields([
       'id',
+      'company',
       'key',
       'refNo',
       'date',
+      'dateMission',
       'state',
       'createdAt',
       'updatedAt',
@@ -459,6 +550,23 @@ export const resolvers = {
             user : validation_user,
           }
         }
+        return null;
+      },
+      paymentInfo: (doc) => {
+        const payment_date   = doc.payment_date;
+        const payment_amount = doc.payment_amount;
+        const payment_user   = doc.payment_user;
+        const payment_meta   = doc.payment_meta;
+
+        if (payment_date && payment_amount && payment_user) {
+          return {
+            date   : payment_date,
+            amount : payment_amount,
+            user   : payment_user,
+            meta   : payment_meta || {},
+          };
+        }
+
         return null;
       },
       closure: (doc) => {
@@ -520,6 +628,30 @@ export const resolvers = {
     parseGraphqlScalarFields([
       'activities',
       'error',
+    ])
+  ),
+
+  SetOrDelPayResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'activities',
+      'error',
+    ])
+  ),
+
+  DocObservationsResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+    ]),
+    parseGraphqlScalarFields([
+      'items',
+      'prevCursor',
+      'cursor',
     ])
   ),
 
@@ -610,11 +742,20 @@ export const resolvers = {
         }
 
         const data = {
-          date : payload.date,
+          dateMission : payload.dateMission,
+          date        : payload.date,
+
+          company     : payload.company,
 
           vehicle : {
-            model       : payload.vehicleModel,
-            plateNumber : payload.vehiclePlateNumber,
+            manufacturer  : payload.vehicleManufacturer,
+            model         : payload.vehicleModel,
+            plateNumber   : payload.vehiclePlateNumber,
+            series        : payload.vehicleSeries,
+            mileage       : payload.vehicleMileage,
+            DMC           : payload.vehicleDMC,
+            energy        : payload.vehicleEnergy,
+            power         : payload.vehiclePower,
           },
 
           client : getUser({
@@ -631,7 +772,7 @@ export const resolvers = {
             email       : payload.agentEmail,
           }),
 
-          isOpen : payload.isOpen,
+          // isOpen : payload.isOpen,
         };
 
         const { doc, activities } = await context.Docs.addDoc(data);
@@ -696,6 +837,64 @@ export const resolvers = {
 
       return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
+    async setPay(_, { id, info }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await payValidations.asyncValidate(fromJS({ ...info }));
+      } catch (errors) {
+        return { errors };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.setPay(id, info);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delPay(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.delPay(id);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
     async setState(_, { id, state }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
@@ -715,6 +914,88 @@ export const resolvers = {
 
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
         const { doc, activities } = await context.Docs.setState(id, state);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async closeDoc(_, { id, closureDate, info }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await closureValidations.asyncValidate(fromJS({ closureDate, ...info }));
+      } catch (errors) {
+        return { errors };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      async function isDocOpen(id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.get('state') === 'OPEN';
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        if (!await isDocOpen(id)) {
+          return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+        }
+
+        const { doc, activities } = await context.Docs.closeDoc(id);
+        // publish subscription notification
+        pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async cancelDoc(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      async function isDocOpen(id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.get('state') === 'OPEN';
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        if (!await isDocOpen(id)) {
+          return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+        }
+
+        const { doc, activities } = await context.Docs.cancelDoc(id);
         // publish subscription notification
         pubsub.publish('docChangeChannel', id);
         return { doc, activities };
@@ -816,79 +1097,92 @@ export const resolvers = {
     getDoc(obj, { id }, context) {
       return context.Docs.get(id);
     },
-    getFile(obj, { id }, context) {
-      return context.Docs.getFile(id);
-    },
-    getDocs(obj, { query }, context, info) {
-      const topLevelFields = Object.keys(graphqlFields(info));
-      return context.Docs.getDocs(query, topLevelFields);
-    },
-    // usersByRoles(obj, { queryString, roles }, context) {
-    //   return context.Docs.searchUsersByRoles(queryString, roles);
-    // },
+      getFile(obj, { id }, context) {
+        return context.Docs.getFile(id);
+      },
+      getDocs(obj, { query }, context, info) {
+        const topLevelFields = Object.keys(graphqlFields(info));
+        return context.Docs.getDocs(query, topLevelFields);
+      },
+      // usersByRoles(obj, { queryString, roles }, context) {
+      //   return context.Docs.searchUsersByRoles(queryString, roles);
+      // },
 
-    esUsersByRoles(obj, { queryString, roles }, context) {
-      return context.Docs.esSearchUsersByRoles(queryString, roles);
-    },
-    esSearchDocs(obj, { queryString, state }, context) {
-      return context.Docs.esSearchDocs(queryString, state);
-    },
-    esQueryDocs(obj, { query }, context) {
-      return context.Docs.esQueryDocs(query);
-    },
+      esUsersByRoles(obj, { queryString, roles }, context) {
+        return context.Docs.esSearchUsersByRoles(queryString, roles);
+      },
+      esSearchDocs(obj, { queryString, state }, context) {
+        return context.Docs.esSearchDocs(queryString, state);
+      },
+      esQueryDocs(obj, { query }, context) {
+        return context.Docs.esQueryDocs(query);
+      },
 
-    pendingDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
-      const selectionSet = Object.keys(graphqlFields(info));
-      return context.Docs.pendingDashboard(
-        durationInDays,
-        cursor,
-        sortConfig,
-        selectionSet,
-        context.Now,
-      );
-    },
-    openDashboard(_, { durationInDays, cursor = 0, sortConfig, validOnly }, context, info) {
-      const selectionSet = Object.keys(graphqlFields(info));
-      return context.Docs.openDashboard(
-        durationInDays,
-        cursor,
-        sortConfig,
-        selectionSet,
-        validOnly,
-        context.Now,
-      );
-    },
-    closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
-      const selectionSet = Object.keys(graphqlFields(info));
-      return context.Docs.closedDashboard(
-        durationInDays,
-        cursor,
-        sortConfig,
-        selectionSet,
-        includeCanceled,
-        context.Now,
-      );
-    },
+      // pendingDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+      //   const selectionSet = Object.keys(graphqlFields(info));
+      //   return context.Docs.pendingDashboard(
+      //     durationInDays,
+      //     cursor,
+      //     sortConfig,
+      //     selectionSet,
+      //     context.Now,
+      //   );
+      // },
+      openDashboard(_, { durationInDays, cursor = 0, sortConfig, validOnly }, context, info) {
+        const selectionSet = Object.keys(graphqlFields(info));
+        return context.Docs.openDashboard(
+          durationInDays,
+          cursor,
+          sortConfig,
+          selectionSet,
+          validOnly,
+          context.Now,
+        );
+      },
+      // closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
+      //   const selectionSet = Object.keys(graphqlFields(info));
+      //   return context.Docs.closedDashboard(
+      //     durationInDays,
+      //     cursor,
+      //     sortConfig,
+      //     selectionSet,
+      //     includeCanceled,
+      //     context.Now,
+      //   );
+      // },
 
-    recentDocs(_, {}, context) {
-      return context.Docs.recent();
-    },
+      recentDocs(_, {}, context) {
+        return context.Docs.recent();
+      },
 
-    dashboard(_, {}, context, info) {
-      const selectionSet = Object.keys(graphqlFields(info));
-      return context.Docs.dashboard(selectionSet);
-    },
+      dashboard(_, {}, context, info) {
+        const selectionSet = Object.keys(graphqlFields(info));
+        return context.Docs.dashboard(selectionSet);
+      },
 
-    getLastRefNo(_, {}, context) {
-      return context.Business.getLastRefNo();
-    },
+      getLastRefNo(_, {}, context) {
+        return context.Business.getLastRefNo();
+      },
 
-    getDocFiles(_, { id }, context) {
-      return context.Docs.getDocFiles(id);
-    },
-    validateDoc(_, { id }, context) {
-      return context.Docs.valideDoc(id);
-    },
+      getDocFiles(_, { id }, context) {
+        return context.Docs.getDocFiles(id);
+      },
+
+      validateDoc(_, { id }, context) {
+        return context.Docs.valideDoc(id);
+      },
+      getInvalidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+        const selectionSet = Object.keys(graphqlFields(info));
+        return context.Docs.getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.now });
+      },
+      getUnpaidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+        const selectionSet = Object.keys(graphqlFields(info));
+        return context.Docs.getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.now });
+      },
+
+      getDocObservations(_, { id, cursor }, context) {
+        return context.Docs.getDocObservations({ id, cursor });
+      },
 
   },
 

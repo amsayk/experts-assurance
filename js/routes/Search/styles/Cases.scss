@@ -65,13 +65,13 @@
   }
 }
 
-.PENDING:not(.selecting){
-  margin: 0;
-  padding: 0;
-  svg {
-    color: $brand-warning;
-  }
-}
+// .PENDING:not(.selecting){
+//   margin: 0;
+//   padding: 0;
+//   svg {
+//     color: $brand-warning;
+//   }
+// }
 .OPEN:not(.selecting){
   margin: 0;
   padding: 0;

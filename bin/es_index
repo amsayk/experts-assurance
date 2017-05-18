@@ -60,6 +60,14 @@ if (cluster.isMaster) {
         done(new Error(e));
       }
     },
+    async onSignUp(req, done) {
+      try {
+        await es.onSignUp(req.params.id);
+        done();
+      } catch (e) {
+        done(new Error(e));
+      }
+    },
   });
 
 }

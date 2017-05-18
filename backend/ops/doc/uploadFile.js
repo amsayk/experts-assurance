@@ -32,8 +32,9 @@ export default async function uploadFile(request, done) {
       fs.readFile(path, (err, buf) => {
         if (err) {
           reject(err);
+        } else {
+          resolve(buf.toString('base64'));
         }
-        resolve(buf.toString('base64'));
       });
     });
 
@@ -61,7 +62,7 @@ export default async function uploadFile(request, done) {
   const business = request.user.get('business');
 
   try {
-    const doc = await new Parse.Query(DocType).get(docId);
+    const doc = await new Parse.Query(DocType).get(docId, { useMasterKey: true });
     if (!doc) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }

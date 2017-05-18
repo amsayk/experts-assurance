@@ -17,7 +17,6 @@ const log = require('log')('app:backend:mq:frontend');
  */
 export default function publish(serverName, serverMethod, req, options = {}) {
   return new Promise(function (resolve, reject) {
-    req.user = serializeParseObject(req.user);
     const data = {
       req,
       __serverMethod : serverMethod,

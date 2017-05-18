@@ -16,7 +16,7 @@ import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER, PATH_CASES_CASE } from
 import {
   CloseIcon,
 
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -39,7 +39,7 @@ const selector = createSelector(
 );
 
 const STATE_ICON = {
-  PENDING  : <UnknownIcon   className={style.stateIcon} size={24}/>,
+  // PENDING  : <UnknownIcon   className={style.stateIcon} size={24}/>,
   OPEN     : <WatchIcon     className={style.stateIcon} size={24}/>,
   CLOSED   : <DoneIcon      className={style.stateIcon} size={24}/>,
   CANCELED : <CanceledIcon  className={style.stateIcon} size={24}/>,

@@ -63,6 +63,9 @@ mark {
   // React date picker
   @import 'react-date-picker/style/index.scss';
 
+  .react-date-picker-dropup .react-date-field__picker {
+  }
+
   .react-date-field--theme-default,
   .react-date-field--focused,
   .react-date-field__picker {

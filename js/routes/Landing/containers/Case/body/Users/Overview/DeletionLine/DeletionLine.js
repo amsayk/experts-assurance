@@ -20,7 +20,7 @@ import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 function DeletionUser({ user }) {
   return (
-    <span style={{ marginLeft: 5, display: 'flex', alignItems: 'center' }}>
+    <span style={{ display: 'flex', alignItems: 'center' }}>
       <span>
         Par{' '}
       </span>

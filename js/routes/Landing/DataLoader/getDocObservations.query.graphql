@@ -1,0 +1,18 @@
+query getDocObservations($id: ID!, $cursor: Date) {
+  getDocObservations(id: $id, cursor: $cursor) {
+    prevCursor
+    cursor
+    items {
+      id
+      text
+
+      user {
+        id
+          displayName
+      }
+
+      date
+    }
+  }
+}
+

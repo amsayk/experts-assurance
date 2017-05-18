@@ -10,7 +10,7 @@ import Button from 'components/bootstrap/Button';
 import {
   CloseIcon,
 
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -26,7 +26,7 @@ import selector from './selector';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-</div>;
+  </div>;
 
 function getState(state, stateText, icon) {
   return (
@@ -42,23 +42,23 @@ function getState(state, stateText, icon) {
 }
 
 const STATE_COMPONENT = {
-  PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
+  // PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
   OPEN     : getState('OPEN',     'En cours',   <WatchIcon     size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',     <CanceledIcon  size={18}/>),
 };
 
 const STATE_MENUITEM = {
-  PENDING  : <MenuItem eventKey='PENDING'>
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div className={style['PENDING']}>
-        <UnknownIcon size={18}/>
-      </div>
-      <div style={{ marginLeft: 9 }}>
-        En attente
-      </div>
-    </div>
-  </MenuItem>,
+  // PENDING  : <MenuItem eventKey='PENDING'>
+  //   <div style={{ display: 'flex', flexDirection: 'row' }}>
+  //     <div className={style['PENDING']}>
+  //       <UnknownIcon size={18}/>
+  //     </div>
+  //     <div style={{ marginLeft: 9 }}>
+  //       En attente
+  //     </div>
+  //   </div>
+  // </MenuItem>,
   OPEN     : <MenuItem eventKey='OPEN'>
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div className={style['OPEN']}>
@@ -92,7 +92,7 @@ const STATE_MENUITEM = {
 };
 
 const STATE_LEVEL = {
-  PENDING  : 1,
+  // PENDING  : 1,
   OPEN     : 2,
   CLOSED   : 3,
   CANCELED : 3,
@@ -101,24 +101,15 @@ const STATE_LEVEL = {
 const STATES = Object.keys(STATE_MENUITEM);
 
 class StateToggle extends React.Component {
-  constructor() {
-    super();
-
-    this.onOpen = this.onOpen.bind(this);
-  }
-  onOpen(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.props.onOpen();
-  }
   render() {
     const { state } = this.props;
 
     return (
-      <Button onClick={this.onOpen} className={cx(style.selectedStateButton, style.togglePickUser)} role='button'>
+      <Button className={cx(style.selectedStateButton, style.togglePickUser)} style={{cursor: 'default'}}>
         {STATE_COMPONENT[state]}
       </Button>
     );
+
   }
 }
 class StateChanger extends React.Component {
@@ -173,21 +164,11 @@ class StateChanger extends React.Component {
     const { busy, actions } = this.props;
     return (
       <div className={style.filterGroup}>
-        <div className={cx(this.state.open && style.mask)}></div>
-        <Dropdown
-          open={this.state.open}
-          onToggle={this.onToggle}
-          className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
-
-          onSelect={this.onSelect}
+        <div
+          className={cx(style.pickUserDropdown)}
         >
-          {state ? <StateToggle state={state} onOpen={this.onToggle}/> : <Dropdown.Toggle className={style.togglePickState} noCaret={false}>
-            État
-          </Dropdown.Toggle>}
-          <Dropdown.Menu className={style.stateMenu}>
-            {keys.map((key) => STATE_MENUITEM[key])}
-          </Dropdown.Menu>
-        </Dropdown>
+          <StateToggle state={state}/>
+        </div>
       </div>
     );
   }

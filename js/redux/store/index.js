@@ -17,8 +17,8 @@ import {
 import {
   SET_DURATION as DASHBOARD_SET_DURATION,
   TOGGLE as DASHBOARD_TOGGLE,
-  TOGGLE_INCLUDE_CANCELED as DASHBOARD_TOGGLE_INCLUDE_CANCELED,
-  SET_ONLY_VALID_OPEN as DASHBOARD_SET_ONLY_VALID_OPEN,
+  // TOGGLE_INCLUDE_CANCELED as DASHBOARD_TOGGLE_INCLUDE_CANCELED,
+  // SET_ONLY_VALID_OPEN as DASHBOARD_SET_ONLY_VALID_OPEN,
 } from 'redux/reducers/dashboard/constants';
 
 import {
@@ -104,33 +104,41 @@ const middlewares = [
       cookieKey  : 'dashboard.viewStatus',
     },
 
-    [DASHBOARD_TOGGLE_INCLUDE_CANCELED]: {
-      reducerKey : 'dashboard.includeCanceled',
-      cookieKey  : 'dashboard.includeCanceled',
-    },
+    // [DASHBOARD_TOGGLE_INCLUDE_CANCELED]: {
+    //   reducerKey : 'dashboard.includeCanceled',
+    //   cookieKey  : 'dashboard.includeCanceled',
+    // },
 
     [DASHBOARD_SET_DURATION]: {
       reducerKey : (state) => state.get('dashboard').durations,
       cookieKey  : 'dashboard.durations',
     },
 
-    [DASHBOARD_SET_ONLY_VALID_OPEN]: {
-      reducerKey : 'dashboard.onlyValidOpen',
-      cookieKey  : 'dashboard.onlyValidOpen',
-    },
+    // [DASHBOARD_SET_ONLY_VALID_OPEN]: {
+    //   reducerKey : 'dashboard.onlyValidOpen',
+    //   cookieKey  : 'dashboard.onlyValidOpen',
+    // },
 
-    [`${SORT}/pendingDashboard`]: {
-      reducerKey : (state) => pick(state.get('dashboard').pendingSortConfig, ['key', 'direction']),
-      cookieKey  : 'dashboard.pendingSortConfig',
-    },
+    // [`${SORT}/pendingDashboard`]: {
+    //   reducerKey : (state) => pick(state.get('dashboard').pendingSortConfig, ['key', 'direction']),
+    //   cookieKey  : 'dashboard.pendingSortConfig',
+    // },
     [`${SORT}/openDashboard`]: {
       reducerKey : (state) => pick(state.get('dashboard').openSortConfig, ['key', 'direction']),
       cookieKey  : 'dashboard.openSortConfig',
     },
-    [`${SORT}/closedDashboard`]: {
-      reducerKey : (state) => pick(state.get('dashboard').closedSortConfig, ['key', 'direction']),
-      cookieKey  : 'dashboard.closedSortConfig',
+    [`${SORT}/unpaidDashboard`]: {
+      reducerKey : (state) => pick(state.get('dashboard').unpaidSortConfig, ['key', 'direction']),
+      cookieKey  : 'dashboard.unpaidSortConfig',
     },
+    [`${SORT}/invalidDashboard`]: {
+      reducerKey : (state) => pick(state.get('dashboard').invalidSortConfig, ['key', 'direction']),
+      cookieKey  : 'dashboard.invalidSortConfig',
+    },
+    // [`${SORT}/closedDashboard`]: {
+    //   reducerKey : (state) => pick(state.get('dashboard').closedSortConfig, ['key', 'direction']),
+    //   cookieKey  : 'dashboard.closedSortConfig',
+    // },
   }),
 ];
 
@@ -155,27 +163,28 @@ const enhancer = composeEnhancers(
 
 export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { intl: { locale: DEFAULT_LANG } }, function (key, value) {
   switch (key) {
-    case ''              : return new Map(value);
-    case 'intl'          : return new IntlState(value);
-    case 'app'           : return new AppState(value);
-    case 'docSearch'     : return new DocSearchState(value);
-    case 'dashboard'     : return new DashboardState(value);
-    case 'notification'  : return new NotificationState(value);
-    case 'scrolling'     : return new ScrollState(value);
-    case 'snackbar'      : return new SnackState(value);
-    case 'toastr'        : return new ToastrState(value);
-    case 'user'          : return new User(value);
-    case 'users'         : return new UsersState(value);
-    case 'cases'         : return new CasesState(value);
-    case 'selection'     : return new SelectionState(value);
-    case 'sortConfig'    : return new SortConfig(value);
-    case 'keys'          : return new Set(value);
-    case 'form'          : return new Map(value);
-    case 'options'       : return value;
-    case 'roles'         : return value;
-    case 'business'      : return value;
-    case 'authorization' : return value;
-    case 'confirm'       : return value;
+    case ''                 : return new Map(value);
+    case 'intl'             : return new IntlState(value);
+    case 'app'              : return new AppState(value);
+    case 'docSearch'        : return new DocSearchState(value);
+    case 'dashboard'        : return new DashboardState(value);
+    case 'notification'     : return new NotificationState(value);
+    case 'scrolling'        : return new ScrollState(value);
+    case 'snackbar'         : return new SnackState(value);
+    case 'toastr'           : return new ToastrState(value);
+    case 'user'             : return new User(value);
+    case 'users'            : return new UsersState(value);
+    case 'cases'            : return new CasesState(value);
+    case 'selection'        : return new SelectionState(value);
+    case 'sortConfig'       : return new SortConfig(value);
+    case 'keys'             : return new Set(value);
+    case 'form'             : return new Map(value);
+
+    case 'options'          : return value;
+    case 'roles'            : return value;
+    case 'business'         : return value;
+    case 'authorization'    : return value;
+    case 'confirm'          : return value;
   }
 
   return new Map(value);

@@ -79,7 +79,7 @@ class FileEntry extends React.PureComponent {
 
               return {
                 timeline : {
-                  cursor : prev.timeline.cursor + 1,
+                  cursor : prev.timeline.cursor,
                   result : [
                     ...newActivities,
                     ...prev.timeline.result,

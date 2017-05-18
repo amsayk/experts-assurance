@@ -4,6 +4,7 @@ query getDoc($id: ID!) {
     key
     refNo
     date
+    dateMission
     state
 
     deletion {
@@ -39,6 +40,12 @@ query getDoc($id: ID!) {
         id
         displayName
       }
+    }
+
+    payment : paymentInfo {
+      user { id }
+      amount
+      date
     }
 
     user {

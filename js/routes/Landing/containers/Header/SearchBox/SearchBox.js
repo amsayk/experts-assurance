@@ -37,7 +37,7 @@ import Tooltip from 'components/react-components/Tooltip';
 import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -61,7 +61,7 @@ import selector from './selector';
 import { injectIntl } from 'react-intl';
 
 const STATE_MAP = {
-  PENDING  : 'Dossiers en attente',
+  // PENDING  : 'Dossiers en attente',
   OPEN     : 'Dossiers en cours',
   CLOSED   : 'Dossiers clos',
   CANCELED : 'Dossiers annulés',
@@ -199,6 +199,27 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         );
         break;
 
+      case 'payment_user.name':
+        matches.push(
+          <div className={style.highlightGroup}>
+            <span className={style.highlightGroupLabel}>
+              Paiement par:{' '}
+            </span>
+            <span className={style.highlightGroupLinkWrapper}>
+              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + validation.user.id}>
+                <span>
+                  <Highlighter
+                    highlightClassName={style.hit}
+                    searchWords={[q]}
+                    textToHighlight={validation.user.name}
+                  />
+                </span>
+              </Link>
+            </span>
+          </div>
+        );
+        break;
+
       case 'closure_user.name':
         // case 'closure_user.email':
         matches.push(
@@ -290,14 +311,14 @@ function getState(state, stateText, icon) {
 }
 
 const STATES_2 = {
-  PENDING  : getState2('PENDING',  <UnknownIcon   size={32}/>),
+  // PENDING  : getState2('PENDING',  <UnknownIcon   size={32}/>),
   OPEN     : getState2('OPEN',     <WatchIcon     size={32}/>),
   CLOSED   : getState2('CLOSED',   <DoneIcon      size={32}/>),
   CANCELED : getState2('CANCELED', <CanceledIcon  size={32}/>),
 };
 
 const STATES = {
-  PENDING  : getState('PENDING',  'Dossiers en attente',  <UnknownIcon   size={24}/>),
+  // PENDING  : getState('PENDING',  'Dossiers en attente',  <UnknownIcon   size={24}/>),
   OPEN     : getState('OPEN',     'Dossiers en cours',    <WatchIcon     size={24}/>),
   CLOSED   : getState('CLOSED',   'Dossiers clos',        <DoneIcon      size={24}/>),
   CANCELED : getState('CANCELED', 'Dossiers annulés',     <CanceledIcon  size={24}/>),
@@ -323,7 +344,7 @@ class SearchBox extends React.Component {
     this.onCloser                  = this.onCloser.bind(this);
     this.onValidator               = this.onValidator.bind(this);
     this.onRange                   = this.onRange.bind(this);
-    this.onValidationRange         = this.onValidationRange.bind(this);
+    // this.onValidationRange         = this.onValidationRange.bind(this);
     this.onClosureRange            = this.onClosureRange.bind(this);
 
 
@@ -423,13 +444,13 @@ class SearchBox extends React.Component {
   }
 
 
-  onValidationRange(range) {
-    this.setState(({ search }) => ({
-      search : search.merge({
-        validationRange: range,
-      }),
-    }));
-  }
+  // onValidationRange(range) {
+  //   this.setState(({ search }) => ({
+  //     search : search.merge({
+  //       validationRange: range,
+  //     }),
+  //   }));
+  // }
 
   onClosureRange(range) {
     this.setState(({ search }) => ({
@@ -523,9 +544,9 @@ class SearchBox extends React.Component {
   }
   renderStateFilters() {
     return [
-      <MenuItem onSelect={this.onStateFilter} key='PENDING' eventKey='PENDING' className={style.stateFilter_PENDING}>
-        {STATES.PENDING}
-      </MenuItem>,
+      // <MenuItem onSelect={this.onStateFilter} key='PENDING' eventKey='PENDING' className={style.stateFilter_PENDING}>
+      //   {STATES.PENDING}
+      // </MenuItem>,
       <MenuItem onSelect={this.onStateFilter} key='OPEN' eventKey='OPEN' className={style.stateFilter_OPEN}>
         {STATES.OPEN}
       </MenuItem>,
@@ -570,7 +591,7 @@ class SearchBox extends React.Component {
           onValidator             : this.onValidator,
           onLastModified          : this.onLastModified,
           onRange                 : this.onRange,
-          onValidationRange       : this.onValidationRange,
+          // onValidationRange       : this.onValidationRange,
           onClosureRange          : this.onClosureRange,
           onClear                 : this.onClearSearch,
           onSearch                : this.onSearchAdvancedSearch,

@@ -9,6 +9,28 @@
   margin-right: 9px;
 }
 
+.docMenuAction {
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+
+  opacity: 0.54;
+
+  &:focus,
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.docMenu {
+  border-radius: 0;
+  top: 75%;
+}
+
 .printButton,
 .archiveButton,
 .deleteButton,
@@ -35,6 +57,34 @@
   }
 }
 
+.docSetPaymentFormMenu {
+  bottom: 0;
+  top: auto;
+  max-width: 300px;
+  width: 300px;
+
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid #D6DADC;
+  border-bottom-color: #C4C9CC;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+}
+
+.docSetPayment,
+.docDelPayment,
+.docSetPaymentButton,
+.docDelPaymentButton {
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.docSetPayment,
+.docDelPayment,
 .print,
 .archive,
 .delete,

@@ -58,7 +58,7 @@ class DurationToggle extends React.Component {
           // margin: '7px auto',
           // padding: '6px 0'
         }}>
-        <div className={style['PENDING']} style={{
+        <div style={{
           color: '#707070',
           fontSize: 13,
         }}>

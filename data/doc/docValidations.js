@@ -2,18 +2,31 @@ import { generateValidation } from 'validation';
 
 export default (context) => {
   const validations = {
+    dateMission: {
+      required : true,
+      date     : true,
+    },
+
     date: {
       required : true,
       date     : true,
     },
 
-    vehicleModel : {
+    vehicleManufacturer : {
       required : true,
     },
+
+    // vehicleModel : {
+    //   required : true,
+    // },
 
     vehiclePlateNumber : {
       required : true,
     },
+
+    // company : {
+    //   required : true,
+    // },
 
     client : {
       promise : async (fielName, value, allValues) => {
@@ -26,26 +39,26 @@ export default (context) => {
 
         if (key === 'id') {
           if (!id) {
-            throw true;
+            throw 'Key is `id` but `id` is not provided';
           }
 
           // Is there a matching client
           try {
             await context.Users.get(id);
           } catch (e) {
-            throw true;
+            throw `Client not found: ${id}`;
           }
 
         } else if (displayName || email) {
           // Are there matching clients
-          const users = await context.Users.getUsersByDisplayName({
+          const users = await context.Users.getUsersByDisplayNameAndEmail({
             type : 'CLIENT',
             displayName,
             email,
           });
 
           if (users.length !== 0) {
-            throw true;
+            throw `There are matching users for this displayName: ${displayName}`;
           }
         }
 
@@ -56,7 +69,7 @@ export default (context) => {
       required : true,
     },
     clientEmail : {
-      required : true,
+      // required : true,
       email    : true,
     },
 
@@ -71,26 +84,26 @@ export default (context) => {
 
         if (key === 'id') {
           if (!id) {
-            throw true;
+            throw 'Key is `id` but `id` is not provided';
           }
 
           // Is there a matching client
           try {
             await context.Users.get(id);
           } catch (e) {
-            throw true;
+            throw `Agent not found: ${id}`;
           }
 
         } else if (displayName || email) {
           // Are there matching clients
-          const users = await context.Users.getUsersByDisplayName({
+          const users = await context.Users.getUsersByDisplayNameAndEmail({
             type: 'AGENT',
             displayName,
             email,
           });
 
           if (users.length !== 0) {
-            throw true;
+            throw `There are matching users for this displayName: ${displayName}`;
           }
         }
 
@@ -101,7 +114,7 @@ export default (context) => {
       required : true,
     },
     agentEmail : {
-      required : true,
+      // required : true,
       email    : true,
     },
   };

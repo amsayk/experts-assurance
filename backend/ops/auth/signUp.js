@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
+import publish from 'backend/kue-mq/publish';
+
 import { Role_MANAGERS } from 'roles';
 
 export default async function signUp(request, done) {
@@ -10,6 +12,7 @@ export default async function signUp(request, done) {
     email,
     password,
     locale,
+    role = Role_MANAGERS,
   } = request.params;
 
   try {
@@ -27,9 +30,19 @@ export default async function signUp(request, done) {
         email,
         username: email,
         locale,
-        roles: [Role_MANAGERS],
+        roles: [role],
         business,
       }).signUp(null, { useMasterKey: true });
+
+    setTimeout(() => {
+      // publish to es_index
+      const req = {
+        user   : serializeParseObject(request.user),
+        now    : request.now,
+        params : { id: user.id },
+      };
+      publish('ES_INDEX', 'onSignUp', req);
+    }, 0);
 
     done(null, serializeParseObject(user));
   } catch (e) {

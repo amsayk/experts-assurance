@@ -4,6 +4,7 @@ const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+// const PrepackWebpackPlugin = require('prepack-webpack-plugin').default;
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -249,6 +250,7 @@ if (__DEV__) {
       externals : config.compiler_offline_assets,
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
+    // new PrepackWebpackPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap : false,
       minimize  : true,
@@ -267,7 +269,14 @@ if (__DEV__) {
 
 webpackConfig.plugins.push(
   new webpack.optimize.CommonsChunkPlugin({
-    names      : __DEV__ ? ['polyfills', 'vendor'] : ['polyfills', 'vendor', 'manifest'],
+    names      : __DEV__ ? [
+      'polyfills',
+      'vendor'
+    ] : [
+      'polyfills',
+      'vendor',
+      'manifest'
+    ],
     minChuncks : Infinity,
   }),
 );

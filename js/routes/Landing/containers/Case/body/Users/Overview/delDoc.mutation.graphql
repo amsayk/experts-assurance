@@ -67,6 +67,12 @@ mutation delDoc($id: ID!) {
         displayName
       }
 
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
       user {
         id
         displayName
@@ -82,5 +88,4 @@ mutation delDoc($id: ID!) {
 
   }
 }
-
 

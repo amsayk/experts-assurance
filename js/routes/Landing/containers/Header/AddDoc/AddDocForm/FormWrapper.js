@@ -144,38 +144,47 @@ class FormWrapper extends React.Component {
     const { data: { addDoc: { doc, error, errors } } } = await this.props.client.mutate({
       mutation  : MUTATION,
       variables : { payload: {
-        date               : data.get('date'),
+        dateMission          : data.get('dateMission'),
+        date                 : data.get('date'),
 
-        vehicleModel       : data.get('vehicleModel'),
-        vehiclePlateNumber : data.get('vehiclePlateNumber'),
+        company              : data.get('company'),
 
-        clientId           : data.get('clientId'),
-        clientKey          : data.get('clientKey'),
-        clientDisplayName  : data.get('clientDisplayName'),
-        clientEmail        : data.get('clientEmail'),
+        vehicleManufacturer  : data.get('vehicleManufacturer'),
+        vehicleModel         : data.get('vehicleModel'),
+        vehiclePlateNumber   : data.get('vehiclePlateNumber'),
+        vehicleSeries        : data.get('vehicleSeries'),
+        vehicleMileage       : data.get('vehicleMileage'),
+        vehicleDMC           : data.get('vehicleDMC'),
+        vehicleEnergy        : data.get('vehicleEnergy'),
+        vehiclePower         : data.get('vehiclePower'),
 
-        agentId            : data.get('agentId'),
-        agentKey           : data.get('agentKey'),
-        agentDisplayName   : data.get('agentDisplayName'),
-        agentEmail         : data.get('agentEmail'),
+        clientId             : data.get('clientId'),
+        clientKey            : data.get('clientKey'),
+        clientDisplayName    : data.get('clientDisplayName'),
+        clientEmail          : data.get('clientEmail'),
 
-        isOpen             : data.get('isOpen'),
+        agentId              : data.get('agentId'),
+        agentKey             : data.get('agentKey'),
+        agentDisplayName     : data.get('agentDisplayName'),
+        agentEmail           : data.get('agentEmail'),
+
+        // isOpen            : data.get('isOpen'),
       } },
       updateQueries : {
         dashboard(prev, { mutationResult }) {
           const newDoc = mutationResult.data.addDoc.doc;
 
           if (prev && newDoc) {
-            if (newDoc.state === 'PENDING') {
-              return {
-                dashboard : {
-                  ...prev.dashboard,
-                  pending : {
-                    count : prev.dashboard.pending.count + 1,
-                  },
-                },
-              };
-            }
+            // if (newDoc.state === 'PENDING') {
+            //   return {
+            //     dashboard : {
+            //       ...prev.dashboard,
+            //       pending : {
+            //         count : prev.dashboard.pending.count + 1,
+            //       },
+            //     },
+            //   };
+            // }
 
             if (newDoc.state === 'OPEN') {
               return {
@@ -192,26 +201,26 @@ class FormWrapper extends React.Component {
 
           return prev;
         },
-        pendingDocs(prev, { mutationResult, queryVariables }) {
-          const newDoc = mutationResult.data.addDoc.doc;
-
-          if (prev && newDoc && newDoc.state === 'PENDING') {
-            const docs = [
-              newDoc,
-              ...prev.pendingDashboard.docs,
-            ];
-
-            return {
-              pendingDashboard : {
-                length : prev.pendingDashboard.length + 1,
-                cursor : prev.pendingDashboard.cursor + 1,
-                docs,
-              },
-            };
-          }
-
-          return prev;
-        },
+        // pendingDocs(prev, { mutationResult, queryVariables }) {
+        //   const newDoc = mutationResult.data.addDoc.doc;
+        //
+        //   if (prev && newDoc && newDoc.state === 'PENDING') {
+        //     const docs = [
+        //       newDoc,
+        //       ...prev.pendingDashboard.docs,
+        //     ];
+        //
+        //     return {
+        //       pendingDashboard : {
+        //         length : prev.pendingDashboard.length + 1,
+        //         cursor : prev.pendingDashboard.cursor + 1,
+        //         docs,
+        //       },
+        //     };
+        //   }
+        //
+        //   return prev;
+        // },
         openDocs(prev, { mutationResult, queryVariables }) {
           const newDoc = mutationResult.data.addDoc.doc;
 
@@ -258,7 +267,7 @@ class FormWrapper extends React.Component {
 
             return {
               timeline : {
-                cursor : prev.timeline.cursor + 1,
+                cursor : prev.timeline.cursor,
                 result : [
                   ...newActivities,
                   ...prev.timeline.result,

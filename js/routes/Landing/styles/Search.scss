@@ -132,7 +132,7 @@
 }
 
 .stateFilterAdvancedSearch,
-.stateFilter_PENDING,
+// .stateFilter_PENDING,
 .stateFilter_OPEN,
 .stateFilter_CLOSED,
 .stateFilter_CANCELED {
@@ -167,16 +167,16 @@
   user-select: none;
 }
 
-.docSearchState_PENDING,
+// .docSearchState_PENDING,
 .docSearchState_OPEN,
 .docSearchState_CLOSED,
 .docSearchState_CANCELED {
   composes: docSearchState;
 }
 
-.docSearchState_PENDING {
-  color: $brand-warning;
-}
+// .docSearchState_PENDING {
+//   color: $brand-warning;
+// }
 .docSearchState_OPEN {
   color: $brand-info;
 }

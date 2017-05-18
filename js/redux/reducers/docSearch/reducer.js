@@ -35,7 +35,7 @@ export class DocSearchState extends Record({
   user            : null,
 
   range           : null,
-  validationRange : null,
+  // validationRange : null,
   closureRange    : null,
 
   lastModified    : null,

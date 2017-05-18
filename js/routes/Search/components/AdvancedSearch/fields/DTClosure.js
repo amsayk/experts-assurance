@@ -23,7 +23,7 @@ export default class DTClosure extends React.Component {
   render() {
     const { range, state } = this.props;
 
-    if (state === 'PENDING' || state === 'OPEN') {
+    if (/*state === 'PENDING' || */state === 'OPEN') {
       return null;
     }
 

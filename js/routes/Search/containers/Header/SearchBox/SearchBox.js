@@ -33,7 +33,7 @@ import Tooltip from 'components/react-components/Tooltip';
 import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -57,7 +57,7 @@ const tooltipAlign = {
 };
 
 const STATE_MAP = {
-  PENDING  : 'Dossiers en attente',
+  // PENDING  : 'Dossiers en attente',
   OPEN     : 'Dossiers en cours',
   CLOSED   : 'Dossiers clos',
   CANCELED : 'Dossiers annulés',
@@ -82,7 +82,7 @@ class SearchBox extends React.Component {
     this.onCloser              = this.onCloser.bind(this);
     this.onValidator           = this.onValidator.bind(this);
     this.onRange               = this.onRange.bind(this);
-    this.onValidationRange     = this.onValidationRange.bind(this);
+    // this.onValidationRange     = this.onValidationRange.bind(this);
     this.onClosureRange        = this.onClosureRange.bind(this);
 
     this.onClearSearch         = this.onClearSearch.bind(this);
@@ -162,13 +162,13 @@ class SearchBox extends React.Component {
   }
 
 
-  onValidationRange(range) {
-    this.setState(({ search }) => ({
-      search : search.merge({
-        validationRange: range,
-      }),
-    }));
-  }
+  // onValidationRange(range) {
+  //   this.setState(({ search }) => ({
+  //     search : search.merge({
+  //       validationRange: range,
+  //     }),
+  //   }));
+  // }
 
   onClosureRange(range) {
     this.setState(({ search }) => ({
@@ -246,7 +246,7 @@ class SearchBox extends React.Component {
           onValidator       : this.onValidator,
           onLastModified    : this.onLastModified,
           onRange           : this.onRange,
-          onValidationRange : this.onValidationRange,
+          // onValidationRange : this.onValidationRange,
           onClosureRange    : this.onClosureRange,
           onClear           : this.onClearSearch,
           onSearch          : this.onSearch,

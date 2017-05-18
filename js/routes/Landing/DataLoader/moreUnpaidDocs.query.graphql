@@ -1,0 +1,42 @@
+query moreUnpaidDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConfig!) {
+  getUnpaidDocs(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig) {
+    cursor
+    docs {
+      id
+      refNo
+      date
+      dateMission
+      state
+      vehicle {
+        model
+        plateNumber
+      }
+      validation {
+        date
+        user {
+          id
+          displayName
+        }
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
+      createdAt
+      updatedAt
+      lastModified
+    }
+  }
+}
+

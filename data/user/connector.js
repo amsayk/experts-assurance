@@ -37,7 +37,7 @@ export class UserConnector {
   }
 
   getUsersByDisplayNameAndEmail({ type, displayName, email }, user) {
-    if (!user) {
+    if (!user || (!displayName && !email)) {
       return Promise.resolve([]);
     }
 
@@ -48,7 +48,7 @@ export class UserConnector {
 
       if (email) {
         q = Parse.Query.or.apply(Parse.Query, [
-          q.equalTo('email', email),
+          new Parse.Query(Parse.User).equalTo('email', email),
           new Parse.Query(Parse.User).equalTo('mail', email)
         ]);
       }
@@ -82,7 +82,7 @@ export class UserConnector {
 
       if (email) {
         q = Parse.Query.or.apply(Parse.Query, [
-          q.matches('email', new RegExp(`^${email}.*`, 'i')),
+          new Parse.Query(Parse.User).matches('email', new RegExp(`^${email}.*`, 'i')),
           new Parse.Query(Parse.User).matches('mail', new RegExp(`^${email}.*`, 'i')),
         ]);
       }

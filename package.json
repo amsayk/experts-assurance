@@ -33,6 +33,7 @@
     "translate": "NODE_PATH=.:./js bnr translate",
     "update-schema": "NODE_PATH=.:./js bnr update-schema",
     "import-samples": "NODE_PATH=.:./js bnr import-samples",
+    "import": "NODE_PATH=.:./js bnr import",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "betterScripts": {
@@ -46,6 +47,12 @@
         "DEBUG": "app:*"
       }
     },
+    "import": {
+      "command": "node -r backend/import/env bin/import",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
     "compile": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/compile",
       "env": {
@@ -53,7 +60,7 @@
       }
     },
     "dev": {
-      "command": "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env --inspect bin/www --exec node",
+      "command": "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/www --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster,apollo-local,-app:server:history"
@@ -189,6 +196,7 @@
     "intl": "^1.2.5",
     "intl-locales-supported": "^1.0.0",
     "ioredis": "^2.5.0",
+    "is-number": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jstimezonedetect": "^1.0.6",
     "keycode": "^2.1.8",
@@ -322,6 +330,7 @@
     "postcss-loader": "^1.2.2",
     "postcss-sassy-import": "^1.2.3",
     "pre-commit": "^1.2.2",
+    "prepack-webpack-plugin": "^1.1.0",
     "progress-bar-webpack-plugin": "^1.9.3",
     "react-addons-perf": "^15.4.2",
     "react-addons-update": "^15.5.2",

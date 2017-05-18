@@ -1,6 +1,8 @@
 import React from 'react'
 import { compose } from 'redux';
 
+import moment from 'moment';
+
 import { DateField, TransitionView, Calendar } from 'react-date-picker';
 
 import TextField from 'components/material-ui/TextField';
@@ -8,8 +10,8 @@ import TextField from 'components/material-ui/TextField';
 import style from 'routes/Landing/styles';
 
 class DT extends React.Component {
-  renderInput({...props }) {
-    const  { meta: { touched, error } } = this.props;
+  renderInput({ ...props }) {
+    const  { meta: { touched, error }, input, label, onRef } = this.props;
 
     let errorText;
     if (error && touched) {
@@ -19,9 +21,10 @@ class DT extends React.Component {
     return (
       <TextField
         className={style.addDocTextField}
-        floatingLabelText='DT Sinistre'
+        floatingLabelText={label}
         errorText={errorText}
         {...props}
+        ref={onRef}
       />
     );
   }
@@ -34,14 +37,17 @@ class DT extends React.Component {
     this.renderInput = this.renderInput.bind(this);
   }
   onChange(_, { dateMoment, timestamp }) {
-    const { input, onNext } = this.props;
-    input.onChange(+dateMoment);
+    const { input } = this.props;
+    input.onChange(
+      moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
+    );
+    this.props.asyncValidate(this.props.name);
   }
   onCollapse() {
     this.props.onNext();
   }
   render() {
-    const { onRef, input, meta, locale } = this.props;
+    const { onRef, label, input, meta, locale } = this.props;
 
     return (
       <div>
@@ -52,11 +58,10 @@ class DT extends React.Component {
           footer={false}
           renderInput={this.renderInput}
           locale={locale}
-          {...input}
+          {...{...input, onRef, label}}
           meta={meta}
           onChange={this.onChange}
           onCollapse={this.onCollapse}
-          ref={onRef}
         >
           <TransitionView>
             <Calendar style={{padding: 10}}/>

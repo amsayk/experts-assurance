@@ -21,7 +21,10 @@ export default function onDoc(id) {
 
       const lastModifiedFields = Object.keys(doc.attributes)
         .filter((key) => key.startsWith('lastModified_'))
-        .map((key) => doc.get(key));
+        .reduce((memo, key) => {
+          memo[key] = doc.get(key);
+          return memo;
+        }, {});
 
       client.index({
         index: 'fikrat',
@@ -52,7 +55,7 @@ export default function onDoc(id) {
         log(`Successfully indexed doc ${id}`);
         return resolve(response);
       });
-    } catch(e) {
+    } catch (e) {
       log.error(`Doc not found: ${id}`, e);
       reject(e);
     }
@@ -62,7 +65,7 @@ export default function onDoc(id) {
 async function indexedUser(user, isEmployee = false) {
   if (user) {
     try {
-      return await user.fetch({ useMasterKey: true }).then(user => ({
+      return await user.fetch({ useMasterKey: true }).then((user) => ({
         id           : user.id,
         name         : user.get('displayName'),
         email        : user.get('email') || user.get('mail'),

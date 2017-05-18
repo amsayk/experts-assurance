@@ -10,6 +10,14 @@ function getInitials(name) {
   // }
   // return initials;
 
+  try {
+    const parts = name.split(/\s+/);
+    if (parts.length >= 3) {
+      return parts[1][0];
+    }
+  } catch (e) {
+  }
+
   return name[0];
 }
 

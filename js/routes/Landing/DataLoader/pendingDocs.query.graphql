@@ -6,6 +6,7 @@ query pendingDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
       id
       refNo
       date
+      dateMission
       state
       vehicle {
         model
@@ -18,6 +19,12 @@ query pendingDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
       manager {
         id
         displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt

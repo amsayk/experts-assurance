@@ -26,6 +26,12 @@ query moreOpenDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConf
         displayName
       }
 
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
       createdAt
       updatedAt
       lastModified

@@ -5,6 +5,7 @@ query morePendingDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortC
       id
       refNo
       date
+      dateMission
       state
       vehicle {
         model
@@ -17,6 +18,12 @@ query morePendingDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortC
       manager {
         id
         displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt

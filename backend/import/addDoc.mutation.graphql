@@ -1,0 +1,17 @@
+mutation addDoc($payload: AddDocPayload!) {
+
+  addDoc(payload: $payload) {
+    doc {
+      id
+      refNo
+
+    }
+
+    error {
+      code
+    }
+
+    errors
+  }
+}
+

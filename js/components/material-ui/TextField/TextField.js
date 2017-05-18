@@ -281,9 +281,8 @@ class TextField extends Component {
     warning(name || hintText || floatingLabelText || id, `Material-UI: We don't have enough information
       to build a robust unique id for the TextField component. Please provide an id or a name.`);
 
-    const uniqueId = `${name}-${hintText}-${floatingLabelText}-${
-      Math.floor(Math.random() * 0xFFFF)}`;
-    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+    const uniqueId = Math.floor(Math.random() * 0xFFFF);
+    this.uniqueId = uniqueId;
   }
 
   componentWillReceiveProps(nextProps) {

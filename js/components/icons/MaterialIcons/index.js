@@ -76,3 +76,5 @@ export { default as UploadIcon } from './Upload';
 
 export { default as AttachmentIcon } from './Attachment';
 
+export { default as CancelIcon } from './Cancel';
+

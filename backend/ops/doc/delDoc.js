@@ -19,7 +19,7 @@ export default async function delDoc(request, done) {
   } = request.params;
 
   try {
-    const doc = await new Parse.Query(DocType).get(id);
+    const doc = await new Parse.Query(DocType).get(id, { useMasterKey: true });
     if (doc) {
       await doc.set({
         deletion_user: request.user,
@@ -62,6 +62,7 @@ export default async function delDoc(request, done) {
           'client',
           'agent',
           'user',
+          'payment_user',
           'validation_user',
           'closure_user',
         ])

@@ -5,6 +5,7 @@ query moreClosedDocs($durationInDays: Int!, $cursor: Int, $sortConfig: ESSortCon
       id
       refNo
       date
+      dateMission
       state
       vehicle {
         model
@@ -24,6 +25,12 @@ query moreClosedDocs($durationInDays: Int!, $cursor: Int, $sortConfig: ESSortCon
       manager {
         id
         displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt

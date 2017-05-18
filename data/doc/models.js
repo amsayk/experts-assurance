@@ -6,16 +6,22 @@ import {
   RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
+  CLOSE_DOC,
+  CANCEL_DOC,
+
+  // Payments
+  SET_PAY,
+  DEL_PAY,
 
   // Files
-  // UPLOAD_FILE,
+  UPLOAD_FILE,
   DELETE_FILE,
   RESTORE_FILE,
 } from 'backend/constants';
 
-import { deserializeParseObject } from 'backend/utils';
+// import { deserializeParseObject } from 'backend/utils';
 
-import uploadFile from 'backend/ops/doc/uploadFile';
+// import uploadFile from 'backend/ops/doc/uploadFile';
 
 export class Docs {
   constructor({ user, connector }) {
@@ -31,12 +37,36 @@ export class Docs {
     return this.connector.getFile(id);
   }
 
+  getDocObservations({ cursor, id }) {
+    return this.connector.getDocObservations({ cursor, id, user : this.user });
+  }
+
   getDocFiles(id) {
     return this.connector.getDocFiles(id);
   }
 
   validateDoc(id) {
     return this.connector.validateDoc(id);
+  }
+  getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+    return this.connector.getInvalidDocs({
+      durationInDays,
+      cursor,
+      sortConfig,
+      user : this.user,
+      now,
+      selectionSet,
+    });
+  }
+  getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+    return this.connector.getUnpaidDocs({
+      durationInDays,
+      cursor,
+      sortConfig,
+      user : this.user,
+      now,
+      selectionSet,
+    });
   }
 
   getDocs({ queryString, cursor = 0, sortConfig, client, manager, state }, topLevelFields) {
@@ -59,16 +89,16 @@ export class Docs {
     return this.connector.esQueryDocs(query);
   }
 
-  pendingDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
-    return this.connector.pendingDashboard(
-      durationInDays,
-      cursor,
-      sortConfig,
-      this.user,
-      now,
-      selectionSet,
-    );
-  }
+  // pendingDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
+  //   return this.connector.pendingDashboard(
+  //     durationInDays,
+  //     cursor,
+  //     sortConfig,
+  //     this.user,
+  //     now,
+  //     selectionSet,
+  //   );
+  // }
   openDashboard(durationInDays, cursor, sortConfig, selectionSet, validOnly, now) {
     return this.connector.openDashboard(
       durationInDays,
@@ -80,17 +110,17 @@ export class Docs {
       validOnly,
     );
   }
-  closedDashboard(durationInDays, cursor, sortConfig, selectionSet, includeCanceled, now) {
-    return this.connector.closedDashboard(
-      durationInDays,
-      cursor,
-      sortConfig,
-      this.user,
-      now,
-      selectionSet,
-      includeCanceled,
-    );
-  }
+  // closedDashboard(durationInDays, cursor, sortConfig, selectionSet, includeCanceled, now) {
+  //   return this.connector.closedDashboard(
+  //     durationInDays,
+  //     cursor,
+  //     sortConfig,
+  //     this.user,
+  //     now,
+  //     selectionSet,
+  //     includeCanceled,
+  //   );
+  // }
 
   recent() {
     return this.connector.recentDocs(this.user);
@@ -141,34 +171,65 @@ export class Docs {
       { sessionToken: this.user.getSessionToken() }
     );
   }
+  closeDoc(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: CLOSE_DOC, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+  cancelDoc(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: CANCEL_DOC, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  // Payments
+  setPay(id, info) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_PAY, args: { id, info } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+  delPay(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DEL_PAY, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
 
   // Files
 
   uploadFile(payload) {
-    // return Parse.Cloud.run(
-    //   'routeOp',
-    //   { __operationKey: UPLOAD_FILE, args: { payload } },
-    //   { sessionToken: this.user.getSessionToken() }
-    // );
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: UPLOAD_FILE, args: { payload } },
+      { sessionToken: this.user.getSessionToken() }
+    );
 
-    const request = {
-      now    : Date.now(),
-      params : { payload },
-      user   : this.user,
-    };
-
-    return new Promise((resolve, reject) => {
-      uploadFile(request, (err, response) => {
-        if (err) {
-          reject(err);
-        }
-        const { file, activities } = response;
-        resolve({
-          file       : deserializeParseObject(file),
-          activities : activities.map(deserializeParseObject),
-        });
-      })
-    })
+    // const request = {
+    //   now    : Date.now(),
+    //   params : { payload },
+    //   user   : this.user,
+    // };
+    //
+    // return new Promise((resolve, reject) => {
+    //   uploadFile(request, (err, response) => {
+    //     if (err) {
+    //       reject(err);
+    //     } else {
+    //       const { file, activities } = response;
+    //       resolve({
+    //         file       : deserializeParseObject(file),
+    //         activities : activities.map(deserializeParseObject),
+    //       });
+    //     }
+    //   });
+    // });
   }
 
   delFile(id) {

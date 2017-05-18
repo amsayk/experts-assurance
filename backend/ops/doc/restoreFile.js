@@ -17,7 +17,7 @@ export default async function restoreFile(request, done) {
   } = request.params;
 
   try {
-    const file = await new Parse.Query(FileType).get(id);
+    const file = await new Parse.Query(FileType).get(id, { useMasterKey: true });
     if (file) {
       await file.set({
         deletion_user: null,

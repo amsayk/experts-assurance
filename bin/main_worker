@@ -18,9 +18,15 @@ import {
   RESTORE_DOC,
   SET_MANAGER,
   SET_STATE,
+  CLOSE_DOC,
+  CANCEL_DOC,
+
+  // Payments
+  SET_PAY,
+  DEL_PAY,
 
   // Files
-  // UPLOAD_FILE,
+  UPLOAD_FILE,
   DELETE_FILE,
   RESTORE_FILE,
 } from 'backend/constants';
@@ -40,9 +46,7 @@ const opts = {
   concurrency : 1,
 };
 
-createWorker(opts, 'MAIN', {
-  [UPDATE_USER_BUSINESS] : businessOps.updateUserBusiness,
-
+createWorker({ ...opts, concurrency : require('os').cpus().length }, 'AUTH', {
   // auth
   [SET_PASSWORD]              : authOps.setPassword,
   [UPDATE_ACCOUNT_SETTINGS]   : authOps.updateAccountSettings,
@@ -50,6 +54,11 @@ createWorker(opts, 'MAIN', {
   [PASSWORD_RESET]            : authOps.passwordReset,
   [SIGN_UP]                   : authOps.signUp,
   [CHANGE_EMAIL]              : authOps.changeEmail,
+
+});
+
+createWorker(opts, 'MAIN', {
+  [UPDATE_USER_BUSINESS] : businessOps.updateUserBusiness,
 
   [AUTHORIZE_MANAGER]            : authOps.authorizeManager,
   [REVOKE_MANAGER_AUTHORIZATION] : authOps.revokeManagerAuthorization,
@@ -60,9 +69,15 @@ createWorker(opts, 'MAIN', {
   [RESTORE_DOC] : docOps.restoreDoc,
   [SET_MANAGER] : docOps.setManager,
   [SET_STATE]   : docOps.setState,
+  [CLOSE_DOC]   : docOps.closeDoc,
+  [CANCEL_DOC]  : docOps.cancelDoc,
+
+  // Payments
+  [SET_PAY]  : docOps.setPay,
+  [DEL_PAY]  : docOps.delPay,
 
   // Files
-  // [UPLOAD_FILE]  : docOps.uploadFile,
+  [UPLOAD_FILE]  : docOps.uploadFile,
   [DELETE_FILE]  : docOps.delFile,
   [RESTORE_FILE] : docOps.restoreFile,
 });

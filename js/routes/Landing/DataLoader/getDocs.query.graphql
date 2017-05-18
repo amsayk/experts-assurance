@@ -7,6 +7,7 @@ query getDocs($query: DocsFetchQuery!) {
       key
       refNo
       date
+      dateMission
       state
 
       vehicle {
@@ -24,6 +25,12 @@ query getDocs($query: DocsFetchQuery!) {
       agent {
         id
         displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt

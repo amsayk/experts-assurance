@@ -10,7 +10,7 @@ const { BusinessType, DocType } = require('data/types');
 
 const { businessQuery } = require('data/utils');
 
-const REF_NO_KEY = 'lastRefNo';
+export const REF_NO_KEY = 'lastRefNo';
 
 export async function getRefNo(business) {
   if (!business.has(REF_NO_KEY)) {
@@ -33,7 +33,7 @@ export function deserializeParseObject(object) {
 
 export async function getOrCreateBusiness() {
   const business = await businessQuery()
-    .first();
+    .first({ useMasterKey : true });
 
   if (!business) {
     return await new BusinessType()
@@ -67,7 +67,7 @@ export async function genDocKey() {
   async function keyExists(key) {
     return (await new Parse.Query(DocType)
       .equalTo('key', key)
-      .count()) > 0;
+      .count({ useMasterKey : true })) > 0;
   }
 }
 

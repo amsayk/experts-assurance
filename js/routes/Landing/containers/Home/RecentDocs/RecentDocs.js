@@ -12,7 +12,7 @@ import {
 } from 'vars';
 
 import {
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -129,7 +129,7 @@ function getState(state, stateText, icon) {
 }
 
 const STATES = {
-  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon   size={12}/>),
+  // PENDING  : getState('PENDING',  'En attente',  <UnknownIcon   size={12}/>),
   OPEN     : getState('OPEN',     'En cours',    <WatchIcon     size={12}/>),
   CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon      size={12}/>),
   CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon  size={12}/>),

@@ -8,7 +8,7 @@ import {
 } from 'vars';
 
 import {
-  UnknownIcon,
+  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -24,30 +24,30 @@ import { PlusIcon } from 'components/icons/MaterialIcons';
 
 const TYPE = 'DOCUMENT_CREATED';
 
-function getState(state, stateText, icon) {
-  return [
-    // <span className={cx(style[state], style.docStateToggle)}>
-    //   {icon}
-    // </span>,
-    <span className={style.text} style={{
-      // textTransform: 'uppercase',
-      marginRight: 5,
-      border: '1px solid #000',
-      borderRadius: '15%',
-      padding: '1px 4px',
-      marginLeft: 5,
-    }}>
-    {stateText}
-  </span>,
-  ];
-}
+// function getState(state, stateText, icon) {
+//   return [
+//     // <span className={cx(style[state], style.docStateToggle)}>
+//     //   {icon}
+//     // </span>,
+//     <span className={style.text} style={{
+//       // textTransform: 'uppercase',
+//       marginRight: 5,
+//       border: '1px solid #000',
+//       borderRadius: '15%',
+//       padding: '1px 4px',
+//       marginLeft: 5,
+//     }}>
+//     {stateText}
+//   </span>,
+//   ];
+// }
 
-const STATES = {
-  PENDING  : getState('PENDING',  'En attente',  <UnknownIcon  size={12}/>),
-  OPEN     : getState('OPEN',     'En cours',    <WatchIcon    size={12}/>),
-  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
-};
+// const STATES = {
+//   // PENDING  : getState('PENDING',  'En attente',  <UnknownIcon  size={12}/>),
+//   OPEN     : getState('OPEN',     'En cours',    <WatchIcon    size={12}/>),
+//   CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
+//   CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
+// };
 
 const ICON_WRAPPER_STYLE = {
   color: 'rgb(255, 255, 255)',
@@ -86,12 +86,12 @@ export default function DocumentCreated({ intl, doc, user, timestamp, metadata }
       <div className={style.entry}>
         <div className={style.title}>
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
-            Création de dossier <b>{doc.refNo}</b>
+            Nouveau dossier <b>{doc.refNo}</b>
           </Link>
         </div>
-        <div className={style.desc}>
-          {STATES[metadata.state]}
-        </div>
+        {/* <div className={style.desc}> */}
+        {/*   {STATES[metadata.state]} */}
+        {/* </div> */}
         <div className={style.info}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             {user.displayName}

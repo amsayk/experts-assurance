@@ -8,3 +8,5 @@ export const ActivityType = Parse.Object.extend('Activity');
 
 export const FileType = Parse.Object.extend('Attachment');
 
+export const ObservationType = Parse.Object.extend('Observation');
+

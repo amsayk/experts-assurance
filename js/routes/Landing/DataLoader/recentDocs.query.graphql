@@ -3,6 +3,7 @@ query recentDocs {
     id
     refNo
     date
+    dateMission
     state
     vehicle {
       model
@@ -12,6 +13,12 @@ query recentDocs {
     user {
       id
       displayName
+    }
+
+      payment : paymentInfo {
+      user { id }
+      amount
+      date
     }
 
     createdAt

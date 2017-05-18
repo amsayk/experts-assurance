@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import cluster from 'cluster';
+// import cluster from 'cluster';
 
 import Parse from 'parse/node';
 import config from 'build/config';
@@ -11,10 +11,10 @@ const log = require('log')('app:bin:server');
 const port = normalizePort(config.server_port);
 app.set('port', port);
 
-if (cluster.isMaster) {
-  // Set master process title (shows in `ps`).
-
-  process.title = `${config.appName} (master)`;
+// if (cluster.isMaster) {
+//   // Set master process title (shows in `ps`).
+//
+//   process.title = `${config.appName} (master)`;
 
   async function onStart() {
     try {
@@ -27,50 +27,50 @@ if (cluster.isMaster) {
     }
   }
 
-  if (__DEV__) {
-    onChildProcess();
-    setTimeout(onStart, 3 * 1000);
-  } else {
-
-    function gracefulShutdown() {
-      log('Master stopping.');
-
-      for (const id in cluster.workers) {
-        cluster.workers[id].kill();
-      }
-
-      process.exit(0);
-    }
-
-    // Listen for dying workers
-    cluster.on('exit', function (worker, code, signal) {
-      log.error('Worker %d died :(', worker.process.id);
-
-      // Replace the dead worker,
-      // we're not sentimental
-      cluster.fork();
-
-    });
-
-    // Master can be terminated by either SIGTERM
-    // or SIGINT. The latter is used by CTRL+C on console.
-
-    process.on('SIGTERM', gracefulShutdown);
-    process.on('SIGINT', gracefulShutdown);
-
-    // A child is loaded
-    cluster.once('listening', onStart);
-
-    for (let i = 0; i < config.clusterWorkerSize; i++) {
-      cluster.fork();
-    }
-  }
-} else {
-
-  process.title = `${config.appName} (slave)`;
+//   if (__DEV__) {
+//     onChildProcess();
+//     setTimeout(onStart, 3 * 1000);
+//   } else {
+//
+//     function gracefulShutdown() {
+//       log('Master stopping.');
+//
+//       for (const id in cluster.workers) {
+//         cluster.workers[id].kill();
+//       }
+//
+//       process.exit(0);
+//     }
+//
+//     // Listen for dying workers
+//     cluster.on('exit', function (worker, code, signal) {
+//       log.error('Worker %d died :(', worker.process.id);
+//
+//       // Replace the dead worker,
+//       // we're not sentimental
+//       cluster.fork();
+//
+//     });
+//
+//     // Master can be terminated by either SIGTERM
+//     // or SIGINT. The latter is used by CTRL+C on console.
+//
+//     process.on('SIGTERM', gracefulShutdown);
+//     process.on('SIGINT', gracefulShutdown);
+//
+//     // A child is loaded
+//     cluster.once('listening', onStart);
+//
+//     // for (let i = 0; i < config.clusterWorkerSize; i++) {
+//       cluster.fork();
+//     // }
+//   }
+// } else {
+//
+//   process.title = `${config.appName} (slave)`;
 
   onChildProcess();
-}
+// }
 
 function onChildProcess() {
   /**
@@ -164,5 +164,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   log('Worker ' + process.pid + ' listening on ' + bind);
+
+
+  onStart();
 }
 

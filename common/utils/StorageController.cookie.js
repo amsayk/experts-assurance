@@ -7,7 +7,7 @@ import cookie from 'react-cookie';
 
 import { SECURE } from 'vars';
 
-export default /* StorageController = */ {
+const StorageController = {
   async: 0,
 
   getItem(path: string): ?string {
@@ -29,4 +29,6 @@ export default /* StorageController = */ {
   clear() {
   },
 };
+
+export default StorageController;
 
