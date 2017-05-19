@@ -20,6 +20,7 @@ const babelOptions = require('../getBabelOptions')({
     'FileController'           : 'common/utils/FileController',
 
     'result-codes'             : 'common/result-codes',
+    'intl-formats'             : 'common/intl-formats',
   },
   plugins: [
     jestPluginHoist,

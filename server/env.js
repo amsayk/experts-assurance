@@ -30,6 +30,7 @@ const babelOptions = require('scripts/getBabelOptions')({
     'FileController'                     : 'common/utils/FileController',
 
     'result-codes'                       : 'common/result-codes',
+    'intl-formats'                       : 'common/intl-formats',
   },
   plugins: [
     'transform-async-to-generator',

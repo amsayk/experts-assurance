@@ -252,7 +252,7 @@ if (__DEV__) {
     new webpack.optimize.AggressiveMergingPlugin(),
     // new PrepackWebpackPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap : false,
+      sourceMap : config.debug,
       minimize  : true,
       compress  : {
         unused        : true,

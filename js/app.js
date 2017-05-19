@@ -40,9 +40,11 @@ import { ready } from 'redux/reducers/app/actions';
 
 import { scrolling } from 'redux/reducers/scrolling/actions';
 
+import formats from 'intl-formats';
+
 import { updateIntl } from 'redux/reducers/intl/actions';
 
-import { SSR, DEFAULT_LANG } from 'vars';
+import { DEBUG, SSR, DEFAULT_LANG } from 'vars';
 
 const log = debug('app:client');
 
@@ -63,46 +65,12 @@ let render = async function render() {
 
   const { messages : translations } = await intlLoader(locale);
 
-  const formats = {
-    date: {
-      medium: {
-        style: 'medium',
-      },
-    },
-    number: {
-      MAD: {
-        style: 'currency',
-        currency: 'MAD',
-        minimumFractionDigits: 2,
-
-        // currencyDisplay: oneOf(['symbol', 'code', 'name']),
-        // minimumIntegerDigits    : number,
-        // minimumFractionDigits   : number,
-        // maximumFractionDigits   : number,
-        // minimumSignificantDigits: number,
-        // maximumSignificantDigits: number,
-
-        // useGrouping    : bool,
-      },
-      MONEY: {
-        style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      },
-      PERCENT: {
-        style: 'percent',
-        minimumFractionDigits: 2,
-      },
-
-    },
-  };
-
   // Update messages if not default locale
   if (locale !== DEFAULT_LANG) {
-    store.dispatch(updateIntl({ messages : translations, formats }));
+    store.dispatch(updateIntl({ locale, messages : translations, formats }));
   }
 
-  const intlSelector = (state) => state.get('intl').toJS();
+  const intlSelector = (state) => state.get('intl');
 
   const routes = getRoutes(store);
   const snackbar = createSnackbarController(store);
@@ -217,9 +185,6 @@ if (__DEV__) {
     );
   }
 
-  // Show all debug messages.
-  localStorage.debug = '*';
-
   window.reduxStore   = store;
   window.Parse        = require('parse');
   window.Perf         = require('react-addons-perf');
@@ -243,6 +208,12 @@ if (__DEV__) {
     },
 
   });
+}
+
+if (__DEV__ || DEBUG) {
+  // Show all debug messages.
+  localStorage.debug = DEBUG || '*';
+
 }
 
 // ========================================================

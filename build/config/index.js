@@ -30,6 +30,7 @@ const moduleMap = {
   'StorageController.cookie'           : 'common/utils/StorageController.cookie',
 
   'result-codes'                       : 'common/result-codes',
+  'intl-formats'                       : 'common/intl-formats',
 };
 
 const babelOptions = require('scripts/getBabelOptions')({
@@ -51,6 +52,9 @@ log('Creating default configuration.');
 // Default Configuration
 // ========================================================
 const config = {
+  // Allow debugging in prodiction mode
+  debug: process.env.DEBUG,
+
   env : process.env.NODE_ENV || 'development',
 
   // HTTPS
@@ -383,6 +387,8 @@ Edit at Your Own Risk
 // N.B.: globals added here must _also_ be added to .eslintrc
 config.globals = {
   'process.env'  : {
+    DEBUG                 : JSON.stringify(config.debug),
+
     NODE_ENV              : JSON.stringify(config.env),
 
     PUBLIC                : JSON.stringify(config.public),

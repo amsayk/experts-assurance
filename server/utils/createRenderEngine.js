@@ -73,7 +73,7 @@ export default function createRenderEngine(app) {
       dataIdFromObject,
     });
 
-    const intlSelector = (state) => state.get('intl').toJS();
+    const intlSelector = (state) => state.get('intl');
 
     const app = (
       <MuiThemeProvider muiTheme={muiTheme}>

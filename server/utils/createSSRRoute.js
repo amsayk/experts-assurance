@@ -17,6 +17,8 @@ import {StringDecoder} from 'string_decoder';
 
 import { match } from 'react-router';
 
+import formats from 'intl-formats';
+
 import createRenderEngine from './createRenderEngine';
 
 import loading from './LoadingAnimation';
@@ -75,40 +77,6 @@ module.exports = function createSSRRoute(app, compiler) {
     const locale = store.getState().getIn(['intl', 'locale']);
 
     const { messages : translations } = intlLoader(locale);
-
-    const formats = {
-      date: {
-        medium: {
-          style: 'medium',
-        },
-      },
-      number: {
-        MAD: {
-          style: 'currency',
-          currency: 'MAD',
-          minimumFractionDigits: 2,
-
-          // currencyDisplay: oneOf(['symbol', 'code', 'name']),
-          // minimumIntegerDigits    : number,
-          // minimumFractionDigits   : number,
-          // maximumFractionDigits   : number,
-          // minimumSignificantDigits: number,
-          // maximumSignificantDigits: number,
-
-          // useGrouping    : bool,
-        },
-        MONEY: {
-          style: 'decimal',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        },
-        PERCENT: {
-          style: 'percent',
-          minimumFractionDigits: 2,
-        },
-
-      },
-    };
 
     // Update messages if not default locale
     if (locale !== config.lang) {

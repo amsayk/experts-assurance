@@ -21,7 +21,7 @@ module.exports = {
     compiler_public_path     : process.env.PUBLIC_PATH || '/',
     compiler_fail_on_warning : false,
     compiler_hash_type       : 'chunkhash',
-    compiler_devtool         : 'nosources-source-map',
+    compiler_devtool         : config.debug ? 'source-map' : false,
     compiler_stats           : {
       chunks       : true,
       chunkModules : true,

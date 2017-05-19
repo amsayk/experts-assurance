@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import { APP_NAME, BASENAME, DEFAULT_LANG, INIT } from 'vars';
+import { APP_NAME, BASENAME, DEFAULT_LANG, DEBUG, INIT } from 'vars';
 
 import pick from 'lodash.pick';
 
@@ -150,7 +150,7 @@ const enhancers = [
 ];
 
 const composeEnhancers =
-  __DEV__ &&
+  (__DEV__ || DEBUG) &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
     name: APP_NAME,
@@ -185,6 +185,9 @@ export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ 
     case 'business'         : return value;
     case 'authorization'    : return value;
     case 'confirm'          : return value;
+
+    case 'messages'         : return value;
+    case 'formats'          : return value;
   }
 
   return new Map(value);

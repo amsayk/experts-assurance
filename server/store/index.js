@@ -1,6 +1,7 @@
 import { compose, createStore, applyMiddleware } from 'redux';
 
 import {
+  DEBUG,
   DEFAULT_LANG,
   APP_NAME,
   INIT,
@@ -29,7 +30,7 @@ const middlewares = [
 const enhancers = [
 ];
 
-const composeEnhancers = __DEV__ ? composeWithDevTools({ realtime: true, name: APP_NAME }) : compose;
+const composeEnhancers = __DEV__ || DEBUG ? composeWithDevTools({ realtime: true, name: APP_NAME }) : compose;
 
 const enhancer = composeEnhancers(
   applyMiddleware(...middlewares),

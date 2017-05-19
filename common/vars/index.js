@@ -2,6 +2,8 @@ import keyOf from 'keyOf';
 
 import ExecutionEnvironment from 'ExecutionEnvironment';
 
+export const DEBUG                            = process.env.DEBUG;
+
 // Use this constant to initialize reducers
 export const INIT                             = keyOf({ INIT: null });
 
