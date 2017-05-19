@@ -125,19 +125,16 @@
     "main_worker": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/main_worker",
       "env": {
-        "DEBUG": "ioredis:cluster"
       }
     },
     "es_index": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/es_index",
       "env": {
-        "DEBUG": "ioredis:cluster"
       }
     },
     "mail": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/mail",
       "env": {
-        "DEBUG": "ioredis:cluster"
       }
     }
   },

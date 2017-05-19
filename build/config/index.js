@@ -53,7 +53,7 @@ log('Creating default configuration.');
 // ========================================================
 const config = {
   // Allow debugging in prodiction mode
-  debug: process.env.DEBUG,
+  debug: process.env.DEBUG || null,
 
   env : process.env.NODE_ENV || 'development',
 
