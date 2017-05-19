@@ -56,7 +56,6 @@
     "compile": {
       "command": "node -r server/utils/validate-env-vars -r server/env bin/compile",
       "env": {
-        "DEBUG": "app:*"
       }
     },
     "dev": {
