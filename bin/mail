@@ -9,6 +9,7 @@ import createWorker from 'backend/kue-mq/createWorker';
 const log = require('log')('app:backend:mail');
 
 if (cluster.isMaster) {
+  process.title = 'master';
 
   for (let i = 0; i < config.clusterWorkerSize; i++) {
     cluster.fork();

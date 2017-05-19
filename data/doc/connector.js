@@ -4,6 +4,8 @@ import Parse from 'parse/node';
 
 import es from 'backend/es';
 
+import config from 'build/config';
+
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
@@ -417,7 +419,7 @@ export class DocConnector {
     }
 
     const searchParams = {
-      index: 'fikrat',
+      index: config.esIndex,
       type: 'doc',
       from : cursor,
       size: cursor === 0 ? LIMIT_PER_PAGE : LIMIT_PER_NEXT_PAGE,
@@ -514,7 +516,7 @@ export class DocConnector {
       };
 
       const searchParams = {
-        index: 'fikrat',
+        index: config.esIndex,
         type: 'doc',
         size: SEARCH_LIMIT,
         body: {
@@ -621,7 +623,7 @@ export class DocConnector {
       };
 
       const searchParams = {
-        index: 'fikrat',
+        index: config.esIndex,
         type: 'person',
         size: SEARCH_LIMIT,
         body: {

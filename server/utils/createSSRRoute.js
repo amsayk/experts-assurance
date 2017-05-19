@@ -2,10 +2,14 @@ import path from 'path';
 
 import Parse from 'parse/node';
 
+import { updateIntl } from 'redux/reducers/intl/actions';
+
 import config from 'build/config';
 
 import createStore from 'server/store';
 import getRoutes from 'server/routes';
+
+import intlLoader from 'server/intl-loader';
 
 import cookie from 'react-cookie';
 
@@ -67,6 +71,50 @@ module.exports = function createSSRRoute(app, compiler) {
       : config.lang;
 
     const store = createStore({ lang });
+
+    const locale = store.getState().getIn(['intl', 'locale']);
+
+    const { messages : translations } = intlLoader(locale);
+
+    const formats = {
+      date: {
+        medium: {
+          style: 'medium',
+        },
+      },
+      number: {
+        MAD: {
+          style: 'currency',
+          currency: 'MAD',
+          minimumFractionDigits: 2,
+
+          // currencyDisplay: oneOf(['symbol', 'code', 'name']),
+          // minimumIntegerDigits    : number,
+          // minimumFractionDigits   : number,
+          // maximumFractionDigits   : number,
+          // minimumSignificantDigits: number,
+          // maximumSignificantDigits: number,
+
+          // useGrouping    : bool,
+        },
+        MONEY: {
+          style: 'decimal',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        },
+        PERCENT: {
+          style: 'percent',
+          minimumFractionDigits: 2,
+        },
+
+      },
+    };
+
+    // Update messages if not default locale
+    if (locale !== config.lang) {
+      store.dispatch(updateIntl({ messages : translations, formats }));
+    }
+
     match({ routes: getRoutes(store), location: req.originalUrl }, async (error, redirectLocation, renderProps) => {
       if (error) {
         res.status(500).send();

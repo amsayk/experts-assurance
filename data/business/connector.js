@@ -4,6 +4,8 @@ import Parse from 'parse/node';
 
 import { businessQuery } from 'data/utils';
 
+import config from 'build/config';
+
 import {
   BusinessType,
 } from 'data/types';
@@ -123,7 +125,7 @@ export class BusinessConnector {
   esSearchUsers(q) {
     if (q) {
       const searchParams = {
-        index: 'fikrat',
+        index: config.esIndex,
         type: 'person',
         size: SEARCH_LIMIT,
         body: {

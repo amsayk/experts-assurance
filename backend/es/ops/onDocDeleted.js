@@ -1,5 +1,7 @@
 import Parse from 'parse/node';
 
+import config from 'build/config';
+
 import client from 'backend/es/connection';
 
 const log = require('log')('app:backend:es:onDocDeleted');
@@ -10,7 +12,7 @@ export default function onDocDeleted(id) {
       const doc = await new Parse.Query(DocType).get(id, { useMasterKey : true });
 
       client.delete({
-        index   : 'fikrat',
+        index   : config.esIndex,
         type    : 'doc',
         id      : String(doc.get('refNo')),
         refresh : 'true',

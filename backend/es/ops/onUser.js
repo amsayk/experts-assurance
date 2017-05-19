@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import client from 'backend/es/connection';
 
+import config from 'build/config';
+
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
@@ -18,7 +20,7 @@ export default function onUser(id) {
       const user = await new Parse.Query(Parse.User).get(id, { useMasterKey : true });
 
       client.index({
-        index: 'fikrat',
+        index: config.esIndex,
         type: 'person',
         id,
         body: {

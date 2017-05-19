@@ -76,7 +76,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
               }
             });
           });
-          log('Index successfully deleted');
+          log(`Index ${config.esIndex} successfully deleted`);
         } catch (e) {
           log.error(`Error deleting index`, e);
         }
@@ -96,7 +96,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
               }
             });
           });
-          log('Index successfully created');
+          log(`Index ${config.esIndex} successfully created`);
         } catch (e) {
           log.error(`Error creating index ${config.esIndex}`, e);
           process.exit(1);

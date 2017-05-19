@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import dataIdFromObject from 'dataIdFromObject';
 
-import { IntlProvider } from 'react-intl';
+import IntlProvider from 'IntlProvider';
 
 import ApolloClient, { toIdValue } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
@@ -16,6 +16,9 @@ import { createLocalInterface } from 'apollo-local-query';
 import schema from 'data/schema';
 
 import getCurrentUser from 'getCurrentUser';
+
+import getMuiTheme from 'components/material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'components/material-ui/styles/MuiThemeProvider';
 
 import emptyObject from 'emptyObject';
 
@@ -36,6 +39,9 @@ import { APOLLO_DEFAULT_REDUX_ROOT_KEY } from 'vars';
 const graphql = require('graphql');
 
 const log = require('log')('app:backend:ssr');
+
+const muiTheme = getMuiTheme({
+});
 
 export default function createRenderEngine(app) {
   return async ({ renderProps, req, res, store }) => {
@@ -67,12 +73,16 @@ export default function createRenderEngine(app) {
       dataIdFromObject,
     });
 
+    const intlSelector = (state) => state.get('intl').toJS();
+
     const app = (
-      <IntlProvider defaultLocale={'en'} locale={'en'} messages={{}} formats={{}}>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <ApolloProvider client={client} store={store} immutable>
-          <RouterContext {...renderProps}/>
+          <IntlProvider intlSelector={intlSelector}>
+            <RouterContext {...renderProps}/>
+          </IntlProvider>
         </ApolloProvider>
-      </IntlProvider>
+      </MuiThemeProvider>
     );
 
     try {

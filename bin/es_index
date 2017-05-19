@@ -11,6 +11,7 @@ import * as es from 'backend/es';
 const log = require('log')('app:backend:es_index');
 
 if (cluster.isMaster) {
+  process.title = 'master';
 
   for (let i = 0; i < config.clusterWorkerSize; i++) {
     cluster.fork();

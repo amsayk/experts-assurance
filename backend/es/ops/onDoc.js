@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import client from 'backend/es/connection';
 
+import config from 'build/config';
+
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
@@ -27,7 +29,7 @@ export default function onDoc(id) {
         }, {});
 
       client.index({
-        index: 'fikrat',
+        index: config.esIndex,
         type: 'doc',
         id: String(doc.get('refNo')),
         body: {
