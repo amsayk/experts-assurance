@@ -91,7 +91,7 @@ class DocMenu extends React.Component {
             Clôturer
           </MenuItem>
           <MenuItem eventKey='cancel'>Annuler</MenuItem>
-          {user.isAdmin || user.isDocManager(doc) ? [
+          {user.isAdmin || user.isManager(doc) ? [
             <MenuItem divider />,
             <MenuItem eventKey='delete'>Supprimer</MenuItem>
           ] : null}

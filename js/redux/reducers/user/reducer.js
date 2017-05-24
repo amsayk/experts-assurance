@@ -2,7 +2,7 @@ import getCurrentUser from 'getCurrentUser';
 
 import { Record, List } from 'immutable';
 
-import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS, userHasRoleAny } from 'roles';
+import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS, userHasRoleAll } from 'roles';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
@@ -22,11 +22,11 @@ export class User extends Record({
   }
 
   get isAdmin() {
-    return userHasRoleAny(this, Role_ADMINISTRATORS);
+    return userHasRoleAll(this, Role_ADMINISTRATORS);
   }
 
   get isAdminOrManager() {
-    return userHasRoleAny(this, Role_ADMINISTRATORS, Role_MANAGERS);
+    return userHasRoleAll(this, Role_ADMINISTRATORS) || userHasRoleAll(this, Role_MANAGERS);
   }
 
   isManager(doc) {

@@ -32,12 +32,12 @@ export default class Overview extends React.Component {
             </div>
           </div>
 
-          <div className={style.overviewLine}>
+          {user && (userHasRoleAll(user, Role_ADMINISTRATORS) || userHasRoleAll(user, Role_MANAGERS)) ? <div className={style.overviewLine}>
             <div className={style.overviewLabel}>Adresse e-mail</div>
             <div className={style.overviewValue}>
               {loading ? null : user.email || '—'}
             </div>
-          </div>
+          </div> : null}
 
           <div className={style.overviewLine}>
             <div className={style.overviewLabel}>Role</div>
