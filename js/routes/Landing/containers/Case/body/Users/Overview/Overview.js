@@ -349,31 +349,31 @@ class Overview extends React.Component {
 
                   return prev;
                 },
-                getTimeline(prev, { mutationResult, queryVariables }) {
-                  const newDoc = mutationResult.data.closeDoc.doc;
-
-                  const newActivities = mutationResult.data.closeDoc.activities;
-
-
-                  if (prev && newActivities && newActivities.length) {
-
-                    if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-                      return prev;
-                    }
-
-                    return {
-                      timeline : {
-                        cursor : prev.timeline.cursor,
-                        result : [
-                          ...newActivities,
-                          ...prev.timeline.result,
-                        ],
-                      },
-                    };
-                  }
-
-                  return prev;
-                },
+                // getTimeline(prev, { mutationResult, queryVariables }) {
+                //   const newDoc = mutationResult.data.closeDoc.doc;
+                //
+                //   const newActivities = mutationResult.data.closeDoc.activities;
+                //
+                //
+                //   if (prev && newActivities && newActivities.length) {
+                //
+                //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+                //       return prev;
+                //     }
+                //
+                //     return {
+                //       timeline : {
+                //         cursor : prev.timeline.cursor,
+                //         result : [
+                //           ...newActivities,
+                //           ...prev.timeline.result,
+                //         ],
+                //       },
+                //     };
+                //   }
+                //
+                //   return prev;
+                // },
                 getDocs(prev, { mutationResult, queryVariables }) {
                   const newDoc = mutationResult.data.closeDoc.doc;
 
@@ -492,6 +492,7 @@ class Overview extends React.Component {
             }
 
             const { data: { cancelDoc: { error } } } = await self.props.client.mutate({
+              refetchQueries : ['getDoc', 'getTimeline'],
               mutation  : CANCEL_MUTATION,
               variables : { id : doc.id },
               updateQueries : {
@@ -701,31 +702,31 @@ class Overview extends React.Component {
 
                   return prev;
                 },
-                getTimeline(prev, { mutationResult, queryVariables }) {
-                  const newDoc = mutationResult.data.cancelDoc.doc;
-
-                  const newActivities = mutationResult.data.cancelDoc.activities;
-
-
-                  if (prev && newActivities && newActivities.length) {
-
-                    if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-                      return prev;
-                    }
-
-                    return {
-                      timeline : {
-                        cursor : prev.timeline.cursor,
-                        result : [
-                          ...newActivities,
-                          ...prev.timeline.result,
-                        ],
-                      },
-                    };
-                  }
-
-                  return prev;
-                },
+                // getTimeline(prev, { mutationResult, queryVariables }) {
+                //   const newDoc = mutationResult.data.cancelDoc.doc;
+                //
+                //   const newActivities = mutationResult.data.cancelDoc.activities;
+                //
+                //
+                //   if (prev && newActivities && newActivities.length) {
+                //
+                //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+                //       return prev;
+                //     }
+                //
+                //     return {
+                //       timeline : {
+                //         cursor : prev.timeline.cursor,
+                //         result : [
+                //           ...newActivities,
+                //           ...prev.timeline.result,
+                //         ],
+                //       },
+                //     };
+                //   }
+                //
+                //   return prev;
+                // },
                 getDocs(prev, { mutationResult, queryVariables }) {
                   const newDoc = mutationResult.data.cancelDoc.doc;
 
@@ -845,7 +846,7 @@ class Overview extends React.Component {
             }
 
             const { data: { [isDeletion ? 'delDoc' : 'restoreDoc']: { error } } } = await self.props.client.mutate({
-              refetchQueries : ['getTimeline'],
+              refetchQueries : ['getDoc', 'getTimeline'],
               mutation  : isDeletion ? DEL_MUTATION : RESTORE_MUTATION,
               variables : { id : doc.id },
               updateQueries : {

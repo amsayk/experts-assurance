@@ -70,7 +70,12 @@ let render = async function render() {
     store.dispatch(updateIntl({ locale, messages : translations, formats }));
   }
 
-  const intlSelector = (state) => state.get('intl').toJS();
+  const intlSelector = (state) => ({
+    defaultLocale : state.get('defaultLocale'),
+    locale        : state.get('locale'),
+    messages      : state.get('messages'),
+    formats       : state.get('formats'),
+  });
 
   const routes = getRoutes(store);
   const snackbar = createSnackbarController(store);
@@ -205,7 +210,10 @@ if (__DEV__) {
 
     },
     onUpdated: function () {
-
+      try {
+        window.location.reload();
+      } catch (e) {
+      }
     },
 
   });

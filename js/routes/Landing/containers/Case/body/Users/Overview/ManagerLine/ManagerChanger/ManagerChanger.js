@@ -47,7 +47,7 @@ class ManagerChanger extends React.Component {
   }
   onToggle() {
     this.setState(({ open }, { doc }) => ({
-      open : doc.deletion ? false : !open,
+      open : doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? false : !open,
     }), () => {
       if (this.state.open) {
         raf(() => focusNode(this._input));

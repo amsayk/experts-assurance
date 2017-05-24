@@ -111,7 +111,7 @@ class NewEntry extends React.PureComponent {
       try {
         await Promise.all(self.state.files.map(async (metadata) => {
           const { data: { uploadFile: { error } } } = await self.props.client.mutate({
-            refetchQueries : ['invalidDocs'],
+            refetchQueries : ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
             mutation       : MUTATION,
             variables      : {
               docId    : self.props.id,
@@ -119,49 +119,49 @@ class NewEntry extends React.PureComponent {
               metadata : metadata,
             },
             updateQueries : {
-              getTimeline(prev, { mutationResult, queryVariables }) {
-                const newFile = mutationResult.data.uploadFile.file;
-                const newActivities = mutationResult.data.uploadFile.activities;
-
-                if (prev && newActivities && newActivities.length) {
-
-                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
-                    return prev;
-                  }
-
-                  return {
-                    timeline : {
-                      cursor : prev.timeline.cursor,
-                      result : [
-                        ...newActivities,
-                        ...prev.timeline.result,
-                      ],
-                    },
-                  };
-                }
-
-                return prev;
-              },
-              getDocFiles(prev, { mutationResult, queryVariables }) {
-                const newFile = mutationResult.data.uploadFile.file;
-
-                if (prev && newFile) {
-
-                  if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
-                    return prev;
-                  }
-
-                  const files = [
-                    newFile,
-                    ...prev.getDocFiles,
-                  ];
-                  return {
-                    getDocFiles : files,
-                  };
-                }
-
-                return prev;
-              },
+              // getTimeline(prev, { mutationResult, queryVariables }) {
+              //   const newFile = mutationResult.data.uploadFile.file;
+              //   const newActivities = mutationResult.data.uploadFile.activities;
+              //
+              //   if (prev && newActivities && newActivities.length) {
+              //
+              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
+              //       return prev;
+              //     }
+              //
+              //     return {
+              //       timeline : {
+              //         cursor : prev.timeline.cursor,
+              //         result : [
+              //           ...newActivities,
+              //           ...prev.timeline.result,
+              //         ],
+              //       },
+              //     };
+              //   }
+              //
+              //   return prev;
+              // },
+              // getDocFiles(prev, { mutationResult, queryVariables }) {
+              //   const newFile = mutationResult.data.uploadFile.file;
+              //
+              //   if (prev && newFile) {
+              //
+              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
+              //       return prev;
+              //     }
+              //
+              //     const files = [
+              //       newFile,
+              //       ...prev.getDocFiles,
+              //     ];
+              //     return {
+              //       getDocFiles : files,
+              //     };
+              //   }
+              //
+              //   return prev;
+              // },
             },
           });
 

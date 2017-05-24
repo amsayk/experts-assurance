@@ -105,7 +105,7 @@ class Payment extends React.Component {
         }
 
         const { data: { delPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -124,29 +124,29 @@ class Payment extends React.Component {
 
               return prev;
             },
-            getTimeline(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.delPay.doc;
-              const newActivities = mutationResult.data.delPay.activities;
-
-              if (prev && newActivities && newActivities.length) {
-
-                if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-                  return prev;
-                }
-
-                return {
-                  timeline : {
-                    cursor : prev.timeline.cursor,
-                    result : [
-                      ...newActivities,
-                      ...prev.timeline.result,
-                    ],
-                  },
-                };
-              }
-
-              return prev;
-            },
+            // getTimeline(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.delPay.doc;
+            //   const newActivities = mutationResult.data.delPay.activities;
+            //
+            //   if (prev && newActivities && newActivities.length) {
+            //
+            //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+            //       return prev;
+            //     }
+            //
+            //     return {
+            //       timeline : {
+            //         cursor : prev.timeline.cursor,
+            //         result : [
+            //           ...newActivities,
+            //           ...prev.timeline.result,
+            //         ],
+            //       },
+            //     };
+            //   }
+            //
+            //   return prev;
+            // },
           },
 
         });
@@ -211,7 +211,7 @@ class Payment extends React.Component {
         }
 
         const { data: { setPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {
@@ -230,29 +230,29 @@ class Payment extends React.Component {
 
               return prev;
             },
-            getTimeline(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setPay.doc;
-              const newActivities = mutationResult.data.setPay.activities;
-
-              if (prev && newActivities && newActivities.length) {
-
-                if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-                  return prev;
-                }
-
-                return {
-                  timeline : {
-                    cursor : prev.timeline.cursor,
-                    result : [
-                      ...newActivities,
-                      ...prev.timeline.result,
-                    ],
-                  },
-                };
-              }
-
-              return prev;
-            },
+            // getTimeline(prev, { mutationResult, queryVariables }) {
+            //   const newDoc = mutationResult.data.setPay.doc;
+            //   const newActivities = mutationResult.data.setPay.activities;
+            //
+            //   if (prev && newActivities && newActivities.length) {
+            //
+            //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+            //       return prev;
+            //     }
+            //
+            //     return {
+            //       timeline : {
+            //         cursor : prev.timeline.cursor,
+            //         result : [
+            //           ...newActivities,
+            //           ...prev.timeline.result,
+            //         ],
+            //       },
+            //     };
+            //   }
+            //
+            //   return prev;
+            // },
           },
 
         });

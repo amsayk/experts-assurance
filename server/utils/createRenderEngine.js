@@ -73,7 +73,12 @@ export default function createRenderEngine(app) {
       dataIdFromObject,
     });
 
-    const intlSelector = (state) => state.get('intl');
+    const intlSelector = (state) => ({
+      defaultLocale : state.get('defaultLocale'),
+      locale        : state.get('locale'),
+      messages      : state.get('messages'),
+      formats       : state.get('formats'),
+    });
 
     const app = (
       <MuiThemeProvider muiTheme={muiTheme}>

@@ -67,7 +67,7 @@ webpackConfig.entry = {
 // Bundle Output
 // ------------------------------------
 webpackConfig.output = {
-  filename   : __DEV__ ? '[name].js' : `[name].[${config.compiler_hash_type}].js`,
+  filename   : __DEV__ ? '[name].js' : `[name].[${config.compiler_hash_type}].v${config.globals['process.env']['VERSION']}.js`,
   path       : paths.dist(),
   publicPath : config.compiler_public_path,
   pathinfo   : __DEV__,
@@ -234,6 +234,7 @@ if (__DEV__) {
     new InlineManifestWebpackPlugin(),
     new WebpackMd5Hash(),
     new OfflinePlugin({
+      autoUpdate: true,
       relativePaths: false,
       publicPath: config.compiler_public_path,
       ServiceWorker:{

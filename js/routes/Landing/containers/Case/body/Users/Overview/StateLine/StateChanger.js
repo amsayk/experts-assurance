@@ -114,8 +114,8 @@ class StateToggle extends React.Component {
 }
 class StateChanger extends React.Component {
   onToggle() {
-    this.setState(({ open }, { deletion }) => ({
-      open : deletion ? false : !open,
+    this.setState(({ open, state }, { deletion }) => ({
+      open : deletion || state === 'CLOSED' || state === 'CANCELED' ? false : !open,
     }), () => {
 
     });

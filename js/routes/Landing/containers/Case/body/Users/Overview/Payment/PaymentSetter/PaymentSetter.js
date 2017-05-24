@@ -43,7 +43,7 @@ class PaymentSetter extends React.Component {
   }
   onToggle() {
     this.setState(({ open }, { doc }) => ({
-      open : doc.deletion ? false : !open,
+      open : doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? false : !open,
     }), () => {
       if (this.state.open) {
         raf(() => focusNode(this._input));
@@ -125,7 +125,7 @@ class PaymentSetter extends React.Component {
       <div style={styles.info}>
         {intl.formatNumber(doc.payment.amount, { format: 'MAD' })}
       </div>
-    ) : (doc.deletion ? '—' : null);
+    ) : (doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? '—' : null);
 
     return (
       <div style={styles.root} className={style.filterGroup}>
