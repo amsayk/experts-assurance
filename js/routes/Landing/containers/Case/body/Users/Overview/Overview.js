@@ -846,7 +846,7 @@ class Overview extends React.Component {
             }
 
             const { data: { [isDeletion ? 'delDoc' : 'restoreDoc']: { error } } } = await self.props.client.mutate({
-              refetchQueries : ['getDoc', 'getTimeline'],
+              refetchQueries : ['getDoc', 'invalidDocs', 'unpaidDocs', 'openDocs', 'getTimeline'],
               mutation  : isDeletion ? DEL_MUTATION : RESTORE_MUTATION,
               variables : { id : doc.id },
               updateQueries : {
