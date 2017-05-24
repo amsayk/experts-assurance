@@ -32,96 +32,87 @@ class ListItem extends React.Component {
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
-        <div style={{
-          maxWidth: 75,
-          minWidth: 75,
-        }} className={style.listItemRef}>
-        <div className={style.wrapper}>
-          <div className={style.innerWrapper}>
-            <div className={style.item}>
-              <div className={style.text}>
-                <Link to={PATH_CASES_CASE + '/' + id}>
-                  <b>{refNo}</b>
-                </Link>
+        <div style={{ maxWidth: 75, minWidth: 75 }} className={style.listItemRef}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <Link to={PATH_CASES_CASE + '/' + id}>
+                    <b>{refNo}</b>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div style={{
-        maxWidth: 140,
-        minWidth: 140,
-      }} className={style.listItemClient}>
-      <div className={style.wrapper}>
-        <div className={style.innerWrapper}>
-          <div className={style.item}>
-            <div className={style.text}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + client.id}>
-                {client.displayName}
-              </Link>
+        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listItemClient}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + client.id}>
+                    {client.displayName}
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div style={{
-      maxWidth: 140,
-      minWidth: 140,
-    }} className={style.listItemManager}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>
-            {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
-              {manager.displayName}
-            </Link> : '—'}
+        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
+                    {manager.displayName}
+                  </Link> : '—'}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div className={style.listItemAgent}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>
-            {vehicle.model}, {vehicle.plateNumber}
+        <div className={style.listItemAgent}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  {vehicle.model}, {vehicle.plateNumber}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div className={style.listItemDate}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>
-            {intl.formatDate(validation.date)}
+        {/* <div className={style.listItemDate}> */}
+        {/*   <div className={style.wrapper}> */}
+        {/*     <div className={style.innerWrapper}> */}
+        {/*       <div className={style.item}> */}
+        {/*         <div className={style.text}> */}
+        {/*           {intl.formatDate(validation.date)} */}
+        {/*         </div> */}
+        {/*       </div> */}
+        {/*     </div> */}
+        {/*   </div> */}
+        {/* </div> */}
+
+        <div className={style.listItemDate}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  {intl.formatDate(date)}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div className={style.listItemDate}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>
-            {intl.formatDate(date)}
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
-
-</div>
-);
-}
+    );
+  }
 }
 
 ListItem.propTypes = {

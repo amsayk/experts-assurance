@@ -1,0 +1,5 @@
+query isDocValid($id: ID!) {
+
+  isDocValid(id: $id)
+}
+

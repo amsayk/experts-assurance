@@ -14,7 +14,7 @@ import graphqlFields from 'graphql-fields';
 import getDocValidations from './docValidations';
 
 import payValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
-import closureValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
+import closureValidations from 'routes/Landing/containers/Case/body/Users/Overview/CloseDoc/CloseDocForm/validations';
 
 import { fromJS } from 'immutable';
 
@@ -41,13 +41,21 @@ export const schema = [`
     amount : Float
   }
 
+  input DocClosureInfo {
+    dateClosure   : Date
+    paymentDate   : Date
+    paymentAmount : Float
+  }
+
   type UploadFileResponse {
+    doc: Doc
     file: File
     activities : [Activity!]!
     error: Error
   }
 
   type DelOrRestoreFileResponse {
+    doc: Doc
     file: File
     activities : [Activity!]!
     error: Error
@@ -659,6 +667,7 @@ export const resolvers = {
     {
     },
     parseGraphqlObjectFields([
+      'doc',
       'file',
     ]),
     parseGraphqlScalarFields([
@@ -671,6 +680,7 @@ export const resolvers = {
     {
     },
     parseGraphqlObjectFields([
+      'doc',
       'file',
     ]),
     parseGraphqlScalarFields([
@@ -921,13 +931,13 @@ export const resolvers = {
 
       return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
-    async closeDoc(_, { id, closureDate, info }, context) {
+    async closeDoc(_, { id, info }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
       }
 
       try {
-        await closureValidations.asyncValidate(fromJS({ closureDate, ...info }));
+        await closureValidations.asyncValidate(fromJS({ ...info }));
       } catch (errors) {
         return { errors };
       }
@@ -957,7 +967,7 @@ export const resolvers = {
           return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
         }
 
-        const { doc, activities } = await context.Docs.closeDoc(id);
+        const { doc, activities } = await context.Docs.closeDoc(id, info);
         // publish subscription notification
         pubsub.publish('docChangeChannel', id);
         return { doc, activities };
@@ -1051,8 +1061,19 @@ export const resolvers = {
         return false;
       }
 
+      async function isValid() {
+        const file = await context.Docs.getFile(id);
+        if (file) {
+          const doc = await context.Docs.get(file.get('document').id);
+          if (doc) {
+            return !doc.has('deletion_date') && (doc.get('state') === 'OPEN');
+          }
+        }
+        return false;
+      }
+
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
-        && !(userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
+        && !(userHasRoleAll(context.user, Role_MANAGERS) && !await isValid() && !await isManager())) {
         return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
@@ -1082,7 +1103,7 @@ export const resolvers = {
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
-        && !(userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
+        && !(userHasRoleAll(context.user, Role_MANAGERS) && !await isManager())) {
         return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
@@ -1168,8 +1189,8 @@ export const resolvers = {
         return context.Docs.getDocFiles(id);
       },
 
-      validateDoc(_, { id }, context) {
-        return context.Docs.valideDoc(id);
+      isDocValid(_, { id }, context) {
+        return context.Docs.isDocValid(id);
       },
       getInvalidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
         const selectionSet = Object.keys(graphqlFields(info));

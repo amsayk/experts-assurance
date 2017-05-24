@@ -59,7 +59,7 @@ class Unpaid extends React.Component {
           }} className={cx(style['OPEN'], style.boardIcon)}>
           <WatchIcon size={18}/>
         </div>
-        <h5 className={style.boardTitle}>Dossiers clos non-payés {summary}</h5>
+        <h5 className={style.boardTitle}>Dossiers non-payés {summary}</h5>
         <div className={style.ctrls}>
           <div className={style.icon}>
             {data.loading ? <ActivityIndicator size='small'/> : null}

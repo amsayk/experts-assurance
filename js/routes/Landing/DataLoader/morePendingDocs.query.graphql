@@ -1,4 +1,4 @@
-query morePendingDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConfig!) {
+query morePendingDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSortConfig!) {
   pendingDashboard(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig) {
     cursor
     docs {

@@ -17,6 +17,9 @@ const babelOptions = require('scripts/getBabelOptions')({
     'graphql-tag/printer'                : 'graphql/language/printer',
 
     'result-codes'                       : 'common/result-codes',
+    'file-categories'                    : 'common/file-categories',
+
+    'printDocRef'                        : 'common/printDocRef',
   },
   plugins: [
     'transform-async-to-generator',

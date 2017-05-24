@@ -1,10 +1,11 @@
-query moreOpenDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConfig!) {
+query moreOpenDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSortConfig!) {
   openDashboard(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig) {
     cursor
     docs {
       id
       refNo
       date
+      dateMission
       state
       vehicle {
         model

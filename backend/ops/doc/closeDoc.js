@@ -16,6 +16,11 @@ export default async function closeDoc(request, done) {
 
   const {
     id,
+    info : {
+      dateClosure : dateClosureMS,
+      paymentAmount,
+      paymentDate : paymentDateMS,
+    },
   } = request.params;
 
   try {
@@ -27,8 +32,25 @@ export default async function closeDoc(request, done) {
 
     const oldState = doc.get('state');
 
+    let paymentInfo = {
+
+    };
+
+    const current_payment_date = doc.has('payment_date') && doc.get('payment_amount').getTime ? doc.get('payment_date').getTime() : null;
+    const current_payment_amount = doc.has('payment_amount') ? doc.get('payment_amount') : null;
+    if (current_payment_amount !== paymentAmount || current_payment_date !== paymentDateMS) {
+      paymentInfo = {
+        payment_user   : request.user,
+        payment_date   : new Date(paymentDateMS),
+        payment_amount : paymentAmount,
+
+      };
+    }
+
     await doc.set({
       state : 'CLOSED',
+
+      ...paymentInfo,
 
       [`lastModified_${request.user.id}`] : new Date(request.now),
       lastModified : new Date(request.now),
@@ -47,9 +69,9 @@ export default async function closeDoc(request, done) {
     ];
 
     const closure = {
-      date: new Date(request.now),
-      state: 'CLOSED',
-      user: request.user,
+      date  : new Date(dateClosureMS),
+      state : 'CLOSED',
+      user  : request.user,
     };
 
     const objects = activities.map(({ type, date, user, metadata }) => {

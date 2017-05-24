@@ -9,7 +9,7 @@ import { PlusIcon } from 'components/icons/MaterialIcons';
 
 import Button from 'components/bootstrap/Button';
 
-import { startAddingDoc, finishAddingDoc, saveNewDoc } from 'redux/reducers/app/actions';
+import { startAddingDoc, finishAddingDoc } from 'redux/reducers/app/actions';
 
 import focusNode from 'focusNode';
 import raf from 'requestAnimationFrame';
@@ -98,7 +98,6 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      saveNewDoc,
       startAddingDoc,
       finishAddingDoc,
     }, dispatch),

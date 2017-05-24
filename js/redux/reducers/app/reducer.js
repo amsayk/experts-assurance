@@ -7,6 +7,7 @@ import {
   TOGGLE_ALERTS,
 
   ADD_DOC,
+  CLOSE_DOC,
 } from './constants';
 
 import { INIT } from 'vars';
@@ -25,6 +26,7 @@ export class AppState extends Record({
   isReady                : false,
   alertsOpen             : false,
   addingDoc              : false,
+  closingDoc             : false,
 }) {}
 
 const initialState = new AppState();
@@ -34,6 +36,10 @@ export default function reducer(state = initialState, action) {
     case ADD_DOC:
       return state.merge({
         addingDoc: action.addingDoc,
+      });
+    case CLOSE_DOC:
+      return state.merge({
+        closingDoc: action.closingDoc,
       });
     case RESIZE:
       return state.merge({

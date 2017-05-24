@@ -7,4 +7,5 @@ export const APP_STATE_CHANGE        = keyOf({APP_STATE_CHANGE: null});
 export const TOGGLE_ALERTS           = keyOf({TOGGLE_ALERTS: null});
 
 export const ADD_DOC                 = keyOf({ADD_DOC: null});
+export const CLOSE_DOC               = keyOf({CLOSE_DOC: null});
 

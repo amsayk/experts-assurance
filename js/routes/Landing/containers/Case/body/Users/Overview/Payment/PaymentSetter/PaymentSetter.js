@@ -123,14 +123,14 @@ class PaymentSetter extends React.Component {
 
     const info = doc.payment ? (
       <div style={styles.info}>
-        <b>MAD</b> {intl.formatNumber(doc.payment.amount, { format: 'MAD' })}
+        {intl.formatNumber(doc.payment.amount, { format: 'MAD' })}
       </div>
     ) : (doc.deletion ? '—' : null);
 
     return (
       <div style={styles.root} className={style.filterGroup}>
         {info}
-        {doc.deletion ? null : [
+        {doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? null : [
           doc.payment ? <div style={styles.dot}>·</div> : null,
           edit,
           del,

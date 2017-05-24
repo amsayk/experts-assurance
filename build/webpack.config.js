@@ -216,6 +216,7 @@ if (__DEV__) {
       verbose: process.env.HAPPY_VERBOSE === 'yes',
     }),
     new webpack.NamedModulesPlugin(),
+    new webpack.NamedChunksPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   );
@@ -252,7 +253,7 @@ if (__DEV__) {
     new webpack.optimize.AggressiveMergingPlugin(),
     // new PrepackWebpackPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap : config.debug,
+      sourceMap : !__DEV__ && config.debug,
       minimize  : true,
       compress  : {
         unused        : true,
@@ -271,13 +272,16 @@ webpackConfig.plugins.push(
   new webpack.optimize.CommonsChunkPlugin({
     names      : __DEV__ ? [
       'polyfills',
-      'vendor'
+      'vendor',
     ] : [
       'polyfills',
       'vendor',
-      'manifest'
+      'manifest',
     ],
     minChuncks : Infinity,
+  }),
+  new webpack.optimize.CommonsChunkPlugin({
+    names : ['runtime'],
   }),
 );
 

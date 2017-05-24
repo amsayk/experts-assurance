@@ -42,6 +42,7 @@ mutation delPay($id: ID!) {
       id
       key
       refNo
+      dateMission
       date
       state
 
@@ -80,6 +81,7 @@ mutation delPay($id: ID!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

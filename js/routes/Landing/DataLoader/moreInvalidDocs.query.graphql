@@ -1,4 +1,4 @@
-query moreInvalidDocs($durationInDays: Int!, $cursor: Int!, $sortConfig: ESSortConfig!) {
+query moreInvalidDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSortConfig!) {
   getInvalidDocs(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig) {
     cursor
     docs {

@@ -45,8 +45,8 @@ export class Docs {
     return this.connector.getDocFiles(id);
   }
 
-  validateDoc(id) {
-    return this.connector.validateDoc(id);
+  isDocValid(id) {
+    return this.connector.isDocValid(id);
   }
   getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
     return this.connector.getInvalidDocs({
@@ -171,10 +171,10 @@ export class Docs {
       { sessionToken: this.user.getSessionToken() }
     );
   }
-  closeDoc(id) {
+  closeDoc(id, info) {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: CLOSE_DOC, args: { id } },
+      { __operationKey: CLOSE_DOC, args: { id, info } },
       { sessionToken: this.user.getSessionToken() }
     );
   }

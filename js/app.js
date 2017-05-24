@@ -70,7 +70,7 @@ let render = async function render() {
     store.dispatch(updateIntl({ locale, messages : translations, formats }));
   }
 
-  const intlSelector = (state) => state.get('intl');
+  const intlSelector = (state) => state.get('intl').toJS();
 
   const routes = getRoutes(store);
   const snackbar = createSnackbarController(store);
@@ -189,6 +189,7 @@ if (__DEV__) {
   window.Parse        = require('parse');
   window.Perf         = require('react-addons-perf');
   window.reduxHistory = history;
+  window.cookie       = require('react-cookie');
 } else {
   require('offline-plugin/runtime').install({
     onInstalled: function () {

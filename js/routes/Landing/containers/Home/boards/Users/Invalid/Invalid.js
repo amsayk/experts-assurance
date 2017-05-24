@@ -59,7 +59,7 @@ class Invalid extends React.Component {
           }} className={cx(style['OPEN'], style.boardIcon)}>
           <WatchIcon size={18}/>
         </div>
-        <h5 className={style.boardTitle}>Dossiers avec pièces manquants {summary}</h5>
+        <h5 className={style.boardTitle}>Dossiers avec pièces manquantes {summary}</h5>
         <div className={style.ctrls}>
           <div className={style.icon}>
             {data.loading ? <ActivityIndicator size='small'/> : null}

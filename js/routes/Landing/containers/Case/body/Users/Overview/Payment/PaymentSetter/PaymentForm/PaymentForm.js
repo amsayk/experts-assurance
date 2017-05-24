@@ -15,6 +15,10 @@ import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'r
 
 import validations from './validations';
 
+function parseDate(s) {
+  return +moment.utc(s);
+}
+
 function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
   let errorText;
 
@@ -137,11 +141,12 @@ class PaymentForm extends React.Component {
     return (
       <div style={styles.root}>
         <h5 style={styles.header}>
-          Détailles de paiement
+          Détail de paiement
         </h5>
 
         <Field
           name='amount'
+          parse={parseFloat}
           props={{
             onRef             : onInputRef,
             onKeyDown         : this.onKeyDown,
@@ -153,6 +158,7 @@ class PaymentForm extends React.Component {
 
         <Field
           name='date'
+          parse={parseDate}
           props={{
             asyncValidate,
             onKeyDown : this.onKeyDown,
@@ -192,7 +198,7 @@ styles.root = {
 
 styles.header = {
   textTransform : 'uppercase',
-  colort        : '#7d97ad',
+  color         : '#7d97ad',
   fontSize      : '.8125rem',
   fontWeight    : 600,
   marginTop     : 12,

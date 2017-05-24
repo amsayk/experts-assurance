@@ -21,6 +21,9 @@ const babelOptions = require('../getBabelOptions')({
 
     'result-codes'             : 'common/result-codes',
     'intl-formats'             : 'common/intl-formats',
+    'file-categories'          : 'common/file-categories',
+
+    'printDocRef'              : 'common/printDocRef',
   },
   plugins: [
     jestPluginHoist,

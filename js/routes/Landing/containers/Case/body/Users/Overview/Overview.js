@@ -14,6 +14,8 @@ import Clipboard from 'Clipboard';
 
 import { injectIntl } from 'react-intl';
 
+import printDocRef from 'printDocRef';
+
 import raf from 'requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
@@ -49,11 +51,10 @@ import DEL_MUTATION from './delDoc.mutation.graphql';
 import RESTORE_MUTATION from './restoreDoc.mutation.graphql';
 
 import CANCEL_MUTATION from './cancelDoc.mutation.graphql';
-import CLOSE_MUTATION from './closeDoc.mutation.graphql';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-  </div>;
+</div>;
 
 class Overview extends React.Component {
   static contextTypes = {
@@ -68,12 +69,19 @@ class Overview extends React.Component {
     this.onDeleteOrRestoreDoc = this.onDeleteOrRestoreDoc.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.busy = this.busy.bind(this);
 
     this.copyKeyToClipboard = this.copyKeyToClipboard.bind(this);
 
     this.state = {
       busyAction : false,
     };
+  }
+
+  busy (busy, onEnd) {
+    this.setState({
+      busyAction : busy,
+    }, onEnd);
   }
 
   copyKeyToClipboard () {
@@ -1176,7 +1184,7 @@ class Overview extends React.Component {
             <h6 style={{ display : 'flex' }} className={style.h6}>
               {loading ? null : [
                 <div className={style.docRefNo}>
-                  Dossier {doc.refNo}
+                  Dossier {printDocRef(doc, { type : printDocRef.LONG })}
                 </div>,
                 <div onClick={this.copyKeyToClipboard} className={style.docKeyBadge}>
                   {doc.key}
@@ -1208,6 +1216,7 @@ class Overview extends React.Component {
 
                 return (
                   <DocMenu
+                    busy={this.busy}
                     onClose={this.onClose}
                     onCancel={this.onCancel}
                     onDelete={this.onDeleteOrRestoreDoc}

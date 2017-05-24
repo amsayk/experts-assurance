@@ -31,6 +31,9 @@ const babelOptions = require('scripts/getBabelOptions')({
 
     'result-codes'                       : 'common/result-codes',
     'intl-formats'                       : 'common/intl-formats',
+    'file-categories'                    : 'common/file-categories',
+
+    'printDocRef'                        : 'common/printDocRef',
   },
   plugins: [
     'transform-async-to-generator',

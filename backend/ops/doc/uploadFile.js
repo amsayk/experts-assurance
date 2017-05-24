@@ -25,7 +25,7 @@ export default async function uploadFile(request, done) {
   ACL.setPublicReadAccess(false);
   ACL.setPublicWriteAccess(false);
 
-  async function add(business, document) {
+  async function add(business,  doc) {
     const { name, type, path, size } = metadata;
 
     const fileData = await new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export default async function uploadFile(request, done) {
 
     const props = {
       fileObj,
-      document,
+      document : doc,
       user: request.user,
       business,
       name,
@@ -53,10 +53,16 @@ export default async function uploadFile(request, done) {
       date,
     };
 
-    return await new FileType()
+    const file = await new FileType()
       .setACL(ACL)
       .set(props)
       .save(null, { useMasterKey: true });
+
+    doc.addUnique('files', file.id);
+
+    await doc.save(null, { useMasterKey : true });
+
+    return file;
   }
 
   const business = request.user.get('business');
@@ -95,7 +101,20 @@ export default async function uploadFile(request, done) {
 
     await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 
-    const [ newFile, newActivities ] = await Promise.all([
+    const [ newDoc, newFile, newActivities ] = await Promise.all([
+      // new doc
+      new Parse.Query(DocType)
+      .include([
+        'manager',
+        'client',
+        'agent',
+        'user',
+        'payment_user',
+        'validation_user',
+        'closure_user',
+      ])
+      .get(doc.id, { useMasterKey : true }),
+
       // new file
       new Parse.Query(FileType)
       .include([
@@ -117,6 +136,7 @@ export default async function uploadFile(request, done) {
     ]);
 
     done(null, {
+      doc        : serializeParseObject(newDoc),
       file       : serializeParseObject(newFile),
       activities : newActivities.map(serializeParseObject),
     });

@@ -56,8 +56,8 @@ class List extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.cursor !== nextProps.cursor && nextProps.loading === false) {
       this.setState({
-        spy       : true,
-        fetchMore : nextProps.docs.length < nextProps.length,
+        spy       : nextProps.cursor < nextProps.length,
+        fetchMore : nextProps.cursor < nextProps.length,
       });
     }
   }
@@ -92,7 +92,7 @@ class List extends React.Component {
       const { spy, fetchMore } = this.state;
       const disabled = (length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={LoadingItem} disabled={disabled}/>
+        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={LoadingItem} done={cursor === length} doneLabel='Dossiers chargés' disabled={disabled}/>
       );
     }
 

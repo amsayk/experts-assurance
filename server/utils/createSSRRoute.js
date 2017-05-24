@@ -13,6 +13,8 @@ import intlLoader from 'server/intl-loader';
 
 import cookie from 'react-cookie';
 
+import refreshSite from './refreshSite';
+
 import {StringDecoder} from 'string_decoder';
 
 import { match } from 'react-router';
@@ -65,6 +67,8 @@ module.exports = function createSSRRoute(app, compiler) {
     res.on('finish', function () {
       unplug();
     });
+
+    refreshSite();
 
     const index = await indexHtml;
 

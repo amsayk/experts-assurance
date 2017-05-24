@@ -1,4 +1,4 @@
-query openDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
+query openDocs($durationInDays:  Float!, $sortConfig: ESSortConfig!) {
   openDashboard(durationInDays: $durationInDays, sortConfig: $sortConfig) {
     length
     cursor

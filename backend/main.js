@@ -46,8 +46,9 @@ Parse.Cloud.define('routeOp', async function (request, response) {
   switch (operationKey) {
     case UPLOAD_FILE: {
       try {
-        const { data : { file, activities } } = await publish('MAIN', operationKey, req, { timeout: 15 * 60 * 1000 });
+        const { data : { doc, file, activities } } = await publish('MAIN', operationKey, req, { timeout: 15 * 60 * 1000 });
         response.success({
+          doc        : deserializeParseObject(doc),
           file       : deserializeParseObject(file),
           activities : activities.map(deserializeParseObject),
         });
@@ -58,8 +59,9 @@ Parse.Cloud.define('routeOp', async function (request, response) {
     }
     case DELETE_FILE: {
       try {
-        const { data : { file, activities } } = await publish('MAIN', operationKey, req);
+        const { data : { doc, file, activities } } = await publish('MAIN', operationKey, req);
         response.success({
+          doc        : deserializeParseObject(doc),
           file       : deserializeParseObject(file),
           activities : activities.map(deserializeParseObject),
         });

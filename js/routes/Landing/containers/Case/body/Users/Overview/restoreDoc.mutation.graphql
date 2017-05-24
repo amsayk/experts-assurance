@@ -80,6 +80,7 @@ mutation restoreDoc($id: ID!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

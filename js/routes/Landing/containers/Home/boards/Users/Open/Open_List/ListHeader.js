@@ -65,87 +65,78 @@ class ListHeader extends React.Component {
     const { key, direction } = sortConfig;
     return (
       <div style={{ position: 'sticky' }} className={style.listHeader}>
-        <div style={{
-          maxWidth: 75,
-          minWidth: 75,
-        }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
-        <div className={style.wrapper}>
-          <div className={style.innerWrapper}>
-            <div className={style.item}>
-              <div className={style.text}>Réf</div>
-              {key === 'refNo' ? <SortDirection direction={direction}/> : null}
+        <div style={{ maxWidth: 75, minWidth: 75 }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>Réf</div>
+                {key === 'refNo' ? <SortDirection direction={direction}/> : null}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div style={{
-        maxWidth: 140,
-        minWidth: 140,
-      }} className={style.listHeaderItemClient}>
-      <div className={style.wrapper}>
-        <div className={style.innerWrapper}>
-          <div className={style.item}>
-            <div className={cx(style.text)}>
-              Assuré
+        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listHeaderItemClient}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>
+                  Assuré
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div style={{
-      maxWidth: 140,
-      minWidth: 140,
-    }} className={style.listHeaderItemManager}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={cx(style.text)}>
-            Gestionaire
+        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listHeaderItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>
+                  Gestionaire
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div className={style.listHeaderItemManager}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={cx(style.text)}>
-            Véhicule
+        <div className={style.listHeaderItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>
+                  Véhicule
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div onClick={this.onSortByValidationDate} className={cx(style.listHeaderItemDate, key === 'validation_date' && style.sorting)}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>DT Validation</div>
-          {key === 'validation_date' ? <SortDirection direction={direction}/> : null}
+        {/* <div onClick={this.onSortByValidationDate} className={cx(style.listHeaderItemDate, key === 'validation_date' && style.sorting)}> */}
+          {/*   <div className={style.wrapper}> */}
+            {/*     <div className={style.innerWrapper}> */}
+              {/*       <div className={style.item}> */}
+                {/*         <div className={style.text}>DT Validation</div> */}
+                {/*         {key === 'validation_date' ? <SortDirection direction={direction}/> : null} */}
+                {/*       </div> */}
+              {/*     </div> */}
+            {/*   </div> */}
+          {/* </div> */}
+
+        <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'date' && style.sorting)}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>DT Sinistre</div>
+                {key === 'date' ? <SortDirection direction={direction}/> : null}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'date' && style.sorting)}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>DT Sinistre</div>
-          {key === 'date' ? <SortDirection direction={direction}/> : null}
-        </div>
       </div>
-    </div>
-  </div>
-
-</div>
-);
-}
+    );
+  }
 }
 
 ListHeader.propTypes = {

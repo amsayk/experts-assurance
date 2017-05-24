@@ -60,10 +60,12 @@ class FileEntry extends React.PureComponent {
     });
   }
   async delFile() {
+    const self = this;
     try {
       const { data: { delFile: { error } } } = await this.props.client.mutate({
-        mutation  : MUTATION,
-        variables : {
+        refetchQueries : ['invalidDocs'],
+        mutation       : MUTATION,
+        variables      : {
           id    : this.props.entry.id,
         },
         updateQueries : {
@@ -73,7 +75,7 @@ class FileEntry extends React.PureComponent {
 
             if (prev && newActivities && newActivities.length) {
 
-              if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+              if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
                 return prev;
               }
 
@@ -95,7 +97,7 @@ class FileEntry extends React.PureComponent {
 
             if (prev && newFile) {
 
-              if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== this.props.id ) {
+              if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
                 return prev;
               }
 

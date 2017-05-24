@@ -20,7 +20,7 @@ import Nav from 'routes/Landing/components/Nav';
 import FileEntry from './FileEntry';
 import NewFileEntry from './NewFileEntry';
 
-import CATEGORIES from './categories';
+import CATEGORIES from 'file-categories';
 
 const NAVBAR_HEIGHT = 70;
 const TOOLBAR_HEIGHT = 41;
@@ -55,6 +55,7 @@ class Files extends React.PureComponent {
   }
   render() {
     const {
+      doc,
       intl,
       id,
       notificationOpen,

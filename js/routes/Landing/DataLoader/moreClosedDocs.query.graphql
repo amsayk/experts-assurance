@@ -1,4 +1,4 @@
-query moreClosedDocs($durationInDays: Int!, $cursor: Int, $sortConfig: ESSortConfig!, $includeCanceled: Boolean) {
+query moreClosedDocs($durationInDays: Float!, $cursor: Int, $sortConfig: ESSortConfig!, $includeCanceled: Boolean) {
   closedDashboard(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig, includeCanceled: $includeCanceled) {
     cursor
     docs {

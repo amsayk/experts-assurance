@@ -42,6 +42,7 @@ mutation setManager($id: ID!, $manager: ID!) {
       id
       key
       refNo
+      dateMission
       date
       state
 
@@ -74,6 +75,7 @@ mutation setManager($id: ID!, $manager: ID!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

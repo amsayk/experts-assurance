@@ -113,34 +113,34 @@ export const durations = [{
   duration : 7,
   label: '1 semaine',
 }, {
-  duration : 15,
+  duration : 14,
   label: '2 semaines',
 }, {
-  duration : 30,
+  duration : 30.417,
   label: '1 mois',
 }, {
-  duration : 60,
+  duration : 60.833,
   label: '2 mois',
 }, {
-  duration : 3 * 30,
+  duration : 91.25,
   label: '3 mois',
 }, {
-  duration : 6 * 30,
+  duration : 182.5,
   label: '6 mois',
 }, {
-  duration : 9 * 30,
+  duration : 273.75,
   label: '9 mois',
 }, {
-  duration : 12 * 30,
+  duration : 365.2422,
   label: '1 an',
 }, {
-  duration : 18 * 30,
+  duration : 547.501,
   label: '18 mois',
 }, {
-  duration : 24 * 30,
+  duration : 730,
   label: '2 ans',
 }, {
-  duration : 3 * 24 * 30,
+  duration : 1095,
   label: '3 ans',
 }, {
   duration : -1,

@@ -68,33 +68,33 @@ const rootSchema = [`
 
     # Docs dashboard
     # pendingDashboard(
-    #   durationInDays: Int!,
+    #   durationInDays: Float!,
     #   cursor: Int = 0,
     #   sortConfig: ESSortConfig!
     # ): DocsFetchResponse!
 
     openDashboard(
-      durationInDays: Int!,
+      durationInDays: Float!,
       cursor: Int = 0,
       validOnly: Boolean = false,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
     # closedDashboard(
-    #   durationInDays: Int!,
+    #   durationInDays: Float!,
     #   cursor: Int = 0,
     #   sortConfig: ESSortConfig!
     #   includeCanceled: Boolean = false,
     # ): DocsFetchResponse!
 
-    validateDoc(id: ID!): Boolean!
+    isDocValid(id: ID!): Boolean!
     getInvalidDocs(
-      durationInDays: Int!
+      durationInDays: Float!
       cursor: Int = 0,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
     getUnpaidDocs(
-      durationInDays: Int!
+      durationInDays: Float!
       cursor: Int = 0,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
@@ -115,7 +115,7 @@ const rootSchema = [`
 
     setState(id: ID!, state: DocState!): SetStateResponse!
 
-    closeDoc(id: ID!, closureDate: Date!, info: DocPaymentInfo): SetStateResponse!
+    closeDoc(id: ID!, info: DocClosureInfo!): SetStateResponse!
     cancelDoc(id: ID!): SetStateResponse!
 
     setPay(id: ID!, info: DocPaymentInfo!): SetOrDelPayResponse!

@@ -1,8 +1,8 @@
 import { DEFAULT_LANG } from 'vars';
 
-import {
-  UPDATE,
-} from './constants';
+import formats from 'intl-formats';
+
+import { UPDATE } from './constants';
 
 import { Record } from 'immutable';
 
@@ -10,7 +10,7 @@ export class IntlState extends Record({
   defaultLocale   : DEFAULT_LANG,
   locale          : DEFAULT_LANG,
   messages        : {},
-  formats         : {},
+  formats         : formats,
 }) {
 }
 

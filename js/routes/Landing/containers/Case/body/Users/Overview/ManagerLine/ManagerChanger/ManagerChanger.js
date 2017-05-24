@@ -91,7 +91,7 @@ class ManagerChanger extends React.Component {
           className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
         >
           <SelectedUserToggle onOpen={this.onToggle} doc={doc} user={manager}/>
-          <Dropdown.Menu className={style.userPickerMenu}>
+          {doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? <Dropdown.Menu/> : <Dropdown.Menu className={style.userPickerMenu}>
             <MenuItem
               onAction={this.onAction}
               queryString={this.state.queryString}
@@ -102,7 +102,7 @@ class ManagerChanger extends React.Component {
               onSearch={this.onSearch}
               componentClass={PickManager}
             />
-          </Dropdown.Menu>
+          </Dropdown.Menu>}
         </Dropdown>
       </div>
     );

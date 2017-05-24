@@ -80,6 +80,7 @@ mutation cancelDoc($id: ID!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

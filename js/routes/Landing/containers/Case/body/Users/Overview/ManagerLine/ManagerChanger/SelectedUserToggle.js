@@ -30,7 +30,7 @@ class SelectedUserToggle extends React.Component {
 
     return (
       <div style={{display: 'inline-flex'}}>
-        {doc.deletion ? '—' : <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} role='button'>
+        {doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? '—' : <Button onClick={this.onOpen} className={cx(style.selectedUserButton, style.togglePickUser, style.selectedManagerButton)} role='button'>
           <div className={style.text} style={{}}>
             {user
               ? user.displayName

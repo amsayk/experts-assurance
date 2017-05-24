@@ -4,7 +4,7 @@ import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/
 
 import * as codes from 'result-codes';
 
-import { ActivityType, FileType } from 'data/types';
+import { ActivityType, FileType, DocType } from 'data/types';
 
 export default async function delFile(request, done) {
   if (!request.user) {
@@ -23,6 +23,12 @@ export default async function delFile(request, done) {
         deletion_user: request.user,
         deletion_date: new Date(request.now),
       }).save(null, { useMasterKey: true });
+
+      const doc = file.get('document');
+      if (doc) {
+        doc.remove('files', file.id);
+        await doc.save(null, { useMasterKey : true });
+      }
 
       const activities = [
         { type : 'FILE_DELETED', user: request.user, date: new Date(request.now) },
@@ -43,7 +49,20 @@ export default async function delFile(request, done) {
 
       await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 
-      const [ newFile, newActivities ] = await Promise.all([
+      const [ newDoc, newFile, newActivities ] = await Promise.all([
+        // new doc
+        new Parse.Query(DocType)
+        .include([
+          'manager',
+          'client',
+          'agent',
+          'user',
+          'payment_user',
+          'validation_user',
+          'closure_user',
+        ])
+        .get(doc.id, { useMasterKey : true }),
+
         // new file
         new Parse.Query(FileType)
         .include([
@@ -65,6 +84,7 @@ export default async function delFile(request, done) {
       ]);
 
       done(null, {
+        doc        : serializeParseObject(newDoc),
         file       : serializeParseObject(newFile),
         activities : newActivities.map(serializeParseObject),
       });

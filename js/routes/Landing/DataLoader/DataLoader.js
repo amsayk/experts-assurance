@@ -132,12 +132,14 @@ const docs = graphql(GET_DOCS_QUERY, {
           const newDocs = fetchMoreResult.getDocs.docs;
 
           return {
-            getDocs : {
+            getDocs    : {
+              __typename : 'DocsFetchResponse',
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.getDocs.cursor,
 
-              // length: fetchMoreResult.data.getDocs.length,
+              length: previousResult.getDocs.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -194,7 +196,8 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
           const newActivities = fetchMoreResult.timeline.result;
 
           return {
-            timeline : {
+            __typename : 'TimelineResponse',
+            timeline   : {
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.timeline.cursor,
@@ -293,11 +296,13 @@ const openDocs = graphql(GET_OPEN_DOCS, {
 
           return {
             openDashboard : {
+              __typename : 'DocsFetchResponse',
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.openDashboard.cursor,
 
-              // length: fetchMoreResult.openDashboard.length,
+              length: previousResult.openDashboard.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -338,12 +343,14 @@ const unpaidDocs = graphql(GET_UNPAID_DOCS, {
           const newDocs = fetchMoreResult.getUnpaidDocs.docs;
 
           return {
-            openDashboard : {
+            getUnpaidDocs : {
+              __typename : 'DocsFetchResponse',
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.getUnpaidDocs.cursor,
 
-              // length: fetchMoreResult.getUnpaidDocs.length,
+              length: previousResult.getUnpaidDocs.length,
 
               // Put the new docs at the end of the list
               docs: [
@@ -360,7 +367,8 @@ const unpaidDocs = graphql(GET_UNPAID_DOCS, {
 
 const invalidDocs = graphql(GET_INVALID_DOCS, {
   options: (ownProps) => ({
-    variables: {
+    fetchPolicy : 'network-only',
+    variables   : {
       durationInDays : ownProps.durationInDays,
       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
     },
@@ -384,12 +392,14 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
           const newDocs = fetchMoreResult.getInvalidDocs.docs;
 
           return {
-            openDashboard : {
+            getInvalidDocs : {
+              __typename : 'DocsFetchResponse',
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.getInvalidDocs.cursor,
 
-              // length: fetchMoreResult.getInvalidDocs.length,
+              length: previousResult.getInvalidDocs.length,
 
               // Put the new docs at the end of the list
               docs: [

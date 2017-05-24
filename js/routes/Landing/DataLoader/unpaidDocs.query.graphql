@@ -1,4 +1,4 @@
-query unpaidDocs($durationInDays: Int!, $sortConfig: ESSortConfig!) {
+query unpaidDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
   getUnpaidDocs(durationInDays: $durationInDays, sortConfig: $sortConfig) {
     length
     cursor

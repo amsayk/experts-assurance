@@ -58,17 +58,14 @@ class DurationToggle extends React.Component {
           // margin: '7px auto',
           // padding: '6px 0'
         }}>
-        <div style={{
-          color: '#707070',
-          fontSize: 13,
-        }}>
-        {label}:
+        <div style={{ color: '#707070', fontSize: 13 }}>
+          {label}:
+        </div>
+        <div style={{ marginLeft: 9 }}>
+          {duration.label}
+        </div>
       </div>
-      <div style={{ marginLeft: 9 }}>
-        {duration.label}
-      </div>
-    </div>
-  </Button>
+    </Button>
     );
   }
 }

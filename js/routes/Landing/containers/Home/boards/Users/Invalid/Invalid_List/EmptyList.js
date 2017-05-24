@@ -19,7 +19,7 @@ export default function EmptyList() {
     <Empty
       noIcon
       message='Félicitation!'
-      description={'Vous n\'avez aucun dossiers avec pièces manquants.'}
+      description={'Vous n\'avez aucun dossiers avec pièces manquantes.'}
       className={style.dashboardEmpyList}
     />
   );

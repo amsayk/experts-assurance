@@ -1,22 +1,39 @@
-import React from 'react'
+import React, { PropTypes as T } from 'react'
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import { withApollo } from 'react-apollo';
+
+import { startClosingDoc } from 'redux/reducers/app/actions';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 import MenuItem from 'components/bootstrap/MenuItem';
 import Button from 'components/bootstrap/Button';
 
+import CloseDoc from './CloseDoc';
+
 import style from 'routes/Landing/styles';
 
 import { MoreHorizIcon } from 'components/icons/MaterialIcons';
 
-export default class DocMenu extends React.Component {
+import MUTATION from './isDocValid.query.graphql';
+
+class DocMenu extends React.Component {
+  static contextTypes = {
+    snackbar : T.shape({
+      show : T.func.isRequired,
+    }),
+  };
+
   constructor(props) {
     super(props);
 
     this.onSelect = this.onSelect.bind(this);
+    this.onCloseDoc = this.onCloseDoc.bind(this);
   }
   onSelect(key) {
     if (key === 'close') {
-      this.props.onClose();
+      this.onCloseDoc();
     }
     if (key === 'cancel') {
       this.props.onCancel();
@@ -25,8 +42,41 @@ export default class DocMenu extends React.Component {
       this.props.onDelete();
     }
   }
+  onCloseDoc() {
+    const self = this;
+    const { doc, busy } = self.props;
+
+    const startTime = Date.now();
+    busy(true, async function () {
+      const { data : { isDocValid } } = await self.props.client.query({
+        query       : MUTATION,
+        fetchPolicy : 'network-only',
+        variables   : { id : doc.id },
+      });
+
+      const duration = Date.now() - startTime;
+      setTimeout(function () {
+        busy(false, function () {
+          if (isDocValid) {
+            self.props.actions.startClosingDoc();
+          } else {
+            self.context.snackbar.show({
+              message  : <b>Impossible de clôturer. Dossier invalide à cause des pièces jointes manquantes.</b>,
+              duration : 7 * 1000,
+            });
+          }
+        });
+
+      }, duration >= 1500 ? 0 : 1500 - duration);
+    });
+  }
   render() {
     const { user, doc } = this.props;
+
+    if (doc.state === 'CLOSED' || doc.state === 'CANCELED') {
+      return null;
+    }
+
     return (
       <Dropdown
         pullRight
@@ -36,7 +86,10 @@ export default class DocMenu extends React.Component {
           <MoreHorizIcon size={32}/>
         </Dropdown.Toggle>
         <Dropdown.Menu className={style.docMenu}>
-          <MenuItem eventKey='close'>Clôturer</MenuItem>
+          <MenuItem eventKey='close'>
+            <CloseDoc doc={doc}/>
+            Clôturer
+          </MenuItem>
           <MenuItem eventKey='cancel'>Annuler</MenuItem>
           {user.isAdmin || user.isDocManager(doc) ? [
             <MenuItem divider />,
@@ -47,4 +100,15 @@ export default class DocMenu extends React.Component {
     )
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {actions: bindActionCreators({ startClosingDoc }, dispatch)};
+}
+
+const Connect = connect(null, mapDispatchToProps);
+
+export default compose(
+  withApollo,
+  Connect,
+)(DocMenu);
 

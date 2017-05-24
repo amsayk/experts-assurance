@@ -42,6 +42,7 @@ mutation setPay($id: ID!, $info: DocPaymentInfo!) {
       id
       key
       refNo
+      dateMission
       date
       state
 
@@ -80,6 +81,7 @@ mutation setPay($id: ID!, $info: DocPaymentInfo!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

@@ -1,6 +1,6 @@
-mutation closeDoc($id: ID!) {
+mutation closeDoc($id: ID!, $info: DocClosureInfo!) {
 
-  closeDoc(id: $id) {
+  closeDoc(id: $id, info: $info) {
 
     activities {
       id,
@@ -42,6 +42,7 @@ mutation closeDoc($id: ID!) {
       id
       key
       refNo
+      dateMission
       date
       state
 
@@ -80,6 +81,7 @@ mutation closeDoc($id: ID!) {
 
       createdAt
       updatedAt
+      lastModified
     }
 
     error {

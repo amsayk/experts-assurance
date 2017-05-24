@@ -32,7 +32,7 @@ export class DashboardState extends Record({
 
   _open                 : true,
   // onlyValidOpen         : false,
-  durationInDays        : 30,
+  durationInDays        : 30.417, // 2 months
   openSortConfig        : sortInitialState,
 
   // closedOpen            : true,

@@ -6,6 +6,7 @@ import {
   TOGGLE_ALERTS,
 
   ADD_DOC,
+  CLOSE_DOC,
 } from './constants';
 
 export function resize() {
@@ -54,9 +55,18 @@ export function finishAddingDoc() {
   };
 }
 
-export function saveNewDoc(data) {
-  return async (dispatch, _, { client }) => {
 
+export function startClosingDoc() {
+  return {
+    type       : CLOSE_DOC,
+    closingDoc : true,
+  };
+}
+
+export function finishClosingDoc() {
+  return {
+    type       : CLOSE_DOC,
+    closingDoc : false,
   };
 }
 

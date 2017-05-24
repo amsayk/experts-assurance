@@ -23,6 +23,52 @@ mutation delFile($id: ID!) {
       date
     }
 
+    doc {
+      id
+      key
+      refNo
+      dateMission
+      date
+      state
+
+      deletion {
+        date
+        user { id }
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+      lastModified
+    }
+
     activities {
       id,
       document {

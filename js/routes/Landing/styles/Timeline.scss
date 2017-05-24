@@ -1,14 +1,14 @@
 .timeline {
   position: absolute;
-  width: calc(100% - #{$content-width});
-  max-width: calc(100% - #{$content-width});
+  width: 300px;
+  max-width: 300px;
   right: 0;
   left: auto;
   // top: calc(#{$navbar-height} + #{$toolbar-height} + 25px);
   top: calc(#{$navbar-height} + 25px);
   z-index: 0;
   padding: 0 10px;
-  padding-right: 15px;
+  margin-right: 10px;
   padding-bottom: 25px;
 
   h2 {
