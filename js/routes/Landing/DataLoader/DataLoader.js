@@ -369,7 +369,8 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
   options: (ownProps) => ({
     fetchPolicy : 'network-only',
     variables   : {
-      durationInDays : ownProps.durationInDays,
+      durationInDays : -1,
+      category       : ownProps.category,
       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
     },
   }),
@@ -385,7 +386,8 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
         query: GET_MORE_INVALID_DOCS,
         variables: {
           cursor,
-          durationInDays : ownProps.durationInDays,
+          durationInDays : -1,
+          category       : ownProps.category,
           sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -481,8 +483,11 @@ const dashboard = graphql(DASHBOARD_QUERY, {
 
 
 const lastRefNo = graphql(LAST_REFNO_QUERY, {
-  options: ({}) => ({
+  options: ({ dateMission }) => ({
     fetchPolicy : 'network-only',
+    variables: {
+      now : dateMission,
+    },
   }),
   props: ({ data: { loading, getLastRefNo = { value: 0 } } }) => ({
     loading,

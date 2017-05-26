@@ -12,6 +12,15 @@
   // transform: translateZ(0);
 }
 
+.listHeaderItemAgent,
+.listHeaderItemClient,
+.listHeaderItemManager,
+.listItemClient,
+.listItemManager {
+  min-width: 200px !important;
+
+}
+
 .listHeaderItem {
   composes: d-flex align-items-center disable-selection from 'styles/_base.scss';
   color: #565656;
@@ -182,6 +191,15 @@
       //     border-right: 1px solid #fff;
     //   }
   // }
+}
+
+.listHeaderItemAgent,
+.listHeaderItemClient,
+.listHeaderItemManager,
+.listItemClient,
+.listItemManager {
+  min-width: 200px !important;
+
 }
 
 .listItem {

@@ -13,7 +13,7 @@ export default class LoadingItem extends React.Component {
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, style.loadingItem)}>
 
-        <div style={{ maxWidth: 75, minWidth: 75 }} className={style.listItemRef}>
+        <div style={{ maxWidth: 115, minWidth: 115 }} className={style.listItemRef}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

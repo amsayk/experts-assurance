@@ -160,7 +160,7 @@ function Entry({ intl, doc }, { currentUser }) {
           {/*   {STATES[doc.state]} */}
           {/* </div> */}
         <div className={style.desc}>
-          <h6 style={{ marginBottom: 3, marginTop: 3 }}>{doc.vehicle.model}, {doc.vehicle.plateNumber}</h6>
+          <h6 style={{ marginBottom: 3, marginTop: 3 }}>{doc.vehicle.model || doc.vehicle.manufacturer}, {doc.vehicle.plateNumber}</h6>
         </div>
         <div className={style.info}>
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>

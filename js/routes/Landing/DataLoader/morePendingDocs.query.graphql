@@ -8,8 +8,14 @@ query morePendingDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSor
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       client {
         id

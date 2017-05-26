@@ -40,6 +40,9 @@ export class DocSearchState extends Record({
 
   lastModified    : null,
 
+  vehicleModel    : null,
+  vehicleManufacturer    : null,
+
   sortConfig      : sortInitialState,
 }) {}
 

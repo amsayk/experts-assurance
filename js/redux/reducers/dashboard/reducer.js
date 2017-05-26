@@ -3,6 +3,7 @@ import cookie from 'react-cookie';
 import {
   TOGGLE,
   SET_DURATION,
+  SET_CATEGORY,
   // TOGGLE_INCLUDE_CANCELED,
   // SET_ONLY_VALID_OPEN,
 
@@ -47,6 +48,7 @@ export class DashboardState extends Record({
   invalidOpen            : true,
   invalidDurationInDays  : 7,
   invalidSortConfig      : sortInitialState,
+  category               : null,
 }) {
 
   get viewStatus() {
@@ -117,6 +119,7 @@ export class DashboardState extends Record({
 
   get invalid() {
     return {
+      category   : this.category,
       duration   : this.invalidDurationInDays,
       visible    : this.invalidOpen,
       sortConfig : {
@@ -213,6 +216,16 @@ export default function reducer(state = initialState, action) {
           throw new Error(`Unknown dashboard : ${action.duration}`);
       }
     }
+    case SET_CATEGORY: {
+      switch (action.dashboard) {
+        case 'invalid':
+          return state.merge({
+            category : action.category,
+          });
+        default:
+          throw new Error(`Unknown dashboard : ${action.category}`);
+      }
+    }
       // case TOGGLE_INCLUDE_CANCELED: {
       //   return state.merge({
       //     includeCanceled : ! state.includeCanceled,
@@ -233,6 +246,7 @@ export default function reducer(state = initialState, action) {
         // closedSortConfig      : sortInitialState.merge(cookie.load('dashboard.closedSortConfig', #<{(| doNotParse = |)}>#false) || {}),
         unpaidSortConfig      : sortInitialState.merge(cookie.load('dashboard.unpaidSortConfig', /* doNotParse = */false) || {}),
         invalidSortConfig     : sortInitialState.merge(cookie.load('dashboard.invalidSortConfig', /* doNotParse = */false) || {}),
+        category              : cookie.load('dashboard.category', /* doNotParse = */false),
 
         // Durations
         // pendingDurationInDays : durations.pending || initialState.pendingDurationInDays,

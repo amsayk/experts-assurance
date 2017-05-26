@@ -45,7 +45,7 @@ function mapStateToProps(state, props) {
 const Connect = connect(mapStateToProps);
 
 export default compose(
-  DataLoader.lastRefNo,
   Connect,
+  DataLoader.lastRefNo,
 )(Title);
 

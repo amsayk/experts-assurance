@@ -9,8 +9,14 @@ query closedDocs($durationInDays: Float!, $sortConfig: ESSortConfig!, $includeCa
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       closure {
         date

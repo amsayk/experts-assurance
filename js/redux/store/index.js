@@ -15,6 +15,7 @@ import {
 } from 'redux/reducers/users/constants';
 
 import {
+  SET_CATEGORY as DASHBOARD_SET_CATEGORY,
   SET_DURATION as DASHBOARD_SET_DURATION,
   TOGGLE as DASHBOARD_TOGGLE,
   // TOGGLE_INCLUDE_CANCELED as DASHBOARD_TOGGLE_INCLUDE_CANCELED,
@@ -112,6 +113,11 @@ const middlewares = [
     [DASHBOARD_SET_DURATION]: {
       reducerKey : (state) => state.get('dashboard').durations,
       cookieKey  : 'dashboard.durations',
+    },
+
+    [DASHBOARD_SET_CATEGORY]: {
+      reducerKey : 'dashboard.category',
+      cookieKey  : 'dashboard.category',
     },
 
     // [DASHBOARD_SET_ONLY_VALID_OPEN]: {

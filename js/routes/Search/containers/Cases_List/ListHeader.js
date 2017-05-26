@@ -48,13 +48,14 @@ class ListHeader extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSortByRef         = this.onSort.bind(this, 'refNo');
-    this.onSortByClient      = this.onSort.bind(this, 'client.name');
-    this.onSortByAgent       = this.onSort.bind(this, 'agent.name');
-    this.onSortByManager     = this.onSort.bind(this, 'manager.name');
-    this.onSortByModel       = this.onSort.bind(this, 'vehicle.model');
-    this.onSortByPlateNumber = this.onSort.bind(this, 'vehicle.plateNumber');
-    this.onSortByDate        = this.onSort.bind(this, 'date');
+    this.onSortByRef            = this.onSort.bind(this, 'refNo');
+    this.onSortByClient         = this.onSort.bind(this, 'client.name');
+    this.onSortByAgent          = this.onSort.bind(this, 'agent.name');
+    this.onSortByManager        = this.onSort.bind(this, 'manager.name');
+    this.onSortByManufacturer   = this.onSort.bind(this, 'vehicle.manufacturer');
+    this.onSortByModel          = this.onSort.bind(this, 'vehicle.model');
+    this.onSortByPlateNumber    = this.onSort.bind(this, 'vehicle.plateNumber');
+    this.onSortByDate           = this.onSort.bind(this, 'date');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;
@@ -73,7 +74,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>État</div>
+                <div className={style.text}>Réf</div>
                 {key === 'refNo' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>
@@ -117,7 +118,20 @@ class ListHeader extends React.Component {
           </div>
         </div>
 
-        <div onClick={this.onSortByModel} className={cx(style.listHeaderItemManager, key === 'vehicle.model' && style.sorting)}>
+        <div onClick={this.onSortByManufacturer} className={cx(style.listHeaderItemVehicle, key === 'vehicle.manufacturer' && style.sorting)}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>
+                  Fabricant
+                </div>
+                {key === 'vehicle.manufacturer' ? <SortDirection direction={direction}/> : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div onClick={this.onSortByModel} className={cx(style.listHeaderItemVehicle, key === 'vehicle.model' && style.sorting)}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

@@ -7,7 +7,7 @@ export default createSelector(
   (dashboard) => ({
     isOpen         : dashboard.invalid.visible,
     sortConfig     : dashboard.invalid.sortConfig,
-    durationInDays : dashboard.invalid.duration,
+    category       : dashboard.invalid.category,
   }),
 );
 

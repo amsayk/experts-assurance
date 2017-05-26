@@ -1,5 +1,5 @@
-query invalidDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
-  getInvalidDocs(durationInDays: $durationInDays, sortConfig: $sortConfig) {
+query invalidDocs($category: String, $durationInDays: Float!, $sortConfig: ESSortConfig!) {
+  getInvalidDocs(category: $category, durationInDays: $durationInDays, sortConfig: $sortConfig) {
     length
     cursor
     docs {
@@ -9,8 +9,14 @@ query invalidDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       validation {
         date

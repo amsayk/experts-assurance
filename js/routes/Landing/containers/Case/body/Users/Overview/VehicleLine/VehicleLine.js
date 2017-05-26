@@ -29,7 +29,7 @@ class VehicleLine extends React.Component {
           {LABEL}
         </div>
         <div className={style.overviewValue}>
-          {doc.vehicle.model}, {doc.vehicle.plateNumber}
+          {doc.vehicle.model || vehicle.manufacturer}, {doc.vehicle.plateNumber}
         </div>
       </div>
     );

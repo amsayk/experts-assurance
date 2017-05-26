@@ -12,8 +12,14 @@ query getDoc($id: ID!) {
       user { id }
     }
     vehicle {
+      manufacturer
       model
       plateNumber
+      series
+      mileage
+      DMC
+      energy
+      power
     }
     client {
       id

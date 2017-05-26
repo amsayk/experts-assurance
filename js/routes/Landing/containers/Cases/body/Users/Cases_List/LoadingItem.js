@@ -32,12 +32,12 @@ export default class LoadingItem extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <StateIcon
-                />
+                {/* <StateIcon */}
+                {/* /> */}
                 <div className={style.text}>
                   <div
                     className={style.placeholder}
-                    style={{ width: 32 }}
+                    style={{ width : 75 }}
                   >
                   </div>
                 </div>

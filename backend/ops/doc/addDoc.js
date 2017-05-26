@@ -8,6 +8,8 @@ import { formatError, getOrCreateBusiness, genDocKey, deserializeParseObject, se
 import { BusinessType, ActivityType, DocType } from 'data/types';
 import { getRefNo } from 'backend/utils';
 
+import printDocRef from 'printDocRef';
+
 import * as codes from 'result-codes';
 
 import { Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
@@ -31,7 +33,7 @@ export default async function addDoc(request, done) {
     agent,
     client,
 
-    dateMission,
+    dateMission : dateMissionMS,
     date : dateMS,
   } } = request.params;
 
@@ -83,7 +85,7 @@ export default async function addDoc(request, done) {
   }
 
   async function add(business) {
-    const refNo = await getRefNo(business);
+    const refNo = await getRefNo(dateMissionMS);
     const key = await genDocKey();
 
     const props = {
@@ -94,7 +96,7 @@ export default async function addDoc(request, done) {
 
       company,
 
-      refNo,
+      refNo : printDocRef({ dateMission : dateMissionMS, refNo: refNo + 1 }),
 
       state,
 
@@ -102,7 +104,7 @@ export default async function addDoc(request, done) {
 
       user: request.user,
 
-      dateMission : new Date(dateMission),
+      dateMission : new Date(dateMissionMS),
       date,
 
       key,

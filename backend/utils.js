@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import uuid from 'uuid';
 
+import moment from 'moment';
+
 export { default as formatError } from 'error-formatter';
 
 import config from 'build/config';
@@ -10,17 +12,14 @@ const { BusinessType, DocType } = require('data/types');
 
 const { businessQuery } = require('data/utils');
 
-export const REF_NO_KEY = 'lastRefNo';
+export async function getRefNo(dateMissionMS) {
+  const value = await new Parse.Query(DocType)
+    .matchesQuery('business', businessQuery())
+    .greaterThanOrEqualTo('dateMission', moment(dateMissionMS).startOf('day').toDate())
+    .lessThanOrEqualTo('dateMission', moment(dateMissionMS).endOf('day').toDate())
+    .count({ useMasterKey : true });
 
-export async function getRefNo(business) {
-  if (!business.has(REF_NO_KEY)) {
-    business.set(REF_NO_KEY, 0);
-  }
-
-  business.increment(REF_NO_KEY);
-
-  return (await business.save(null, { useMasterKey: true }))
-    .get(REF_NO_KEY);
+  return value;
 }
 
 export function serializeParseObject(parseObject) {
@@ -38,7 +37,6 @@ export async function getOrCreateBusiness() {
   if (!business) {
     return await new BusinessType()
       .set('key', config.businessKey)
-      .set(REF_NO_KEY, 0)
       .save(null, { useMasterKey: true });
   }
 

@@ -7,7 +7,7 @@ import DataLoader from 'routes/Landing/DataLoader';
 
 import Button from 'components/bootstrap/Button';
 
-import { toggle, setDuration } from 'redux/reducers/dashboard/actions';
+import { toggle, setCategory } from 'redux/reducers/dashboard/actions';
 
 import style from 'routes/Landing/styles';
 
@@ -22,7 +22,7 @@ import {
   // DownloadIcon,
 } from 'components/icons/MaterialIcons';
 
-// import DurationSelector from '../DurationSelector';
+import CategorySelector from './CategorySelector';
 
 import List from './Invalid_List';
 
@@ -41,7 +41,7 @@ class Invalid extends React.Component {
   render() {
     const {
       isOpen,
-      durationInDays,
+      category,
       data,
       loadMore,
       actions,
@@ -71,13 +71,12 @@ class Invalid extends React.Component {
                 {/*     /> */}
               {/*   </Button> */}
             {/* </div> */}
-          {/* <div className={style.icon}> */}
-            {/*   <DurationSelector */}
-              {/*     label='Durée de validation' */}
-              {/*     duration={durationInDays} */}
-              {/*     onDuration={actions.setDuration} */}
-              {/*   /> */}
-            {/* </div> */}
+          <div className={style.icon}>
+            <CategorySelector
+              category={category}
+              onCategory={actions.setCategory}
+            />
+          </div>
         </div>
       </header>
       {isOpen ? <div className={style.boardContent}>
@@ -108,7 +107,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
       toggle : (...args) => toggle('invalid', ...args),
-      setDuration : (...args) => setDuration('invalid', ...args),
+      setCategory,
     }, dispatch),
   };
 }

@@ -46,6 +46,9 @@ const rootSchema = [`
     # searchUsers(queryString: String): [User!]!
     esSearchUsers(queryString: String): ESUsersQueryResponse!
 
+    searchVehicles(queryString: String): [Vehicle!]!
+    vehicleByPlateNumber(plateNumber: String): Vehicle
+
     # activities
     timeline(cursor: Date, query: TimelineQuery!): TimelineResponse!
 
@@ -89,6 +92,7 @@ const rootSchema = [`
 
     isDocValid(id: ID!): Boolean!
     getInvalidDocs(
+      category: String
       durationInDays: Float!
       cursor: Int = 0,
       sortConfig: ESSortConfig!
@@ -99,7 +103,7 @@ const rootSchema = [`
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
-    getLastRefNo: RefNo!
+    getLastRefNo(now: Date!): RefNo!
 
     # Doc validation
     getUsersByDisplayNameAndEmail(type: String!, displayName: String, email: String): [User!]!

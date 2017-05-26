@@ -68,7 +68,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>État</div>
+                <div className={style.text}>Réf</div>
                 {key === 'refNo' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>
@@ -97,7 +97,7 @@ class ListHeader extends React.Component {
           </div>
         </div>
 
-        <div className={style.listHeaderItemManager}>
+        <div className={style.listHeaderItemVehicle}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

@@ -31,7 +31,7 @@ class ListItem extends React.Component {
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
-        <div style={{ maxWidth: 75, minWidth: 75 }} className={style.listItemRef}>
+        <div style={{ maxWidth: 115, minWidth: 115 }} className={style.listItemRef}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
@@ -78,7 +78,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {vehicle.model}, {vehicle.plateNumber}
+                  {vehicle.model || vehicle.manufacturer}, {vehicle.plateNumber}
                 </div>
               </div>
             </div>

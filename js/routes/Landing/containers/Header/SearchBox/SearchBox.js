@@ -12,6 +12,8 @@ import emptyFunction from 'emptyFunction';
 import focusNode from 'focusNode';
 import isEmpty from 'isEmpty';
 
+import get from 'lodash.get';
+
 import DataLoader from 'routes/Landing/DataLoader';
 
 import Dropdown from 'components/bootstrap/Dropdown';
@@ -242,8 +244,14 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
         );
         break;
 
+      case 'vehicle.manufacturer':
       case 'vehicle.model':
       case 'vehicle.plateNumber':
+      case 'vehicle.series':
+      case 'vehicle.mileage':
+      case 'vehicle.DMC':
+      case 'vehicle.energy':
+      case 'vehicle.power':
         matches.push(
           <div className={style.highlightGroup}>
             <span className={style.highlightGroupLabel}>
@@ -254,7 +262,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <Highlighter
                   highlightClassName={style.hit}
                   searchWords={[q]}
-                  textToHighlight={`${vehicle.model}, ${vehicle.plateNumber}`}
+                  textToHighlight={get({vehicle}, highlight)}
                 />
               </span>
             </span>
@@ -330,6 +338,8 @@ class SearchBox extends React.Component {
 
     this.onSearch                  = this.onSearch.bind(this);
     this.onLastModified            = this.onLastModified.bind(this);
+    this.onVehicleModel                 = this.onVehicleModel.bind(this);
+    this.onVehicleManufacturer                 = this.onVehicleManufacturer.bind(this);
     this.onSearchAdvancedSearch    = this.onSearchAdvancedSearch.bind(this);
     this.onTextInput               = this.onTextInput.bind(this);
     this.onClearSearch             = this.onClearSearch.bind(this);
@@ -381,6 +391,22 @@ class SearchBox extends React.Component {
     this.setState(({ search }) => ({
       search : search.merge({
         lastModified: date,
+      }),
+    }));
+  }
+
+  onVehicleManufacturer(manufacturer) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        vehicleManufacturer : manufacturer,
+      }),
+    }));
+  }
+
+  onVehicleModel(model) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        vehicleModel : model,
       }),
     }));
   }
@@ -596,6 +622,8 @@ class SearchBox extends React.Component {
           onClear                 : this.onClearSearch,
           onSearch                : this.onSearchAdvancedSearch,
           onLastModified          : this.onLastModified,
+          onVehicleManufacturer               : this.onVehicleManufacturer,
+          onVehicleModel               : this.onVehicleModel,
         }}
       />
     );

@@ -1,5 +1,6 @@
 import {
   TOGGLE,
+  SET_CATEGORY,
   SET_DURATION,
   // TOGGLE_INCLUDE_CANCELED,
   // SET_ONLY_VALID_OPEN,
@@ -24,6 +25,14 @@ export function setDuration(dashboard, duration) {
     type : SET_DURATION,
     dashboard,
     duration,
+  };
+}
+
+export function setCategory(category) {
+  return {
+    type :  SET_CATEGORY,
+    dashboard : 'invalid',
+    category,
   };
 }
 

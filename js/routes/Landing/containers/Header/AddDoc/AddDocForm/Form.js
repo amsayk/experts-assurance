@@ -39,6 +39,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     padding: '0 2.25rem',
+    minHeight: 1125,
   },
 
   error : {

@@ -1,0 +1,8 @@
+query vehicleByPlateNumber($plateNumber: String) {
+  vehicleByPlateNumber(plateNumber: $plateNumber) {
+    manufacturer
+    model
+    plateNumber
+  }
+}
+

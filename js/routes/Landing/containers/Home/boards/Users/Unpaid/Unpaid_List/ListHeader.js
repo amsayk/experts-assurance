@@ -65,7 +65,7 @@ class ListHeader extends React.Component {
     const { key, direction } = sortConfig;
     return (
       <div style={{ position: 'sticky' }} className={style.listHeader}>
-        <div style={{ maxWidth: 75, minWidth: 75 }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
+        <div style={{ maxWidth: 115, minWidth: 115 }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

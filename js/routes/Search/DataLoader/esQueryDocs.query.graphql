@@ -14,7 +14,11 @@ query esQueryDocs($query: ESDocsQueryPayload!) {
         client{ id name }
         refNo
         state
-        vehicle{ model plateNumber}
+        vehicle{
+          manufacturer
+          model
+          plateNumber
+        }
         validation {
           user { id name }
           date

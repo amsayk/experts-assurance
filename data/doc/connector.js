@@ -6,6 +6,8 @@ import es from 'backend/es';
 
 import config from 'build/config';
 
+import uniqBy from 'lodash.uniqby';
+
 import {
   userHasRoleAny,
   Role_ADMINISTRATORS,
@@ -24,7 +26,7 @@ import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
 const LIMIT_PER_PAGE = 45;
 const LIMIT_PER_NEXT_PAGE = 15;
-const SEARCH_LIMIT = 15;
+const SEARCH_LIMIT = 7;
 const RECENT_DOCS_LIMIT = 5;
 
 export class DocConnector {
@@ -92,6 +94,46 @@ export class DocConnector {
         ? count
         : new Error(`Docs count for state \`${s}\` failed`);
     })
+  }
+
+  async searchVehicles(q) {
+    if (q) {
+      const queries = [
+        'manufacturer',
+        'model',
+        'plateNumber'
+      ].map((key) => {
+        return new Parse.Query(DocType)
+          .matchesQuery('business', businessQuery())
+          .doesNotExist('deletion_user')
+          .doesNotExist('deletion_date')
+          .matches(`vehicle.${key}`, new RegExp(`^${q}.*`, 'i'));
+      });
+
+      const query = Parse.Query.or.apply(Parse.Query, queries);
+
+      const docs = await query.find({ useMasterKey : true });
+
+      return uniqBy(
+        docs.map(doc => doc.get('vehicle')),
+        (vehicle) => vehicle.manufacturer,
+      );
+    }
+
+    return [];
+
+  }
+
+  async vehicleByPlateNumber(plateNumber) {
+    const query = new Parse.Query(DocType)
+      .matchesQuery('business', businessQuery())
+      .doesNotExist('deletion_user')
+      .doesNotExist('deletion_date')
+      .equalTo(`vehicle.plateNumber`, plateNumber);
+
+    const doc = await query.first({ useMasterKey : true });
+
+    return doc.get('vehicle');
   }
 
   get(id) {
@@ -193,7 +235,7 @@ export class DocConnector {
     }
   }
 
-  getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, user, now }) {
+  getInvalidDocs({ category, durationInDays, cursor, sortConfig, selectionSet, user, now }) {
     if (!user) {
       return Promise.resolve({
         length: 0,
@@ -212,7 +254,7 @@ export class DocConnector {
     function getQuery() {
       const queries = [];
 
-      categories.forEach(({ slug : category, required }) => {
+      (category ? [ category ] : categories).forEach(({ slug : category, required }) => {
         if (required) {
           const query = new Parse.Query(FileType)
             .matchesQuery('business', businessQuery())
@@ -305,11 +347,11 @@ export class DocConnector {
       const q = new Parse.Query(DocType)
         .matchesQuery('business', businessQuery());
 
-      // if (durationInDays === -1) {
-      //   q.greaterThanOrEqualTo('validation_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
-      // } else {
-      //   q.greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
-      // }
+      if (durationInDays === -1) {
+        q.lessThan('date', new Date(now - 94672800000));
+      } else {
+        q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+      }
 
       // Not deleted
       q.doesNotExist('deletion_date');
@@ -401,6 +443,9 @@ export class DocConnector {
     client = null,
     agent = null,
 
+    vehicleManufacturer = null,
+    vehicleModel = null,
+
     lastModified = null,
 
     range = null,
@@ -419,6 +464,18 @@ export class DocConnector {
     if (state !== null) {
       must.push({
         term: { state },
+      });
+    }
+
+    if (vehicleManufacturer !== null) {
+      must.push({
+        match: { 'vehicle.manufacturer' : vehicleManufacturer },
+      });
+    }
+
+    if (vehicleModel !== null) {
+      must.push({
+        match: { 'vehicle.model' : vehicleModel },
       });
     }
 
@@ -543,7 +600,7 @@ export class DocConnector {
     } : undefined;
 
     const multi_match = q ? {
-      operator: 'and',
+      // operator: 'and',
       fields: [
         'manager.name',
         // 'manager.email',
@@ -554,10 +611,14 @@ export class DocConnector {
         'agent.name',
         // 'agent.email',
 
+        'vehicle.manufacturer',
         'vehicle.model',
         'vehicle.plateNumber',
-
-        'refNo_string',
+        'vehicle.series',
+        'vehicle.mileage',
+        'vehicle.DMC',
+        'vehicle.energy',
+        'vehicle.power',
       ],
       query: q,
     } : undefined;
@@ -610,13 +671,17 @@ export class DocConnector {
             'agent.name'        : {},
             // 'agent.email'       : {},
 
-            'vehicle.model'       : {},
-            'vehicle.plateNumber' : {},
+            'vehicle.manufacturer' : {},
+            'vehicle.model': {},
+            'vehicle.plateNumber': {},
+            'vehicle.series': {},
+            'vehicle.mileage': {},
+            'vehicle.DMC': {},
+            'vehicle.energy': {},
+            'vehicle.power': {},
 
             'client.name'         : {},
             // 'client.email'        : {},
-
-            'refNo_string'        : {},
           },
         },
       },
@@ -650,7 +715,7 @@ export class DocConnector {
       } : undefined;
 
       const multi_match = {
-        operator: 'and',
+        // operator: 'or',
         fields: [
           'manager.name',
           // 'manager.email',
@@ -661,13 +726,17 @@ export class DocConnector {
           'agent.name',
           // 'agent.email',
 
+          'vehicle.manufacturer',
           'vehicle.model',
           'vehicle.plateNumber',
+          'vehicle.series',
+          'vehicle.mileage',
+          'vehicle.DMC',
+          'vehicle.energy',
+          'vehicle.power',
 
           'user.name',
           'user.email',
-
-          'refNo_string',
 
           'validation_user.name',
           // 'validation_user.email',
@@ -716,13 +785,17 @@ export class DocConnector {
               'agent.name'                 : {},
               // 'agent.email'                : {},
 
-              'vehicle.model'                : {},
-              'vehicle.plateNumber'          : {},
+              'vehicle.manufacturer' : {},
+              'vehicle.model': {},
+              'vehicle.plateNumber': {},
+              'vehicle.series': {},
+              'vehicle.mileage': {},
+              'vehicle.DMC': {},
+              'vehicle.energy': {},
+              'vehicle.power': {},
 
               'client.name'                  : {},
               // 'client.email'                 : {},
-
-              'refNo_string'                 : {},
 
               'validation_user.name'         : {},
               // 'validation_user.email'        : {},
@@ -928,7 +1001,7 @@ export class DocConnector {
   //       .matchesQuery('business', businessQuery());
   //
   //     if (durationInDays === -1) {
-  //       q.lessThan('date', new Date(now - (94608000000)));
+  //       q.lessThan('date', new Date(now - (94672800000)));
   //     } else {
   //       q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
   //     }
@@ -991,7 +1064,7 @@ export class DocConnector {
         .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
-        q.lessThan('date', new Date(now - (94608000000)));
+        q.lessThan('date', new Date(now - (94672800000)));
       } else {
         q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
@@ -1063,7 +1136,7 @@ export class DocConnector {
   //       .matchesQuery('business', businessQuery());
   //
   //     if (durationInDays === -1) {
-  //       q.lessThan('closure_date', new Date(now - (94608000000)));
+  //       q.lessThan('closure_date', new Date(now - (94672800000)));
   //     } else {
   //       q.greaterThanOrEqualTo('closure_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)));
   //     }

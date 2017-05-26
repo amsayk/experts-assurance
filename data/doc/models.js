@@ -29,6 +29,13 @@ export class Docs {
     this.connector = connector;
   }
 
+  searchVehicles(queryString) {
+    return this.connector.searchVehicles(queryString);
+  }
+  vehicleByPlateNumber(plateNumber) {
+    return this.connector.vehicleByPlateNumber(plateNumber);
+  }
+
   get(id) {
     return this.connector.get(id);
   }

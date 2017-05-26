@@ -22,12 +22,17 @@ export default function createWorker(opts, name, methods) {
     if (!methods.hasOwnProperty(serverMethod)) {
       done('This method does not support by this server');
     }
-    const request = job.data.req;
+    try {
+      const request = job.data.req;
 
-    request.user = deserializeParseObject(job.data.req.user);
-    request.log = (...args) => log(serverMethod, ...args);
+      request.user = deserializeParseObject(job.data.req.user);
+      request.log = (...args) => log(serverMethod, ...args);
 
-    methods[serverMethod](request, done);
+      methods[serverMethod](request, done);
+    } catch (e) {
+      log.error(`Error while executing ${serverMethod}:`, e);
+      done(new Error(e));
+    }
   });
 
   queue.on('job complete', function (id) {

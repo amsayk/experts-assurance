@@ -8,8 +8,14 @@ query moreUnpaidDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSort
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       validation {
         date

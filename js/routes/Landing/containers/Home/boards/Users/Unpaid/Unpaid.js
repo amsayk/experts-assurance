@@ -22,7 +22,7 @@ import {
   // DownloadIcon,
 } from 'components/icons/MaterialIcons';
 
-// import DurationSelector from '../DurationSelector';
+import DurationSelector from '../DurationSelector';
 
 import List from './Unpaid_List';
 
@@ -71,13 +71,13 @@ class Unpaid extends React.Component {
                 {/*     /> */}
               {/*   </Button> */}
             {/* </div> */}
-          {/* <div className={style.icon}> */}
-            {/*   <DurationSelector */}
-              {/*     label='Durée de validation' */}
-              {/*     duration={durationInDays} */}
-              {/*     onDuration={actions.setDuration} */}
-              {/*   /> */}
-            {/* </div> */}
+          <div className={style.icon}>
+            <DurationSelector
+              label='Durée de validation'
+              duration={durationInDays}
+              onDuration={actions.setDuration}
+            />
+          </div>
         </div>
       </header>
       {isOpen ? <div className={style.boardContent}>

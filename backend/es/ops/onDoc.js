@@ -31,11 +31,10 @@ export default function onDoc(id) {
       client.index({
         index: config.esIndex,
         type: 'doc',
-        id: String(doc.get('refNo')),
+        id: doc.get('refNo'),
         body: {
           id           : doc.id,
           refNo        : doc.get('refNo'),
-          refNo_string : String(doc.get('refNo')),
           vehicle      : doc.get('vehicle'),
           state        : doc.get('state'),
           date         : doc.get('date'),

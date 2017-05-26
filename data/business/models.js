@@ -4,7 +4,7 @@ import {
   UPDATE_USER_BUSINESS,
 } from 'backend/constants';
 
-import { getOrCreateBusiness } from 'backend/utils';
+import { getRefNo } from 'backend/utils';
 
 export class Business {
   constructor({ connector, user }) {
@@ -33,8 +33,8 @@ export class Business {
     return this.connector.esSearchUsers(q, this.user);
   }
 
-  async getLastRefNo() {
-    return { value : (await getOrCreateBusiness()).get('lastRefNo') };
+  async getLastRefNo(now) {
+    return { value : await getRefNo(now) };
   }
 
 }

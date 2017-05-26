@@ -3,6 +3,8 @@ import { graphql } from 'react-apollo';
 import pick from 'lodash.pick';
 
 import ES_QUERY_DOCS_QUERY from './esQueryDocs.query.graphql';
+import GET_VEHICLE_BY_PLATE_NUMBER_QUERY from './vehicleByPlateNumber.query.graphql';
+import SEARCH_VEHICLES_QUERY from './searchVehicles.query.graphql';
 
 import moment from 'moment';
 
@@ -35,6 +37,9 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
         client          : search.client,
         manager         : search.manager,
         agent           : search.agent,
+
+        vehicleModel         : search.vehicleModel,
+        vehicleManufacturer  : search.vehicleManufacturer,
 
         validator       : search.validator,
         closer          : search.closer,
@@ -69,6 +74,11 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
             client          : ownProps.search.client,
             manager         : ownProps.search.manager,
             agent           : ownProps.search.agent,
+
+
+            vehicleModel         : ownProps.search.vehicleModel,
+            vehicleManufacturer  : ownProps.search.vehicleManufacturer,
+
 
             validator       : ownProps.search.validator,
             closer          : ownProps.search.closer,
@@ -109,5 +119,30 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
   }),
 });
 
-export default { queryDocs };
+const vehicleByPlateNumber = graphql(GET_VEHICLE_BY_PLATE_NUMBER_QUERY, {
+  options: ({ plateNumber }) => ({
+    variables: {
+      plateNumber,
+    },
+  }),
+  props: ({ ownProps, data: { loading, vehicleByPlateNumber = {} } }) => ({
+    loading,
+    vehicle : vehicleByPlateNumber,
+  }),
+});
+
+const searchVehicles = graphql(SEARCH_VEHICLES_QUERY, {
+  skip: ({ queryString, skip }) => typeof skip === 'undefined' ? !queryString || queryString < 2 : skip,
+  options: ({ queryString }) => ({
+    variables: {
+      queryString,
+    },
+  }),
+  props: ({ ownProps, data: { loading, searchVehicles = [] } }) => ({
+    loading,
+    vehicles : searchVehicles,
+  }),
+});
+
+export default { queryDocs, vehicleByPlateNumber, searchVehicles };
 

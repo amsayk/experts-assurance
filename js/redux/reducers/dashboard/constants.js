@@ -10,6 +10,7 @@ import {
 
 export const TOGGLE  = keyOf({DASHBOARD_ON_TOGGLE: null});
 export const SET_DURATION  = keyOf({DASHBOARD_SET_DURATION: null});
+export const SET_CATEGORY  = keyOf({DASHBOARD_SET_CATEGORY: null});
 // export const TOGGLE_INCLUDE_CANCELED  = keyOf({DASHBOARD_TOGGLE_INCLUDE_CANCELED: null});
 
 // export const SORT_PENDING   = keyOf({[`${SORT_ACTION}/pendingDashboard`]: null});

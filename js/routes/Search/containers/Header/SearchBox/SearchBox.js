@@ -74,6 +74,8 @@ class SearchBox extends React.Component {
     this.onSearch              = this.onSearch.bind(this);
 
     this.onLastModified        = this.onLastModified.bind(this);
+    this.onVehicleManufacturer             = this.onVehicleManufacturer.bind(this);
+    this.onVehicleModel             = this.onVehicleModel.bind(this);
     this.onTextInput           = this.onTextInput.bind(this);
     this.onState               = this.onState.bind(this);
     this.onManager             = this.onManager.bind(this);
@@ -99,6 +101,22 @@ class SearchBox extends React.Component {
     this.setState(({ search }) => ({
       search : search.merge({
         lastModified: date,
+      }),
+    }));
+  }
+
+  onVehicleManufacturer(manufacturer) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        vehicleManufacturer : manufacturer,
+      }),
+    }));
+  }
+
+  onVehicleModel(model) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        vehicleModel : model,
       }),
     }));
   }
@@ -245,6 +263,8 @@ class SearchBox extends React.Component {
           onCloser          : this.onCloser,
           onValidator       : this.onValidator,
           onLastModified    : this.onLastModified,
+          onVehicleManufacturer         : this.onVehicleManufacturer,
+          onVehicleModel         : this.onVehicleModel,
           onRange           : this.onRange,
           // onValidationRange : this.onValidationRange,
           onClosureRange    : this.onClosureRange,

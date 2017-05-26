@@ -9,8 +9,14 @@ query openDocs($durationInDays:  Float!, $sortConfig: ESSortConfig!) {
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       validation {
         date

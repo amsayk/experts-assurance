@@ -57,10 +57,10 @@ class ListItem extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <StateIcon
-                  state={state}
-                  onClick={this.onItem}
-                />
+                {/* <StateIcon */}
+                {/*   state={state} */}
+                {/*   onClick={this.onItem} */}
+                {/* /> */}
                 <div className={style.text} style={{ marginLeft: 6 }}>
                   <Link to={PATH_CASES_CASE + '/' + id}>
                     <b>{refNo}</b>
@@ -118,7 +118,19 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {vehicle.model}
+                  {vehicle.manufacturer}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={style.listItemAgent}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  {vehicle.model || vehicle.manufacturer}
                 </div>
               </div>
             </div>

@@ -1,0 +1,8 @@
+query searchVehicles($queryString: String) {
+  searchVehicles(queryString: $queryString) {
+    manufacturer
+    model
+    plateNumber
+  }
+}
+

@@ -14,8 +14,6 @@ import Clipboard from 'Clipboard';
 
 import { injectIntl } from 'react-intl';
 
-import printDocRef from 'printDocRef';
-
 import raf from 'requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
@@ -1185,7 +1183,7 @@ class Overview extends React.Component {
             <h6 style={{ display : 'flex' }} className={style.h6}>
               {loading ? null : [
                 <div className={style.docRefNo}>
-                  Dossier {printDocRef(doc, { type : printDocRef.LONG })}
+                  Dossier {doc.refNo}
                 </div>,
                 <div onClick={this.copyKeyToClipboard} className={style.docKeyBadge}>
                   {doc.key}
@@ -1193,7 +1191,7 @@ class Overview extends React.Component {
               ]}
             </h6>
             <h4 className={style.h4}>
-              {loading ? null : `${doc.vehicle.model}, ${doc.vehicle.plateNumber}`}
+              {loading ? null : `${doc.vehicle.model || doc.vehicle.manufacturer}, ${doc.vehicle.plateNumber}`}
             </h4>
             <div className={style.deleteOrRestoreDocAction}>
               {(() => {

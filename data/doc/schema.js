@@ -201,8 +201,7 @@ export const schema = [`
     id: ID!
     company: String!
 
-    refNo: Int!
-    refNo_string: String!
+    refNo: String!
 
     state: DocState!
     dateMission: Date!
@@ -254,6 +253,9 @@ export const schema = [`
     manager: UserQuery
     client: UserQuery
     agent: UserQuery
+
+    vehicleManufacturer: String
+    vehicleModel: String
 
     range: DateRange
     # validationRange: DateRange
@@ -320,7 +322,7 @@ export const schema = [`
   type Vehicle {
     manufacturer: String
     model: String! # Type
-    plateNumber: String!
+    plateNumber: ID!
     series: String
     mileage: String
     DMC: String
@@ -355,7 +357,7 @@ export const schema = [`
 
     key: ID!
 
-    refNo: Int!
+    refNo: String!
 
     date: Date!
     dateMission: Date!
@@ -387,6 +389,23 @@ export const schema = [`
 `];
 
 export const resolvers = {
+
+  Vehicle: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+    ]),
+    parseGraphqlScalarFields([
+      'manufacturer',
+      'model',
+      'plateNumber',
+      'series',
+      'mileage',
+      'DMC',
+      'energy',
+      'power',
+    ])
+  ),
 
   File: Object.assign(
     {
@@ -534,8 +553,8 @@ export const resolvers = {
     parseGraphqlScalarFields([
       'id',
       'company',
-      'key',
       'refNo',
+      'key',
       'date',
       'dateMission',
       'state',
@@ -1181,8 +1200,8 @@ export const resolvers = {
         return context.Docs.dashboard(selectionSet);
       },
 
-      getLastRefNo(_, {}, context) {
-        return context.Business.getLastRefNo();
+      getLastRefNo(_, { now }, context) {
+        return context.Business.getLastRefNo(now);
       },
 
       getDocFiles(_, { id }, context) {
@@ -1192,17 +1211,24 @@ export const resolvers = {
       isDocValid(_, { id }, context) {
         return context.Docs.isDocValid(id);
       },
-      getInvalidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+      getInvalidDocs(_, { category, durationInDays, cursor = 0, sortConfig }, context, info) {
         const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.now });
+        return context.Docs.getInvalidDocs({ category, durationInDays, cursor, sortConfig, selectionSet, now : context.Now });
       },
       getUnpaidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
         const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.now });
+        return context.Docs.getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.Now });
       },
 
       getDocObservations(_, { id, cursor }, context) {
         return context.Docs.getDocObservations({ id, cursor });
+      },
+
+      searchVehicles(_, { queryString }, context) {
+        return context.Docs.searchVehicles(queryString);
+      },
+      vehicleByPlateNumber(_, { plateNumber }, context) {
+        return context.Docs.vehicleByPlateNumber(plateNumber);
       },
 
   },

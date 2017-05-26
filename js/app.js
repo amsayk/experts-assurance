@@ -71,10 +71,10 @@ let render = async function render() {
   }
 
   const intlSelector = (state) => ({
-    defaultLocale : state.get('defaultLocale'),
-    locale        : state.get('locale'),
-    messages      : state.get('messages'),
-    formats       : state.get('formats'),
+    defaultLocale : state.getIn(['intl', 'defaultLocale']),
+    locale        : state.getIn(['intl', 'locale']),
+    messages      : state.getIn(['intl', 'messages']),
+    formats       : state.getIn(['intl', 'formats']),
   });
 
   const routes = getRoutes(store);

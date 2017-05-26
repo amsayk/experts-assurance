@@ -8,8 +8,14 @@ query moreClosedDocs($durationInDays: Float!, $cursor: Int, $sortConfig: ESSortC
       dateMission
       state
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
       }
       closure {
         date

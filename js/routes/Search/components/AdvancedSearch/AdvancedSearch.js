@@ -14,6 +14,9 @@ import DTClosure from './fields/DTClosure';
 // import Q from './fields/Q';
 import LastModified from './fields/LastModified';
 
+import VehicleManufacturer from './fields/VehicleManufacturer';
+import VehicleModel from './fields/VehicleModel';
+
 import Actions from './Actions';
 
 export default class AdvancedSearch extends React.Component {
@@ -47,7 +50,26 @@ export default class AdvancedSearch extends React.Component {
         />
 
         {/* render divider */}
-        <div className={style.advancedSearch_divider}/>
+        {/* <div className={style.advancedSearch_divider}/> */}
+
+        <h6 className={style.advancedSearch_intro}>Véhicule</h6>
+
+        <VehicleManufacturer
+          manufacturer={search.vehicleManufacturer}
+          onVehicle={actions.onVehicleManufacturer}
+        />
+
+        <VehicleModel
+          model={search.vehicleModel}
+          onVehicle={actions.onVehicleModel}
+        />
+
+        {/* render divider */}
+        {/* <div className={style.advancedSearch_divider}/> */}
+
+        <br/>
+
+        <h6 className={style.advancedSearch_intro}>Individuels/Sociétés</h6>
 
         {/* render users ---- */}
         <Manager
@@ -64,7 +86,7 @@ export default class AdvancedSearch extends React.Component {
         />
 
         {/* render divider */}
-        <div className={style.advancedSearch_divider}/>
+        {/* <div className={style.advancedSearch_divider}/> */}
 
         {/* render dates ---- */}
         {/* <Q q={search.q} onQ={actions.onQ}/> */}

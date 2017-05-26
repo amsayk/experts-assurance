@@ -37,6 +37,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     }, options.timeout || (30 * 1000));
 
     job.on('failed', function (err) {
+      log(`Job #${job.id} failed.`, err);
       clearTimeout(timeoutCall);
       reject(err);
     });
@@ -54,7 +55,8 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     job.save(function (err) {
       if (err) {
         clearTimeout(timeoutCall);
-        reject(err);
+        log(`publish(${serverName}, ${serverMethod}) Job #${job.id} failed`);
+        return reject(err);
       }
       log(`publish(${serverName}, ${serverMethod}) Job #${job.id}`);
     });

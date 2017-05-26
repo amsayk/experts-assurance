@@ -90,13 +90,8 @@
     "doc": {
       "properties": {
         "refNo": {
-          "type": "integer"
-        },
-        "refNo_string": {
           "type": "string",
-          "index_options": "offsets",
-          "analyzer": "nGram_analyzer",
-          "search_analyzer": "whitespace_analyzer"
+          "index": "not_analyzed"
         },
         "state": {
           "type": "string",
