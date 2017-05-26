@@ -6,6 +6,7 @@ query morePendingDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSor
       refNo
       date
       dateMission
+      company
       state
       vehicle {
         manufacturer

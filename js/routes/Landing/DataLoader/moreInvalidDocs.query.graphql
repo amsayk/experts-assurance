@@ -6,6 +6,7 @@ query moreInvalidDocs($category: String, $durationInDays: Float!, $cursor: Int!,
       refNo
       date
       dateMission
+      company
       state
       vehicle {
         manufacturer

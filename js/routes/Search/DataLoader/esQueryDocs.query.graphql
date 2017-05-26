@@ -14,6 +14,8 @@ query esQueryDocs($query: ESDocsQueryPayload!) {
         client{ id name }
         refNo
         state
+        dateMission
+        company
         vehicle{
           manufacturer
           model

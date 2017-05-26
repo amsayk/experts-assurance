@@ -7,6 +7,7 @@ query moreDocs($query: DocsFetchQuery!) {
       refNo
       date
       dateMission
+      company
       state
 
       vehicle {

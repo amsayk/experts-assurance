@@ -37,6 +37,8 @@ export default function onDoc(id) {
           refNo        : doc.get('refNo'),
           vehicle      : doc.get('vehicle'),
           state        : doc.get('state'),
+          company      : doc.get('company'),
+          dateMission  : doc.get('dateMission'),
           date         : doc.get('date'),
           manager      : doc.has('manager') ? (await indexedUser(doc.get('manager'), /* isEmployee = */true)) : null,
           client       : (await indexedUser(doc.get('client'))),

@@ -5,6 +5,7 @@ query getDoc($id: ID!) {
     refNo
     date
     dateMission
+    company
     state
 
     deletion {

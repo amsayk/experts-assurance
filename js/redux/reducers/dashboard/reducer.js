@@ -187,7 +187,7 @@ export default function reducer(state = initialState, action) {
             invalidOpen : ! state.invalidOpen,
           });
         default:
-          throw new Error(`Unknown dashboard : ${action.duration}`);
+          throw new Error(`Unknown dashboard : ${action.dashboard}`);
       }
     }
     case SET_DURATION: {
@@ -213,7 +213,7 @@ export default function reducer(state = initialState, action) {
             invalidDurationInDays : action.duration,
           });
         default:
-          throw new Error(`Unknown dashboard : ${action.duration}`);
+          throw new Error(`Unknown dashboard : ${action.dashboard}`);
       }
     }
     case SET_CATEGORY: {
@@ -223,7 +223,7 @@ export default function reducer(state = initialState, action) {
             category : action.category,
           });
         default:
-          throw new Error(`Unknown dashboard : ${action.category}`);
+          throw new Error(`Unknown dashboard : ${action.dashboard}`);
       }
     }
       // case TOGGLE_INCLUDE_CANCELED: {

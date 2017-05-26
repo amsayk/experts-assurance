@@ -7,6 +7,7 @@ query pendingDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
       refNo
       date
       dateMission
+      company
       state
       vehicle {
         model

@@ -87,10 +87,54 @@ function *intersperse(a, delim) {
   }
 }
 
-const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
+function toArray(str) {
+  return (str || '').split(/\s+/);
+}
+
+const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, company, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
 
   const matches = highlight.reduce(function (matches, highlight) {
     switch (highlight) {
+      case 'company':
+        // case 'manager.email':
+        matches.push(
+          <div className={style.highlightGroup}>
+            <span className={style.highlightGroupLabel}>
+              Compagnie:{' '}
+            </span>
+            <span className={style.highlightGroupLinkWrapper}>
+              <span>
+                <Highlighter
+                  highlightClassName={style.hit}
+                  searchWords={toArray(q)}
+                  textToHighlight={company}
+                />
+              </span>
+            </span>
+          </div>
+        );
+        break;
+
+      case 'refNo':
+        // case 'manager.email':
+        matches.push(
+          <div className={style.highlightGroup}>
+            <span className={style.highlightGroupLabel}>
+              Réf:{' '}
+            </span>
+            <span className={style.highlightGroupLinkWrapper}>
+              <span>
+                <Highlighter
+                  highlightClassName={style.hit}
+                  searchWords={toArray(q)}
+                  textToHighlight={refNo}
+                />
+              </span>
+            </span>
+          </div>
+        );
+        break;
+
       case 'manager.name':
         // case 'manager.email':
         matches.push(
@@ -103,7 +147,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={manager.name}
                   />
                 </span>
@@ -125,7 +169,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={client.name}
                   />
                 </span>
@@ -147,7 +191,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={agent.name}
                   />
                 </span>
@@ -169,7 +213,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={user.name}
                   />
                 </span>
@@ -191,7 +235,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={validation.user.name}
                   />
                 </span>
@@ -234,7 +278,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
-                    searchWords={[q]}
+                    searchWords={toArray(q)}
                     textToHighlight={closure.user.name}
                   />
                 </span>
@@ -261,7 +305,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
               <span>
                 <Highlighter
                   highlightClassName={style.hit}
-                  searchWords={[q]}
+                  searchWords={toArray(q)}
                   textToHighlight={get({vehicle}, highlight)}
                 />
               </span>

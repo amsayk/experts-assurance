@@ -67,28 +67,28 @@ class Open extends React.Component {
           <div className={style.icon}>
             {data.loading ? <ActivityIndicator size='small'/> : null}
           </div>
-    {/* <div className={cx(style.icon, style.download)}> */}
-    {/*   <Button className={style.downloadButton} role='button'> */}
-    {/*     <DownloadIcon */}
-    {/*       size={18} */}
-    {/*     /> */}
-    {/*   </Button> */}
-    {/* </div> */}
-    <div className={style.icon}>
-      <DurationSelector
-        label='Durée de validation'
-        duration={durationInDays}
-        onDuration={actions.setDuration}
-      />
-    </div>
-  </div>
-</header>
-{openDashboardIsOpen ? <div className={style.boardContent}>
-  <List
-    loadMore={loadMore}
-    {...data}
-  />
-</div> : null}
+          {/* <div className={cx(style.icon, style.download)}> */}
+            {/*   <Button className={style.downloadButton} role='button'> */}
+              {/*     <DownloadIcon */}
+                {/*       size={18} */}
+                {/*     /> */}
+              {/*   </Button> */}
+            {/* </div> */}
+          <div className={style.icon}>
+            <DurationSelector
+              label='Durée de validation'
+              duration={durationInDays}
+              onDuration={actions.setDuration}
+            />
+          </div>
+        </div>
+      </header>
+      {openDashboardIsOpen ? <div className={style.boardContent}>
+        <List
+          loadMore={loadMore}
+          {...data}
+        />
+          </div> : null}
         </div>
     );
   }

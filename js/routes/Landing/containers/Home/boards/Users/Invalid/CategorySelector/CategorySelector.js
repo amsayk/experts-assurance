@@ -59,7 +59,7 @@ class CategoryToggle extends React.Component {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           width: 160,
           // margin: '7px auto',
           // padding: '6px 0'

@@ -6,6 +6,7 @@ query getDocs($query: DocsFetchQuery!) {
       id
       key
       refNo
+      company
       date
       dateMission
       state

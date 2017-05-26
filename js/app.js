@@ -207,13 +207,19 @@ if (__DEV__) {
       require('offline-plugin/runtime').applyUpdate();
     },
     onUpdateFailed: function () {
+      alert(`
+        Erreur pending la mise à jour de l'application.
+        Veuillez réfraîchir la page et informer votre administrateur si le problème persist.
+      `);
 
     },
     onUpdated: function () {
-      try {
-        window.location.reload();
-      } catch (e) {
-      }
+      setTimeout(function () {
+        try {
+          alert(`Votre application a été mise à jour. Nous allons réfraîchir la page.`);
+          window.location.reload();
+        } catch (e) {}
+      }, 0);
     },
 
   });

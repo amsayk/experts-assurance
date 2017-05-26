@@ -199,7 +199,7 @@ export const schema = [`
 
   type ESDocSource {
     id: ID!
-    company: String!
+    company: String
 
     refNo: String!
 
@@ -353,7 +353,7 @@ export const schema = [`
   type Doc {
     id: ID!
 
-    company: String!
+    company: String
 
     key: ID!
 

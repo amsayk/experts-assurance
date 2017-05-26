@@ -611,6 +611,10 @@ export class DocConnector {
         'agent.name',
         // 'agent.email',
 
+        'refNo',
+
+        'company',
+
         'vehicle.manufacturer',
         'vehicle.model',
         'vehicle.plateNumber',
@@ -671,6 +675,10 @@ export class DocConnector {
             'agent.name'        : {},
             // 'agent.email'       : {},
 
+            'refNo'        : {},
+
+            'company'        : {},
+
             'vehicle.manufacturer' : {},
             'vehicle.model': {},
             'vehicle.plateNumber': {},
@@ -725,6 +733,10 @@ export class DocConnector {
 
           'agent.name',
           // 'agent.email',
+
+          'refNo',
+
+          'company',
 
           'vehicle.manufacturer',
           'vehicle.model',
@@ -784,6 +796,10 @@ export class DocConnector {
 
               'agent.name'                 : {},
               // 'agent.email'                : {},
+
+              'refNo'        : {},
+
+              'company'        : {},
 
               'vehicle.manufacturer' : {},
               'vehicle.model': {},

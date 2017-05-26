@@ -4,6 +4,7 @@ query recentDocs {
     refNo
     date
     dateMission
+    company
     state
     vehicle {
       manufacturer
