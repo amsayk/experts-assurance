@@ -8,10 +8,10 @@ import createWorker from 'backend/kue-mq/createWorker';
 
 import * as es from 'backend/es';
 
-const log = require('log')('app:backend:es_index');
+const log = require('log')('app:bin:es_index');
 
 if (cluster.isMaster) {
-  process.title = 'master';
+  process.title = 'es_index:master';
 
   for (let i = 0; i < config.clusterWorkerSize; i++) {
     cluster.fork();
@@ -19,14 +19,17 @@ if (cluster.isMaster) {
 
   // Listen for dying workers
   cluster.on('exit', function (worker, code, signal) {
+    log.error('Worker %d died :(', signal, worker.process.id);
 
-    // Replace the dead worker,
-    // we're not sentimental
-    log.error('Worker %d died :(', worker.process.id);
-    cluster.fork();
+    if (signal !== 'SIGKILL') {
+      // Replace the dead worker,
+      // we're not sentimental
+      cluster.fork();
+    }
 
   });
 } else {
+  process.title = 'es_index: worker process';
 
   const opts = {
     ...config.kue_opts,

@@ -39,7 +39,9 @@ import * as docOps from 'backend/ops/doc';
 
 import createWorker from 'backend/kue-mq/createWorker';
 
-const log = require('log')('app:backend:main_worker');
+const log = require('log')('app:bin:main_worker');
+
+process.title = 'main:master';
 
 const opts = {
   ...config.kue_opts,
