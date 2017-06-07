@@ -8,6 +8,8 @@ import config from 'build/config';
 
 import es, { config as esConfig } from 'backend/es';
 
+import moment from 'moment';
+
 import { getOrCreateBusiness, REF_NO_KEY } from 'backend/utils';
 
 import { DocType, ActivityType } from 'data/types';
@@ -20,7 +22,8 @@ import * as loaders from './loaders';
 
 import isEmpty from 'isEmpty';
 
-import MUTATION from './addDoc.mutation.graphql';
+import ADD from './addDoc.mutation.graphql';
+import CLOSE from './closeDoc.mutation.graphql';
 
 const log = require('log')('app:import');
 
@@ -203,7 +206,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
         try {
           const { data: { addDoc: { doc, error, errors } } } = await apolloClient.mutate({
-            mutation  : MUTATION,
+            mutation  : ADD,
             variables : { payload },
           });
 
@@ -213,6 +216,28 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
           if (!isEmpty(errors)) {
             throw new Error(`Validation errors: ${JSON.stringify(errors)}`);
+          }
+
+          const dateValidation = data['DT VALIDATION'];
+          const paymentDate    = data['PAIEMENT'];
+
+          if (dateValidation && paymentDate) {
+            log(`Closing doc: ${doc.refNo}`);
+            const { data : { closeDoc : { error } } }  = await apolloClient.mutate({
+              mutation  : CLOSE,
+              variables : {
+                id   : doc.id,
+                info : {
+                  dateClosure : +moment(dateValidation),
+                  paymentDate : +moment(paymentDate),
+                },
+              },
+            });
+
+            if (error) {
+              log.error(`Error closing doc: ${doc.refNo}`);
+              throw new Error(error);
+            }
           }
 
           log(`Successfully added doc: ${doc.refNo}`);

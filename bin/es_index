@@ -11,7 +11,7 @@ import * as es from 'backend/es';
 const log = require('log')('app:bin:es_index');
 
 if (cluster.isMaster) {
-  process.title = 'es_index:master';
+  process.title = 'index: master';
 
   for (let i = 0; i < config.clusterWorkerSize; i++) {
     cluster.fork();
@@ -29,7 +29,7 @@ if (cluster.isMaster) {
 
   });
 } else {
-  process.title = 'es_index: worker process';
+  process.title = 'index: worker process';
 
   const opts = {
     ...config.kue_opts,

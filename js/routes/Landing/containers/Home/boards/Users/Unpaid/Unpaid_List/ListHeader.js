@@ -22,14 +22,14 @@ import {
 } from 'redux/reducers/sorting/constants';
 
 import {
-  sortOpen,
+  sortUnpaid,
 } from 'redux/reducers/dashboard/actions';
 
 const dashboardSelector = (state) => state.getIn(['dashboard']);
 
 const selector = createSelector(
   dashboardSelector,
-  (dashboard) => ({ sortConfig: dashboard.open.sortConfig }),
+  (dashboard) => ({ sortConfig: dashboard.unpaid.sortConfig }),
 );
 
 function SortDirection({ direction }) {
@@ -49,7 +49,7 @@ class ListHeader extends React.Component {
     super(props);
 
     this.onSortByRef = this.onSort.bind(this, 'refNo');
-    this.onSortByDate = this.onSort.bind(this, 'date');
+    this.onSortByDate = this.onSort.bind(this, 'dateMission');
     this.onSortByValidationDate = this.onSort.bind(this, 'validation_date');
   }
   onSort(key) {
@@ -57,7 +57,7 @@ class ListHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sort(
-      key, direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {
@@ -123,12 +123,12 @@ class ListHeader extends React.Component {
         {/*   </div> */}
         {/* </div> */}
 
-        <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'date' && style.sorting)}>
+        <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'dateMission' && style.sorting)}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>DT Sinistre</div>
-                {key === 'date' ? <SortDirection direction={direction}/> : null}
+                <div className={style.text}>DT Mission</div>
+                {key === 'dateMission' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>
           </div>
@@ -142,7 +142,7 @@ class ListHeader extends React.Component {
 ListHeader.propTypes = {
   intl: intlShape.isRequired,
   sortConfig: T.shape({
-    key       : T.oneOf(['refNo', 'validation_date', 'date']),
+    key       : T.oneOf(['refNo', 'validation_date', 'dateMission']),
     direction : T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
   }).isRequired,
 };
@@ -154,7 +154,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      sort : sortOpen,
+      sort : sortUnpaid,
     }, dispatch),
   };
 }

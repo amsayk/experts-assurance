@@ -15,7 +15,7 @@ import { Router, match } from 'react-router';
 
 import debug from 'log';
 
-import doSetupAppStateChangeListener from 'utils/appStateChangeObserver';
+// import doSetupAppStateChangeListener from 'utils/appStateChangeObserver';
 import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObserver';
 
 import getRoutes from './routes';
@@ -94,11 +94,11 @@ let render = async function render() {
     }
     componentWillMount() {
       this._connectionStateListener = doSetupConnectionStateChangeObserver(store);
-      this._appStateListener = doSetupAppStateChangeListener(store);
+      // this._appStateListener = doSetupAppStateChangeListener(store);
     }
     componentWillUnmount() {
       this._connectionStateListener && this._connectionStateListener.remove();
-      this._appStateListener && this._appStateListener.remove();
+      // this._appStateListener && this._appStateListener.remove();
     }
     render() {
       const { routerProps } = this.props;

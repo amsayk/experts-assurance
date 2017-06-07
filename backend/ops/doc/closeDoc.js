@@ -18,6 +18,7 @@ export default async function closeDoc(request, done) {
     id,
     info : {
       dateClosure : dateClosureMS,
+      // dateValidation : dateValidationMS,
       paymentAmount,
       paymentDate : paymentDateMS,
     },
@@ -36,7 +37,7 @@ export default async function closeDoc(request, done) {
 
     };
 
-    const current_payment_date = doc.has('payment_date') && doc.get('payment_amount').getTime ? doc.get('payment_date').getTime() : null;
+    const current_payment_date = doc.has('payment_date') && doc.get('payment_date').getTime ? doc.get('payment_date').getTime() : null;
     const current_payment_amount = doc.has('payment_amount') ? doc.get('payment_amount') : null;
     if (current_payment_amount !== paymentAmount || current_payment_date !== paymentDateMS) {
       paymentInfo = {
@@ -47,10 +48,24 @@ export default async function closeDoc(request, done) {
       };
     }
 
+    let validationInfo = {
+
+    };
+
+    // const current_validation_date = doc.has('validation_date') && doc.get('validation_date').getTime ? doc.get('validation_date').getTime() : null;
+    // if (current_validation_date !== dateValidationMS) {
+    //   validationInfo = {
+    //     validation_user   : request.user,
+    //     validation_date   : new Date(dateValidationMS),
+    //
+    //   };
+    // }
+
     await doc.set({
       state : 'CLOSED',
 
       ...paymentInfo,
+      ...validationInfo,
 
       [`lastModified_${request.user.id}`] : new Date(request.now),
       lastModified : new Date(request.now),
@@ -63,7 +78,7 @@ export default async function closeDoc(request, done) {
           fromState : oldState,
           toState   : 'CLOSED',
         },
-        date     : new Date(request.now),
+        date     : new Date(dateClosureMS),
         user     : request.user,
       },
     ];
@@ -80,6 +95,7 @@ export default async function closeDoc(request, done) {
         type      : type,
         metadata  : { ...metadata },
         timestamp : date,
+        now       : new Date(request.now),
         document  : doc,
         business  : request.user.get('business'),
         user,

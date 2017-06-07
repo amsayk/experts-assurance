@@ -86,8 +86,8 @@ function onChildProcess() {
 
   // http://www.oesmith.co.uk/post/15532216845
 
-  process.on('SIGTERM', onStop);
-  process.on('SIGINT', onStop);
+  // process.on('SIGTERM', onStop);
+  // process.on('SIGINT', onStop);
 
   function onStop() {
     log('Stopping worker ' + process.pid);
@@ -102,7 +102,7 @@ function onChildProcess() {
   server.on('close', function () {
     log('Worker ' + process.pid + ' stopped');
 
-    process.exit(0);
+    // process.exit(0);
   });
 }
 

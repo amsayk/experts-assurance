@@ -42,6 +42,7 @@ export default async function cancelDoc(request, done) {
           toState   : 'CANCELED',
         },
         date     : new Date(request.now),
+        now      : new Date(request.now),
         user     : request.user,
       },
     ];

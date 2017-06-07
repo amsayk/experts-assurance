@@ -83,6 +83,7 @@ class Files extends React.PureComponent {
 
       files.push(
         <NewFileEntry
+          doc={doc}
           key='new'
           id={id}
           category={slug}
@@ -128,6 +129,7 @@ const Connect = connect(mapStateToProps);
 export default compose(
   injectIntl,
   Connect,
+  DataLoader.doc,
   DataLoader.docFiles,
 )(Files);
 

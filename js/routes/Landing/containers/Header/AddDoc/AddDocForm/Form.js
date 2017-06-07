@@ -151,6 +151,7 @@ class Form extends React.Component {
             onKeyDown : this.onKeyDown,
             onNext    : this.onNext1,
             label     : 'DT Mission',
+            showClock : true,
           }}
           component={DT}
         />

@@ -49,14 +49,14 @@ class ListHeader extends React.Component {
     super(props);
 
     this.onSortByName = this.onSort.bind(this, 'displayName');
-    this.onSortByDate = this.onSort.bind(this, 'date');
+    this.onSortByDate = this.onSort.bind(this, 'dateMission');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;
     const { direction } = sortConfig;
 
     actions.sortUsers(
-      key, direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {
@@ -87,7 +87,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={cx(style.text, { [style.sorting]: key === 'date' })}>Dernière activité</div>
+                <div className={cx(style.text, key === 'date' && style.sorting)}>Dernière activité</div>
                 {key === 'date' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>

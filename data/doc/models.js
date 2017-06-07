@@ -13,6 +13,10 @@ import {
   SET_PAY,
   DEL_PAY,
 
+  // Validation
+  SET_DT_VALIDATION,
+  DEL_DT_VALIDATION,
+
   // Files
   UPLOAD_FILE,
   DELETE_FILE,
@@ -55,8 +59,9 @@ export class Docs {
   isDocValid(id) {
     return this.connector.isDocValid(id);
   }
-  getInvalidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+  getInvalidDocs({ category, durationInDays, cursor, sortConfig, selectionSet, now }) {
     return this.connector.getInvalidDocs({
+      category,
       durationInDays,
       cursor,
       sortConfig,
@@ -205,6 +210,22 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DEL_PAY, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  // Validation
+  setDTValidation(id, info) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_DT_VALIDATION, args: { id, info } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+  delDTValidation(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DEL_DT_VALIDATION, args: { id } },
       { sessionToken: this.user.getSessionToken() }
     );
   }

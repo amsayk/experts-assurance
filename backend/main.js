@@ -27,6 +27,10 @@ import {
   SET_PAY,
   DEL_PAY,
 
+  // Validation
+  SET_DT_VALIDATION,
+  DEL_DT_VALIDATION,
+
   // Files
   UPLOAD_FILE,
   DELETE_FILE,
@@ -107,6 +111,30 @@ Parse.Cloud.define('routeOp', async function (request, response) {
       break;
     }
     case DEL_PAY: {
+      try {
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case SET_DT_VALIDATION: {
+      try {
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case DEL_DT_VALIDATION: {
       try {
         const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
         response.success({

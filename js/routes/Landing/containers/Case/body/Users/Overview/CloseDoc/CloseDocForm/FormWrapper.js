@@ -172,14 +172,14 @@ class FormWrapper extends React.Component {
     }
 
     const info = {
-      dateClosure    : data.get('dateClosure'),
-      // dateValidation : data.get('dateValidation'),
-      paymentAmount  : data.get('paymentAmount'),
-      paymentDate    : data.get('paymentDate'),
+      dateClosure       : data.get('dateClosure'),
+      dateValidation    : data.get('dateValidation'),
+      paymentAmount     : data.get('paymentAmount'),
+      paymentDate       : data.get('paymentDate'),
     };
 
     const { data: { closeDoc: { errors, error } } } = await self.props.client.mutate({
-      refetchQueries : ['getDoc', 'getTimeline'],
+      refetchQueries : ['getDoc', 'unpaidDocs', 'getTimeline'],
       mutation  : MUTATION,
       variables : { id : doc.id, info },
       updateQueries : {

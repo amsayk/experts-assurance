@@ -21,6 +21,11 @@ function parseDate(s) {
   return +moment.utc(s);
 }
 
+function _parseFloat(s) {
+  const val = s ? parseFloat(s) : null;
+  return isNaN(val) ? null : val;
+}
+
 function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
   let errorText;
 
@@ -72,7 +77,7 @@ class PaymentForm extends React.Component {
 
         <Field
           name='paymentAmount'
-          parse={parseFloat}
+          parse={_parseFloat}
           props={{
             onRef             : onPaymentFirstChild,
             onKeyDown         : onKeyDown,
@@ -87,7 +92,6 @@ class PaymentForm extends React.Component {
           parse={parseDate}
           props={{
             asyncValidate,
-            showClock : false,
             onKeyDown : onKeyDown,
             label     : 'DT Paiement',
           }}

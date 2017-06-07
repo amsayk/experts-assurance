@@ -92,6 +92,7 @@ export default async function uploadFile(request, done) {
           type      : type,
           metadata  : { ...metadata },
           timestamp : date,
+          now       : new Date(request.now),
           document  : doc,
           file      : file,
           user,

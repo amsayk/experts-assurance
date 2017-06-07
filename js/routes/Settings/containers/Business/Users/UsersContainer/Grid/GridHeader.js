@@ -69,7 +69,7 @@ class GridHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sortUsersByDirection(
-      direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {

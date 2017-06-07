@@ -254,8 +254,13 @@ class NewFileEntry extends React.PureComponent {
   }
 
   render() {
-    const { height } = this.props;
+    const { doc, height } = this.props;
     const { status, dragging, dropzoneEnter } = this.state;
+
+    if (doc && (doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED')) {
+      return null;
+    }
+
     return (
       <Dropzone
         disableClick={status !== null}

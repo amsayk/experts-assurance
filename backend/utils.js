@@ -12,6 +12,8 @@ const { BusinessType, DocType } = require('data/types');
 
 const { businessQuery } = require('data/utils');
 
+const log = require('log')('app:backend:utils');
+
 export async function getRefNo(dateMissionMS) {
   const value = await new Parse.Query(DocType)
     .matchesQuery('business', businessQuery())
@@ -23,11 +25,23 @@ export async function getRefNo(dateMissionMS) {
 }
 
 export function serializeParseObject(parseObject) {
-  return parseObject ? { className: parseObject.className, ...parseObject.toJSON() } : null;
+  if (parseObject && !parseObject.className) {
+    log(`[WARN]: Parse object doesn't have className: ${parseObject.toJSON()}`);
+  }
+  return parseObject ? { ...parseObject.toJSON(), className: parseObject.className } : null;
 }
 
 export function deserializeParseObject(object) {
-  return object ? Parse.Object.fromJSON(object) : null;
+  try {
+    if (!object.className && object.emailVerified) {
+      object.className = Parse.User.className;
+    }
+    return object ? Parse.Object.fromJSON(object) : null;
+  } catch (e) {
+    log.error(`Error deserializing object: ${object.toJSON ? object.toJSON() : JSON.stringify(object)}`);
+    e.stack && log.error(e.stack);
+    throw e;
+  }
 }
 
 export async function getOrCreateBusiness() {

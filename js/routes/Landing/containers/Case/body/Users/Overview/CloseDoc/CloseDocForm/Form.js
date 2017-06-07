@@ -70,11 +70,16 @@ class Form extends React.Component {
     this.onNext1 = this.onNext1.bind(this);
     this.onNext2 = this.onNext2.bind(this);
     this.onFirstChild = this.onFirstChild.bind(this);
+    this.onSecondChild = this.onSecondChild.bind(this);
     this.onPaymentFirstChildRef = this.onPaymentFirstChildRef.bind(this);
   }
 
   onFirstChild(ref) {
     this.firstChild = ref;
+  }
+
+  onSecondChild(ref) {
+    this.secondChild = ref;
   }
 
   onPaymentFirstChildRef(ref) {
@@ -85,7 +90,7 @@ class Form extends React.Component {
     if (!activeElement && activeElement.nodeName !== 'INPUT' && activeElement.nodeName !== 'TEXTAREA') {
       setTimeout(() => {
         raf(
-          () => focusNode(this.firstChild)
+          () => focusNode(this.secondChild)
         );
       }, 0);
     }
@@ -143,11 +148,27 @@ class Form extends React.Component {
             onRef     : onFirstChild,
             onKeyDown : this.onKeyDown,
             onNext    : this.onNext1,
-            label     : 'DT Clôture',
+            label     : 'DT Validation',
           }}
           component={DT}
         />
       </section>,
+
+      // <section key='dateValidation' className={style.closeSection}>
+      //   <Field
+      //     name='dateValidation'
+      //     parse={parseDate}
+      //     props={{
+      //       asyncValidate,
+      //       locale    : lang,
+      //       onRef     : this.onSecondChild,
+      //       onKeyDown : this.onKeyDown,
+      //       onNext    : this.onNext2,
+      //       label     : 'DT Validation',
+      //     }}
+      //     component={DT}
+      //   />
+      // </section>,
 
       // <section key='dateValidation' className={style.closeSection}>
       //   <Field

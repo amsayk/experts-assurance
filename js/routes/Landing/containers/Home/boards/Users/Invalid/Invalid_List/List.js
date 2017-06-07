@@ -64,7 +64,7 @@ class List extends React.Component {
   }
 
   render() {
-    const { cursor, loading, length, isReady } = this.props;
+    const { cursor, loading, length, isReady, sortConfig } = this.props;
     const { items } = this.state;
 
     if (loading === false && length === 0) {
@@ -80,7 +80,7 @@ class List extends React.Component {
             defaultOpen
             className={style.listContainer}
           >
-            <ListHeader/>
+            <ListHeader sortConfig={sortConfig}/>
             <Dropdown.Menu className={style.listItemsWrapper}>
               {/* {Array.from(new Array(5)).map(() => <LoadingItem/>)} */}
             </Dropdown.Menu>
@@ -115,7 +115,7 @@ class List extends React.Component {
           defaultOpen
           className={style.listContainer}
         >
-          <ListHeader/>
+          <ListHeader sortConfig={sortConfig}/>
           <Dropdown.Menu className={style.listItemsWrapper}>
             {items.map((item, index) => (
               <MenuItem

@@ -1,0 +1,98 @@
+mutation setDTValidation($id: ID!, $info: DocValidationInfo!) {
+
+  setDTValidation(id: $id, info: $info) {
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    doc {
+      id
+      key
+      refNo
+      dateMission
+      date
+      state
+
+      deletion {
+        date
+        user { id }
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
+      validation {
+        user { id }
+        date
+      }
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+      lastModified
+    }
+
+    error {
+      code
+    }
+
+  }
+}
+

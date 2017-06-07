@@ -83,6 +83,8 @@
   }
 }
 
+.docSetDTValidation,
+.docDelDTValidation,
 .docSetPayment,
 .docDelPayment,
 .print,
@@ -91,6 +93,32 @@
 .refresh,
 .more {
   composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
+}
+
+.docSetDTValidationFormMenu {
+  bottom: 0;
+  top: auto;
+  max-width: 300px;
+  width: 300px;
+
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid #D6DADC;
+  border-bottom-color: #C4C9CC;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+}
+
+.docSetDTValidation,
+.docDelDTValidation,
+.docSetDTValidationButton,
+.docDelDTValidationButton {
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .userMoreMenu {

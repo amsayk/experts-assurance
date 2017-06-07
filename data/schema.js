@@ -125,6 +125,9 @@ const rootSchema = [`
     setPay(id: ID!, info: DocPaymentInfo!): SetOrDelPayResponse!
     delPay(id: ID!): SetOrDelPayResponse!
 
+    setDTValidation(id: ID!, info: DocValidationInfo!): SetOrDelDTValidationResponse!
+    delDTValidation(id: ID!): SetOrDelDTValidationResponse!
+
     # Files
     uploadFile(docId: ID!, category: String!, metadata: FileInput!): UploadFileResponse!
     delFile(id: ID!): DelOrRestoreFileResponse!

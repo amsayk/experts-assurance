@@ -11,7 +11,7 @@ import style from 'routes/Landing/styles';
 
 import selector from './selector';
 
-const LABEL = 'DT Clôture';
+const LABEL = 'DT Validation';
 
 class DTClosure extends React.Component {
   render() {

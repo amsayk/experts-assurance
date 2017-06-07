@@ -76,7 +76,7 @@ export class DashboardState extends Record({
   //     duration : this.pendingDurationInDays,
   //     visible : this.pendingOpen,
   //     sortConfig : {
-  //       key: this.pendingSortConfig.key || 'date',
+  //       key: this.pendingSortConfig.key || 'dateMission',
   //       direction: this.pendingSortConfig.direction,
   //     },
   //   };
@@ -88,7 +88,7 @@ export class DashboardState extends Record({
       // onlyValidOpen : this.onlyValidOpen,
       visible : this._open,
       sortConfig : {
-        key: this.openSortConfig.key || 'date',
+        key: this.openSortConfig.key || 'dateMission',
         direction: this.openSortConfig.direction,
       },
     };
@@ -111,7 +111,7 @@ export class DashboardState extends Record({
       duration   : this.unpaidDurationInDays,
       visible    : this.unpaidOpen,
       sortConfig : {
-        key       : this.unpaidSortConfig.key || 'date',
+        key       : this.unpaidSortConfig.key || 'dateMission',
         direction : this.unpaidSortConfig.direction,
       },
     };
@@ -123,7 +123,7 @@ export class DashboardState extends Record({
       duration   : this.invalidDurationInDays,
       visible    : this.invalidOpen,
       sortConfig : {
-        key       : this.invalidSortConfig.key || 'date',
+        key       : this.invalidSortConfig.key || 'dateMission',
         direction : this.invalidSortConfig.direction,
       },
     };

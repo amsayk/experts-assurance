@@ -22,13 +22,13 @@ import { Role_ADMINISTRATORS, Role_MANAGERS } from 'roles';
 
 import { toastr } from 'containers/Toastr';
 
-import Form from './PaymentForm';
+import Form from './DTValidationForm';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
 </div>;
 
-class PaymentSetter extends React.Component {
+class DTValidationSetter extends React.Component {
   state ={
     open : false,
   };
@@ -61,10 +61,9 @@ class PaymentSetter extends React.Component {
           self.setState({
             open : false,
           });
-          const { amount, date } = info.toJS();
-          self.props.onSetPayment({
+          const { date } = info.toJS();
+          self.props.onSetDTValidation({
             date   : new Date(date).getTime(),
-            amount : parseFloat(amount),
           });
         },
       });
@@ -77,7 +76,7 @@ class PaymentSetter extends React.Component {
         cancelText : 'Non',
         okText     : 'Oui',
         onOk       : () => {
-          self.props.onDeletePayment();
+          self.props.onDeleteDTValidation();
         },
       });
     }
@@ -92,38 +91,39 @@ class PaymentSetter extends React.Component {
       actions,
     } = this.props;
 
-    const edit = (
-      <div className={style.docSetPayment} style={styles.action1}>
+    const canMutate = currentUser.isAdmin || currentUser.isManager(doc);
+
+    const edit = canMutate ? (
+      <div className={style.docSetDTValidation} style={styles.action1}>
         <Dropdown open={this.state.open} onToggle={this.onToggle}>
-          <Dropdown.Toggle bsStyle='link' componentClass={Button} className={style.docSetPaymentButton}>
-            {doc.payment ? <PencilIcon size={18}/> : 'Ajouter le paiement…'}
+          <Dropdown.Toggle bsStyle='link' componentClass={Button} className={style.docSetDTValidationButton}>
+            {doc.validation ? <PencilIcon size={18}/> : 'Ajouter la date de validation…'}
           </Dropdown.Toggle>
-          <Dropdown.Menu className={style.docSetPaymentFormMenu}>
+          <Dropdown.Menu className={style.docSetDTValidationFormMenu}>
             <MenuItem
               componentClass={Form}
               onSubmit={this.onSet}
               initialValues={{
-                date   : doc.payment ? new Date(doc.payment.date) : new Date(),
-                amount : doc.payment ? doc.payment.amount : null,
+                date   : doc.validation ? new Date(doc.validation.date) : new Date(),
               }}
               onInputRef={this.onInputRef}
             />
           </Dropdown.Menu>
         </Dropdown>
       </div>
-    );
+    ) : null;
 
-    const del = doc.payment ? (
-      <div className={style.docDelPayment} style={styles.action2}>
-        <Button bsStyle='link' className={style.docDelPaymentButton} onClick={this.onDelete} role='button'>
+    const del = canMutate && doc.validation ? (
+      <div className={style.docDelDTValidation} style={styles.action2}>
+        <Button bsStyle='link' className={style.docDelDTValidationButton} onClick={this.onDelete} role='button'>
           <TrashIcon size={18}/>
         </Button>
       </div>
     ) : null;
 
-    const info = doc.payment ? (
+    const info = doc.validation ? (
       <div style={styles.info}>
-        {intl.formatNumber(doc.payment.amount, { format: 'MAD' })}
+        {intl.formatDate(doc.validation.date)}
       </div>
     ) : (doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? '—' : null);
 
@@ -131,7 +131,7 @@ class PaymentSetter extends React.Component {
       <div style={styles.root} className={style.filterGroup}>
         {info}
         {doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? null : [
-          doc.payment ? <div style={styles.dot}>·</div> : null,
+          doc.validation ? <div style={styles.dot}>·</div> : null,
           edit,
           del,
         ]}
@@ -165,5 +165,5 @@ styles.dot = {
 
 export default compose(
   injectIntl,
-)(PaymentSetter);
+)(DTValidationSetter);
 

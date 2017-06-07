@@ -62,7 +62,7 @@ class ListHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sort(
-      key, direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {
@@ -177,7 +177,7 @@ ListHeader.propTypes = {
   sortConfig: T.shape({
     key       : T.oneOf([
       'refNo',
-      'date',
+      'dateMission',
     ]),
     direction : T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
   }).isRequired,

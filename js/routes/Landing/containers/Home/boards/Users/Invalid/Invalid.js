@@ -40,6 +40,7 @@ class Invalid extends React.Component {
   }
   render() {
     const {
+      sortConfig,
       isOpen,
       category,
       data,
@@ -81,6 +82,7 @@ class Invalid extends React.Component {
       </header>
       {isOpen ? <div className={style.boardContent}>
         <List
+          sortConfig={sortConfig}
           loadMore={loadMore}
           {...data}
         />

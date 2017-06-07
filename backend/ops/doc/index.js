@@ -10,6 +10,10 @@ export { default as cancelDoc } from './cancelDoc';
 export { default as setPay } from './setPay';
 export { default as delPay } from './delPay';
 
+// Validation
+export { default as setDTValidation } from './setDTValidation';
+export { default as delDTValidation } from './delDTValidation';
+
 // Files
 
 export { default as uploadFile } from './uploadFile';

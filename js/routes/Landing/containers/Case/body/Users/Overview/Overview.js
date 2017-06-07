@@ -1254,10 +1254,6 @@ class Overview extends React.Component {
               loading={loading}
               doc={doc}
             />
-            {/* <DTValidationLine */}
-              {/*   loading={loading} */}
-              {/*   doc={doc} */}
-              {/* /> */}
             <DTClosureLine
               loading={loading}
               doc={doc}
@@ -1270,6 +1266,11 @@ class Overview extends React.Component {
               loading={loading}
               doc={doc}
             />
+            {/* <DTValidationLine */}
+            {/*   loading={loading} */}
+            {/*   doc={doc} */}
+            {/*   currentUser={user} */}
+            {/* /> */}
             {(() => {
               if (loading) {
                 return (

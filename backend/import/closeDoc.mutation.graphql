@@ -1,0 +1,94 @@
+mutation closeDoc($id: ID!, $info: DocClosureInfo!) {
+
+  closeDoc(id: $id, info: $info) {
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    doc {
+      id
+      key
+      refNo
+      dateMission
+      date
+      state
+
+      deletion {
+        date
+        user { id }
+      }
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+      lastModified
+    }
+
+    error {
+      code
+    }
+
+  }
+}
+
+

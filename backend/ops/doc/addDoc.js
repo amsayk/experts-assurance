@@ -154,6 +154,7 @@ export default async function addDoc(request, done) {
           type      : type,
           metadata  : { ...metadata },
           timestamp : date,
+          now       : new Date(request.now),
           document  : doc,
           user,
           business,

@@ -4,10 +4,13 @@ const dashboardSelector = (state) => state.get('dashboard');
 
 export default createSelector(
   dashboardSelector,
-  (dashboard) => ({
-    isOpen          : dashboard.unpaid.visible,
-    sortConfig      : dashboard.unpaid.sortConfig,
-    durationInDays  : dashboard.unpaid.duration,
-  }),
+  (dashboard) => {
+    const { unpaid } = dashboard;
+    return ({
+      isOpen          : unpaid.visible,
+      sortConfig      : unpaid.sortConfig,
+      durationInDays  : unpaid.duration,
+    });
+  },
 );
 

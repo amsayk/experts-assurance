@@ -29,7 +29,7 @@ import schema from 'data/schema';
 
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { subscriptionManager } from 'data/subscriptions';
+import { execute, subscribe } from 'graphql';
 
 import { apolloUploadExpress } from 'apollo-upload-server';
 
@@ -318,16 +318,18 @@ app.use('/api', kue.app);
 const server = createServer(app);
 
 // eslint-disable-next-line
-new SubscriptionServer(
+SubscriptionServer.create(
   {
+    schema,
+    execute,
+    subscribe,
     onConnect: async (connectionParams) => {
       // Implement if you need to handle and manage connection
     },
-    subscriptionManager,
 
     // the obSubscribe function is called for every new subscription
     // and we use it to set the GraphQL context for this subscription
-    onSubscribe: (msg, params) => {
+    onOperation: (msg, params) => {
       return Object.assign({}, params, {
         context: {
           Business: new Business({ connector: new BusinessConnector() }),

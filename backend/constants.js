@@ -27,3 +27,7 @@ export const RESTORE_FILE                 = keyOf({RESTORE_FILE: null});
 export const SET_PAY                 = keyOf({SET_PAY: null});
 export const DEL_PAY                 = keyOf({DEL_PAY: null});
 
+// Validation
+export const SET_DT_VALIDATION       = keyOf({SET_DT_VALIDATION: null});
+export const DEL_DT_VALIDATION       = keyOf({DEL_DT_VALIDATION: null});
+

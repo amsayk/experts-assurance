@@ -56,7 +56,7 @@ class ListHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sortCases(
-      key, direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {

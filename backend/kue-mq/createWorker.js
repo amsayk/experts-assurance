@@ -25,7 +25,7 @@ export default function createWorker(opts, name, methods) {
     try {
       const request = job.data.req;
 
-      request.user = deserializeParseObject(job.data.req.user);
+      request.user = deserializeParseObject(request.user);
       request.log = (...args) => log(serverMethod, ...args);
 
       methods[serverMethod](request, done);

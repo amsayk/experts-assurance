@@ -47,14 +47,15 @@ class DT extends React.Component {
     this.props.onNext();
   }
   render() {
-    const { onRef, label, input, meta, locale } = this.props;
+    const { onRef, label, showClock = false, input, meta, locale } = this.props;
 
     return (
       <div>
         <DateField
           forceValidDate
-          dateFormat='YYYY-MM-DD hh:mm a'
+          dateFormat={showClock === true ? 'YYYY-MM-DD hh:mm a' : 'YYYY-MM-DD'}
           updateOnDateClick={true}
+          collapseOnDateClick={showClock === false}
           footer={false}
           renderInput={this.renderInput}
           locale={locale}

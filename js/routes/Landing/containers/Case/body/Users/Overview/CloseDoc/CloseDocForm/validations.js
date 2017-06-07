@@ -7,7 +7,7 @@ const validations = {
     date     : true,
   },
   paymentAmount: {
-    required       : true,
+    // required       : true,
     number         : true,
     validateOnBlur : true,
   },
@@ -17,6 +17,12 @@ const validations = {
     date           : true,
     validateOnBlur : true,
   },
+
+  // dateValidation: {
+  //   required       : true,
+  //   date           : true,
+  //   validateOnBlur : true,
+  // },
 };
 
 export default generateValidation(validations);

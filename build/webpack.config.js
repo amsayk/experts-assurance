@@ -25,7 +25,7 @@ const log = require('log')('app:webpack:config');
 
 const paths = config.utils_paths;
 
-const happyThreadPool = HappyPack.ThreadPool({ size: 8 });
+const happyThreadPool = HappyPack.ThreadPool({ size: require('os').cpus().length });
 
 log('Creating configuration.');
 const webpackConfig = {
@@ -81,6 +81,14 @@ webpackConfig.externals = {};
 // ------------------------------------
 // Plugins
 // ------------------------------------
+
+const CACHE_LOADER = {
+  loader  : 'cache-loader',
+  options : {
+    // provide a cache directory where cache items should be stored
+    cacheDirectory: path.resolve(process.cwd(), 'tmp', '.cache'),
+  },
+};
 
 const STYLE_LOADER = 'style-loader';
 
@@ -177,14 +185,14 @@ if (argv.analyze) {
       // In `server` mode analyzer will start HTTP server to show bundle report.
       // In `static` mode single HTML file with bundle report will be generated.
       // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
-      analyzerMode: 'server',
+      analyzerMode: 'static',
       // Host that will be used in `server` mode to start HTTP server.
-      analyzerHost: '127.0.0.1',
+      // analyzerHost: '127.0.0.1',
       // Port that will be used in `server` mode to start HTTP server.
-      analyzerPort: 8888,
+      // analyzerPort: 8888,
       // Path to bundle report file that will be generated in `static` mode.
       // Relative to bundles output directory.
-      // reportFilename: 'report.html',
+      reportFilename: path.resolve(process.cwd(), 'dist', 'report.html'),
       // Automatically open report in default browser
       // openAnalyzer: true,
       // If `true`, Webpack Stats JSON file will be generated in bundles output directory
@@ -208,9 +216,7 @@ if (__DEV__) {
     new HappyPack({
       id: 'styles',
       threadPool: happyThreadPool,
-      loaders : __DEV__
-      ? [STYLE_LOADER, ...SASS_LOADERS]
-      : SASS_LOADERS,
+      loaders : [STYLE_LOADER, ...SASS_LOADERS],
 
       // make happy more verbose with HAPPY_VERBOSE=yes
       verbose: process.env.HAPPY_VERBOSE === 'yes',
@@ -296,6 +302,7 @@ webpackConfig.module.rules = [{
     path.resolve(process.cwd(), 'node_modules'),
   ],
   use : [
+    CACHE_LOADER,
     'happypack/loader?id=js',
   ],
 }, {
@@ -320,6 +327,7 @@ webpackConfig.module.rules.push({
   test    : /\.scss$/,
   exclude : [],
   use : [
+    CACHE_LOADER,
     'happypack/loader?id=styles',
   ],
 });
@@ -350,7 +358,7 @@ if (!__DEV__) {
   ).forEach((loader) => {
     loader.use = ExtractTextPlugin.extract({
       fallback : STYLE_LOADER,
-      use      : SASS_LOADERS,
+      use      : [CACHE_LOADER, ...SASS_LOADERS],
     });
   });
 

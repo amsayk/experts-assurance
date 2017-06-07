@@ -49,7 +49,7 @@ class ListHeader extends React.Component {
     super(props);
 
     this.onSortByRef = this.onSort.bind(this, 'refNo');
-    this.onSortByDate = this.onSort.bind(this, 'date');
+    this.onSortByDate = this.onSort.bind(this, 'dateMission');
     this.onSortByClosureDate = this.onSort.bind(this, 'closure_date');
   }
   onSort(key) {
@@ -57,7 +57,7 @@ class ListHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sort(
-      key, direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
   }
 
   render() {
@@ -132,26 +132,26 @@ class ListHeader extends React.Component {
     </div>
   </div>
 
-  <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'date' && style.sorting)}>
+  <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'dateMission' && style.sorting)}>
     <div className={style.wrapper}>
       <div className={style.innerWrapper}>
         <div className={style.item}>
-          <div className={style.text}>DT Sinistre</div>
-          {key === 'date' ? <SortDirection direction={direction}/> : null}
+          <div className={style.text}>DT Mission</div>
+          {key === 'dateMission' ? <SortDirection direction={direction}/> : null}
         </div>
       </div>
     </div>
   </div>
 
-</div>
-);
-}
+      </div>
+    );
+  }
 }
 
 ListHeader.propTypes = {
   intl: intlShape.isRequired,
   sortConfig: T.shape({
-    key       : T.oneOf(['refNo', 'closure_date', 'date']),
+    key       : T.oneOf(['refNo', 'closure_date', 'dateMission']),
     direction : T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
   }).isRequired,
 };

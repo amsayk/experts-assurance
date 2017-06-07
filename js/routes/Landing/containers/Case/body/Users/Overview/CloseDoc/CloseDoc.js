@@ -62,7 +62,7 @@ class CloseDoc extends React.Component {
           doc={doc}
           closingDoc={closingDoc}
           initialValues={{
-            dateValidation : Date.now(),
+            // dateValidation : Date.now(),
             dateClosure    : Date.now(),
 
             paymentAmount  : doc.payment ? doc.payment.amount : null,

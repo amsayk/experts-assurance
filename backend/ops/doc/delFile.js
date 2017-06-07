@@ -40,6 +40,7 @@ export default async function delFile(request, done) {
           type      : type,
           metadata  : { ...metadata },
           timestamp : date,
+          now       : new Date(request.now),
           document  : file.get('document'),
           file      : file,
           business  : request.user.get('business'),

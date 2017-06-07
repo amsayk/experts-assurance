@@ -19,41 +19,6 @@ function parseDate(s) {
   return +moment.utc(s);
 }
 
-function _parseFloat(s) {
-  const val = s ? parseFloat(s) : null;
-  return isNaN(val) ? null : val;
-}
-
-function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
-  let errorText;
-
-  if (error && touched) {
-    errorText = error.get('number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
-  }
-
-  const props = {};
-
-  if (multiLine) {
-    props.rows = 2;
-    props.rowsMax = 5;
-  } else {
-    props.onKeyDown = onKeyDown;
-  }
-
-  return (
-    <TextField
-      {...props}
-      ref={onRef}
-      className={className}
-      floatingLabelText={floatingLabelText}
-      errorText={errorText}
-      multiLine={multiLine}
-      {...input}
-    />
-
-  );
-}
-
 class DT extends React.Component {
   renderInput({ ...props }) {
     const  { meta: { touched, error }, input, label, onRef } = this.props;
@@ -118,7 +83,7 @@ class DT extends React.Component {
   }
 }
 
-class PaymentForm extends React.Component {
+class DTValidationForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -146,40 +111,19 @@ class PaymentForm extends React.Component {
     return (
       <div style={styles.root}>
         <h5 style={styles.header}>
-          Détail de paiement
+          Détaille de Validation
         </h5>
-
-        <Field
-          name='amount'
-          parse={_parseFloat}
-          props={{
-            onRef             : onInputRef,
-            onKeyDown         : this.onKeyDown,
-            floatingLabelText : 'MT',
-          }}
-          component={renderField} />
-
-        <br/>
 
         <Field
           name='date'
           parse={parseDate}
           props={{
             asyncValidate,
+            onRef     : onInputRef,
             onKeyDown : this.onKeyDown,
-            label     : 'DT Paiement',
+            label     : 'DT Validation',
           }}
           component={DT} />
-
-        <br/>
-
-        <Field
-          name='description'
-          props={{
-            multiLine          : true,
-            floatingLabelText : 'Remarques (optionnel)',
-          }}
-          component={renderField} />
 
         <br/>
 
@@ -215,7 +159,7 @@ styles.btn = {
 };
 
 const WithForm = reduxForm({
-  form: 'setPay',
+  form: 'setDTValidation',
   keepDirtyOnReinitialize   : false,
   enableReinitialize        : true,
   destroyOnUnmount          : true,
@@ -225,5 +169,5 @@ const WithForm = reduxForm({
 
 export default compose(
   WithForm,
-)(PaymentForm);
+)(DTValidationForm);
 

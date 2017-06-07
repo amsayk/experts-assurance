@@ -60,7 +60,7 @@ class CategoryToggle extends React.Component {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          width: 160,
+          minWidth: 160,
           // margin: '7px auto',
           // padding: '6px 0'
         }}>
@@ -143,7 +143,7 @@ class CategorySelector extends React.Component {
 }
 
 CategorySelector.defaultProps = {
-  label : 'Catégorie',
+  label : 'Catégorie manquante',
 };
 
 export default compose(

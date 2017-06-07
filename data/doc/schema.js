@@ -7,7 +7,7 @@ import * as codes from 'result-codes';
 
 import config from 'build/config';
 
-import { pubsub } from '../subscriptions';
+// import { pubsub } from 'data/subscriptions';
 
 import graphqlFields from 'graphql-fields';
 
@@ -42,9 +42,14 @@ export const schema = [`
   }
 
   input DocClosureInfo {
-    dateClosure   : Date
-    paymentDate   : Date
-    paymentAmount : Float
+    dateClosure    : Date
+    # dateValidation : Date
+    paymentDate    : Date
+    paymentAmount  : Float
+  }
+
+  input DocValidationInfo {
+    date : Date
   }
 
   type UploadFileResponse {
@@ -133,6 +138,12 @@ export const schema = [`
   }
 
   type SetOrDelPayResponse {
+    error: Error
+    doc: Doc
+    activities : [Activity!]!
+  }
+
+  type SetOrDelDTValidationResponse {
     error: Error
     doc: Doc
     activities : [Activity!]!
@@ -670,6 +681,18 @@ export const resolvers = {
     ])
   ),
 
+  SetOrDelDTValidationResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'activities',
+      'error',
+    ])
+  ),
+
   DocObservationsResponse: Object.assign(
     {
     },
@@ -806,7 +829,7 @@ export const resolvers = {
 
         const { doc, activities } = await context.Docs.addDoc(data);
         // publish subscription notification
-        pubsub.publish('addDocChannel', doc);
+        // pubsub.publish('addDocChannel', doc);
         return { doc, activities, errors: {} };
       }
 
@@ -827,7 +850,7 @@ export const resolvers = {
 
       const { doc, activities } = await context.Docs.delDoc(id);
       // publish subscription notification
-      pubsub.publish('delDocChannel', id);
+      // pubsub.publish('delDocChannel', id);
       return { activities, doc };
     },
     async restoreDoc(_, { id }, context) {
@@ -845,7 +868,7 @@ export const resolvers = {
 
       const { doc, activities } = await context.Docs.restoreDoc(id);
       // publish subscription notification
-      pubsub.publish('restoreDocChannel', id);
+      // pubsub.publish('restoreDocChannel', id);
       return { activities, doc };
     },
     async setManager(_, { id, manager }, context) {
@@ -860,8 +883,66 @@ export const resolvers = {
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
         const { doc, manager: user, activities } = await context.Docs.setManager(id, manager);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, manager : user, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async setDTValidation(_, { id, info }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await validationValidations.asyncValidate(fromJS({ ...info }));
+      } catch (errors) {
+        return { errors };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.setDTValidation(id, info);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delDTValidation(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.delDTValidation(id);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
       }
 
       return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
@@ -892,7 +973,7 @@ export const resolvers = {
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
         const { doc, activities } = await context.Docs.setPay(id, info);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
@@ -918,7 +999,7 @@ export const resolvers = {
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
         const { doc, activities } = await context.Docs.delPay(id);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
@@ -944,7 +1025,7 @@ export const resolvers = {
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
         const { doc, activities } = await context.Docs.setState(id, state);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
@@ -988,7 +1069,7 @@ export const resolvers = {
 
         const { doc, activities } = await context.Docs.closeDoc(id, info);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
@@ -1026,7 +1107,7 @@ export const resolvers = {
 
         const { doc, activities } = await context.Docs.cancelDoc(id);
         // publish subscription notification
-        pubsub.publish('docChangeChannel', id);
+        // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
@@ -1054,7 +1135,7 @@ export const resolvers = {
 
         const { file, activities } = await context.Docs.uploadFile({ docId, category, metadata });
         // publish subscription notification
-        pubsub.publish('uploadFileChannel', file);
+        // pubsub.publish('uploadFileChannel', file);
         return { file, activities, errors: {} };
       }
 
@@ -1098,7 +1179,7 @@ export const resolvers = {
 
       const { file, activities } = await context.Docs.delFile(id);
       // publish subscription notification
-      pubsub.publish('delFileChannel', id);
+      // pubsub.publish('delFileChannel', id);
       return { activities, file };
     },
     async restoreFile(_, { id }, context) {
@@ -1128,7 +1209,7 @@ export const resolvers = {
 
       const { file, activities } = await context.Docs.restoreFile(id);
       // publish subscription notification
-      pubsub.publish('restoreFileChannel', id);
+      // pubsub.publish('restoreFileChannel', id);
       return { activities, file };
     },
   },

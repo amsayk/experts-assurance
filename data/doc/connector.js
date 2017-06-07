@@ -254,7 +254,7 @@ export class DocConnector {
     function getQuery() {
       const queries = [];
 
-      (category ? [ category ] : categories).forEach(({ slug : category, required }) => {
+      (category ? [ { slug : category, required : true } ] : categories).forEach(({ slug : category, required }) => {
         if (required) {
           const query = new Parse.Query(FileType)
             .matchesQuery('business', businessQuery())
@@ -269,8 +269,8 @@ export class DocConnector {
         }
       });
 
-      const q = Parse.Query.or.apply(Parse.Query, queries)
-        .matchesQuery('business', businessQuery());
+      const q = (queries.length > 1 ? Parse.Query.or.apply(Parse.Query, queries)
+        : queries[0]).matchesQuery('business', businessQuery());
 
       // if (durationInDays === -1) {
       //   q.greaterThanOrEqualTo('validation_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
@@ -293,7 +293,7 @@ export class DocConnector {
         .doesNotExist('deletion_date')
         .doesNotExist('files'),
 
-        // files but missing categories
+        // files missing categories
         q,
       ]);
     }
@@ -314,7 +314,7 @@ export class DocConnector {
       }
 
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+        !sortConfig.key || sortConfig.key === 'dateMission' ? 'dateMission' : sortConfig.key
       );
 
       return q.find({ useMasterKey : true });
@@ -348,9 +348,9 @@ export class DocConnector {
         .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
-        q.lessThan('date', new Date(now - 94672800000));
+        q.lessThan('dateMission', new Date(now - 94672800000));
       } else {
-        q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+        q.greaterThanOrEqualTo('dateMission', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
 
       // Not deleted
@@ -380,7 +380,7 @@ export class DocConnector {
       }
 
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+        !sortConfig.key || sortConfig.key === 'dateMission' ? 'dateMission' : sortConfig.key
       );
 
       return q.find({ useMasterKey : true });
@@ -1017,9 +1017,9 @@ export class DocConnector {
   //       .matchesQuery('business', businessQuery());
   //
   //     if (durationInDays === -1) {
-  //       q.lessThan('date', new Date(now - (94672800000)));
+  //       q.lessThan('dateMission', new Date(now - (94672800000)));
   //     } else {
-  //       q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+  //       q.greaterThanOrEqualTo('dateMission', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
   //     }
   //
   //     // Not deleted
@@ -1080,9 +1080,9 @@ export class DocConnector {
         .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
-        q.lessThan('date', new Date(now - (94672800000)));
+        q.lessThan('dateMission', new Date(now - (94672800000)));
       } else {
-        q.greaterThanOrEqualTo('date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+        q.greaterThanOrEqualTo('dateMission', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
 
       // Not deleted
@@ -1108,7 +1108,7 @@ export class DocConnector {
       }
 
       q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+        !sortConfig.key || sortConfig.key === 'dateMission' ? 'dateMission' : sortConfig.key
       );
 
       return q.find({ useMasterKey : true });
