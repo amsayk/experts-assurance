@@ -1,0 +1,12 @@
+[Unit]
+Description=Fikrat: Experts d'assurance (ES)
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/fikrat
+; Environment=DEBUG=app:*
+ExecStart=/usr/bin/yarnpkg run es_index
+; Restart=always
+
+[Install]
+WantedBy=multi-user.target
