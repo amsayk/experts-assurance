@@ -786,9 +786,9 @@ export const resolvers = {
             return { key, id };
           }
 
-          if (key === 'userData') {
-            return { key, userData : {displayName, email} };
-          }
+          // if (key === 'userData') {
+            return { key : 'userData', userData : {displayName, email} };
+          // }
 
           throw new Error(`addDoc: Invalid user entry`);
         }
