@@ -5,12 +5,34 @@ mutation addDoc($payload: AddDocPayload!) {
       id
       key
       refNo
+      company
       date
+      dateMission
       state
 
       vehicle {
+        manufacturer
         model
         plateNumber
+        series
+        mileage
+        DMC
+        energy
+        power
+      }
+
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
+      user {
+        id
+        displayName
       }
       client {
         id
@@ -25,13 +47,15 @@ mutation addDoc($payload: AddDocPayload!) {
         displayName
       }
 
-      user {
-        id
-        displayName
+      payment : paymentInfo {
+        user { id }
+        amount
+        date
       }
 
       createdAt
       updatedAt
+      lastModified
     }
 
     activities {

@@ -11,11 +11,17 @@ import style from 'routes/Landing/styles';
 
 class DT extends React.Component {
   renderInput({ ...props }) {
-    const  { meta: { touched, error }, input, label, onRef } = this.props;
+    const  { meta: { touched, error }, input, label, asyncValidate, onRef } = this.props;
 
     let errorText;
     if (error && touched) {
       errorText = 'Ce champ ne peut pas être vide.';
+    }
+
+    function onBlur(e) {
+      // input.onBlur && input.onBlur(e);
+      props.onBlur && props.onBlur(e);
+      asyncValidate(input.name);
     }
 
     return (
@@ -24,6 +30,7 @@ class DT extends React.Component {
         floatingLabelText={label}
         errorText={errorText}
         {...props}
+        onBlur={onBlur}
         ref={onRef}
       />
     );
@@ -41,13 +48,13 @@ class DT extends React.Component {
     input.onChange(
       moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
     );
-    this.props.asyncValidate(this.props.name);
+    this.props.asyncValidate(input.name);
   }
   onCollapse() {
     this.props.onNext();
   }
   render() {
-    const { onRef, label, showClock = false, input, meta, locale } = this.props;
+    const { onRef, label, showClock = false, input, meta, minDate, locale } = this.props;
 
     return (
       <div>
@@ -63,6 +70,7 @@ class DT extends React.Component {
           meta={meta}
           onChange={this.onChange}
           onCollapse={this.onCollapse}
+          minDate={minDate}
         >
           <TransitionView>
             <Calendar style={{padding: 10}}/>

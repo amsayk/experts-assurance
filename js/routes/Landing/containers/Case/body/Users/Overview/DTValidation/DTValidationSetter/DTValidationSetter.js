@@ -92,19 +92,20 @@ class DTValidationSetter extends React.Component {
     } = this.props;
 
     const canMutate = currentUser.isAdmin || currentUser.isManager(doc);
+    const hasValidationDate = doc.validation && doc.validation.date;
 
     const edit = canMutate ? (
       <div className={style.docSetDTValidation} style={styles.action1}>
         <Dropdown open={this.state.open} onToggle={this.onToggle}>
           <Dropdown.Toggle bsStyle='link' componentClass={Button} className={style.docSetDTValidationButton}>
-            {doc.validation ? <PencilIcon size={18}/> : 'Ajouter la date de validation…'}
+            {hasValidationDate ? <PencilIcon size={18}/> : 'Ajouter la date de validation…'}
           </Dropdown.Toggle>
           <Dropdown.Menu className={style.docSetDTValidationFormMenu}>
             <MenuItem
               componentClass={Form}
               onSubmit={this.onSet}
               initialValues={{
-                date   : doc.validation ? new Date(doc.validation.date) : new Date(),
+                date   : hasValidationDate ? new Date(doc.validation.date) : new Date(),
               }}
               onInputRef={this.onInputRef}
             />
@@ -113,7 +114,7 @@ class DTValidationSetter extends React.Component {
       </div>
     ) : null;
 
-    const del = canMutate && doc.validation ? (
+    const del = canMutate && hasValidationDate ? (
       <div className={style.docDelDTValidation} style={styles.action2}>
         <Button bsStyle='link' className={style.docDelDTValidationButton} onClick={this.onDelete} role='button'>
           <TrashIcon size={18}/>
@@ -121,7 +122,7 @@ class DTValidationSetter extends React.Component {
       </div>
     ) : null;
 
-    const info = doc.validation ? (
+    const info = hasValidationDate ? (
       <div style={styles.info}>
         {intl.formatDate(doc.validation.date)}
       </div>
@@ -131,7 +132,7 @@ class DTValidationSetter extends React.Component {
       <div style={styles.root} className={style.filterGroup}>
         {info}
         {doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? null : [
-          doc.validation ? <div style={styles.dot}>·</div> : null,
+          hasValidationDate ? <div style={styles.dot}>·</div> : null,
           edit,
           del,
         ]}

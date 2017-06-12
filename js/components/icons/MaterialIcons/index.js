@@ -78,3 +78,5 @@ export { default as AttachmentIcon } from './Attachment';
 
 export { default as CancelIcon } from './Cancel';
 
+export { default as ThumbsUpIcon } from './ThumbsUp';
+

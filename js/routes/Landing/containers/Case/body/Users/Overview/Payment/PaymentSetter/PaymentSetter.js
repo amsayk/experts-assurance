@@ -123,7 +123,11 @@ class PaymentSetter extends React.Component {
 
     const info = doc.payment ? (
       <div style={styles.info}>
-        {intl.formatNumber(doc.payment.amount, { format: 'MAD' })}
+        {[
+          doc.payment.amount ? <div style={{display: 'inline'}}>{intl.formatNumber(doc.payment.amount, { format: 'MAD' })}</div> : null,
+          doc.payment.amount && doc.payment.date ? <div style={styles.dot}>·</div> : null,
+          doc.payment.date ? <div style={{display: 'inline'}}>{intl.formatDate(doc.payment.date)}</div> : null,
+        ]}
       </div>
     ) : (doc.deletion || doc.state === 'CLOSED' || doc.state === 'CANCELED' ? '—' : null);
 
@@ -161,6 +165,7 @@ styles.dot = {
   opacity : 0.54,
   marginLeft : 6,
   marginRight : 6,
+  display: 'inline',
 };
 
 export default compose(

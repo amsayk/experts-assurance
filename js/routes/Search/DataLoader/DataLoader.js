@@ -32,28 +32,30 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
   options: ({ search }) => ({
     variables: {
       query : {
-        q               : search.q,
+        q                      : search.q,
 
-        client          : search.client,
-        manager         : search.manager,
-        agent           : search.agent,
+        company                : search.company,
+        client                 : search.client,
+        manager                : search.manager,
+        agent                  : search.agent,
 
-        vehicleModel         : search.vehicleModel,
-        vehicleManufacturer  : search.vehicleManufacturer,
+        vehicleModel           : search.vehicleModel,
+        vehicleManufacturer    : search.vehicleManufacturer,
 
-        validator       : search.validator,
-        closer          : search.closer,
-        user            : search.user,
+        validator              : search.validator,
+        closer                 : search.closer,
+        user                   : search.user,
 
-        range           : rangeToDate(search.range),
-        // validationRange : rangeToDate(search.validationRange),
-        closureRange    : momentToDate(search.closureRange),
+        missionRange           : rangeToDate(search.missionRange),
+        range                  : rangeToDate(search.range),
+        // validationRange     : rangeToDate(search.validationRange),
+        closureRange           : momentToDate(search.closureRange),
 
-        state           : search.state,
+        state                  : search.state,
 
-        lastModified    : momentToDate(search.lastModified),
+        lastModified           : momentToDate(search.lastModified),
 
-        sortConfig      : search.sortConfig ? pick(search.sortConfig, ['key', 'direction']) : null,
+        sortConfig             : search.sortConfig ? pick(search.sortConfig, ['key', 'direction']) : null,
       },
     },
   }),
@@ -69,30 +71,32 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
           query : {
             cursor,
 
-            q               : ownProps.search.q,
+            q                        : ownProps.search.q,
 
-            client          : ownProps.search.client,
-            manager         : ownProps.search.manager,
-            agent           : ownProps.search.agent,
-
-
-            vehicleModel         : ownProps.search.vehicleModel,
-            vehicleManufacturer  : ownProps.search.vehicleManufacturer,
+            company                  : ownProps.search.company,
+            client                   : ownProps.search.client,
+            manager                  : ownProps.search.manager,
+            agent                    : ownProps.search.agent,
 
 
-            validator       : ownProps.search.validator,
-            closer          : ownProps.search.closer,
-            user            : ownProps.search.user,
+            vehicleModel             : ownProps.search.vehicleModel,
+            vehicleManufacturer      : ownProps.search.vehicleManufacturer,
 
-            range           : rangeToDate(ownProps.search.range),
-            // validationRange : rangeToDate(ownProps.search.validationRange),
-            closureRange    : momentToDate(ownProps.search.closureRange),
 
-            state           : ownProps.search.state,
+            validator                : ownProps.search.validator,
+            closer                   : ownProps.search.closer,
+            user                     : ownProps.search.user,
 
-            lastModified    : momentToDate(ownProps.search.lastModified),
+            missionRange             : rangeToDate(ownProps.search.missionRange),
+            range                    : rangeToDate(ownProps.search.range),
+            // validationRange       : rangeToDate(ownProps.search.validationRange),
+            closureRange             : momentToDate(ownProps.search.closureRange),
 
-            sortConfig      : ownProps.search.sortConfig ? pick(ownProps.search.sortConfig, ['key', 'direction']) : null,
+            state                    : ownProps.search.state,
+
+            lastModified             : momentToDate(ownProps.search.lastModified),
+
+            sortConfig               : ownProps.search.sortConfig ? pick(ownProps.search.sortConfig, ['key', 'direction']) : null,
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {

@@ -22,12 +22,13 @@ import { SubmissionError, Field, reduxForm, submit, propTypes as formPropTypes }
 
 import TextField from 'components/material-ui/TextField';
 
-import DT from './DT';
+import DTMission from './DTMission';
+import DTSinistre from './DTSinistre';
+
 import Company from './Company';
 import Vehicle from './Vehicle';
 import Agent from './Agent';
 import Client from './Client';
-// import State from './State';
 
 function parseDate(s) {
   return +moment.utc(s);
@@ -135,29 +136,7 @@ class Form extends React.Component {
         <ErrorIcon size={32}/> <div style={{marginLeft: 9}}>{error}</div>
       </div> : null,
 
-      // <Field
-      //   name='isOpen'
-      //   component={State}
-      // />,
-
-      <section key='dateMission' className={style.addDocSection}>
-        <Field
-          name='dateMission'
-          parse={parseDate}
-          props={{
-            asyncValidate,
-            locale    : lang,
-            onRef     : onDTField,
-            onKeyDown : this.onKeyDown,
-            onNext    : this.onNext1,
-            label     : 'DT Mission',
-            showClock : true,
-          }}
-          component={DT}
-        />
-      </section>,
-
-      <section key='date' className={style.addDocSection}>
+      <section style={{display: 'flex', flexDirection: 'row'}} key='date' className={style.addDocSectionDates}>
         <Field
           name='date'
           parse={parseDate}
@@ -165,11 +144,25 @@ class Form extends React.Component {
             asyncValidate,
             locale    : lang,
             onKeyDown : this.onKeyDown,
-            onRef     : this.onDTField,
-            onNext    : this.onNext2,
+            onRef     : onDTField,
+            onNext    : this.onNext1,
             label     : 'DT Sinistre',
           }}
-          component={DT}
+          component={DTSinistre}
+        />
+        <Field
+          name='dateMission'
+          parse={parseDate}
+          props={{
+            asyncValidate,
+            locale    : lang,
+            onRef     : this.onDTField,
+            onKeyDown : this.onKeyDown,
+            onNext    : this.onNext2,
+            label     : 'DT Mission',
+            showClock : true,
+          }}
+          component={DTMission}
         />
       </section>,
 
@@ -229,22 +222,23 @@ const WithForm = reduxForm({
   destroyOnUnmount          : true,
   forceUnregisterOnUnmount  : true,
   asyncValidate             : validations.asyncValidate,
-  asyncBlurFields           : [
-    'dateMission',
-    'date',
-
-    'company',
-
-    'vehicleManufacturer',
-    'vehicleModel',
-    'vehiclePlateNumber',
-
-    'clientDisplayName',
-    'clientEmail',
-
-    'agentDisplayName',
-    'agentEmail',
-  ],
+  // asyncBlurFields           : [
+  //   'dateMission',
+  //   'date',
+  //
+  //   'company',
+  //
+  //   'vehicleManufacturer',
+  //   'vehicleModel',
+  //   'vehiclePlateNumber',
+  //
+  //   'clientDisplayName',
+  //   'clientEmail',
+  //
+  //   'agentDisplayName',
+  //   'agentEmail',
+  // ],
+  asyncBlurFields           : validations.asyncBlurFields,
 });
 
 export default compose(

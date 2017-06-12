@@ -29,12 +29,13 @@ import StateLine from './StateLine';
 // import RefLine from './RefLine';
 // import VehicleLine from './VehicleLine';
 import LastActivityLine from './LastActivityLine';
-// import DTValidationLine from './DTValidation';
+import DTValidationLine from './DTValidation';
 import DTSinisterLine from './DTSinister';
 import Payment from './Payment';
-import DTClosureLine from './DTClosure';
+// import DTClosureLine from './DTClosure';
 import DTMissionLine from './DTMission';
 import DeletionLine from './DeletionLine';
+import MTRapportsLine from './MTRapports';
 
 import DocMenu from './DocMenu';
 
@@ -1254,10 +1255,10 @@ class Overview extends React.Component {
               loading={loading}
               doc={doc}
             />
-            <DTClosureLine
-              loading={loading}
-              doc={doc}
-            />
+            {/* <DTClosureLine */}
+              {/*   loading={loading} */}
+              {/*   doc={doc} */}
+              {/* /> */}
             <DTSinisterLine
               loading={loading}
               doc={doc}
@@ -1266,11 +1267,16 @@ class Overview extends React.Component {
               loading={loading}
               doc={doc}
             />
-            {/* <DTValidationLine */}
-            {/*   loading={loading} */}
-            {/*   doc={doc} */}
-            {/*   currentUser={user} */}
-            {/* /> */}
+            <DTValidationLine
+              loading={loading}
+              doc={doc}
+              currentUser={user}
+            />
+            <MTRapportsLine
+              loading={loading}
+              doc={doc}
+              currentUser={user}
+            />
             {(() => {
               if (loading) {
                 return (

@@ -111,13 +111,13 @@ export default function DocumentStateChanged({ intl, doc, user, timestamp, metad
               if (metadata.toState === 'CLOSED') {
                 return (
                   <span>
-                    Dossier <b>{doc.refNo}</b> a été clôturé
+                    Dossier <b>{doc.refNo}</b> clos
                   </span>
                 );
               } else {
                 return (
                   <span>
-                    Dossier <b>{doc.refNo}</b> a été annulé
+                    Dossier <b>{doc.refNo}</b> annulé
                   </span>
                 );
               }

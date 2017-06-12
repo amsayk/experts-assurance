@@ -64,9 +64,10 @@ class CloseDoc extends React.Component {
           initialValues={{
             // dateValidation : Date.now(),
             dateClosure    : Date.now(),
+            mtRapports     : doc.validation && doc.validation.amount ? doc.validation.amount : null,
 
             paymentAmount  : doc.payment ? doc.payment.amount : null,
-            paymentDate    : doc.payment ? doc.payment.date   : null,
+            paymentDate    : doc.payment ? doc.payment.date   : Date.now(),
           }}
           actions={actions}
           onFirstChild={this.onFirstChild}

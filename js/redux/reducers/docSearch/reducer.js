@@ -26,6 +26,7 @@ export class DocSearchState extends Record({
   state           : null,
   advancedMode    : false,
 
+  company         : null,
   manager         : null,
   client          : null,
   agent           : null,
@@ -34,6 +35,7 @@ export class DocSearchState extends Record({
   closer          : null,
   user            : null,
 
+  missionRange    : null,
   range           : null,
   // validationRange : null,
   closureRange    : null,

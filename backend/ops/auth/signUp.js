@@ -10,6 +10,7 @@ export default async function signUp(request, done) {
   const {
     displayName,
     email,
+    mail,
     password,
     locale,
     role = Role_MANAGERS,
@@ -27,7 +28,8 @@ export default async function signUp(request, done) {
       .set({
         displayName,
         password,
-        email,
+        email: email || mail,
+        mail,
         username: email,
         locale,
         roles: [role],

@@ -11,6 +11,8 @@ import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './MenuItem.scss';
 
 const propTypes = {
+  disableClick : React.PropTypes.bool,
+
   componentClass: elementType,
 
   /**
@@ -67,6 +69,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  disableClick: false,
   componentClass: SafeAnchor,
   divider: false,
   disabled: false,
@@ -98,6 +101,7 @@ class MenuItem extends React.Component {
 
   render() {
     const {
+      disableClick,
       componentClass: Component,
       disabled,
       divider,
@@ -140,13 +144,15 @@ class MenuItem extends React.Component {
       [getLocalCSSClassName(style, prefix(bsProps, 'item'))]: true,
     };
 
+    const _onClick = disableClick ? null : createChainedFunction(onClick, this.handleClick);
+
     return (
       <Component
         {...elementProps}
         role='menuitem'
         tabIndex='-1'
         className={classNames(className, classes)}
-        onClick={createChainedFunction(onClick, this.handleClick)}
+        onClick={_onClick}
       />
     );
   }

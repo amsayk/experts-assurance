@@ -20,6 +20,7 @@ query moreOpenDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSortCo
       }
       validation {
         date
+        amount
         user {
           id
           displayName

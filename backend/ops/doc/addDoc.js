@@ -25,8 +25,6 @@ export default async function addDoc(request, done) {
   const { payload: {
     vehicle,
 
-    // isOpen,
-
     company,
 
     manager,
@@ -38,7 +36,6 @@ export default async function addDoc(request, done) {
   } } = request.params;
 
   const date = new Date(dateMS);
-  // const state = isOpen ? 'OPEN' : 'PENDING';
   const state = 'OPEN';
 
   const ACL = new Parse.ACL();
@@ -52,15 +49,6 @@ export default async function addDoc(request, done) {
 
     if (_in && _in.key === 'userData') {
       const { displayName, email } = _in[_in.key];
-      // return await new Parse.User().set({
-      //   username : uuid.v4(),
-      //   password : uuid.v4(),
-      //   displayName,
-      //   mail: email,
-      //   roles: [role],
-      //   business,
-      // }).save(null, { useMasterKey: true });
-
       return await new Promise(async (resolve, reject) => {
         try {
           const signUpRequest = {
@@ -70,6 +58,7 @@ export default async function addDoc(request, done) {
               password : uuid.v4(),
               displayName,
               email : email || `${uuid.v4()}@epsilon.ma`,
+              mail  : null,
               role,
             },
           };
@@ -131,14 +120,6 @@ export default async function addDoc(request, done) {
     let activities = [
       { type : 'DOCUMENT_CREATED', user: request.user, state, date },
     ];
-    let validation = {
-      date,
-      user: request.user,
-    };
-    // let validation = isOpen && {
-    //   date,
-    //   user: request.user,
-    // };
 
     if (business) {
       doc = await add(await business.fetch({ useMasterKey: true }));
@@ -160,15 +141,6 @@ export default async function addDoc(request, done) {
           business,
         });
     });
-
-    if (validation) {
-      doc.set({
-        validation_user : validation.user,
-        validation_date : validation.date,
-      });
-
-      objects.push(doc);
-    }
 
     await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
 

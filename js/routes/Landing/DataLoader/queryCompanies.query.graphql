@@ -1,0 +1,4 @@
+query queryCompanies($queryString: String) {
+  queryCompanies(queryString: $queryString)
+}
+

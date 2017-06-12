@@ -5,6 +5,10 @@ export default function printDocRef(doc) {
   const refNo = getProp(doc, 'refNo');
   const dateMission = getProp(doc, 'dateMission');
 
+  if (!dateMission) {
+    return '—';
+  }
+
   return `${moment(dateMission).format(DATE_MISSION_FORMAT)}${refNo}`;
 }
 

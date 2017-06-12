@@ -142,6 +142,7 @@ class FormWrapper extends React.Component {
     const { closePortal, router } = this.props;
 
     const { data: { addDoc: { doc, error, errors } } } = await this.props.client.mutate({
+      refetchQueries : ['getTimeline', 'recentDocs'],
       mutation  : MUTATION,
       variables : { payload: {
         dateMission          : data.get('dateMission'),
@@ -241,43 +242,43 @@ class FormWrapper extends React.Component {
 
           return prev;
         },
-        recentDocs(prev, { mutationResult, queryVariables }) {
-          const newDoc = mutationResult.data.addDoc.doc;
-
-          if (prev && newDoc) {
-            return {
-              docs : [
-                newDoc,
-                ...prev.docs,
-              ],
-            };
-          }
-
-          return prev;
-        },
-        getTimeline(prev, { mutationResult, queryVariables }) {
-          const newDoc = mutationResult.data.addDoc.doc;
-          const newActivities = mutationResult.data.addDoc.activities;
-
-          if (prev && newActivities && newActivities.length) {
-
-            if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-              return prev;
-            }
-
-            return {
-              timeline : {
-                cursor : prev.timeline.cursor,
-                result : [
-                  ...newActivities,
-                  ...prev.timeline.result,
-                ],
-              },
-            };
-          }
-
-          return prev;
-        },
+        // recentDocs(prev, { mutationResult, queryVariables }) {
+        //   const newDoc = mutationResult.data.addDoc.doc;
+        //
+        //   if (prev && newDoc) {
+        //     return {
+        //       docs : [
+        //         newDoc,
+        //         ...prev.docs,
+        //       ],
+        //     };
+        //   }
+        //
+        //   return prev;
+        // },
+        // getTimeline(prev, { mutationResult, queryVariables }) {
+        //   const newDoc = mutationResult.data.addDoc.doc;
+        //   const newActivities = mutationResult.data.addDoc.activities;
+        //
+        //   if (prev && newActivities && newActivities.length) {
+        //
+        //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+        //       return prev;
+        //     }
+        //
+        //     return {
+        //       timeline : {
+        //         cursor : prev.timeline.cursor,
+        //         result : [
+        //           ...newActivities,
+        //           ...prev.timeline.result,
+        //         ],
+        //       },
+        //     };
+        //   }
+        //
+        //   return prev;
+        // },
         getDocs(prev, { mutationResult, queryVariables }) {
           const newDoc = mutationResult.data.addDoc.doc;
 

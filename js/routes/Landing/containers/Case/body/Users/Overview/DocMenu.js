@@ -12,6 +12,8 @@ import Button from 'components/bootstrap/Button';
 
 import CloseDoc from './CloseDoc';
 
+import raf from 'requestAnimationFrame';
+
 import style from 'routes/Landing/styles';
 
 import { MoreHorizIcon } from 'components/icons/MaterialIcons';
@@ -61,8 +63,20 @@ class DocMenu extends React.Component {
             self.props.actions.startClosingDoc();
           } else {
             self.context.snackbar.show({
-              message  : <b>Impossible de clôturer. Dossier invalide à cause des pièces jointes manquantes.</b>,
-              duration : 7 * 1000,
+              message   : <b>Des pièces jointes manquent. Clôturer de toute façon?</b>,
+              duration  : 5 * 1000,
+              // closeable : true,
+              action    : {
+                title : 'Clôturer',
+                click : function () {
+                  this.dismiss();
+                  setTimeout(() => {
+                    raf(() => {
+                      self.props.actions.startClosingDoc();
+                    });
+                  }, 0);
+                },
+              },
             });
           }
         });

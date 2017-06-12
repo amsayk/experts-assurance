@@ -30,7 +30,7 @@ export default class DTClosure extends React.Component {
     return (
       <div className={style.advancedSearch_field}>
         <div className={style.advancedSearch_field_label}>
-          DT Clôture
+          DT Validation
         </div>
         <div className={style.advancedSearch_field_info}>
           <DateRangePicker

@@ -27,6 +27,15 @@ query morePendingDocs($durationInDays: Float!, $cursor: Int!, $sortConfig: ESSor
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

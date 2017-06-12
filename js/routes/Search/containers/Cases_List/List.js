@@ -67,6 +67,7 @@ class List extends React.Component {
             <div className={style.summary}>
               Aucun résultat
             </div>
+            <br/>
             <Dropdown.Menu className={style.listItemsWrapper}>
             </Dropdown.Menu>
           </Dropdown>
@@ -83,6 +84,7 @@ class List extends React.Component {
           >
             <div className={style.summary}>
             </div>
+            <br/>
             <ListHeader/>
             <Dropdown.Menu className={style.listItemsWrapper}>
               {Array.from(new Array(15)).map(() => <LoadingItem/>)}
@@ -97,7 +99,7 @@ class List extends React.Component {
       const { spy, fetchMore } = this.state;
       const disabled = (length < 30);
       scrollSpy = (
-        spy ? <ScrollSpy.Spying bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={LoadingItem} done={cursor === length} doneLabel='Dossiers chargés' disabled={disabled}/>
+        spy ? <ScrollSpy.Spying loadMoreLabel='Plus des dossiers' bubbles fetchMore={fetchMore} offset={NAVBAR_HEIGHT} disabled={disabled} onSpy={this.onSpy}/> : <ScrollSpy.Idle Loading={LoadingItem} done={cursor === length} doneLabel='Dossiers chargés' disabled={disabled}/>
       );
     }
 
@@ -110,6 +112,7 @@ class List extends React.Component {
           <div className={style.summary}>
             {cursor}/{length} dossiers en {took/1000} seconds
           </div>
+          <br/>
           <ListHeader/>
           <Dropdown.Menu className={style.listItemsWrapper}>
             {items.map((item, index) => (

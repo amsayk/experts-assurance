@@ -16,6 +16,9 @@ import getDocValidations from './docValidations';
 import payValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
 import closureValidations from 'routes/Landing/containers/Case/body/Users/Overview/CloseDoc/CloseDocForm/validations';
 
+import validationValidations from 'routes/Landing/containers/Case/body/Users/Overview/DTValidation/DTValidationSetter/DTValidationForm/validations';
+import mtRapportsValidations from 'routes/Landing/containers/Case/body/Users/Overview/MTRapports/MTRapportsSetter/MTRapportsForm/validations';
+
 import { fromJS } from 'immutable';
 
 const log = require('log')('app:backend:docs');
@@ -41,8 +44,13 @@ export const schema = [`
     amount : Float
   }
 
+  input DocMTRapportsInfo {
+    amount : Float
+  }
+
   input DocClosureInfo {
     dateClosure    : Date
+    mtRapports     : Float
     # dateValidation : Date
     paymentDate    : Date
     paymentAmount  : Float
@@ -120,8 +128,6 @@ export const schema = [`
     date: Date
 
     company: String
-
-    # isOpen: Boolean!
   }
 
   type AddDocResponse {
@@ -144,6 +150,12 @@ export const schema = [`
   }
 
   type SetOrDelDTValidationResponse {
+    error: Error
+    doc: Doc
+    activities : [Activity!]!
+  }
+
+  type SetOrDelMTRapportsResponse {
     error: Error
     doc: Doc
     activities : [Activity!]!
@@ -198,7 +210,8 @@ export const schema = [`
   # Queries
 
   type ESDocValidationState {
-    date: Date!
+    date: Date
+    amount: Float
     user: ESUserSource!
   }
 
@@ -261,6 +274,7 @@ export const schema = [`
     q: String
     state: DocState
 
+    company: String
     manager: UserQuery
     client: UserQuery
     agent: UserQuery
@@ -268,6 +282,7 @@ export const schema = [`
     vehicleManufacturer: String
     vehicleModel: String
 
+    missionRange: DateRange
     range: DateRange
     # validationRange: DateRange
     closureRange: DateRange
@@ -323,7 +338,7 @@ export const schema = [`
   type Payment {
     date: Date!
     user: User!
-    amount: Float!
+    amount: Float
     meta: JSON!
   }
 
@@ -345,7 +360,8 @@ export const schema = [`
   # Validation type
   # ------------------------------------
   type DocValidationState {
-    date: Date!
+    date: Date
+    amount: Float
     user: User!
   }
 
@@ -478,13 +494,15 @@ export const resolvers = {
     },
     {
       validation: (doc) => {
-        const validation_date = doc.validation_date || doc.get('validation_date');
-        const validation_user = doc.validation_user || doc.get('validation_user');
+        const validation_date   = doc.validation_date    || doc.get('validation_date');
+        const validation_amount = doc.validation_amount  || doc.get('validation_amount');
+        const validation_user   = doc.validation_user    || doc.get('validation_user');
 
-        if (validation_date && validation_user) {
+        if (validation_user) {
           return {
-            date : validation_date,
-            user : validation_user,
+            amount : validation_amount || null,
+            date   : validation_date   || null,
+            user   : validation_user,
           };
         }
 
@@ -496,10 +514,10 @@ export const resolvers = {
         const payment_user   = doc.payment_user   || doc.get('payment_user');
         const payment_meta   = doc.payment_meta   || doc.get('payment_meta');
 
-        if (payment_date && payment_amount && payment_user) {
+        if (payment_date && payment_user) {
           return {
             date   : payment_date,
-            amount : payment_amount,
+            amount : payment_amount || null,
             user   : payment_user,
             meta   : payment_meta || {},
           };
@@ -580,12 +598,14 @@ export const resolvers = {
     {
       validation: (doc) => {
         const validation_date = doc.validation_date;
+        const validation_amount = doc.validation_amount;
         const validation_user = doc.validation_user;
 
-        if (validation_date && validation_user) {
+        if (validation_user) {
           return {
-            date : validation_date,
-            user : validation_user,
+            date   : validation_date   || null,
+            amount : validation_amount || null,
+            user   : validation_user,
           }
         }
         return null;
@@ -599,7 +619,7 @@ export const resolvers = {
         if (payment_date && payment_amount && payment_user) {
           return {
             date   : payment_date,
-            amount : payment_amount,
+            amount : payment_amount || null,
             user   : payment_user,
             meta   : payment_meta || {},
           };
@@ -682,6 +702,18 @@ export const resolvers = {
   ),
 
   SetOrDelDTValidationResponse: Object.assign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'activities',
+      'error',
+    ])
+  ),
+
+  SetOrDelMTRapportsResponse: Object.assign(
     {
     },
     parseGraphqlObjectFields([
@@ -787,10 +819,10 @@ export const resolvers = {
           }
 
           // if (key === 'userData') {
-            return { key : 'userData', userData : {displayName, email} };
+          return { key : 'userData', userData : {displayName, email} };
           // }
 
-          throw new Error(`addDoc: Invalid user entry`);
+          // throw new Error(`addDoc: Invalid user entry`);
         }
 
         const data = {
@@ -823,8 +855,6 @@ export const resolvers = {
             displayName : payload.agentDisplayName,
             email       : payload.agentEmail,
           }),
-
-          // isOpen : payload.isOpen,
         };
 
         const { doc, activities } = await context.Docs.addDoc(data);
@@ -940,6 +970,64 @@ export const resolvers = {
 
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
         const { doc, activities } = await context.Docs.delDTValidation(id);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async setMTRapports(_, { id, info }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await mtRapportsValidations.asyncValidate(fromJS({ ...info }));
+      } catch (errors) {
+        return { errors };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.setMTRapports(id, info);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delMTRapports(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && (doc.get('manager').id === user.id);
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+      }
+
+      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+        const { doc, activities } = await context.Docs.delMTRapports(id);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
@@ -1310,6 +1398,10 @@ export const resolvers = {
       },
       vehicleByPlateNumber(_, { plateNumber }, context) {
         return context.Docs.vehicleByPlateNumber(plateNumber);
+      },
+
+      queryCompanies(_, { queryString }, context) {
+        return context.Docs.queryCompanies(queryString);
       },
 
   },

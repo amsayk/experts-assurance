@@ -89,6 +89,14 @@
   }
 }
 
+.addDocSectionDates {
+  composes: addDocSection;
+
+  & > div {
+    width: 50%;
+  }
+}
+
 .addDocSection + .addDocSection {
   margin-top: 3.2rem;
 }

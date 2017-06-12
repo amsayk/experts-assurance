@@ -1,5 +1,11 @@
 // Search
 
+.docsSearchResultShowAll {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .searchFieldWrapper {
   flex: 1;
   margin-left: 17px;
@@ -102,7 +108,8 @@
   background-clip: initial;
   display: block;
   max-width: 720px;
-  max-height: 677.375px;
+  max-height: 800px;
+  // max-height: 677.375px;
   // height: 677.375px;
   // overflow-y: auto;
 

@@ -17,6 +17,9 @@ import LastModified from './fields/LastModified';
 import VehicleManufacturer from './fields/VehicleManufacturer';
 import VehicleModel from './fields/VehicleModel';
 
+import DTMission from './fields/DTMission';
+import Company from './fields/Company';
+
 import Actions from './Actions';
 
 export default class AdvancedSearch extends React.Component {
@@ -30,24 +33,26 @@ export default class AdvancedSearch extends React.Component {
         {/* render closer if state='CLOSED' || state='CANCELED' */}
         {/* render validator if state='OPEN' */}
         <State state={search.state} onState={actions.onState}/>
+        <DTMission
+          range={search.missionRange ? search.missionRange.toJS() : {}}
+          onRange={actions.onDTMissionRange}/>
         <DTSinister
           range={search.range ? search.range.toJS() : {}}
-          onRange={actions.onRange}
-        />
+          onRange={actions.onRange}/>
         {/* <DTValidation */}
-        {/*   state={search.state} */}
-        {/*   range={search.validationRange ? search.validationRange.toJS() : {}} */}
-        {/*   onRange={actions.onValidationRange} */}
-        {/* /> */}
+          {/*   state={search.state} */}
+          {/*   range={search.validationRange ? search.validationRange.toJS() : {}} */}
+          {/*   onRange={actions.onValidationRange} */}
+          {/* /> */}
         <DTClosure
           state={search.state}
           range={search.closureRange ? search.closureRange.toJS() : {}}
-          onRange={actions.onClosureRange}
-        />
+          onRange={actions.onClosureRange} />
         <LastModified
           date={search.lastModified}
-          onDate={actions.onLastModified}
-        />
+          onDate={actions.onLastModified}/>
+
+        <br/>
 
         {/* render divider */}
         {/* <div className={style.advancedSearch_divider}/> */}
@@ -56,13 +61,11 @@ export default class AdvancedSearch extends React.Component {
 
         <VehicleManufacturer
           manufacturer={search.vehicleManufacturer}
-          onVehicle={actions.onVehicleManufacturer}
-        />
+          onVehicle={actions.onVehicleManufacturer}/>
 
         <VehicleModel
           model={search.vehicleModel}
-          onVehicle={actions.onVehicleModel}
-        />
+          onVehicle={actions.onVehicleModel}/>
 
         {/* render divider */}
         {/* <div className={style.advancedSearch_divider}/> */}
@@ -72,18 +75,18 @@ export default class AdvancedSearch extends React.Component {
         <h6 className={style.advancedSearch_intro}>Individuels/Sociétés</h6>
 
         {/* render users ---- */}
+        <Company
+         company={search.company}
+         onCompany={actions.onCompany}/>
         <Manager
           manager={search.manager}
-          onManager={actions.onManager}
-        />
+          onManager={actions.onManager}/>
         <Client
           client={search.client}
-          onClient={actions.onClient}
-        />
+          onClient={actions.onClient}/>
         <Agent
           agent={search.agent}
-          onAgent={actions.onAgent}
-        />
+          onAgent={actions.onAgent}/>
 
         {/* render divider */}
         {/* <div className={style.advancedSearch_divider}/> */}
@@ -92,7 +95,7 @@ export default class AdvancedSearch extends React.Component {
         {/* <Q q={search.q} onQ={actions.onQ}/> */}
         <Actions actions={actions}/>
       </div>
-    )
+    );
   }
 }
 

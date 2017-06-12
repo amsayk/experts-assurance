@@ -48,7 +48,7 @@ export class UserConnector {
 
       if (email) {
         q = Parse.Query.or.apply(Parse.Query, [
-          new Parse.Query(Parse.User).equalTo('email', email),
+          // new Parse.Query(Parse.User).equalTo('email', email),
           new Parse.Query(Parse.User).equalTo('mail', email)
         ]);
       }
@@ -82,7 +82,7 @@ export class UserConnector {
 
       if (email) {
         q = Parse.Query.or.apply(Parse.Query, [
-          new Parse.Query(Parse.User).matches('email', new RegExp(`^${email}.*`, 'i')),
+          // new Parse.Query(Parse.User).matches('email', new RegExp(`^${email}.*`, 'i')),
           new Parse.Query(Parse.User).matches('mail', new RegExp(`^${email}.*`, 'i')),
         ]);
       }
@@ -96,7 +96,7 @@ export class UserConnector {
 
       q.descending(
         'displayName',
-        'email',
+        // 'email',
         'mail',
       );
 

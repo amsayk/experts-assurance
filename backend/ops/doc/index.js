@@ -13,6 +13,8 @@ export { default as delPay } from './delPay';
 // Validation
 export { default as setDTValidation } from './setDTValidation';
 export { default as delDTValidation } from './delDTValidation';
+export { default as setMTRapports } from './setMTRapports';
+export { default as delMTRapports } from './delMTRapports';
 
 // Files
 

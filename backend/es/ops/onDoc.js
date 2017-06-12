@@ -89,11 +89,13 @@ async function indexedUser(user, isEmployee = false) {
 
 async function getValidation(doc) {
   const validation_date = doc.get('validation_date');
+  const validation_amount = doc.get('validation_amount');
   const validation_user = doc.get('validation_user');
 
-  if (validation_date && validation_user) {
+  if (validation_user) {
     const isEmployee = (validation_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (validation_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
     return {
+      validation_amount,
       validation_date,
       validation_user : (await indexedUser(validation_user, isEmployee)),
     };

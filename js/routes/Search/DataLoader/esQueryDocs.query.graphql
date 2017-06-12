@@ -23,6 +23,7 @@ query esQueryDocs($query: ESDocsQueryPayload!) {
         }
         validation {
           user { id name }
+          amount
           date
         }
         closure {

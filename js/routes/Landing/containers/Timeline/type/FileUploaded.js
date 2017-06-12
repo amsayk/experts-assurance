@@ -51,6 +51,18 @@ const ENTRY_NAME_STYLE = {
   alignSelf: 'flex-start',
 };
 
+const ENTRY_CATEGORY_STYLE = {
+  color: '#707070',
+  fontSize: 12,
+  maxWidth: 150,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  marginLeft: 4,
+  alignSelf: 'flex-start',
+  textTransform : 'uppercase',
+};
+
 export default function FileUploaded({ intl, doc, file, user, timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
@@ -64,6 +76,9 @@ export default function FileUploaded({ intl, doc, file, user, timestamp, metadat
           <Link to={PATH_CASES_CASE + '/' + doc.id}>
             Nouvelle pièce jointe
           </Link>
+        </div>
+        <div className={style.desc} title={file.category} style={ENTRY_CATEGORY_STYLE}>
+          <b>{file.category}</b>
         </div>
         <div className={style.desc}>
           <div className={style.fileEntryIcon}>

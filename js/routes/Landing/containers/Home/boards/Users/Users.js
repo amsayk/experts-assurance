@@ -14,8 +14,8 @@ export default class Users extends React.PureComponent {
       <div className={style.boards}>
         {/* <Pending/> */}
         <Open/>
-        <Unpaid/>
         <Invalid/>
+        <Unpaid/>
         {/* <Closed/> */}
       </div>
     );

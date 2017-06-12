@@ -34,6 +34,15 @@ query moreClosedDocs($durationInDays: Float!, $cursor: Int, $sortConfig: ESSortC
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

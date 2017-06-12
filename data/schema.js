@@ -61,6 +61,8 @@ const rootSchema = [`
     esSearchDocs(queryString: String, state: DocState): ESDocsQueryResponse!
     esQueryDocs(query: ESDocsQueryPayload!): ESDocsQueryResponse!
 
+    queryCompanies(queryString: String): [String!]!
+
     # Files
     getDocFiles(id: ID!): [File!]!
     getFile(id: ID!): File
@@ -127,6 +129,9 @@ const rootSchema = [`
 
     setDTValidation(id: ID!, info: DocValidationInfo!): SetOrDelDTValidationResponse!
     delDTValidation(id: ID!): SetOrDelDTValidationResponse!
+
+    setMTRapports(id: ID!, info: DocMTRapportsInfo!): SetOrDelMTRapportsResponse!
+    delMTRapports(id: ID!): SetOrDelMTRapportsResponse!
 
     # Files
     uploadFile(docId: ID!, category: String!, metadata: FileInput!): UploadFileResponse!

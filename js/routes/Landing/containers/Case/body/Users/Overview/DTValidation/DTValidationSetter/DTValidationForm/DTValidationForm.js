@@ -50,7 +50,7 @@ class DT extends React.Component {
     input.onChange(
       moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
     );
-    this.props.asyncValidate(this.props.name);
+    this.props.asyncValidate(input.name);
   }
   onCollapse() {
   }

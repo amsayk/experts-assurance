@@ -1,5 +1,5 @@
 query recentDocs {
-  docs : recentDocs {
+  recentDocs {
     id
     refNo
     date
@@ -22,7 +22,16 @@ query recentDocs {
       displayName
     }
 
-      payment : paymentInfo {
+    validation {
+      date
+      amount
+      user {
+        id
+        # displayName
+      }
+    }
+
+    payment : paymentInfo {
       user { id }
       amount
       date

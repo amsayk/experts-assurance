@@ -40,6 +40,8 @@ import SEARCH_MATCHING_USERS_QUERY from './searchMatchingUsers.query.graphql';
 
 import GET_DOC_FILES_QUERY from './getDocFiles.query.graphql';
 
+import QUERY_COMPANIES from './queryCompanies.query.graphql';
+
 const currentUser = graphql(CURRENT_USER_QUERY, {
   options: ({ user }) => ({ variables: { id: user.id } }),
   skip: ({ user }) => user.isEmpty,
@@ -217,9 +219,9 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
 
 
 const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
-  props: ({ data: { loading, docs = [] } }) => ({
+  props: ({ data: { loading, recentDocs = [] } }) => ({
     loading,
-    docs,
+    docs : recentDocs,
   }),
 });
 
@@ -483,6 +485,7 @@ const dashboard = graphql(DASHBOARD_QUERY, {
 
 
 const lastRefNo = graphql(LAST_REFNO_QUERY, {
+  skip: ({ dateMission }) => !dateMission,
   options: ({ dateMission }) => ({
     fetchPolicy : 'network-only',
     variables: {
@@ -534,6 +537,18 @@ const docObserations = graphql(GET_DOC_OBSERVATIONS_QUERY, {
   }),
 });
 
+const queryCompanies = graphql(QUERY_COMPANIES, {
+  options: (ownProps) => ({
+    variables : {
+      queryString : ownProps.queryString,
+    },
+  }),
+  props: ({ data: { loading, queryCompanies = [] } }) => ({
+    loading,
+    companies : queryCompanies,
+  }),
+});
+
 export default {
   currentUser/*, usersByRoles*/,
   esUsersByRoles,
@@ -553,5 +568,6 @@ export default {
   docObserations,
   unpaidDocs,
   invalidDocs,
+  queryCompanies,
 };
 

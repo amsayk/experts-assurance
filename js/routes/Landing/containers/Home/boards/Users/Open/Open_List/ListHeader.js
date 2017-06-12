@@ -51,6 +51,7 @@ class ListHeader extends React.Component {
     this.onSortByRef = this.onSort.bind(this, 'refNo');
     this.onSortByDate = this.onSort.bind(this, 'dateMission');
     this.onSortByValidationDate = this.onSort.bind(this, 'validation_date');
+    this.onSortByCompany = this.onSort.bind(this, 'company');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;
@@ -65,6 +66,17 @@ class ListHeader extends React.Component {
     const { key, direction } = sortConfig;
     return (
       <div style={{ position: 'sticky' }} className={style.listHeader}>
+        <div style={{}} onClick={this.onSortByCompany} className={cx(style.listHeaderItemCompany, key === 'company' && style.sorting)}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>Adverse</div>
+                {key === 'company' ? <SortDirection direction={direction}/> : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div style={{ maxWidth: 115, minWidth: 115 }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
@@ -88,17 +100,17 @@ class ListHeader extends React.Component {
           </div>
         </div>
 
-        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listHeaderItemManager}>
-          <div className={style.wrapper}>
-            <div className={style.innerWrapper}>
-              <div className={style.item}>
-                <div className={cx(style.text)}>
-                  Gestionaire
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listHeaderItemManager}> */}
+        {/*   <div className={style.wrapper}> */}
+        {/*     <div className={style.innerWrapper}> */}
+        {/*       <div className={style.item}> */}
+        {/*         <div className={cx(style.text)}> */}
+        {/*           Gestionaire */}
+        {/*         </div> */}
+        {/*       </div> */}
+        {/*     </div> */}
+        {/*   </div> */}
+        {/* </div> */}
 
         <div className={style.listHeaderItemManager}>
           <div className={style.wrapper}>

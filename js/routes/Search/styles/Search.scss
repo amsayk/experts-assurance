@@ -41,9 +41,10 @@ $navbar-height: 70px;
 }
 
 .summary {
-  padding: 0 0 28px;
+  // padding: 0 0 28px;
+  padding: 0;
   font-size: 1.4rem;
-  height: 59px;
+  // height: 59px;
 }
 
 .backButton {
@@ -172,7 +173,8 @@ $navbar-height: 70px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
   background-clip: initial;
   display: block;
-  max-height: 677.375px;
+  max-height: 800px;
+  // max-height: 677.375px;
   // height: 677.375px;
   // overflow-y: auto;
 

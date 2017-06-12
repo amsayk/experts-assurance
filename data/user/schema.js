@@ -150,7 +150,7 @@ export const resolvers = {
         return user.get('roles') || [];
       },
       email(user) {
-        return user.get('email') || user.get('mail');
+        return /* user.get('email') || */user.get('mail');
       },
       authorization(user) {
         const authorization_date = user.get('authorization_date');
@@ -384,7 +384,7 @@ export const resolvers = {
           }
           if (response.success) {
             // save session.. create user.. save form data.. render page, return json.. etc.
-            const user = await context.Users.signUp({ ...info, locale: context.locale });
+            const user = await context.Users.signUp({ ...info, mail : info.email, locale: context.locale });
             resolve({ user, errors: {} });
           } else {
             // show warning, render page, return a json, etc.

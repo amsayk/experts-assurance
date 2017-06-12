@@ -8,6 +8,7 @@
   border-bottom: 1px solid #eee;
   padding-right: 16px;
   // transform: translateZ(0);
+  min-height: 49px;
 }
 
 .listHeaderItem {
@@ -62,17 +63,20 @@
 
 .listHeaderItemName {
   composes: listHeaderItem sortable;
-  flex: 3;
+  // flex: 3;
+  width: 50%;
 }
 
 .listHeaderItemDate {
   composes: listHeaderItem sortable;
-  flex: 1;
+  // flex: 1;
+  width: 25%;
 }
 
 .listHeaderItemEmail {
   composes: listHeaderItem;
-  flex: 1;
+  // flex: 1;
+  width: 25%;
 }
 
 // List items
@@ -214,17 +218,20 @@
 
 .listItemName {
   composes: listItem;
-  flex: 3;
+  // flex: 3;
+  width: 50%;
 }
 
 .listItemDate {
   composes: listItem;
-  flex: 1;
+  // flex: 1;
+  width: 25%;
 }
 
 .listItemEmail {
   composes: listItem;
-  flex: 1;
+  // flex: 1;
+  width: 25%;
 }
 
 .emptyList {

@@ -68,6 +68,15 @@ mutation closeDoc($id: ID!, $info: DocClosureInfo!) {
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

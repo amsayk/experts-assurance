@@ -33,6 +33,15 @@ query moreDocs($query: DocsFetchQuery!) {
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

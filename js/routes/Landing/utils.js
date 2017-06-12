@@ -107,6 +107,9 @@ export const extrapolate = function () {
 };
 
 export const durations = [{
+  duration : 1,
+  label: 'Une journée',
+}, {
   duration : 3,
   label: '3 jours',
 }, {

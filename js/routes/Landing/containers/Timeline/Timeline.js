@@ -106,9 +106,9 @@ class Timeline extends React.Component {
     }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter((item) => to
-        ? to > item.timestamp && item.timestamp >= from
-        : item.timestamp >= from
+      const acts = items.filter(({ now }) => to
+        ? to > now && now >= from
+        : now >= from
       );
 
       acts.sort((a, b) => b.timestamp - a.timestamp);

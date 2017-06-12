@@ -483,6 +483,7 @@ class StateLine extends React.Component {
         <div className={style.overviewValueState}>
           <StateChanger
             busy={this.state.busySetState}
+            doc={doc}
             deletion={doc.deletion}
             state={doc.state}
             onStateChange={this.onSetState}

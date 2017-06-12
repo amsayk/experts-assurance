@@ -31,3 +31,6 @@ export const DEL_PAY                 = keyOf({DEL_PAY: null});
 export const SET_DT_VALIDATION       = keyOf({SET_DT_VALIDATION: null});
 export const DEL_DT_VALIDATION       = keyOf({DEL_DT_VALIDATION: null});
 
+export const DEL_MT_RAPPORTS      = keyOf({DEL_MT_RAPPORTS: null});
+export const SET_MT_RAPPRTS       = keyOf({SET_MT_RAPPRTS: null});
+

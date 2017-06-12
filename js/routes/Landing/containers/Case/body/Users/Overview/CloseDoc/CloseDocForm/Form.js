@@ -29,6 +29,41 @@ function parseDate(s) {
   return +moment.utc(s);
 }
 
+function _parseFloat(s) {
+  const val = s ? parseFloat(s) : null;
+  return isNaN(val) ? null : val;
+}
+
+function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
+  let errorText;
+
+  if (error && touched) {
+    errorText = error.get('number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
+  }
+
+  const props = {};
+
+  if (multiLine) {
+    props.rows = 2;
+    props.rowsMax = 5;
+  } else {
+    props.onKeyDown = onKeyDown;
+  }
+
+  return (
+    <TextField
+      {...props}
+      ref={onRef}
+      className={className}
+      floatingLabelText={floatingLabelText}
+      errorText={errorText}
+      multiLine={multiLine}
+      {...input}
+    />
+
+  );
+}
+
 const styles = {
   body : {
     flex: 1,
@@ -154,6 +189,20 @@ class Form extends React.Component {
         />
       </section>,
 
+      <section key='mtRapports' className={style.closeSection}>
+        <Field
+          name='mtRapports'
+          parse={_parseFloat}
+          props={{
+            asyncValidate,
+            onRef             : this.onSecondChild,
+            onKeyDown         : this.onKeyDown,
+            onBlur            : this.onNext2,
+            floatingLabelText : 'MT Rapports',
+          }}
+          component={renderField} />
+      </section>,
+
       // <section key='dateValidation' className={style.closeSection}>
       //   <Field
       //     name='dateValidation'
@@ -227,11 +276,7 @@ const WithForm = reduxForm({
   destroyOnUnmount          : true,
   forceUnregisterOnUnmount  : true,
   asyncValidate             : validations.asyncValidate,
-  asyncBlurFields           : [
-    'closure_date',
-    'validation_date',
-
-  ],
+  asyncBlurFields           : validations.asyncBlurFields,
 });
 
 export default compose(

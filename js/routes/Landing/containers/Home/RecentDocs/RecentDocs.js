@@ -56,7 +56,7 @@ class RecentDocs extends React.Component {
     // }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter(({ date : timestamp }) => {
+      const acts = items.filter(({ updatedAt : timestamp }) => {
         const res = to
           ? to > timestamp && timestamp >= from
           : timestamp >= from;

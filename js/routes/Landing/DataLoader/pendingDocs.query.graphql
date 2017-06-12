@@ -22,6 +22,15 @@ query pendingDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

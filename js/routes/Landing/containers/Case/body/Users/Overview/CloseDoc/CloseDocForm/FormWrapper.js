@@ -173,7 +173,8 @@ class FormWrapper extends React.Component {
 
     const info = {
       dateClosure       : data.get('dateClosure'),
-      dateValidation    : data.get('dateValidation'),
+      mtRapports        : data.get('mtRapports'),
+      // dateValidation    : data.get('dateValidation'),
       paymentAmount     : data.get('paymentAmount'),
       paymentDate       : data.get('paymentDate'),
     };

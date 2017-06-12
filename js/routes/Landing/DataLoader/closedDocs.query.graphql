@@ -35,6 +35,15 @@ query closedDocs($durationInDays: Float!, $sortConfig: ESSortConfig!, $includeCa
         displayName
       }
 
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       payment : paymentInfo {
         user { id }
         amount

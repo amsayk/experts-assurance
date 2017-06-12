@@ -33,12 +33,12 @@ export function serializeParseObject(parseObject) {
 
 export function deserializeParseObject(object) {
   try {
-    if (!object.className && object.emailVerified) {
+    if (object && !object.className && object.emailVerified) {
       object.className = Parse.User.className;
     }
     return object ? Parse.Object.fromJSON(object) : null;
   } catch (e) {
-    log.error(`Error deserializing object: ${object.toJSON ? object.toJSON() : JSON.stringify(object)}`);
+    log.error(`Error deserializing object: ${object ? (object.toJSON ? object.toJSON() : JSON.stringify(object)) : null}`);
     e.stack && log.error(e.stack);
     throw e;
   }

@@ -3,6 +3,7 @@ query getTimeline($cursor: Date, $query: TimelineQuery!) {
     cursor
     result {
       id,
+      now,
       document {
         id
         refNo

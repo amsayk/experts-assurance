@@ -68,7 +68,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={cx(style.text, { [style.sorting]: key === 'displayName' })}>Nom</div>
+                <div className={cx(style.text, key === 'displayName' && style.sorting)}>Nom</div>
                 {key === 'displayName' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>

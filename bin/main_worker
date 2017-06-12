@@ -29,6 +29,9 @@ import {
   SET_DT_VALIDATION,
   DEL_DT_VALIDATION,
 
+  SET_MT_RAPPORTS,
+  DEL_MT_RAPPORTS,
+
   // Files
   UPLOAD_FILE,
   DELETE_FILE,
@@ -85,6 +88,9 @@ createWorker(opts, 'MAIN', {
   // Validation
   [SET_DT_VALIDATION]  : docOps.setDTValidation,
   [DEL_DT_VALIDATION]  : docOps.delDTValidation,
+
+  [DEL_MT_RAPPORTS]  : docOps.delMTRapports,
+  [SET_MT_RAPPORTS]  : docOps.setMTRapports,
 
   // Files
   [UPLOAD_FILE]  : docOps.uploadFile,

@@ -124,6 +124,33 @@ export class DocConnector {
 
   }
 
+  async queryCompanies(q) {
+    if (q) {
+      const queries = [
+        'company'
+      ].map((key) => {
+        return new Parse.Query(DocType)
+          .matchesQuery('business', businessQuery())
+          .exists('company')
+          .doesNotExist('deletion_user')
+          .doesNotExist('deletion_date')
+          .matches(`${key}`, new RegExp(`^${q}.*`, 'i'));
+      });
+
+      const query = Parse.Query.or.apply(Parse.Query, queries);
+
+      const docs = await query.find({ useMasterKey : true });
+
+      return uniqBy(
+        docs.map(doc => doc.get('company')),
+        (company) => company,
+      );
+    }
+
+    return [];
+
+  }
+
   async vehicleByPlateNumber(plateNumber) {
     const query = new Parse.Query(DocType)
       .matchesQuery('business', businessQuery())
@@ -235,7 +262,15 @@ export class DocConnector {
     }
   }
 
-  getInvalidDocs({ category, durationInDays, cursor, sortConfig, selectionSet, user, now }) {
+  getInvalidDocs({
+    category,
+    // durationInDays,
+    cursor,
+    sortConfig,
+    selectionSet,
+    user,
+    now
+  }) {
     if (!user) {
       return Promise.resolve({
         length: 0,
@@ -273,7 +308,7 @@ export class DocConnector {
         : queries[0]).matchesQuery('business', businessQuery());
 
       // if (durationInDays === -1) {
-      //   q.greaterThanOrEqualTo('validation_date', new Date(now - (3 * 365 * 24 * 60 * 60 * 1000)));
+      //   q.lessThan('validation_date', new Date(now - 94672800000));
       // } else {
       //   q.greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       // }
@@ -348,10 +383,16 @@ export class DocConnector {
         .matchesQuery('business', businessQuery());
 
       if (durationInDays === -1) {
-        q.lessThan('dateMission', new Date(now - 94672800000));
+        q.lessThan('validation_date', new Date(now - 94672800000));
       } else {
-        q.greaterThanOrEqualTo('dateMission', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
+        q.greaterThanOrEqualTo('validation_date', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
+
+      // Only open docs
+      q.equalTo('state', 'OPEN');
+
+      // validated
+      q.exists('validation_date');
 
       // Not deleted
       q.doesNotExist('deletion_date');
@@ -439,6 +480,7 @@ export class DocConnector {
 
     state = null,
 
+    company = null,
     manager = null,
     client = null,
     agent = null,
@@ -448,6 +490,7 @@ export class DocConnector {
 
     lastModified = null,
 
+    missionRange = null,
     range = null,
     // validationRange = null,
     closureRange = null,
@@ -485,6 +528,12 @@ export class DocConnector {
           term: { 'manager.id': manager.id },
         });
       }
+    }
+
+    if (company) {
+      must.push({
+        term: { company },
+      });
     }
 
     if (client) {

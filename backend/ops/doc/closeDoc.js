@@ -18,7 +18,7 @@ export default async function closeDoc(request, done) {
     id,
     info : {
       dateClosure : dateClosureMS,
-      // dateValidation : dateValidationMS,
+      mtRapports,
       paymentAmount,
       paymentDate : paymentDateMS,
     },
@@ -52,14 +52,20 @@ export default async function closeDoc(request, done) {
 
     };
 
-    // const current_validation_date = doc.has('validation_date') && doc.get('validation_date').getTime ? doc.get('validation_date').getTime() : null;
-    // if (current_validation_date !== dateValidationMS) {
-    //   validationInfo = {
-    //     validation_user   : request.user,
-    //     validation_date   : new Date(dateValidationMS),
-    //
-    //   };
-    // }
+    const current_validation_date = doc.has('validation_date') && doc.get('validation_date').getTime
+      ? doc.get('validation_date').getTime()
+      : null;
+    const current_validation_amount = doc.has('validation_amount')
+      ? doc.get('validation_amount')
+      : null;
+    if (current_validation_date !== dateClosureMS || current_validation_amount !== mtRapports) {
+      validationInfo = {
+        validation_user   : request.user,
+        validation_date   : new Date(dateClosureMS),
+        validation_amount : mtRapports,
+
+      };
+    }
 
     await doc.set({
       state : 'CLOSED',

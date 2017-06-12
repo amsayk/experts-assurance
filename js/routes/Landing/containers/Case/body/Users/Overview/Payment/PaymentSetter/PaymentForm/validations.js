@@ -2,7 +2,7 @@ import { generateValidation } from 'validation';
 
 const validations = {
   amount: {
-    required       : true,
+    // required       : true,
     number         : true,
     validateOnBlur : true,
   },

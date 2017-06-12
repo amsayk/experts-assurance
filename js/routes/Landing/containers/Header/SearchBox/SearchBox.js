@@ -320,7 +320,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
   }, []);
 
   return (
-    <div role={role} tabIndex={tabIndex} className={cx(qClassName, style.docSearchDoc, className)}>
+    <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(qClassName, style.docSearchDoc, className)}>
       {STATES_2[state]}
       <div style={{ marginLeft: 12 }} className={style.docSearchDocInfo}>
         <div className={style.docSearchDocTop}>
@@ -392,11 +392,13 @@ class SearchBox extends React.Component {
 
     this.onTextInputAdvancedSearch = this.onTextInputAdvancedSearch.bind(this);
     this.onState                   = this.onState.bind(this);
+    this.onCompany                 = this.onCompany.bind(this);
     this.onManager                 = this.onManager.bind(this);
     this.onClient                  = this.onClient.bind(this);
     this.onUser                    = this.onUser.bind(this);
     this.onCloser                  = this.onCloser.bind(this);
     this.onValidator               = this.onValidator.bind(this);
+    this.onDTMissionRange          = this.onDTMissionRange.bind(this);
     this.onRange                   = this.onRange.bind(this);
     // this.onValidationRange         = this.onValidationRange.bind(this);
     this.onClosureRange            = this.onClosureRange.bind(this);
@@ -471,6 +473,14 @@ class SearchBox extends React.Component {
     }));
   }
 
+  onCompany(company) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        company,
+      }),
+    }));
+  }
+
   onClient(id) {
     this.setState(({ search }) => ({
       search : search.merge({
@@ -509,6 +519,14 @@ class SearchBox extends React.Component {
     this.setState(({ search }) => ({
       search : search.merge({
         range,
+      }),
+    }));
+  }
+
+  onDTMissionRange(range) {
+    this.setState(({ search }) => ({
+      search : search.merge({
+        missionRange : range,
       }),
     }));
   }
@@ -635,8 +653,9 @@ class SearchBox extends React.Component {
   }
 
   renderDocs(hits) {
-    return hits.map((hit, index) => (
+    const docs = hits.map((hit, index) => (
       <MenuItem
+        disableClick
         qClassName={index === 0 && style.noTopBorder}
         q={this.props.search.q}
         intl={this.props.intl}
@@ -646,6 +665,18 @@ class SearchBox extends React.Component {
         hit={hit}
       />
     ));
+
+    docs.push(
+      <MenuItem divider />,
+      <MenuItem
+        onClick={this.onSearch}
+        className={style.docsSearchResultShowAll}
+        key={'showAll'}
+        eventKey={'showAll'}
+      >Afficher tous</MenuItem>
+    );
+
+    return docs;
   }
   renderAdvancedSearch() {
     return (
@@ -654,6 +685,7 @@ class SearchBox extends React.Component {
         search={this.state.search}
         actions={{
           onState                 : this.onState,
+          onCompany               : this.onCompany,
           onManager               : this.onManager,
           onClient                : this.onClient,
           onUser                  : this.onUser,
@@ -661,6 +693,7 @@ class SearchBox extends React.Component {
           onValidator             : this.onValidator,
           onLastModified          : this.onLastModified,
           onRange                 : this.onRange,
+          onDTMissionRange        : this.onDTMissionRange,
           // onValidationRange       : this.onValidationRange,
           onClosureRange          : this.onClosureRange,
           onClear                 : this.onClearSearch,

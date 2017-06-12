@@ -28,7 +28,7 @@ const ICON_SIZE = 18;
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-  </div>;
+</div>;
 
 class FileEntry extends React.PureComponent {
   static contextTypes = {
@@ -147,7 +147,8 @@ class FileEntry extends React.PureComponent {
       switch (key) {
         case 'download' : {
           const a = document.createElement('a');
-          a.download = this.props.entry.name;
+          // a.download = this.props.entry.name;
+          a.target = '_blank';
           a.href = this.props.entry.url;
           document.body.appendChild(a);
           a.click();

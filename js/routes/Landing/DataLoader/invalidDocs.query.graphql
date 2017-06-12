@@ -21,6 +21,7 @@ query invalidDocs($category: String, $durationInDays: Float!, $sortConfig: ESSor
       }
       validation {
         date
+        amount
         user {
           id
           displayName

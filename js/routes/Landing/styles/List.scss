@@ -10,6 +10,7 @@
   border-bottom: 1px solid #eee;
   padding-right: 16px;
   // transform: translateZ(0);
+  min-height: 1.5em;
 }
 
 .listHeaderItemAgent,
@@ -17,7 +18,7 @@
 .listHeaderItemManager,
 .listItemClient,
 .listItemManager {
-  min-width: 200px !important;
+  // min-width: 200px !important;
 
 }
 
@@ -79,6 +80,13 @@
     margin: 0 4px;
     // padding-top: 15px;
   }
+}
+
+.listHeaderItemCompany {
+  composes: listHeaderItem sortable;
+  max-width: 155px;
+  min-width: 155px;
+  flex: 1;
 }
 
 .listHeaderItemRef {
@@ -198,7 +206,7 @@
 .listHeaderItemManager,
 .listItemClient,
 .listItemManager {
-  min-width: 200px !important;
+  // min-width: 200px !important;
 
 }
 
@@ -258,6 +266,14 @@
     // height: 32px;
     // width: 32px;
   }
+}
+
+.listItemCompany {
+  composes: listItem;
+  max-width: 155px;
+  min-width: 155px;
+  flex: 1;
+  text-transform: uppercase;
 }
 
 .listItemRef {

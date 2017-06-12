@@ -83,6 +83,8 @@
   }
 }
 
+.docSetMTRapports,
+.docDelMTRapports,
 .docSetDTValidation,
 .docDelDTValidation,
 .docSetPayment,
@@ -95,6 +97,7 @@
   composes: d-flex flex-row align-items-center rightNavItem from 'styles/_base.scss';
 }
 
+.docSetMTRapportsFormMenu,
 .docSetDTValidationFormMenu {
   bottom: 0;
   top: auto;
@@ -112,6 +115,19 @@
 .docDelDTValidation,
 .docSetDTValidationButton,
 .docDelDTValidationButton {
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.docSetMTRapports,
+.docDelMTRapports,
+.docSetMTRapportsButton,
+.docDelMTRapportsButton {
   padding: 0;
   margin: 0;
 

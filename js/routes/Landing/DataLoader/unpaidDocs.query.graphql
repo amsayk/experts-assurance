@@ -21,6 +21,7 @@ query unpaidDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
       }
       validation {
         date
+        amount
         user {
           id
           displayName

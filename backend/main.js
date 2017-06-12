@@ -31,6 +31,9 @@ import {
   SET_DT_VALIDATION,
   DEL_DT_VALIDATION,
 
+  DEL_MT_RAPPORTS,
+  SET_MT_RAPPORTS,
+
   // Files
   UPLOAD_FILE,
   DELETE_FILE,
@@ -135,6 +138,30 @@ Parse.Cloud.define('routeOp', async function (request, response) {
       break;
     }
     case DEL_DT_VALIDATION: {
+      try {
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case SET_MT_RAPPORTS: {
+      try {
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
+        response.success({
+          doc        : deserializeParseObject(doc),
+          activities : activities.map(deserializeParseObject),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
+    case DEL_MT_RAPPORTS: {
       try {
         const { data : { doc, activities } } = await publish('MAIN', operationKey, req);
         response.success({
@@ -320,6 +347,7 @@ Parse.Cloud.define('onStart', async function (request, response) {
 
     p.setPassword(obj.password);
     p.set('email', obj.email);
+    p.set('mail', obj.email);
     p.set('username', obj.username);
 
     p.set('displayName', obj.displayName);

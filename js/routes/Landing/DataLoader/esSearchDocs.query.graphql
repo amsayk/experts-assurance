@@ -28,6 +28,7 @@ query esSearchDocs($queryString: String, $state: DocState) {
         validation {
           user { id name }
           date
+          amount
         }
         closure {
           state

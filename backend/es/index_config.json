@@ -91,7 +91,10 @@
       "properties": {
         "refNo": {
           "type": "string",
-          "index": "not_analyzed"
+          "index_options": "offsets",
+          "analyzer": "nGram_analyzer",
+          "search_analyzer": "whitespace_analyzer",
+          "fielddata": true
         },
         "state": {
           "type": "string",
@@ -264,6 +267,9 @@
         },
         "validation_date": {
           "type": "date"
+        },
+        "validation_amount": {
+          "type": "float"
         },
         "validation_user": {
           "properties": {

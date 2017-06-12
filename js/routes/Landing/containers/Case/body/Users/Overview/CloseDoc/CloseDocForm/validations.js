@@ -2,10 +2,16 @@ import { generateValidation } from 'validation';
 
 const validations = {
   dateClosure : {
+    date     : true,
     required : true,
     validateOnBlur : true,
-    date     : true,
   },
+  mtRapports: {
+    number         : true,
+    required       : true,
+    validateOnBlur : true,
+  },
+
   paymentAmount: {
     // required       : true,
     number         : true,
@@ -13,8 +19,8 @@ const validations = {
   },
 
   paymentDate: {
-    required       : true,
     date           : true,
+    required       : true,
     validateOnBlur : true,
   },
 

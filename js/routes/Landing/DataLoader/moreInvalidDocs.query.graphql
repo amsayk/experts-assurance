@@ -20,6 +20,7 @@ query moreInvalidDocs($category: String, $durationInDays: Float!, $cursor: Int!,
       }
       validation {
         date
+        amount
         user {
           id
           displayName

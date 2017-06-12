@@ -12,7 +12,10 @@ export default async function changeEmail(request, done) {
 
   try {
     if (email !== request.user.get('email')) {
-      const user = await request.user.set('email', email)
+      const user = await request.user.set({
+        email,
+        mail : email,
+      })
         .save(null, { sessionToken: request.user.getSessionToken() });
     }
     done(null, serializeParseObject(user));

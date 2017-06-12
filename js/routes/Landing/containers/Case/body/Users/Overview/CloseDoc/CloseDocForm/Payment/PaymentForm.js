@@ -79,6 +79,7 @@ class PaymentForm extends React.Component {
           name='paymentAmount'
           parse={_parseFloat}
           props={{
+            asyncValidate,
             onRef             : onPaymentFirstChild,
             onKeyDown         : onKeyDown,
             floatingLabelText : 'MT',

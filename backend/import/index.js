@@ -154,7 +154,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
           dateMission        : new Date(nullthrows(data['DT Mission'])).getTime(),
           date               : new Date(nullthrows(data['DT Sinistre'])).getTime(),
 
-          company            : data['COMPAGNIE'] || null,
+          company            : data['Adverse'] || null,
 
           vehicleManufacturer  : nullthrows(data['Véhicule']),
           vehicleModel         : nullthrows(data['Genre']),
@@ -175,7 +175,8 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
           agentDisplayName   : nullthrows(data['Assureur conseil']),
           agentEmail         : null,
 
-          // isOpen             : true,
+          // police             : data['N° Sinistre ou N° Police'],
+          // nature             : data['Nature'],
         };
 
         try {

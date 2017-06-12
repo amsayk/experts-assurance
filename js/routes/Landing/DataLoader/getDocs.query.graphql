@@ -21,6 +21,16 @@ query getDocs($query: DocsFetchQuery!) {
         energy
         power
       }
+
+      validation {
+        date
+        amount
+        user {
+          id
+          displayName
+        }
+      }
+
       client {
         id
         displayName

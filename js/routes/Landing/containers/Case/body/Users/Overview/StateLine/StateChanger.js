@@ -11,6 +11,7 @@ import {
   CloseIcon,
 
   // UnknownIcon,
+  ThumbsUpIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -31,7 +32,7 @@ const CONFIRM_MSG = <div style={style.confirmToastr}>
 function getState(state, stateText, icon) {
   return (
     <div className={style.state} style={{ marginRight: 5 }}>
-      <span className={cx(style[state], style.docStateToggle)}>
+      <span className={cx(style[state === 'VALID' ? 'OPEN' : state], style.docStateToggle)}>
         {icon}
       </span>
       <span className={style.text} style={{ textTransform: 'uppercase', marginLeft: 5 }}>
@@ -44,6 +45,7 @@ function getState(state, stateText, icon) {
 const STATE_COMPONENT = {
   // PENDING  : getState('PENDING',  'En attente', <UnknownIcon   size={18}/>),
   OPEN     : getState('OPEN',     'En cours',   <WatchIcon     size={18}/>),
+  VALID    : getState('VALID',    'Validé',     <ThumbsUpIcon  size={18}/>),
   CLOSED   : getState('CLOSED',   'Clos',       <DoneIcon      size={18}/>),
   CANCELED : getState('CANCELED', 'Annulé',     <CanceledIcon  size={18}/>),
 };
@@ -102,11 +104,17 @@ const STATES = Object.keys(STATE_MENUITEM);
 
 class StateToggle extends React.Component {
   render() {
-    const { state } = this.props;
+    const { doc, state } = this.props;
+
+    let _state = state;
+
+    if (state === 'OPEN' && doc && doc.validation && doc.validation.date && doc.validation.amount !== null) {
+      _state = 'VALID';
+    }
 
     return (
       <Button className={cx(style.selectedStateButton, style.togglePickUser)} style={{cursor: 'default'}}>
-        {STATE_COMPONENT[state]}
+        {STATE_COMPONENT[_state]}
       </Button>
     );
 
@@ -161,13 +169,13 @@ class StateChanger extends React.Component {
 
   render() {
     const { keys, state } = this.state;
-    const { busy, actions } = this.props;
+    const { busy, doc, actions } = this.props;
     return (
       <div className={style.filterGroup}>
         <div
           className={cx(style.pickUserDropdown)}
         >
-          <StateToggle state={state}/>
+          <StateToggle doc={doc} state={state}/>
         </div>
       </div>
     );

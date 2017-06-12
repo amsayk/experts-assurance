@@ -76,7 +76,7 @@ class Open extends React.Component {
             {/* </div> */}
           <div className={style.icon}>
             <DurationSelector
-              label='Durée de validation'
+              label='Durée'
               duration={durationInDays}
               onDuration={actions.setDuration}
             />

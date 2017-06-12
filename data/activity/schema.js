@@ -39,6 +39,7 @@ export const schema = [`
   type Activity {
     id: ID!
 
+    now: Date!
     document: Doc
     file: File
 
@@ -75,6 +76,7 @@ export const resolvers = {
       'ns',
       'type',
       'timestamp',
+      'now',
       'createdAt',
       'updatedAt',
     ])
