@@ -180,7 +180,7 @@ class FormWrapper extends React.Component {
     };
 
     const { data: { closeDoc: { errors, error } } } = await self.props.client.mutate({
-      refetchQueries : ['getDoc', 'unpaidDocs', 'getTimeline'],
+      refetchQueries : ['getDoc', 'unpaidDocs', 'timeline'],
       mutation  : MUTATION,
       variables : { id : doc.id, info },
       updateQueries : {

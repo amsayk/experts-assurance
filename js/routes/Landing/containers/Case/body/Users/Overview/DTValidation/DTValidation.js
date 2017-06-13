@@ -105,7 +105,7 @@ class DTValidation extends React.Component {
         }
 
         const { data: { delDTValidation: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'getTimeline'],
+          refetchQueries     : ['getDoc', 'timeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -211,7 +211,7 @@ class DTValidation extends React.Component {
         }
 
         const { data: { setDTValidation: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'getTimeline'],
+          refetchQueries     : ['getDoc', 'timeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {

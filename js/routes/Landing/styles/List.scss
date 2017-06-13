@@ -84,9 +84,14 @@
 
 .listHeaderItemCompany {
   composes: listHeaderItem sortable;
+  max-width: 130px;
+  min-width: 130px;
+  flex: 1;
+}
+
+.board .listHeaderItemCompany {
   max-width: 155px;
   min-width: 155px;
-  flex: 1;
 }
 
 .listHeaderItemRef {
@@ -106,7 +111,14 @@
 
 .listHeaderItemDate {
   composes: listHeaderItem sortable;
+  max-width: 125px;
+  min-width: 125px;
   flex: 1;
+}
+
+.board .listHeaderItemDate {
+  max-width: 175px;
+  min-width: 175px;
 }
 
 .listHeaderItemEmail {
@@ -141,6 +153,10 @@
   flex-shrink: 0;
   padding: 0;
   margin: 0;
+
+  &:hover {
+    background-color: rgba(214, 209, 209, 0.075) !important;
+  }
 
   &:focus,
   &:active {
@@ -201,12 +217,14 @@
   // }
 }
 
-.listHeaderItemAgent,
-.listHeaderItemClient,
-.listHeaderItemManager,
-.listItemClient,
-.listItemManager {
+.board .listHeaderItemAgent,
+.board .listHeaderItemClient,
+.board .listHeaderItemManager,
+.board .listItemClient,
+.board .listItemManager {
   // min-width: 200px !important;
+  // max-width: 200px;
+  min-width: 200px;
 
 }
 
@@ -220,6 +238,7 @@
   vertical-align: middle;
   border-bottom: 1px solid rgba(0, 0, 0, 0.065);
   min-width: 142.422px;
+  cursor: pointer;
 
   .wrapper {
     height: 48px;
@@ -270,10 +289,15 @@
 
 .listItemCompany {
   composes: listItem;
-  max-width: 155px;
-  min-width: 155px;
+  max-width: 130px;
+  min-width: 130px;
   flex: 1;
   text-transform: uppercase;
+}
+
+.board .listItemCompany {
+  max-width: 155px;
+  min-width: 155px;
 }
 
 .listItemRef {
@@ -291,9 +315,23 @@
   flex: 1;
 }
 
+.board .listItemClient,
+.board .listItemAgent,
+.board .listItemManager,
+.board .listItemVehicle {
+  min-width: 200px;
+}
+
 .listItemDate {
   composes: listItem;
+  max-width: 125px;
+  min-width: 125px;
   flex: 1;
+}
+
+.board .listItemDate {
+  max-width: 175px;
+  min-width: 175px;
 }
 
 .emptyList {

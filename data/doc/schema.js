@@ -128,6 +128,9 @@ export const schema = [`
     date: Date
 
     company: String
+
+    police: String,
+    nature: String
   }
 
   type AddDocResponse {
@@ -200,6 +203,7 @@ export const schema = [`
   enum DocsSortKey {
     refNo
     date
+    company
   }
 
   input DocsSortConfig {
@@ -244,6 +248,9 @@ export const schema = [`
 
     date: Date!
     lastModified: Date!
+
+    police: String
+    nature: String
   }
 
   type ESDoc {
@@ -411,6 +418,9 @@ export const schema = [`
     deletion: Deletion
 
     business: Business
+
+    police: String
+    nature: String
   }
 
 `];
@@ -589,6 +599,8 @@ export const resolvers = {
       'state',
       'createdAt',
       'updatedAt',
+      'police',
+      'nature',
     ])
   ),
 
@@ -654,6 +666,24 @@ export const resolvers = {
         return typeof ret !== 'undefined' ? ret :  null;
       },
     },
+    parseGraphqlScalarFields([
+      'vehicle',
+
+      'client',
+      'manager',
+      'agent',
+      'user',
+
+      'id',
+      'company',
+      'refNo',
+      'date',
+      'dateMission',
+      'state',
+
+      'police',
+      'nature',
+    ])
   ),
 
   ESDoc: Object.assign(

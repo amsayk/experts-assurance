@@ -1,10 +1,8 @@
 import React, { PropTypes as T } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import { withRouter } from 'react-router';
 
 import raf from 'requestAnimationFrame';
 
@@ -91,7 +89,7 @@ function toArray(str) {
   return (str || '').split(/\s+/);
 }
 
-const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, company, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
+const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, company, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
 
   const matches = highlight.reduce(function (matches, highlight) {
     switch (highlight) {
@@ -320,7 +318,7 @@ const Doc = ({ q, intl, qClassName, className, tabIndex, role, hit: { highlight,
   }, []);
 
   return (
-    <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(qClassName, style.docSearchDoc, className)}>
+    <div onClickCapture={onClickCapture} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(qClassName, style.docSearchDoc, className)}>
       {STATES_2[state]}
       <div style={{ marginLeft: 12 }} className={style.docSearchDocInfo}>
         <div className={style.docSearchDocTop}>
@@ -651,15 +649,23 @@ class SearchBox extends React.Component {
     ];
 
   }
-
+  handleClick(id, e) {
+    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.router.push(
+        PATH_CASES_CASE + '/' + id,
+      );
+    }
+  }
   renderDocs(hits) {
     const docs = hits.map((hit, index) => (
       <MenuItem
-        disableClick
         qClassName={index === 0 && style.noTopBorder}
         q={this.props.search.q}
         intl={this.props.intl}
         key={hit._id}
+        onClickCapture={this.handleClick.bind(this, hit._source.id)}
         eventKey={hit._id}
         componentClass={Doc}
         hit={hit}
@@ -669,7 +675,7 @@ class SearchBox extends React.Component {
     docs.push(
       <MenuItem divider />,
       <MenuItem
-        onClick={this.onSearch}
+        onClickCapture={this.onSearch}
         className={style.docsSearchResultShowAll}
         key={'showAll'}
         eventKey={'showAll'}

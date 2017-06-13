@@ -71,7 +71,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>Adverse</div>
+                <div className={style.text}>Compagnie</div>
                 {key === 'company' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>

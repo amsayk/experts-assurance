@@ -99,6 +99,12 @@
   }
 }
 
+.docsSearchResultShowAll,
+.docSearchDoc {
+  cursor: pointer;
+
+}
+
 .searchBoxMenu {
   width: 100%;
   top: 102%;
@@ -122,6 +128,9 @@
   }
 
   z-index: 2399999;
+
+  & > div {
+  }
 }
 
 .scrollY {

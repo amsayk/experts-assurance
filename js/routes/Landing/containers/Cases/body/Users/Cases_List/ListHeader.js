@@ -50,6 +50,7 @@ class ListHeader extends React.Component {
 
     this.onSortByRef = this.onSort.bind(this, 'refNo');
     this.onSortByDate = this.onSort.bind(this, 'date');
+    this.onSortByCompany = this.onSort.bind(this, 'company');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;
@@ -64,6 +65,18 @@ class ListHeader extends React.Component {
     const { key, direction } = sortConfig;
     return (
       <div className={style.listHeader}>
+
+        <div style={{}} onClick={this.onSortByCompany} className={cx(style.listHeaderItemCompany, key === 'company' && style.sorting)}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>Compagnie</div>
+                {key === 'company' ? <SortDirection direction={direction}/> : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>

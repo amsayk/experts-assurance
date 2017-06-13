@@ -33,6 +33,9 @@ export default async function addDoc(request, done) {
 
     dateMission : dateMissionMS,
     date : dateMS,
+
+    police,
+    nature,
   } } = request.params;
 
   const date = new Date(dateMS);
@@ -97,6 +100,9 @@ export default async function addDoc(request, done) {
       date,
 
       key,
+
+      police,
+      nature,
 
       [`lastModified_${request.user.id}`] : new Date(request.now),
       lastModified : new Date(request.now),

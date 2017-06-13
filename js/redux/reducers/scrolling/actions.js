@@ -4,15 +4,17 @@ import {
   UPDATE_POSITION,
 } from './constants';
 
+import throttle from 'lodash.throttle';
+
 // ------------------------------------
 // Actions
 // ------------------------------------
 export function scrolling() {
   return (dispatch) => {
-    addEventListener(document, 'scroll', function () {
+    addEventListener(document, 'scroll', throttle(function () {
       const st = window.pageYOffset || document.documentElement.scrollTop; // Credits: 'https://github.com/qeremy/so/blob/master/so.dom.js#L426'
       dispatch(update(st));
-    });
+    }, 75));
 
   };
 }

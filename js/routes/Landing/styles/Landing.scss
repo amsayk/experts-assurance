@@ -47,10 +47,16 @@ $toolbar-height: 41px;
   composes: d-flex flex-row from 'styles/_base.scss';
   height: 100%;
   // overflow-y: visible;
-  max-width: $content-width;
-  min-width: $content-width;
+  // max-width: $content-width;
+  // min-width: $content-width;
 
-  margin: 70px 0 0 0;
+  width: calc(100vw - 275px - 15px);
+
+  margin: 70px 25px 0 0;
+}
+
+.timelineDisplayMismatches .content {
+  width: 100vw;
 }
 
 .addButton {

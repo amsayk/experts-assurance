@@ -142,7 +142,7 @@ class FormWrapper extends React.Component {
     const { closePortal, router } = this.props;
 
     const { data: { addDoc: { doc, error, errors } } } = await this.props.client.mutate({
-      refetchQueries : ['getTimeline', 'recentDocs'],
+      refetchQueries : ['timeline', 'recentDocs'],
       mutation  : MUTATION,
       variables : { payload: {
         dateMission          : data.get('dateMission'),
@@ -169,7 +169,8 @@ class FormWrapper extends React.Component {
         agentDisplayName     : data.get('agentDisplayName'),
         agentEmail           : data.get('agentEmail'),
 
-        // isOpen            : data.get('isOpen'),
+        police               : data.get('police'),
+        nature               : data.get('nature'),
       } },
       updateQueries : {
         dashboard(prev, { mutationResult }) {

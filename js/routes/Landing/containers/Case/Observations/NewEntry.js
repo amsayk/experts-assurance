@@ -111,7 +111,7 @@ class NewEntry extends React.PureComponent {
       try {
         await Promise.all(self.state.files.map(async (metadata) => {
           const { data: { uploadFile: { error } } } = await self.props.client.mutate({
-            refetchQueries : ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
+            refetchQueries : ['getDoc', 'invalidDocs', 'timeline', 'getDocFiles'],
             mutation       : MUTATION,
             variables      : {
               docId    : self.props.id,

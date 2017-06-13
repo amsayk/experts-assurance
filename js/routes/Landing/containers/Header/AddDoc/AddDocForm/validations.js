@@ -4,18 +4,32 @@ import { client as apolloClient } from 'apollo';
 
 import GET_MATCHING_USERS_QUERY from './getMatchingUsers.query.graphql';
 
-const validations = {
-  dateMission: {
-    required : true,
-    date     : true,
-    validateOnBlur : true,
-  },
+import { SERVER } from 'vars';
 
-  date: {
-    required : true,
-    date     : true,
-    validateOnBlur : true,
-  },
+const dateMission = {
+  required : true,
+  validateOnBlur : true,
+
+}
+
+if (SERVER) {
+  dateMission.date = true;
+}
+
+const date = {
+  required : true,
+  validateOnBlur : true,
+
+}
+
+if (SERVER) {
+  date.date = true;
+}
+
+const validations = {
+  dateMission,
+
+  date,
 
   vehicleManufacturer : {
     required : true,

@@ -17,7 +17,7 @@ import { SERVER } from 'vars';
 import { Record } from 'immutable';
 
 const MEDIA_QUERY = '(min-width: 992px)';
-const TIMELINE_MEDIA_QUERY = '(min-width: 1232px)';
+const TIMELINE_MEDIA_QUERY = '(min-width: 1380px)';
 
 export class AppState extends Record({
   displayMatches         : SERVER || matchMedia(MEDIA_QUERY).matches,

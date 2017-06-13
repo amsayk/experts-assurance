@@ -105,7 +105,7 @@ class Payment extends React.Component {
         }
 
         const { data: { delPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'timeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -211,7 +211,7 @@ class Payment extends React.Component {
         }
 
         const { data: { setPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'timeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {

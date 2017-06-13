@@ -1,11 +1,29 @@
 import { generateValidation } from 'validation';
 
+import { SERVER } from 'vars';
+
+const paymentDate = {
+  required : true,
+  validateOnBlur : true,
+
+}
+
+if (SERVER) {
+  paymentDate.date = true;
+}
+
+const dateClosure = {
+  required : true,
+  validateOnBlur : true,
+
+}
+
+if (SERVER) {
+  dateClosure.date = true;
+}
+
 const validations = {
-  dateClosure : {
-    date     : true,
-    required : true,
-    validateOnBlur : true,
-  },
+  dateClosure,
   mtRapports: {
     number         : true,
     required       : true,
@@ -18,11 +36,7 @@ const validations = {
     validateOnBlur : true,
   },
 
-  paymentDate: {
-    date           : true,
-    required       : true,
-    validateOnBlur : true,
-  },
+  paymentDate,
 
   // dateValidation: {
   //   required       : true,

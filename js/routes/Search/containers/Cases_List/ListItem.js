@@ -1,7 +1,6 @@
 import React, { PropTypes as T } from 'react';
+import { Link, withRouter } from 'react-router';
 import { compose } from 'redux';
-
-import { Link } from 'react-router';
 
 import style from 'routes/Search/styles';
 
@@ -42,6 +41,16 @@ class ListItem extends React.Component {
     super();
 
     this.onItem = this.onItem.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e) {
+    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.router.push(
+        PATH_CASES_CASE + '/' + this.props.item._source.id,
+      );
+    }
   }
 
   onItem() {
@@ -49,18 +58,30 @@ class ListItem extends React.Component {
   }
   render() {
     const { intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, state, client, manager, agent, vehicle, date } = item._source;
+    const { id, refNo, company, state, client, manager, agent, vehicle, date } = item._source;
     return (
-      <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
+      <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
+
+        <div style={{}} className={style.listItemCompany}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <b>{company || '—'}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className={style.listItemRef}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 {/* <StateIcon */}
-                {/*   state={state} */}
-                {/*   onClick={this.onItem} */}
-                {/* /> */}
+                  {/*   state={state} */}
+                  {/*   onClick={this.onItem} */}
+                  {/* /> */}
                 <div className={style.text} style={{ marginLeft: 6 }}>
                   <Link to={PATH_CASES_CASE + '/' + id}>
                     <b>{refNo}</b>
@@ -99,19 +120,19 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div className={style.listItemManager}>
-          <div className={style.wrapper}>
-            <div className={style.innerWrapper}>
-              <div className={style.item}>
-                <div className={style.text}>
-                  {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
-                    {manager.name}
-                  </Link> : '—'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* <div className={style.listItemManager}> */}
+        {/*   <div className={style.wrapper}> */}
+        {/*     <div className={style.innerWrapper}> */}
+        {/*       <div className={style.item}> */}
+        {/*         <div className={style.text}> */}
+        {/*           {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}> */}
+        {/*             {manager.name} */}
+        {/*           </Link> : '—'} */}
+        {/*         </div> */}
+        {/*       </div> */}
+        {/*     </div> */}
+        {/*   </div> */}
+        {/* </div> */}
 
         <div className={style.listItemAgent}>
           <div className={style.wrapper}>
@@ -176,6 +197,7 @@ ListItem.propTypes = {
 };
 
 export default compose(
+  withRouter,
   injectIntl,
 )(ListItem);
 

@@ -34,6 +34,18 @@ function parseDate(s) {
   return +moment.utc(s);
 }
 
+function renderField({ onKeyDown, label : floatingLabelText, className, input }) {
+  return (
+    <TextField
+      className={className}
+      floatingLabelText={floatingLabelText}
+      onKeyDown={onKeyDown}
+      {...input}
+    />
+
+  );
+}
+
 const styles = {
   body : {
     flex: 1,
@@ -178,10 +190,16 @@ class Form extends React.Component {
         />
       </section>,
 
+      <br/>,
+      <br/>,
+
       <Vehicle
         key='vehicle'
         onKeyDown={this.onKeyDown}
       />,
+
+      <br/>,
+      <br/>,
 
       <Client
         key='client'
@@ -189,11 +207,44 @@ class Form extends React.Component {
         asyncValidate={asyncValidate}
       />,
 
+      <br/>,
+      <br/>,
+
       <Agent
         key='agent'
         onKeyDown={this.onKeyDown}
         asyncValidate={asyncValidate}
       />,
+
+      <br/>,
+      <br/>,
+
+      <header>
+        <h5>Informations additionnelles</h5>
+      </header>,
+
+      <section style={{display: 'flex', flexDirection: 'row'}} key='last' className={style.addDocSectionDates}>
+        <div>
+          <Field
+            name='police'
+            props={{
+              onKeyDown : this.onKeyDown,
+              label     : 'N° Sinistre ou N° Police',
+            }}
+            component={renderField}
+          />
+        </div>
+        <div>
+          <Field
+            name='nature'
+            props={{
+              onKeyDown : this.onKeyDown,
+              label     : 'Nature',
+            }}
+            component={renderField}
+          />
+        </div>
+      </section>,
     ];
 
     return (

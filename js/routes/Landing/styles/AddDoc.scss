@@ -93,12 +93,12 @@
   composes: addDocSection;
 
   & > div {
-    width: 50%;
+    width: 50% !important;
   }
 }
 
 .addDocSection + .addDocSection {
-  margin-top: 3.2rem;
+  margin-top: 1.4rem;
 }
 
 .addDocTextField + .addDocTextField {

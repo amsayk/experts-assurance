@@ -68,6 +68,7 @@ class List extends React.Component {
               Aucun résultat
             </div>
             <br/>
+            <br/>
             <Dropdown.Menu className={style.listItemsWrapper}>
             </Dropdown.Menu>
           </Dropdown>
@@ -84,6 +85,7 @@ class List extends React.Component {
           >
             <div className={style.summary}>
             </div>
+            <br/>
             <br/>
             <ListHeader/>
             <Dropdown.Menu className={style.listItemsWrapper}>
@@ -112,6 +114,7 @@ class List extends React.Component {
           <div className={style.summary}>
             {cursor}/{length} dossiers en {took/1000} seconds
           </div>
+          <br/>
           <br/>
           <ListHeader/>
           <Dropdown.Menu className={style.listItemsWrapper}>

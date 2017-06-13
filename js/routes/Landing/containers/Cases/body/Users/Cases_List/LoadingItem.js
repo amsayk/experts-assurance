@@ -28,12 +28,28 @@ export default class LoadingItem extends React.Component {
     return (
       <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, style.loadingItem)}>
 
+        <div style={{}} className={style.listItemCompany}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <div
+                    className={style.placeholder}
+                    style={{ width: SIZE }}
+                  >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className={style.listItemRef}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 {/* <StateIcon */}
-                {/* /> */}
+                  {/* /> */}
                 <div className={style.text}>
                   <div
                     className={style.placeholder}

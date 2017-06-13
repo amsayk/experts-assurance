@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
 
@@ -52,8 +52,8 @@ function StateIcon({ isSelected, hasSelection, state, onClick }) {
       {isSelected
         ? <CheckboxIcon.Checked onClick={onClick} className={cx(style.checkbox, style.isSelected)} size={24}/>
         : <CheckboxIcon.Blank onClick={onClick} className={style.checkbox} size={24}/>}
-      {STATE_ICON[state]}
-    </div>
+        {STATE_ICON[state]}
+      </div>
   );
 }
 
@@ -62,6 +62,16 @@ class ListItem extends React.Component {
     super();
 
     this.onItem = this.onItem.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e) {
+    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.router.push(
+        PATH_CASES_CASE + '/' + this.props.item.id,
+      );
+    }
   }
 
   onItem() {
@@ -69,20 +79,32 @@ class ListItem extends React.Component {
   }
   render() {
     const { isSelected, hasSelection, intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, state, client, agent, vehicle, date } = item;
+    const { id, refNo, company, state, client, agent, vehicle, date } = item;
     return (
-      <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
+      <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
+
+        <div style={{}} className={style.listItemCompany}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>
+                  <b>{company || '—'}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className={style.listItemRef}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 {/* <StateIcon */}
-                {/*   state={state} */}
-                {/*   hasSelection={hasSelection} */}
-                {/*   isSelected={isSelected} */}
-                {/*   onClick={this.onItem} */}
-                {/* /> */}
+                  {/*   state={state} */}
+                  {/*   hasSelection={hasSelection} */}
+                  {/*   isSelected={isSelected} */}
+                  {/*   onClick={this.onItem} */}
+                  {/* /> */}
                 <div className={style.text}>
                   <Link to={PATH_CASES_CASE + '/' + id}>
                     <b>{refNo}</b>
@@ -191,6 +213,7 @@ function mapDispatchToProps(dispatch) {
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(
+  withRouter,
   injectIntl,
   Connect,
 )(ListItem);

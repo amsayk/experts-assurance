@@ -7,6 +7,8 @@ import { logOut } from 'redux/reducers/user/actions';
 
 import style from 'routes/Landing/styles';
 
+import cx from 'classnames';
+
 import Title from 'components/Title';
 
 import Header from '../../Header';
@@ -27,9 +29,9 @@ export class CasesContainer extends React.PureComponent {
     };
   }
   render() {
-    const { user, actions } = this.props;
+    const { user, timelineDisplayMatches, actions } = this.props;
     return (
-      <div className={style.root}>
+      <div className={cx(style.root, !timelineDisplayMatches && style.timelineDisplayMismatches)}>
         <Title title={`Dossiers · ${APP_NAME}`}/>
         <Header user={user} onLogOut={actions.logOut}/>
         <Body user={user}/>

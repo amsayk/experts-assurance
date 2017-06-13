@@ -1,5 +1,5 @@
 import React, { PropTypes as T } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
 
@@ -21,6 +21,16 @@ class ListItem extends React.Component {
     super();
 
     this.onItem = this.onItem.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e) {
+    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.router.push(
+        PATH_CASES_CASE + '/' + this.props.item.id,
+      );
+    }
   }
 
   onItem() {
@@ -30,7 +40,7 @@ class ListItem extends React.Component {
     const { intl, className, tabIndex, role, item } = this.props;
     const { id, refNo, company, client, manager, vehicle, validation, date } = item;
     return (
-      <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
+      <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
         <div style={{}} className={style.listItemCompany}>
           <div className={style.wrapper}>
@@ -73,18 +83,18 @@ class ListItem extends React.Component {
         </div>
 
         {/* <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listItemManager}> */}
-        {/*   <div className={style.wrapper}> */}
-        {/*     <div className={style.innerWrapper}> */}
-        {/*       <div className={style.item}> */}
-        {/*         <div className={style.text}> */}
-        {/*           {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}> */}
-        {/*             {manager.displayName} */}
-        {/*           </Link> : '—'} */}
-        {/*         </div> */}
-        {/*       </div> */}
-        {/*     </div> */}
-        {/*   </div> */}
-        {/* </div> */}
+          {/*   <div className={style.wrapper}> */}
+            {/*     <div className={style.innerWrapper}> */}
+              {/*       <div className={style.item}> */}
+                {/*         <div className={style.text}> */}
+                  {/*           {manager ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}> */}
+                    {/*             {manager.displayName} */}
+                    {/*           </Link> : '—'} */}
+                  {/*         </div> */}
+                {/*       </div> */}
+              {/*     </div> */}
+            {/*   </div> */}
+          {/* </div> */}
 
         <div className={style.listItemAgent}>
           <div className={style.wrapper}>
@@ -141,6 +151,7 @@ ListItem.propTypes = {
 };
 
 export default compose(
+  withRouter,
   injectIntl,
 )(ListItem);
 

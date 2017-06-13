@@ -9,8 +9,10 @@ import TextField from 'components/material-ui/TextField';
 
 import style from 'routes/Landing/styles';
 
+import throttle from 'lodash.throttle';
+
 class DT extends React.Component {
-  renderInput({ ...props }) {
+  renderInput({ onBlur, ...props }) {
     const  { meta: { touched, error }, input, label, asyncValidate, onRef } = this.props;
 
     let errorText;
@@ -18,10 +20,9 @@ class DT extends React.Component {
       errorText = 'Ce champ ne peut pas être vide.';
     }
 
-    function onBlur(e) {
-      // input.onBlur && input.onBlur(e);
-      props.onBlur && props.onBlur(e);
-      asyncValidate(input.name);
+    function myOnBlur(e) {
+      onBlur && onBlur(e);
+      // asyncValidate(input.name);
     }
 
     return (
@@ -30,7 +31,7 @@ class DT extends React.Component {
         floatingLabelText={label}
         errorText={errorText}
         {...props}
-        onBlur={onBlur}
+        onBlur={myOnBlur}
         ref={onRef}
       />
     );
@@ -39,16 +40,18 @@ class DT extends React.Component {
   constructor() {
     super();
 
-    this.onChange = this.onChange.bind(this);
+    this.onChange = throttle(this.onChange.bind(this), 100);
     this.onCollapse = this.onCollapse.bind(this);
     this.renderInput = this.renderInput.bind(this);
   }
   onChange(_, { dateMoment, timestamp }) {
     const { input } = this.props;
     input.onChange(
-      moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
+      dateMoment
+      ? moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
+      : null
     );
-    this.props.asyncValidate(input.name);
+    // this.props.asyncValidate(input.name);
   }
   onCollapse() {
     this.props.onNext();
@@ -66,7 +69,9 @@ class DT extends React.Component {
           footer={false}
           renderInput={this.renderInput}
           locale={locale}
-          {...{...input, onRef, label}}
+          value={input.value}
+          onRef={onRef}
+          label={label}
           meta={meta}
           onChange={this.onChange}
           onCollapse={this.onCollapse}

@@ -18,7 +18,7 @@ export default function EmptyList() {
     // </div>
     <Empty
       noIcon
-      message='Félicitation!'
+      message='Rien à afficher'
       description={'Vous n\'avez aucun dossiers avec pièces manquantes.'}
       className={style.dashboardEmpyList}
     />

@@ -45,6 +45,8 @@ export default function onDoc(id) {
           agent        : (await indexedUser(doc.get('agent'))),
           user         : (await indexedUser(doc.get('user'), /* isEmployee = */true)),
           lastModified : doc.get('lastModified') || doc.get('updatedAt'),
+          police       : doc.get('police'),
+          nature       : doc.get('nature'),
           ...lastModifiedFields,
           ...(await getValidation(doc)),
           ...(await getClosure(doc)),
