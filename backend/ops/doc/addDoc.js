@@ -61,7 +61,7 @@ export default async function addDoc(request, done) {
               password : uuid.v4(),
               displayName,
               email : email || `${uuid.v4()}@epsilon.ma`,
-              mail  : null,
+              mail  : email,
               role,
             },
           };
