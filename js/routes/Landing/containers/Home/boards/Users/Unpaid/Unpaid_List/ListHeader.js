@@ -71,7 +71,7 @@ class ListHeader extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>Compagnie</div>
+                <div className={style.text}>Comp.</div>
                 {key === 'company' ? <SortDirection direction={direction}/> : null}
               </div>
             </div>
@@ -89,7 +89,7 @@ class ListHeader extends React.Component {
           </div>
         </div>
 
-        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listHeaderItemClient}>
+        <div style={{}} className={style.listHeaderItemClient}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

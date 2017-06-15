@@ -56,7 +56,7 @@ class RecentDocs extends React.Component {
     // }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter(({ updatedAt : timestamp }) => {
+      const acts = items.filter(({ lastModified : timestamp }) => {
         const res = to
           ? to > timestamp && timestamp >= from
           : timestamp >= from;
@@ -167,7 +167,7 @@ function Entry({ intl, doc }, { currentUser }) {
             {doc.user.displayName}
           </Link> ·{' '}
           <time title={intl.formatDate(doc.date)} dateTime={new Date(doc.date).toISOString()}>
-            {intl.formatRelative(doc.date)}
+            {intl.formatRelative(doc.lastModified)}
           </time>
         </div>
       </div>

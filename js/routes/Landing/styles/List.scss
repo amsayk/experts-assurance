@@ -98,14 +98,14 @@
 
 .listHeaderItemCompany {
   composes: listHeaderItem sortable;
-  max-width: 130px;
-  min-width: 130px;
+  max-width: 100px;
+  min-width: 100px;
   flex: 1;
 }
 
 .board .listHeaderItemCompany {
-  max-width: 155px;
-  min-width: 155px;
+  // max-width: 155px;
+  // min-width: 155px;
 }
 
 .listHeaderItemRef {
@@ -238,7 +238,7 @@
 .board .listItemManager {
   // min-width: 200px !important;
   // max-width: 200px;
-  min-width: 200px;
+  // min-width: 300px;
 
 }
 
@@ -303,15 +303,15 @@
 
 .listItemCompany {
   composes: listItem;
-  max-width: 130px;
-  min-width: 130px;
+  max-width: 100px;
+  min-width: 100px;
   flex: 1;
   text-transform: uppercase;
 }
 
 .board .listItemCompany {
-  max-width: 155px;
-  min-width: 155px;
+  // max-width: 155px;
+  // min-width: 155px;
 }
 
 .listItemRef {
@@ -333,7 +333,7 @@
 .board .listItemAgent,
 .board .listItemManager,
 .board .listItemVehicle {
-  min-width: 200px;
+  // min-width: 300px;
 }
 
 .listItemDate {

@@ -94,8 +94,8 @@
 
 .listHeaderItemCompany {
   composes: listHeaderItem sortable;
-  max-width: 125px;
-  min-width: 125px;
+  max-width: 100px;
+  min-width: 100px;
   flex: 1;
 }
 
@@ -285,8 +285,8 @@
 
 .listItemCompany {
   composes: listItem;
-  max-width: 125px;
-  min-width: 125px;
+  max-width: 110px;
+  min-width: 110px;
   flex: 1;
   text-transform: uppercase;
 }

@@ -62,7 +62,7 @@ class Open extends React.Component {
           }} className={cx(style['OPEN'], style.boardIcon)}>
           <WatchIcon size={18}/>
         </div>
-        <h5 className={style.boardTitle}>Dossiers en cours {summary}</h5>
+        <h5 className={style.boardTitle}>Dossiers non-validés {summary}</h5>
         <div className={style.ctrls}>
           <div className={style.icon}>
             {data.loading ? <ActivityIndicator size='small'/> : null}

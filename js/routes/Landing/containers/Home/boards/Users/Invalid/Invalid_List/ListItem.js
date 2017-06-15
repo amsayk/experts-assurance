@@ -38,7 +38,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, company, client, manager, vehicle, validation, date } = item;
+    const { id, refNo, company, client, manager, vehicle, validation, date, dateMission } = item;
     return (
       <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className)}>
 
@@ -68,7 +68,7 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listItemClient}>
+        <div style={{}} className={style.listItemClient}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
@@ -125,7 +125,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {intl.formatDate(date)}
+                  {intl.formatDate(dateMission)}
                 </div>
               </div>
             </div>

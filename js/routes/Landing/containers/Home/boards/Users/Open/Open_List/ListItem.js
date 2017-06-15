@@ -67,7 +67,7 @@ class ListItem extends React.Component {
           </div>
         </div>
 
-        <div style={{ maxWidth: 175, minWidth: 175 }} className={style.listItemClient}>
+        <div style={{}} className={style.listItemClient}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>

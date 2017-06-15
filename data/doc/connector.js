@@ -1132,6 +1132,10 @@ export class DocConnector {
         q.greaterThanOrEqualTo('dateMission', new Date(now - (durationInDays * 24 * 60 * 60 * 1000)))
       }
 
+      // Not validated
+      q.doesNotExist('validation_date');
+      q.doesNotExist('validation_amount');
+
       // Not deleted
       q.doesNotExist('deletion_date');
       q.doesNotExist('deletion_user');
