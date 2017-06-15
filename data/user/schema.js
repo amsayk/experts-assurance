@@ -149,9 +149,7 @@ export const resolvers = {
       roles(user) {
         return user.get('roles') || [];
       },
-      email(user) {
-        return /* user.get('email') || */user.get('mail');
-      },
+      email: parseGraphqlScalarFields(['mail']).mail,
       authorization(user) {
         const authorization_date = user.get('authorization_date');
         const authorization_user = user.get('authorization_user');
