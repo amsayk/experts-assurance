@@ -107,7 +107,7 @@ class DTValidationForm extends React.Component {
       submitting,
       invalid,
       asyncValidate,
-      } = this.props;
+    } = this.props;
     return (
       <div style={styles.root}>
         <h5 style={styles.header}>
@@ -125,7 +125,7 @@ class DTValidationForm extends React.Component {
           }}
           component={DT} />
 
-        <br/>
+        <div style={{marginTop: 15}}></div>
 
         <Button style={styles.btn} disabled={pristine || submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
           Valider

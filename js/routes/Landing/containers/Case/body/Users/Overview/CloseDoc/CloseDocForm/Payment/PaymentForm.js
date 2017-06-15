@@ -86,7 +86,7 @@ class PaymentForm extends React.Component {
           }}
           component={renderField} />
 
-        <br/>
+        <div style={{marginTop: 15}}></div>
 
         <Field
           name='paymentDate'
@@ -98,7 +98,7 @@ class PaymentForm extends React.Component {
           }}
           component={DT} />
 
-        <br/>
+        <div style={{marginTop: 15}}></div>
 
         <Field
           name='paymentDescription'

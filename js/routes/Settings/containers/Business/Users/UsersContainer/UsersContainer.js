@@ -29,7 +29,7 @@ import List from './List';
 function UsersContainer({ intl, user, viewType, notificationOpen, actions }) {
   const isList = viewType === VIEW_TYPE_LIST;
   return (
-    <div className={cx(style.root, isList && style.listView, notificationOpen && style.notificationOpen)}>
+    <div className={cx(style.usersContainerRoot, isList && style.listView, notificationOpen && style.notificationOpen)}>
       <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
       <Header onLogOut={actions.logOut}/>
       {/* <div className={style.body}> */}

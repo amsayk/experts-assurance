@@ -236,8 +236,8 @@ class Form extends React.Component {
       //   />
       // </section>,
 
-      <br/>,
-      <br/>,
+      <div style={{marginTop: 15}}></div>,
+      <div style={{marginTop: 15}}></div>,
 
       <Payment
         doc={doc}

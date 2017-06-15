@@ -6,6 +6,8 @@ import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/
 
 import { DocType, ActivityType } from 'data/types';
 
+import moment from 'moment';
+
 import * as codes from 'result-codes';
 
 export default async function closeDoc(request, done) {
@@ -37,8 +39,12 @@ export default async function closeDoc(request, done) {
 
     };
 
-    const current_payment_date = doc.has('payment_date') && doc.get('payment_date').getTime ? doc.get('payment_date').getTime() : null;
-    const current_payment_amount = doc.has('payment_amount') ? doc.get('payment_amount') : null;
+    const current_payment_date = doc.has('payment_date') && doc.get('payment_date').getTime
+      ? +moment(doc.get('payment_date'))
+      : null;
+    const current_payment_amount = doc.has('payment_amount')
+      ? doc.get('payment_amount')
+      : null;
     if (current_payment_amount !== paymentAmount || current_payment_date !== paymentDateMS) {
       paymentInfo = {
         payment_user   : request.user,
@@ -53,7 +59,7 @@ export default async function closeDoc(request, done) {
     };
 
     const current_validation_date = doc.has('validation_date') && doc.get('validation_date').getTime
-      ? doc.get('validation_date').getTime()
+      ? +moment(doc.get('validation_date'))
       : null;
     const current_validation_amount = doc.has('validation_amount')
       ? doc.get('validation_amount')
@@ -62,7 +68,7 @@ export default async function closeDoc(request, done) {
       validationInfo = {
         validation_user   : request.user,
         validation_date   : new Date(dateClosureMS),
-        validation_amount : mtRapports,
+        validation_amount : mtRapports || null,
 
       };
     }

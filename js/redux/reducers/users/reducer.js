@@ -28,9 +28,11 @@ import sortReducer, {
 
 import { Record, List } from 'immutable';
 
+const initialSortConfig = sortInitialState.merge({ key : 'date' });
+
 export class UsersState extends Record({
   selection    : selectionInitialState,
-  sortConfig   : sortInitialState,
+  sortConfig   : initialSortConfig,
   viewType     : VIEW_TYPE_GRID,
   searchOpen   : false,
   queryString  : '',
@@ -80,7 +82,7 @@ export default function reducer(state = initialState, action) {
     case INIT: {
       return state.merge({
         viewType   : cookie.load('users.viewType', /* doNotParse = */true) || VIEW_TYPE_GRID,
-        sortConfig : sortInitialState.merge(cookie.load('users.sortConfig', /* doNotParse = */false)),
+        sortConfig : initialSortConfig.merge(cookie.load('users.sortConfig', /* doNotParse = */false)),
       });
     }
     case USER_LOGGED_OUT:

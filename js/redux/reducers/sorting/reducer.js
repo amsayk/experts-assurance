@@ -1,13 +1,15 @@
 import {
   SET_SORT_KEY,
   SET_SORT_DIRECTION,
+
+  SORT_DIRECTION_DESC,
 } from './constants';
 
 import { Record } from 'immutable';
 
 export class SortConfig extends Record({
   key       : undefined,
-  direction : undefined,
+  direction : SORT_DIRECTION_DESC,
 }) {}
 
 export const initialState = new SortConfig();

@@ -257,7 +257,7 @@ export const schema = [`
     _index: String!
     _type: String!
     _id: String!
-    _score: Int!
+    _score: Float!
     highlight: [String!]!
     _source: ESDocSource!
   }

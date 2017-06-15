@@ -18,6 +18,8 @@ import sortReducer, {
   initialState as sortInitialState,
 } from 'redux/reducers/sorting/reducer';
 
+const initialSortConfig = sortInitialState.merge({ key : 'date' });
+
 export class DocSearchState extends Record({
   active          : false,
   showStateFilter : false,
@@ -45,7 +47,7 @@ export class DocSearchState extends Record({
   vehicleModel    : null,
   vehicleManufacturer    : null,
 
-  sortConfig      : sortInitialState,
+  sortConfig      : initialSortConfig,
 }) {}
 
 const initialState = new DocSearchState();

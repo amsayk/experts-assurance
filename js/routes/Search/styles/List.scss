@@ -13,6 +13,16 @@
   min-height: 1.5em;
 }
 
+.listHeader {
+  position: sticky;
+  top: 0%;
+  z-index: 1;
+  background: #fff;
+  height: 30px;
+  border-bottom: 1px solid rgba(176, 197, 197, 0.6);
+
+}
+
 .listHeaderItemAgent,
 .listHeaderItemClient,
 .listHeaderItemManager,

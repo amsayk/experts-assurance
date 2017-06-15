@@ -81,6 +81,8 @@ export default async function addDoc(request, done) {
     const key = await genDocKey();
 
     const props = {
+      imported: process.env._IMPORTING === 'yes',
+
       agent  : (await getUser(business, agent, Role_AGENTS)),
       client : (await getUser(business, client, Role_CLIENTS)),
 

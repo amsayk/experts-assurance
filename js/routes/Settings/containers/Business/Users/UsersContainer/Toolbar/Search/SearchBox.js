@@ -86,7 +86,16 @@ class SearchBox extends React.Component {
           <MenuItem header componentClass={Header} title={'Résultat de recherche'}/>
           {result.hits.map(({ _id, _source : user }, index) => {
             return (
-              <MenuItem q={q} url={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + _id} key={_id} eventKey={index} ProfilePic={ProfilePic} componentClass={ListItem} item={user} intl={intl}/>
+              <MenuItem
+                q={q}
+                url={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + _id}
+                key={_id}
+                eventKey={index}
+                ProfilePic={ProfilePic}
+                componentClass={ListItem}
+                item={user}
+                intl={intl}
+              />
             );
           })}
         </Dropdown.Menu>

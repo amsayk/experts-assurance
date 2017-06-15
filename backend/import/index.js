@@ -2,25 +2,31 @@ import Parse from 'parse/node';
 
 import nullthrows from 'nullthrows';
 
+import isEmpty from 'isEmpty';
+
 const argv = require('yargs').argv;
+
+import publish from 'backend/kue-mq/publish';
 
 import config from 'build/config';
 
+import { businessQuery } from 'data/utils';
+
 import es, { config as esConfig } from 'backend/es';
+
+import orderBy from 'lodash.orderby';
 
 import moment from 'moment';
 
-import { getOrCreateBusiness, REF_NO_KEY } from 'backend/utils';
+import { serializeParseObject } from 'backend/utils';
 
-import { DocType, ActivityType } from 'data/types';
+import { DocType, ActivityType, FileType } from 'data/types';
 
 import fs from 'fs';
 
 import createApolloClient from './apollo-client';
 
 import * as loaders from './loaders';
-
-import isEmpty from 'isEmpty';
 
 import ADD from './addDoc.mutation.graphql';
 import CLOSE from './closeDoc.mutation.graphql';
@@ -56,11 +62,28 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
     process.exit(1);
   }
 
+  docs = orderBy(docs, (doc) => +moment(doc['DT Sinistre']), ['asc']);
+
   function sleep(n) {
     return new Promise(resolve => setTimeout(resolve, n));
   }
 
+  function getCompany(doc) {
+    const ref = doc['Réf'];
+
+    if (isEmpty(ref)) {
+      throw new Error('Company is required.');
+    }
+
+    const company = ref.substring(0, 3);
+
+    return company;
+  }
+
   try {
+    // Log in
+    const user = await Parse.User.logIn('admin', password);
+
     // Reset all data
     if (!argv.keep) {
 
@@ -105,56 +128,73 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
           process.exit(1);
         }
 
-        const business = await getOrCreateBusiness();
-
-        await business.set(REF_NO_KEY, 0)
-          .save(null, { useMasterKey : true });
-
-        await sleep(250);
-        // Delete all users
-        {
-          const users = await new Parse.Query(Parse.User)
-            .notEqualTo('username', 'admin')
-            .find({ useMasterKey : true });
-          log(`Found ${users.length} users...`);
-          await Promise.all(
-            users.map((o) => o.destroy({ useMasterKey : true })));
-        }
-
-        await sleep(250);
         // Delete all docs
-        {
-          const docs = await new Parse.Query(DocType).find({ useMasterKey : true });
-          log(`Found ${docs.length} docs...`);
-          await Promise.all(
-            docs.map((o) => o.destroy({ useMasterKey : true })));
-        }
+        await sleep(250);
+        const importedDocs = await new Parse.Query(DocType)
+          .matchesQuery('business', businessQuery())
+          .equalTo('imported', true)
+          .find({ useMasterKey : true });
+        log(`Found ${importedDocs.length} imported docs...`);
 
-        // Delete all activities
+        // Delete all activities of imported docs
         await sleep(250);
         {
-          const activities = await new Parse.Query(ActivityType).find({ useMasterKey : true });
+          const activities = await new Parse.Query(ActivityType)
+            .containedIn('document', importedDocs)
+            .find({ useMasterKey : true });
           log(`Found ${activities.length} activities...`);
           await Promise.all(
             activities.map((o) => o.destroy({ useMasterKey : true })));
         }
+
+        // Delete all files of imported docs
+        await sleep(250);
+        {
+          const files = await new Parse.Query(FileType)
+            .containedIn('document', importedDocs)
+            .find({ useMasterKey : true });
+          log(`Found ${files.length} files...`);
+          await Promise.all(
+            files.map((o) => o.destroy({ useMasterKey : true })));
+        }
+
+        log(`Deleting imported docs...`);
+        await Promise.all(
+          importedDocs.map((o) => o.destroy({ useMasterKey : true })));
+
+        // Index non-imported docs
+        await sleep(250);
+        {
+          const docs = await new Parse.Query(DocType)
+            .matchesQuery('business', businessQuery())
+            .equalTo('imported', false)
+            .find({ useMasterKey : true });
+          log(`Found ${docs.length} remaining docs...indexing.`);
+          await Promise.all(
+            docs.map((o) => {
+              const req = {
+                user   : serializeParseObject(user),
+                now    : Date.now(),
+                params : { id: o.id },
+              };
+              return publish('ES_INDEX', 'onDoc', req);
+            }));
+        }
+
       }
 
       await reset();
     }
-
-    // Log in
-    const user = await Parse.User.logIn('admin', password);
 
     const apolloClient = createApolloClient(user);
 
     await docs.reduce((p, data) => {
       return p.then(async () => {
         const payload = {
-          dateMission        : new Date(nullthrows(data['DT Mission'])).getTime(),
-          date               : new Date(nullthrows(data['DT Sinistre'])).getTime(),
+          dateMission        : +moment(nullthrows(data['DT Mission'])),
+          date               : +moment(nullthrows(data['DT Sinistre'])),
 
-          company            : data['Adverse'] || null,
+          company            : getCompany(data),
 
           vehicleManufacturer  : nullthrows(data['Véhicule']),
           vehicleModel         : nullthrows(data['Genre']),
@@ -175,8 +215,8 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
           agentDisplayName   : nullthrows(data['Assureur conseil']),
           agentEmail         : null,
 
-          // police             : data['N° Sinistre ou N° Police'],
-          // nature             : data['Nature'],
+          police             : data['N° Sinistre ou N° Police'],
+          nature             : data['Nature'],
         };
 
         try {
@@ -231,6 +271,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
                 info : {
                   dateClosure : +moment(dateValidation),
                   paymentDate : +moment(paymentDate),
+                  mtRapports  : 0,
                 },
               },
             });
@@ -243,7 +284,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
           log(`Successfully added doc: ${doc.refNo}`);
         } catch (e) {
-          log.error(`Error adding doc: ${JSON.stringify(data)}`);
+          log.error(`Error adding doc: ${JSON.stringify(data)}, ${error}`);
           return Promise.reject(e);
         }
 

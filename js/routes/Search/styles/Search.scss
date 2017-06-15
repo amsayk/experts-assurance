@@ -9,7 +9,8 @@ $navbar-height: 70px;
 .navbar {
   composes: fixed-top navbar flex-row justify-content-between from 'styles/_base.scss';
   top: -70px;
-  z-index: 1;
+  // z-index: 1;
+  z-index: 1052;
   border-bottom: 0;
   margin-top: 0;
   padding-left: $navbar-horizontal-spacing;
@@ -36,7 +37,7 @@ $navbar-height: 70px;
 
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
-  height: 100%;
+  // height: 100%;
   background-color: #fff;
 }
 

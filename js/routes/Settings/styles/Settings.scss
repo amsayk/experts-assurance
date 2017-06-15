@@ -141,7 +141,7 @@ textarea.control {
 
 .root {
   composes: d-flex flex-column from 'styles/_base.scss';
-  height: 100%;
+  height: 100vh;
 }
 
 .formHeading {

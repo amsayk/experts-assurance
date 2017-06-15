@@ -47,7 +47,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <b>{company || '—'}</b>
+                  {company || '—'}
                 </div>
               </div>
             </div>

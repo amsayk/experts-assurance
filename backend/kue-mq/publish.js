@@ -27,7 +27,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     const clearJob = function () {
       job.remove(function (err) {
         if (err) { throw err; }
-        log('removed completed job #%d', job.id);
+        log('removed completed job %s:#%d', serverMethod, job.id);
       });
     };
 
@@ -37,7 +37,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     }, options.timeout || (30 * 1000));
 
     job.on('failed', function (err) {
-      log(`Job #${job.id} failed.`, err);
+      log(`Job ${serverMethod}:#${job.id} failed.`, err);
       clearTimeout(timeoutCall);
       reject(err);
     });
@@ -45,7 +45,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     job.on('complete', function (result, err) {
       clearTimeout(timeoutCall);
       if (err) { return reject(err); }
-      log(`Job #${job.id} completed successfully.`);
+      log(`Job ${serverMethod}:#${job.id} completed successfully.`);
       resolve({
         data: result,
         job: job,
@@ -55,7 +55,7 @@ export default function publish(serverName, serverMethod, req, options = {}) {
     job.save(function (err) {
       if (err) {
         clearTimeout(timeoutCall);
-        log(`publish(${serverName}, ${serverMethod}) Job #${job.id} failed`);
+        log(`publish(${serverName}, ${serverMethod}) Job #${job.id} failed to save.`);
         return reject(err);
       }
       log(`publish(${serverName}, ${serverMethod}) Job #${job.id}`);

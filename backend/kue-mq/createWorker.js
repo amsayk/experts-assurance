@@ -40,7 +40,7 @@ export default function createWorker(opts, name, methods) {
       if (err) { return; }
       job.remove(function (err){
         if (err) { throw err; }
-        log('removed completed job #%d', job.id);
+        log('removed completed job %s:%s:#%d', name, job.data.__serverMethod, job.id);
       });
     });
   });
@@ -50,7 +50,7 @@ export default function createWorker(opts, name, methods) {
       if (err) { return; }
       job.remove(function (err){
         if (err) { throw err; }
-        log('removed failed job #%d', job.id);
+        log('removed failed job %s:%s:#%d', name, job.data.__serverMethod, job.id);
       });
     });
   });

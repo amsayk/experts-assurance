@@ -199,6 +199,7 @@
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.0",
     "lodash.omit": "^4.5.0",
+    "lodash.orderby": "^4.6.0",
     "lodash.padstart": "^4.6.1",
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.18.1",

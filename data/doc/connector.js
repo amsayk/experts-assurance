@@ -688,11 +688,11 @@ export class DocConnector {
 
     const sort = [
       '_score',
-      {
-        lastModified: {
-          order: 'desc',
-        },
-      },
+      // {
+      //   lastModified: {
+      //     order: 'desc',
+      //   },
+      // },
     ];
 
     const SORT_DIRECTION_MAP = {
@@ -700,11 +700,9 @@ export class DocConnector {
       SORT_DIRECTION_DESC : 'desc',
     };
 
-    if (sortConfig && sortConfig.key) {
-      sort.unshift({
-        [`${sortConfig.key}`] : { order: sortConfig.direction ? SORT_DIRECTION_MAP[sortConfig.direction] : 'desc' },
-      });
-    }
+    sort.push({
+      [`${sortConfig && sortConfig.key ? sortConfig.key : 'date'}`] : { order: sortConfig.direction ? SORT_DIRECTION_MAP[sortConfig.direction] : 'desc' },
+    });
 
     const searchParams = {
       index: config.esIndex,

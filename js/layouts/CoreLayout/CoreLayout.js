@@ -56,18 +56,14 @@ class CoreLayout extends React.PureComponent {
     let body = React.Children.only(children);
     if (!displayMatches) {
       body = (
-        <div className={style.root}>
-          <div className={style.center}>
-            {intl.formatMessage(messages.UnsupportedDisplay)}
-          </div>
+        <div className={style.center}>
+          {intl.formatMessage(messages.UnsupportedDisplay)}
         </div>
       );
     } else if (!onLine) {
       body = (
-        <div className={style.root}>
-          <div className={style.center}>
-            {intl.formatMessage(messages.NavigatorOffline)}
-          </div>
+        <div className={style.center}>
+          {intl.formatMessage(messages.NavigatorOffline)}
         </div>
       );
     }

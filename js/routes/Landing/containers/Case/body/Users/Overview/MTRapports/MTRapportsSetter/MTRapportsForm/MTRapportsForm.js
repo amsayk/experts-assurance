@@ -90,7 +90,7 @@ class MTRapportsForm extends React.Component {
           }}
           component={renderField} />
 
-        <br/>
+        <div style={{marginTop: 15}}></div>
 
         <Button style={styles.btn} disabled={pristine || submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
           Valider

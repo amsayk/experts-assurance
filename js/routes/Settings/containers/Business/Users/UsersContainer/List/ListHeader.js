@@ -49,7 +49,7 @@ class ListHeader extends React.Component {
     super(props);
 
     this.onSortByName = this.onSort.bind(this, 'displayName');
-    this.onSortByDate = this.onSort.bind(this, 'dateMission');
+    this.onSortByDate = this.onSort.bind(this, 'date');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;

@@ -190,16 +190,16 @@ class Form extends React.Component {
         />
       </section>,
 
-      <br/>,
-      <br/>,
+      <div style={{marginTop: 15}}></div>,
+      <div style={{marginTop: 15}}></div>,
 
       <Vehicle
         key='vehicle'
         onKeyDown={this.onKeyDown}
       />,
 
-      <br/>,
-      <br/>,
+      <div style={{marginTop: 15}}></div>,
+      <div style={{marginTop: 15}}></div>,
 
       <Client
         key='client'
@@ -207,8 +207,8 @@ class Form extends React.Component {
         asyncValidate={asyncValidate}
       />,
 
-      <br/>,
-      <br/>,
+      <div style={{marginTop: 15}}></div>,
+      <div style={{marginTop: 15}}></div>,
 
       <Agent
         key='agent'
@@ -216,8 +216,8 @@ class Form extends React.Component {
         asyncValidate={asyncValidate}
       />,
 
-      <br/>,
-      <br/>,
+      <div style={{marginTop: 15}}></div>,
+      <div style={{marginTop: 15}}></div>,
 
       <header>
         <h5>Informations additionnelles</h5>

@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import DataLoader from 'dataloader';
 
+import { businessQuery } from 'data/utils';
+
 // export const usernames = new DataLoader(async function (keys) {
 //   const objects = await new Parse.Query(Parse.User)
 //     .containedIn('username', keys)
@@ -15,6 +17,7 @@ import DataLoader from 'dataloader';
 
 export const displayNames = new DataLoader(async function (keys) {
   const objects = await new Parse.Query(Parse.User)
+    .matchesQuery('business', businessQuery())
     .containedIn('displayName', keys)
     .find({ useMasterKey: true });
 

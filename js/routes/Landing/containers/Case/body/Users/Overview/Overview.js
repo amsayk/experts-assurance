@@ -1192,7 +1192,7 @@ class Overview extends React.Component {
               ]}
             </h6>
             <h4 className={style.h4}>
-              {loading ? null : `${doc.vehicle.model || doc.vehicle.manufacturer}, ${doc.vehicle.plateNumber}`}
+              {loading ? null : `${[doc.vehicle.manufacturer, doc.vehicle.model, doc.vehicle.plateNumber].filter(s => s).join(', ')}`}
             </h4>
             <div className={style.deleteOrRestoreDocAction}>
               {(() => {

@@ -27,9 +27,11 @@ import sortReducer, {
 
 import { Record } from 'immutable';
 
+const initialSortConfig = sortInitialState.merge({ key : 'date' });
+
 export class CasesState extends Record({
   selection    : selectionInitialState,
-  sortConfig   : sortInitialState,
+  sortConfig   : initialSortConfig,
   queryString  : '',
   state        : null,
   client       : null,
@@ -80,7 +82,7 @@ export default function reducer(state = initialState, action) {
       case USER_LOGGED_IN:
     case INIT: {
       return state.merge({
-        sortConfig : sortInitialState.merge(cookie.load('cases.sortConfig', /* doNotParse = */false)),
+        sortConfig : initialSortConfig.merge(cookie.load('cases.sortConfig', /* doNotParse = */false)),
       });
     }
     case USER_LOGGED_OUT:

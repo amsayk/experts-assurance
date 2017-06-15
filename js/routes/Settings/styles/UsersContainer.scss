@@ -1,7 +1,11 @@
-.root {
+.root,
+.usersContainerRoot {
   composes: d-flex flex-column from 'styles/_base.scss';
-  height: 100%;
   background-color: #fff;
+}
+
+.usersContainerRoot {
+  composes: fit-page from 'styles/_base.scss';
 }
 
 // .body {

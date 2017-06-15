@@ -69,7 +69,7 @@ export class ChangePasswordForm extends React.Component {
             component={CurrentPasswordField}
             label={intl.formatMessage(messages.labelCurrentPassword)}
             onKeyDown={this.onKeyDown} />
-          <br/>
+          <div style={{marginTop: 15}}></div>,
           <Field
             name='newPassword'
             component={NewPasswordField}

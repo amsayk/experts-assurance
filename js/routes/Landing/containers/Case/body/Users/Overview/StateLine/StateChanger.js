@@ -27,7 +27,7 @@ import selector from './selector';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-  </div>;
+</div>;
 
 function getState(state, stateText, icon) {
   return (
@@ -108,7 +108,7 @@ class StateToggle extends React.Component {
 
     let _state = state;
 
-    if (state === 'OPEN' && doc && doc.validation && doc.validation.date && doc.validation.amount !== null) {
+    if (state === 'OPEN' && doc && doc.validation && (doc.validation.date && doc.validation.amount !== null)) {
       _state = 'VALID';
     }
 

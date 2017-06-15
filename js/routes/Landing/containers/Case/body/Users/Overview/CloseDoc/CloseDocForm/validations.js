@@ -25,8 +25,7 @@ if (SERVER) {
 const validations = {
   dateClosure,
   mtRapports: {
-    number         : true,
-    required       : true,
+    numberRequired : SERVER ? process.env._IMPORTING !== 'yes' : true,
     validateOnBlur : true,
   },
 

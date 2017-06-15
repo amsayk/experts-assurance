@@ -52,7 +52,7 @@ export default class AdvancedSearch extends React.Component {
           date={search.lastModified}
           onDate={actions.onLastModified}/>
 
-        <br/>
+            <div style={{marginTop: 15}}></div>
 
         {/* render divider */}
         {/* <div className={style.advancedSearch_divider}/> */}
@@ -70,7 +70,7 @@ export default class AdvancedSearch extends React.Component {
         {/* render divider */}
         {/* <div className={style.advancedSearch_divider}/> */}
 
-        <br/>
+            <div style={{marginTop: 15}}></div>
 
         <h6 className={style.advancedSearch_intro}>Individuels/Sociétés</h6>
 

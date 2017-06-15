@@ -22,6 +22,10 @@ export function number(field, value) {
   return value ? !isNumber(value) : false;
 }
 
+export function numberRequired(field, value, prop) {
+  return prop ? !isNumber(value) : false;
+}
+
 export function email(field, value, prop) {
   return prop && value ? !(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(value)) : false; // eslint-disable-line max-len
 }

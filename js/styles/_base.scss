@@ -65,6 +65,10 @@
   }
 }
 
+.fit-page {
+  min-height: 100vh;
+}
+
 .flex {
   composes: d-flex;
   height: 100%;
