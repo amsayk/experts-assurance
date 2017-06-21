@@ -55,6 +55,8 @@ log('Creating default configuration.');
 // Default Configuration
 // ========================================================
 const config = {
+  verbose : false,
+
   // Allow debugging in prodiction mode
   debug: typeof process.env.DEBUG !== 'undefined' ? process.env.DEBUG : null,
 

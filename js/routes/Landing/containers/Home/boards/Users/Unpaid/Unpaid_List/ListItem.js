@@ -15,7 +15,6 @@ import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER, PATH_CASES_CASE } from
 
 import { injectIntl, intlShape } from 'react-intl';
 
-
 class ListItem extends React.Component {
   constructor() {
     super();

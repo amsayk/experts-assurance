@@ -22,12 +22,20 @@ if (SERVER) {
   dateClosure.date = true;
 }
 
+const mtRapports = {
+  validateOnBlur : true,
+  required       : true,
+  number         : true,
+};
+
+if (SERVER) {
+  mtRapports.required = process.env._IMPORTING !== 'yes';
+  mtRapports.number = process.env._IMPORTING !== 'yes';
+}
+
 const validations = {
   dateClosure,
-  mtRapports: {
-    numberRequired : SERVER ? process.env._IMPORTING !== 'yes' : true,
-    validateOnBlur : true,
-  },
+  mtRapports,
 
   paymentAmount: {
     // required       : true,

@@ -15,21 +15,25 @@ import MatchingUsers from '../MatchingUsers';
 
 import fieldErrorSelector from '../fieldErrorSelector';
 
+function getError(error, fieldName) {
+  return error.get ? error.get(fieldName) || error[fieldName] : error[fieldName];
+}
+
 const renderField = connect(fieldErrorSelector('agent'))(
   function ({ agent, onChange, onKeyDown, floatingLabelText, className, input, meta: { touched, error } }) {
     let errorText;
 
     if (touched) {
       if (error) {
-        if (error.get('required')) {
+        if (getError(error, 'required')) {
           errorText = 'Ce champ ne peut pas être vide.';
         }
-        if (error.get('email')) {
+        if (getError(error, 'email')) {
           errorText = 'Cet adresse e-mail est invalide.';
         }
       }
 
-      if (agent && agent.get('promise')) {
+      if (agent && getError(agent, 'promise')) {
         errorText = input.name == 'agentDisplayName'
           ? 'Cet utilisateur exist déja, vous devez le selectionner.'
           : <div></div>;

@@ -273,6 +273,7 @@ const WithForm = reduxForm({
   destroyOnUnmount          : true,
   forceUnregisterOnUnmount  : true,
   asyncValidate             : validations.asyncValidate,
+  validate                  : validations.validate,
   // asyncBlurFields           : [
   //   'dateMission',
   //   'date',

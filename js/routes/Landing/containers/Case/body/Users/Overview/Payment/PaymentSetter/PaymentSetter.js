@@ -103,7 +103,7 @@ class PaymentSetter extends React.Component {
               componentClass={Form}
               onSubmit={this.onSet}
               initialValues={{
-                date   : doc.payment ? new Date(doc.payment.date) : new Date(),
+                date   : doc.payment ? doc.payment.date : Date.now(),
                 amount : doc.payment ? doc.payment.amount : null,
               }}
               onInputRef={this.onInputRef}

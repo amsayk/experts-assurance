@@ -17,6 +17,39 @@ export function addMultipleValidations(obj) {
 addMultipleValidations(basicValidations);
 
 
+export function generateSyncValidation(validationConfig) {
+  return (values) => {
+    invariant(Map.isMap(values), '`values` must be an immutable Map.');
+    const errors = {};
+
+    function addError(field, validatorName, message = true) {
+      if (!errors[field]) {
+        errors[field] = {};
+      }
+      errors[field][validatorName] = message;
+
+    }
+
+    Object.keys(validationConfig).map((fieldName) => {
+      const validation = validationConfig[fieldName];
+      if (typeof validation === 'object') {
+        Object.keys(validation).map((validationType) => {
+          if (validationType in ['promise'] || typeof validationStore[validationType] !== 'function') {
+            return;
+          }
+          const hasError = validationStore[validationType](fieldName, values.get(fieldName), validation[validationType], values.toJS(), validation); // eslint-disable-line max-len
+          if (isPromise(hasError)) {
+
+          } else if (hasError) {
+            addError(fieldName, validationType, hasError);
+          }
+        });
+      }
+    });
+    return errors;
+  };
+}
+
 export function generateAsyncValidation(validationConfig) {
   return (values) => {
     invariant(Map.isMap(values), '`values` must be an immutable Map.');
@@ -69,6 +102,7 @@ export function generateAsyncBlurFields(validationConfig) {
 
 export function generateValidation(validationConfig) {
   return {
+    validate: generateSyncValidation(validationConfig),
     asyncValidate: generateAsyncValidation(validationConfig),
     asyncBlurFields: generateAsyncBlurFields(validationConfig),
   };

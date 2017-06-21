@@ -77,7 +77,7 @@ export class ChangeEmailForm extends React.Component {
             component={NewEmailField}
             label={intl.formatMessage(messages.labelNewEmail)}
             onKeyDown={this.onKeyDown} />
-          <button onClick={handleSubmit(this.onSubmit)} disabled={pristine || submitting || invalid} className={style.saveButton}>
+          <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.saveButton}>
             {intl.formatMessage(messages.changeEmail)}
           </button>
         </div>

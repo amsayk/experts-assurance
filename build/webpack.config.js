@@ -262,6 +262,7 @@ if (__DEV__) {
     new webpack.optimize.UglifyJsPlugin({
       sourceMap : !__DEV__ && config.debug,
       minimize  : true,
+      comments: false,
       compress  : {
         unused        : true,
         dead_code     : true,
@@ -270,12 +271,19 @@ if (__DEV__) {
         drop_console  : true,
         hoist_vars    : true,
         screw_ie8     : true,
+        conditionals  : true,
+        comparisons   : true,
+        sequences     : true,
+        evaluate      : true,
+        if_return     : true,
+        join_vars     : true,
       },
     })
   );
 }
 
 webpackConfig.plugins.push(
+  // new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.optimize.CommonsChunkPlugin({
     names      : __DEV__ ? [
       'polyfills',
@@ -364,8 +372,8 @@ if (!__DEV__) {
 
   webpackConfig.plugins.push(
     new ExtractTextPlugin({
-      filename    : '[name].[contenthash].css',
-      disable     : false,
+      filename    : 'styles/[name].[contenthash].css',
+      disable     : __DEV__,
       ignoreOrder : true,
       allChunks   : true,
     })

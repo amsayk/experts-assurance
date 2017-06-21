@@ -11,13 +11,17 @@ import style from 'routes/Landing/styles';
 
 import throttle from 'lodash.throttle';
 
+function getError(error, fieldName) {
+  return error.get ? error.get(fieldName) || error[fieldName] : error[fieldName];
+}
+
 class DT extends React.Component {
   renderInput({ onBlur, ...props }) {
     const  { meta: { touched, error }, input, label, asyncValidate, onRef } = this.props;
 
     let errorText;
     if (error && touched) {
-      errorText = error.get('date') ? 'Date invalide.' : 'Ce champ ne peut pas être vide.';
+      errorText = getError(error, 'date') ? 'Date invalide.' : 'Ce champ ne peut pas être vide.';
     }
 
     function myOnBlur(e) {

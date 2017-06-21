@@ -216,6 +216,7 @@ const Connect = connect(mapStateToProps, mapDispatchToProps);
 
 const WithForm = reduxForm({
   form: 'signup',
+  // validate: validations.validate,
 });
 
 export default compose(
@@ -225,3 +226,4 @@ export default compose(
   Connect,
   WithForm,
 )(SignupContainer);
+

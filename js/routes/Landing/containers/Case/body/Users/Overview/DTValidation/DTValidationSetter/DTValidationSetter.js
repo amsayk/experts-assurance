@@ -105,7 +105,7 @@ class DTValidationSetter extends React.Component {
               componentClass={Form}
               onSubmit={this.onSet}
               initialValues={{
-                date   : hasValidationDate ? new Date(doc.validation.date) : new Date(),
+                date : hasValidationDate ? doc.validation.date : Date.now(),
               }}
               onInputRef={this.onInputRef}
             />

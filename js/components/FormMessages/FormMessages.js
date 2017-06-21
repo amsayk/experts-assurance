@@ -59,6 +59,7 @@ function mapStateToProps(state, { field }) {
         name    : field,
         touched : getIn(formState, ['fields', field, 'touched'], false),
         errors  : merge(
+          getIn(formState, ['syncErrors', field], {}),
           getIn(formState, ['asyncErrors', field], {}),
           getIn(formState, ['submitErrors', field], {}),
         ),

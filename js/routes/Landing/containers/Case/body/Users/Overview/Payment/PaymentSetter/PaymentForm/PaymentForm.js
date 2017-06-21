@@ -15,6 +15,8 @@ import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'r
 
 import validations from './validations';
 
+import throttle from 'lodash.throttle';
+
 function parseDate(s) {
   return +moment.utc(s);
 }
@@ -24,11 +26,15 @@ function _parseFloat(s) {
   return isNaN(val) ? null : val;
 }
 
+function getError(error, fieldName) {
+  return error.get ? error.get(fieldName) || error[fieldName] : error[fieldName];
+}
+
 function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
   let errorText;
 
   if (error && touched) {
-    errorText = error.get('number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
+    errorText = getError(error, 'number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
   }
 
   const props = {};
@@ -55,12 +61,17 @@ function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, on
 }
 
 class DT extends React.Component {
-  renderInput({ ...props }) {
-    const  { meta: { touched, error }, input, label, onRef } = this.props;
+  renderInput({ onBlur, ...props }) {
+    const  { meta: { touched, error }, input, label, asyncValidate, onRef } = this.props;
 
     let errorText;
     if (error && touched) {
-      errorText = error.get('date') ? 'Date invalide.' : 'Ce champ ne peut pas être vide.';
+      errorText = getError(error, 'date') ? 'Date invalide.' : 'Ce champ ne peut pas être vide.';
+    }
+
+    function myOnBlur(e) {
+      onBlur && onBlur(e);
+      asyncValidate(input.name);
     }
 
     return (
@@ -69,6 +80,7 @@ class DT extends React.Component {
         floatingLabelText={label}
         errorText={errorText}
         {...props}
+        onBlur={myOnBlur}
         ref={onRef}
       />
     );
@@ -77,13 +89,16 @@ class DT extends React.Component {
   constructor() {
     super();
 
-    this.onChange = this.onChange.bind(this);
+    this.onChange = throttle(this.onChange.bind(this), 100);
+    this.onCollapse = this.onCollapse.bind(this);
     this.renderInput = this.renderInput.bind(this);
   }
   onChange(_, { dateMoment, timestamp }) {
     const { input } = this.props;
     input.onChange(
-      moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
+      dateMoment
+      ? moment.isMoment(dateMoment) && moment(dateMoment).isValid() ? +dateMoment : ''
+      : null
     );
     this.props.asyncValidate(input.name);
   }
@@ -93,29 +108,30 @@ class DT extends React.Component {
     const { onRef, label, input, meta, locale } = this.props;
 
     return (
-      <div className='react-date-picker-dropup'>
+      <div>
         <DateField
-          footer={false}
-          updateOnDateClick={true}
-          collapseOnDateClick={true}
           forceValidDate
           dateFormat='YYYY-MM-DD'
           updateOnDateClick={true}
+          collapseOnDateClick={true}
+          footer={false}
           renderInput={this.renderInput}
           locale={locale}
-          {...{...input, onRef, label}}
+          value={input.value}
+          onRef={onRef}
+          label={label}
           meta={meta}
           onChange={this.onChange}
           onCollapse={this.onCollapse}
         >
           <TransitionView>
-            <Calendar
-              style={{padding: 10}}/>
+            <Calendar style={{padding: 10}}/>
           </TransitionView>
         </DateField>
       </div>
     );
   }
+
 }
 
 class PaymentForm extends React.Component {
@@ -183,7 +199,7 @@ class PaymentForm extends React.Component {
 
         <div style={{marginTop: 15}}></div>
 
-        <Button style={styles.btn} disabled={pristine || submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
+        <Button style={styles.btn} disabled={submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
           Valider
         </Button>
       </div>

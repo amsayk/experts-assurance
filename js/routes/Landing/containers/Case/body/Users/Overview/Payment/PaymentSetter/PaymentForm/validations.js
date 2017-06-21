@@ -10,7 +10,6 @@ const validations = {
   date: {
     required       : true,
     date           : true,
-    validateOnBlur : true,
   },
 };
 

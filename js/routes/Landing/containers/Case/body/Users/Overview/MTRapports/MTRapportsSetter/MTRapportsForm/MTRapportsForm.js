@@ -18,11 +18,15 @@ function _parseFloat(s) {
   return isNaN(val) ? null : val;
 }
 
+function getError(error, fieldName) {
+  return error.get ? error.get(fieldName) || error[fieldName] : error[fieldName];
+}
+
 function renderField({ name, multiLine = false, onKeyDown, label : floatingLabelText, onRef, className, input, meta: { touched, error } }) {
   let errorText;
 
   if (error && touched) {
-    errorText = error.get('number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
+    errorText = getError(error, 'number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
   }
 
   const props = {};
@@ -92,7 +96,7 @@ class MTRapportsForm extends React.Component {
 
         <div style={{marginTop: 15}}></div>
 
-        <Button style={styles.btn} disabled={pristine || submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
+        <Button style={styles.btn} disabled={submitting || invalid} bsStyle='primary' onClick={handleSubmit} role='button'>
           Valider
         </Button>
       </div>
