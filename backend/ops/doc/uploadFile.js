@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import fs from 'fs';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
@@ -42,8 +44,8 @@ export default async function uploadFile(request, done) {
       .save(null, { useMasterKey: true });
 
     const props = {
+      [DOC_FOREIGN_KEY]: doc.get(DOC_ID_KEY),
       fileObj,
-      document : doc,
       user: request.user,
       business,
       name,
@@ -68,7 +70,10 @@ export default async function uploadFile(request, done) {
   const business = request.user.get('business');
 
   try {
-    const doc = await new Parse.Query(DocType).get(docId, { useMasterKey: true });
+    const doc = await new Parse.Query(DocType)
+      .equalTo(DOC_ID_KEY, docId)
+      .first({ useMasterKey: true });
+
     if (!doc) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
@@ -88,13 +93,13 @@ export default async function uploadFile(request, done) {
       return new ActivityType()
         .setACL(ACL)
         .set({
-          ns        : 'DOCUMENTS',
-          type      : type,
-          metadata  : { ...metadata },
-          timestamp : date,
-          now       : new Date(request.now),
-          document  : doc,
-          file      : file,
+          ns                : 'DOCUMENTS',
+          type              : type,
+          metadata          : { ...metadata },
+          timestamp         : date,
+          now               : new Date(request.now),
+          [DOC_FOREIGN_KEY] : file.get(DOC_FOREIGN_KEY),
+          file              : file,
           user,
           business,
         });
@@ -120,7 +125,6 @@ export default async function uploadFile(request, done) {
       new Parse.Query(FileType)
       .include([
         'user',
-        'document',
         'fileObj',
       ])
       .get(file.id, { useMasterKey : true }),
@@ -129,7 +133,6 @@ export default async function uploadFile(request, done) {
       new Parse.Query(ActivityType)
       .equalTo('file', file)
       .include([
-        'document',
         'file',
         'user',
       ])

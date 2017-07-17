@@ -1,5 +1,8 @@
 query getDoc($id: ID!) {
   getDoc(id: $id) {
+    nature
+    police
+
     id
     key
     refNo
@@ -51,7 +54,10 @@ query getDoc($id: ID!) {
     }
 
     payment : paymentInfo {
-      user { id }
+        user {
+          id
+          displayName
+        }
       amount
       date
     }

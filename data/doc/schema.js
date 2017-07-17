@@ -1,13 +1,17 @@
-import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
-import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
+import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
+import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
 
 import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, userVerified } from 'roles';
 
 import * as codes from 'result-codes';
 
+import objectAssign from 'object-assign';
+
 import config from 'build/config';
 
 // import { pubsub } from 'data/subscriptions';
+
+import { DOC_ID_KEY } from 'backend/constants';
 
 import graphqlFields from 'graphql-fields';
 
@@ -104,6 +108,12 @@ export const schema = [`
     userData
   }
 
+  input AddDocMeta {
+    ref: ID
+    key: ID
+    imported: Boolean!
+  }
+
   input AddDocPayload {
     vehicleManufacturer : String
     vehicleModel : String
@@ -137,6 +147,11 @@ export const schema = [`
     doc: Doc
     activities : [Activity!]!
     errors: JSON!
+    error: Error
+  }
+
+  type PurgeDocResponse {
+    doc: Doc
     error: Error
   }
 
@@ -203,6 +218,7 @@ export const schema = [`
   enum DocsSortKey {
     refNo
     date
+    dateMission
     company
   }
 
@@ -229,7 +245,7 @@ export const schema = [`
     id: ID!
     company: String
 
-    refNo: String!
+    refNo: ID!
 
     state: DocState!
     dateMission: Date!
@@ -385,13 +401,14 @@ export const schema = [`
   # Doc type
   # ------------------------------------
   type Doc {
+    objectId: ID!
     id: ID!
 
     company: String
 
     key: ID!
 
-    refNo: String!
+    refNo: ID!
 
     date: Date!
     dateMission: Date!
@@ -427,7 +444,7 @@ export const schema = [`
 
 export const resolvers = {
 
-  Vehicle: Object.assign(
+  Vehicle: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -444,7 +461,7 @@ export const resolvers = {
     ])
   ),
 
-  File: Object.assign(
+  File: objectAssign(
     {
     },
     {
@@ -485,7 +502,7 @@ export const resolvers = {
     ])
   ),
 
-  Observation: Object.assign(
+  Observation: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -499,10 +516,16 @@ export const resolvers = {
     ])
   ),
 
-  Doc: Object.assign(
+  Doc: objectAssign(
     {
     },
     {
+      objectId: (doc) => {
+        return doc.id;
+      },
+      id: (doc) => {
+        return doc.get(DOC_ID_KEY);
+      },
       validation: (doc) => {
         const validation_date   = doc.validation_date    || doc.get('validation_date');
         const validation_amount = doc.validation_amount  || doc.get('validation_amount');
@@ -590,7 +613,6 @@ export const resolvers = {
       'user',
     ]),
     parseGraphqlScalarFields([
-      'id',
       'company',
       'refNo',
       'key',
@@ -604,10 +626,13 @@ export const resolvers = {
     ])
   ),
 
-  ESDocSource: Object.assign(
+  ESDocSource: objectAssign(
     {
     },
     {
+      id: (doc) => {
+        return doc[DOC_ID_KEY];
+      },
       validation: (doc) => {
         const validation_date = doc.validation_date;
         const validation_amount = doc.validation_amount;
@@ -674,7 +699,6 @@ export const resolvers = {
       'agent',
       'user',
 
-      'id',
       'company',
       'refNo',
       'date',
@@ -686,7 +710,7 @@ export const resolvers = {
     ])
   ),
 
-  ESDoc: Object.assign(
+  ESDoc: objectAssign(
     {
       highlight(_source, {}, {}) {
         return Object.keys(_source.highlight || {});
@@ -694,7 +718,7 @@ export const resolvers = {
     },
   ),
 
-  AddDocResponse: Object.assign(
+  AddDocResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -707,7 +731,18 @@ export const resolvers = {
     ])
   ),
 
-  DelOrRestoreDocResponse: Object.assign(
+  PurgeDocResponse: objectAssign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'doc',
+    ]),
+    parseGraphqlScalarFields([
+      'error',
+    ])
+  ),
+
+  DelOrRestoreDocResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -719,7 +754,7 @@ export const resolvers = {
     ])
   ),
 
-  SetOrDelPayResponse: Object.assign(
+  SetOrDelPayResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -731,7 +766,7 @@ export const resolvers = {
     ])
   ),
 
-  SetOrDelDTValidationResponse: Object.assign(
+  SetOrDelDTValidationResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -743,7 +778,7 @@ export const resolvers = {
     ])
   ),
 
-  SetOrDelMTRapportsResponse: Object.assign(
+  SetOrDelMTRapportsResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -755,7 +790,7 @@ export const resolvers = {
     ])
   ),
 
-  DocObservationsResponse: Object.assign(
+  DocObservationsResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -767,7 +802,7 @@ export const resolvers = {
     ])
   ),
 
-  UploadFileResponse: Object.assign(
+  UploadFileResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -780,7 +815,7 @@ export const resolvers = {
     ])
   ),
 
-  DelOrRestoreFileResponse: Object.assign(
+  DelOrRestoreFileResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -793,7 +828,7 @@ export const resolvers = {
     ])
   ),
 
-  SetManagerResponse: Object.assign(
+  SetManagerResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -806,7 +841,7 @@ export const resolvers = {
     ])
   ),
 
-  SetStateResponse: Object.assign(
+  SetStateResponse: objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -819,7 +854,14 @@ export const resolvers = {
   ),
 
   Mutation: {
-    async addDoc(_, { payload }, context) {
+    purgeDoc(_, { id }, context) {
+      try {
+        return context.Docs.purgeDoc(id);
+      } catch (e) {
+        return { error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+      }
+    },
+    async addDoc(_, { payload, meta }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
       }
@@ -887,7 +929,7 @@ export const resolvers = {
           }),
         };
 
-        const { doc, activities } = await context.Docs.addDoc(data);
+        const { doc, activities } = await context.Docs.addDoc(data, meta);
         // publish subscription notification
         // pubsub.publish('addDocChannel', doc);
         return { doc, activities, errors: {} };
@@ -1437,4 +1479,3 @@ export const resolvers = {
   },
 
 };
-

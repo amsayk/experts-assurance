@@ -63,7 +63,7 @@ class FileEntry extends React.PureComponent {
     const self = this;
     try {
       const { data: { delFile: { error } } } = await this.props.client.mutate({
-        refetchQueries : ['getDoc', 'invalidDocs', 'timeline', 'getDocFiles'],
+        refetchQueries : ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
         mutation       : MUTATION,
         variables      : {
           id    : this.props.entry.id,

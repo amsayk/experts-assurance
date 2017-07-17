@@ -3,6 +3,9 @@ query closedDocs($durationInDays: Float!, $sortConfig: ESSortConfig!, $includeCa
     length
     cursor
     docs {
+      nature
+      police
+
       id
       refNo
       date
@@ -45,7 +48,10 @@ query closedDocs($durationInDays: Float!, $sortConfig: ESSortConfig!, $includeCa
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

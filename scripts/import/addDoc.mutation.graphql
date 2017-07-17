@@ -1,7 +1,8 @@
-mutation addDoc($payload: AddDocPayload!) {
+mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
 
-  addDoc(payload: $payload) {
+  addDoc(payload: $payload, meta: $meta) {
     doc {
+      objectId
       id
       key
       refNo
@@ -48,7 +49,10 @@ mutation addDoc($payload: AddDocPayload!) {
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

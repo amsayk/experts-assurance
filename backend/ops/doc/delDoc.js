@@ -4,6 +4,8 @@ import publish from 'backend/kue-mq/publish';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 import { DocType, ActivityType } from 'data/types';
@@ -19,7 +21,10 @@ export default async function delDoc(request, done) {
   } = request.params;
 
   try {
-    const doc = await new Parse.Query(DocType).get(id, { useMasterKey: true });
+    const doc = await new Parse.Query(DocType)
+      .equalTo(DOC_ID_KEY, id)
+      .first({ useMasterKey: true });
+
     if (doc) {
       await doc.set({
         deletion_user: request.user,
@@ -32,13 +37,13 @@ export default async function delDoc(request, done) {
 
       const objects = activities.map(({ type, date, user, ...metadata }) => {
         return new ActivityType().set({
-          ns        : 'DOCUMENTS',
-          type      : type,
-          metadata  : { ...metadata },
-          timestamp : date,
-          now       : new Date(request.now),
-          document  : doc,
-          business  : request.user.get('business'),
+          ns                : 'DOCUMENTS',
+          type              : type,
+          metadata          : { ...metadata },
+          timestamp         : date,
+          now               : new Date(request.now),
+          [DOC_FOREIGN_KEY] : doc.get(DOC_ID_KEY),
+          business          : request.user.get('business'),
           user,
         });
       });
@@ -56,14 +61,15 @@ export default async function delDoc(request, done) {
       }, 0);
 
       const [ newDoc, newActivities ] = await Promise.all([
-        // new doc
-        new Parse.Query(DocType)
+      // new doc
+      new Parse.Query(DocType)
         .include([
           'manager',
           'client',
           'agent',
           'user',
           'payment_user',
+          'deletion_user',
           'validation_user',
           'closure_user',
         ])
@@ -71,9 +77,8 @@ export default async function delDoc(request, done) {
 
         // activities
         new Parse.Query(ActivityType)
-        .equalTo('document', doc)
+        .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
         .include([
-          'document',
           'user',
         ])
         .find({ useMasterKey : true })

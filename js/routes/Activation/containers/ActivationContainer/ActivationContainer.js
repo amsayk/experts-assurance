@@ -52,7 +52,7 @@ export class ActivationContainer extends React.PureComponent {
       <div className={style.root}>
         <Header user={user} onLogOut={actions.logOut}/>
         <div className={style.center}>
-          <p className={style.infoLine}>
+          <div className={style.infoLine}>
             <h3>
               <FormattedMessage
                 {...messages.Thanks}
@@ -61,7 +61,7 @@ export class ActivationContainer extends React.PureComponent {
                 }}
               />
             </h3>
-          </p>
+          </div>
           <p className={style.infoLine}>
             <FormattedMessage
               {...messages.EmailVerificationPending}

@@ -1,5 +1,9 @@
-import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
-import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
+import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
+import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
+
+import objectAssign from 'object-assign';
+
+import invariant from 'invariant';
 
 export const schema = [`
 
@@ -61,12 +65,20 @@ export const schema = [`
 
 export const resolvers = {
 
-  Activity: Object.assign(
+  Activity: objectAssign(
     {
+    },
+    {
+      document: (activity, {}, context) => {
+        const ref = activity.get('ref');
+
+        invariant(ref, 'Activity.document resolver: ref is required.');
+        return context.Docs.get(ref);
+      },
+
     },
     parseGraphqlObjectFields([
       'business',
-      'document',
       'file',
       'metadata',
       'user',

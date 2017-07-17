@@ -48,11 +48,17 @@ mutation delPay($id: ID!) {
 
       deletion {
         date
-        user { id }
+        user {
+          id
+          displayName
+        }
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

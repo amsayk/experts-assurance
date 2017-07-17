@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { compose } from 'redux';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import messages from './messages';
 

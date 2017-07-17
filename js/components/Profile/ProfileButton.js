@@ -20,9 +20,9 @@ const ProfileButton = ({ user, size, children }) => (
 );
 
 ProfileButton.propTypes = {
-  size    : T.number.isRequired,
-  chidren : T.arrayOf(T.element.isRequired).isRequired,
-  user    : T.shape({
+  size     : T.number.isRequired,
+  children : T.arrayOf(T.element.isRequired).isRequired,
+  user     : T.shape({
     displayName: T.string.isRequired,
     email: T.string.isRequired,
   }),

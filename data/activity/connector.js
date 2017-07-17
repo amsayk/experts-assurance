@@ -56,7 +56,7 @@ export class ActivityConnector {
         .limit(LIMIT_PER_PAGE);
 
       if (query.doc) {
-        q.equalTo('document', DocType.createWithoutData(query.doc));
+        q.equalTo('ref', query.doc);
       }
 
       if (query.ns) {
@@ -72,12 +72,7 @@ export class ActivityConnector {
       }
 
       q.include([
-        'document',
         'file',
-        // 'document.user',
-        // 'document.agent',
-        // 'document.client',
-        // 'document.agent',
         'user',
       ]);
 

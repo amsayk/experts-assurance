@@ -2,6 +2,9 @@ query moreDocs($query: DocsFetchQuery!) {
   getDocs(query: $query) {
     cursor
     docs {
+      nature
+      police
+
       id
       key
       refNo
@@ -43,7 +46,10 @@ query moreDocs($query: DocsFetchQuery!) {
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

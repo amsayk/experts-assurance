@@ -105,7 +105,7 @@ class Payment extends React.Component {
         }
 
         const { data: { delPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'timeline'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -113,12 +113,12 @@ class Payment extends React.Component {
               const newDoc = mutationResult.data.delPay.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 
@@ -211,7 +211,7 @@ class Payment extends React.Component {
         }
 
         const { data: { setPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'timeline'],
+          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {
@@ -219,12 +219,12 @@ class Payment extends React.Component {
               const newDoc = mutationResult.data.setPay.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 

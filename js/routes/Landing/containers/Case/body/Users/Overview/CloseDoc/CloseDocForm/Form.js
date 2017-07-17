@@ -10,7 +10,7 @@ import style from 'routes/Landing/styles';
 import moment from 'moment';
 
 import focusNode from 'focusNode';
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import validations from './validations';
 

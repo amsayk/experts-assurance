@@ -30,12 +30,12 @@ const getComponent = memoizeStringOnly(function getComponent(type) {
 
 export default class TimelineEntry extends React.Component {
   render() {
-    const { intl, type, document, file, user, metadata, timestamp } = this.props;
+    const { intl, type, doc, file, user, metadata, timestamp } = this.props;
     const Component = getComponent(type);
     return (
       <Component
         intl={intl}
-        doc={document}
+        doc={doc}
         file={file}
         timestamp={timestamp}
         metadata={metadata}

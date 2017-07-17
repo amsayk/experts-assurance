@@ -48,10 +48,10 @@ class ListHeader extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSortByRef = this.onSort.bind(this, 'refNo');
-    this.onSortByDate = this.onSort.bind(this, 'dateMission');
+    this.onSortByRef            = this.onSort.bind(this, 'refNo');
+    this.onSortByDate           = this.onSort.bind(this, 'dateMission');
     this.onSortByValidationDate = this.onSort.bind(this, 'validation_date');
-    this.onSortByCompany = this.onSort.bind(this, 'company');
+    this.onSortByCompany        = this.onSort.bind(this, 'company');
   }
   onSort(key) {
     const { actions, sortConfig } = this.props;
@@ -125,27 +125,27 @@ class ListHeader extends React.Component {
           </div>
         </div>
 
-        {/* <div onClick={this.onSortByValidationDate} className={cx(style.listHeaderItemDate, key === 'validation_date' && style.sorting)}> */}
-          {/*   <div className={style.wrapper}> */}
-            {/*     <div className={style.innerWrapper}> */}
-              {/*       <div className={style.item}> */}
-                {/*         <div className={style.text}>DT Validation</div> */}
-                {/*         {key === 'validation_date' ? <SortDirection direction={direction}/> : null} */}
-                {/*       </div> */}
-              {/*     </div> */}
-            {/*   </div> */}
-          {/* </div> */}
-
-        <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'dateMission' && style.sorting)}>
-          <div className={style.wrapper}>
-            <div className={style.innerWrapper}>
-              <div className={style.item}>
-                <div className={style.text}>DT Mission</div>
-                {key === 'dateMission' ? <SortDirection direction={direction}/> : null}
+        <div onClick={this.onSortByValidationDate} className={cx(style.listHeaderItemDate, key === 'validation_date' && style.sorting)}>
+            <div className={style.wrapper}>
+                <div className={style.innerWrapper}>
+                    <div className={style.item}>
+                        <div className={style.text}>DT Validation</div>
+                        {key === 'validation_date' ? <SortDirection direction={direction}/> : null}
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
+
+        {/* <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'dateMission' && style.sorting)}> */}
+        {/*   <div className={style.wrapper}> */}
+        {/*     <div className={style.innerWrapper}> */}
+        {/*       <div className={style.item}> */}
+        {/*         <div className={style.text}>DT Validation</div> */}
+        {/*         {key === 'dateMission' ? <SortDirection direction={direction}/> : null} */}
+        {/*       </div> */}
+        {/*     </div> */}
+        {/*   </div> */}
+        {/* </div> */}
 
       </div>
     );

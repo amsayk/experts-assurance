@@ -18,7 +18,7 @@ import selector from './selector';
 import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
-  WatchIcon,
+  // WatchIcon,
   // DownloadIcon,
 } from 'components/icons/MaterialIcons';
 
@@ -58,7 +58,8 @@ class Invalid extends React.Component {
           <div style={{
             paddingLeft: 10,
           }} className={cx(style['OPEN'], style.boardIcon)}>
-          <WatchIcon size={18}/>
+          {/* <WatchIcon size={18}/> */}
+          #
         </div>
         <h5 className={style.boardTitle}>Dossiers avec pièces manquantes {summary}</h5>
         <div className={style.ctrls}>

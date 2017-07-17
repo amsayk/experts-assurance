@@ -12,7 +12,7 @@ import Button from 'components/bootstrap/Button';
 
 import CloseDoc from './CloseDoc';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 

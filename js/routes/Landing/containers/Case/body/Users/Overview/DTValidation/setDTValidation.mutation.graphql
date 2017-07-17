@@ -48,11 +48,17 @@ mutation setDTValidation($id: ID!, $info: DocValidationInfo!) {
 
       deletion {
         date
-        user { id }
+        user {
+          id
+          displayName
+        }
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

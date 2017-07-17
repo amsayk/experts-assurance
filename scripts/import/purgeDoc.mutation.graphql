@@ -1,0 +1,21 @@
+mutation purgeDoc($id: ID!) {
+
+  purgeDoc(id: $id) {
+
+    doc {
+      objectId
+      id
+      key
+      refNo
+
+    }
+
+    error {
+      code
+    }
+
+  }
+}
+
+
+

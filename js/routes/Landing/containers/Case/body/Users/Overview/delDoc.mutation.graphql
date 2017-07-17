@@ -68,7 +68,10 @@ mutation delDoc($id: ID!) {
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

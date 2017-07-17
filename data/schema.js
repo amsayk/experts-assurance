@@ -114,7 +114,8 @@ const rootSchema = [`
 
   type Mutation {
     # mutations
-    addDoc(payload: AddDocPayload!): AddDocResponse!
+    purgeDoc(id: ID!): PurgeDocResponse!
+    addDoc(payload: AddDocPayload!, meta: AddDocMeta!): AddDocResponse!
     delDoc(id: ID!): DelOrRestoreDocResponse!
     restoreDoc(id: ID!): DelOrRestoreDocResponse!
     setManager(id: ID!, manager: ID!): SetManagerResponse!

@@ -4,7 +4,7 @@ query getTimeline($cursor: Date, $query: TimelineQuery!) {
     result {
       id,
       now,
-      document {
+      doc : document {
         id
         refNo
         state

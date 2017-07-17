@@ -105,7 +105,7 @@ class MTRapports extends React.Component {
         }
 
         const { data: { delMTRapports: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'timeline'],
+          refetchQueries     : ['getDoc', 'getTimeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -113,12 +113,12 @@ class MTRapports extends React.Component {
               const newDoc = mutationResult.data.delMTRapports.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 
@@ -211,7 +211,7 @@ class MTRapports extends React.Component {
         }
 
         const { data: { setMTRapports: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'timeline'],
+          refetchQueries     : ['getDoc', 'getTimeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {
@@ -219,12 +219,12 @@ class MTRapports extends React.Component {
               const newDoc = mutationResult.data.setMTRapports.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 

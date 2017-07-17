@@ -7,6 +7,9 @@ query esSearchDocs($queryString: String, $state: DocState) {
       _id
       highlight
       _source {
+        nature
+        police
+
         id
         manager{ id name }
         agent{ id name }

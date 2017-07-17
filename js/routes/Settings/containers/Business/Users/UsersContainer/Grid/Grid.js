@@ -12,7 +12,7 @@ import ScrollSpy from 'components/ScrollSpy';
 
 import DataLoader from '../../DataLoader';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import Scroll from 'Scroll';
 

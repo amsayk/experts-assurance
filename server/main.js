@@ -1,5 +1,7 @@
 import 'isomorphic-fetch';
 
+import objectAssign from 'object-assign';
+
 import Parse from 'parse/node';
 
 import kue from 'kue';
@@ -284,12 +286,12 @@ app.use(config.graphql_endpoint, apolloUploadExpress(config.uploadOptions), grap
     schema,
     context: {
       user,
-      locale: req.locale,
-      Users: new Users({ user, connector: new UserConnector() }),
-      Business: new Business({ user, connector: new BusinessConnector() }),
-      Docs: new Docs({ user, connector: new DocConnector() }),
-      Activities: new Activities({ user, connector: new ActivityConnector() }),
-      Now: new Date().getTime(),
+      locale     : req.locale,
+      Users      : new Users({ user, connector: new UserConnector() }),
+      Business   : new Business({ user, connector: new BusinessConnector() }),
+      Docs       : new Docs({ user, connector: new DocConnector() }),
+      Activities : new Activities({ user, connector: new ActivityConnector() }),
+      Now        : new Date().getTime(),
     },
     logFunction: require('log')('app:server:graphql'),
     debug: __DEV__,
@@ -330,9 +332,9 @@ SubscriptionServer.create(
     // the obSubscribe function is called for every new subscription
     // and we use it to set the GraphQL context for this subscription
     onOperation: (msg, params) => {
-      return Object.assign({}, params, {
+      return objectAssign({}, params, {
         context: {
-          Business: new Business({ connector: new BusinessConnector() }),
+          Business : new Business({ connector: new BusinessConnector() }),
         },
       });
     },

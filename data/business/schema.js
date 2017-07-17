@@ -1,5 +1,7 @@
-import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
-import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
+import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
+import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
+
+import objectAssign from 'object-assign';
 
 import { fromJS } from 'immutable';
 
@@ -133,7 +135,7 @@ export const schema = [`
 
 export const resolvers = {
 
-  Business: Object.assign(
+  Business: objectAssign(
     {
     },
     parseGraphqlScalarFields([
@@ -156,7 +158,7 @@ export const resolvers = {
     ])
   ),
 
-  UpdateUserBusinessResponse : Object.assign(
+  UpdateUserBusinessResponse : objectAssign(
     {
     },
     parseGraphqlObjectFields([

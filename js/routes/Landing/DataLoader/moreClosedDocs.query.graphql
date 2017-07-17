@@ -2,6 +2,9 @@ query moreClosedDocs($durationInDays: Float!, $cursor: Int, $sortConfig: ESSortC
   closedDashboard(durationInDays: $durationInDays, cursor: $cursor, sortConfig: $sortConfig, includeCanceled: $includeCanceled) {
     cursor
     docs {
+      nature
+      police
+
       id
       refNo
       date
@@ -44,7 +47,10 @@ query moreClosedDocs($durationInDays: Float!, $cursor: Int, $sortConfig: ESSortC
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

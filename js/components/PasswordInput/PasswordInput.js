@@ -2,7 +2,7 @@ import React, { PropTypes as T } from 'react';
 
 import focusNode from 'focusNode';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import {
   VisibilityOnIcon,

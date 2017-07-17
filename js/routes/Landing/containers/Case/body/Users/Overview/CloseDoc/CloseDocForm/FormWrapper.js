@@ -18,7 +18,7 @@ import Zoom from 'components/transitions/Zoom';
 
 import Button from 'components/bootstrap/Button';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import { CloseIcon } from 'components/icons/MaterialIcons';
 
@@ -180,7 +180,7 @@ class FormWrapper extends React.Component {
     };
 
     const { data: { closeDoc: { errors, error } } } = await self.props.client.mutate({
-      refetchQueries : ['getDoc', 'unpaidDocs', 'timeline'],
+      refetchQueries : ['getDoc', 'unpaidDocs', 'getTimeline'],
       mutation  : MUTATION,
       variables : { id : doc.id, info },
       updateQueries : {
@@ -377,14 +377,17 @@ class FormWrapper extends React.Component {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc) {
-            const index = arrayFindIndex(prev.docs, (id) => newDoc.id === id);
-            const docs = index !== -1
-              ? prev.docs.filter((doc) => doc.id !== newDoc.id)
+            const index = arrayFindIndex(prev.recentDocs, (id) => newDoc.id === id);
+            const recentDocs = index !== -1
+              ? prev.recentDocs.filter((doc) => doc.id !== newDoc.id)
               : [
-                ...prev.docs
+                ...prev.recentDocs
               ];
             return {
-              docs,
+              recentDocs : [
+                newDoc,
+                ...recentDocs,
+              ],
             };
           }
 

@@ -15,7 +15,7 @@ import { injectIntl } from 'react-intl';
 
 import StateChanger from './StateChanger';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 
@@ -354,12 +354,12 @@ class StateLine extends React.Component {
               const newDoc = mutationResult.data.setState.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 

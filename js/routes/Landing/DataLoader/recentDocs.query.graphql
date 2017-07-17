@@ -1,5 +1,8 @@
 query recentDocs {
   recentDocs {
+    nature
+    police
+
     id
     refNo
     date
@@ -27,12 +30,15 @@ query recentDocs {
       amount
       user {
         id
-        # displayName
+        displayName
       }
     }
 
     payment : paymentInfo {
-      user { id }
+        user {
+          id
+          displayName
+        }
       amount
       date
     }

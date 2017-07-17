@@ -10,6 +10,8 @@ import { getRefNo } from 'backend/utils';
 
 import printDocRef from 'printDocRef';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 import { Role_MANAGERS, Role_AGENTS, Role_CLIENTS } from 'roles';
@@ -22,21 +24,22 @@ export default async function addDoc(request, done) {
     return;
   }
 
-  const { payload: {
-    vehicle,
-
-    company,
-
-    manager,
-    agent,
-    client,
-
-    dateMission : dateMissionMS,
-    date : dateMS,
-
-    police,
-    nature,
-  } } = request.params;
+  const {
+    payload: {
+      vehicle,
+      company,
+      manager,
+      agent,
+      client,
+      dateMission : dateMissionMS,
+      date : dateMS,
+      police,
+      nature,
+    },
+    ref,
+    imported,
+    key,
+  } = request.params;
 
   const date = new Date(dateMS);
   const state = 'OPEN';
@@ -77,11 +80,21 @@ export default async function addDoc(request, done) {
   }
 
   async function add(business) {
-    const refNo = await getRefNo(dateMissionMS);
-    const key = await genDocKey();
+    let refNo = ref;
+
+    if (!refNo) {
+      refNo = await getRefNo(dateMissionMS);
+      refNo = printDocRef({ dateMission : dateMissionMS, refNo: refNo + 1 });
+    }
+
+    let mKey = key;
+
+    if (!mKey) {
+      mKey = await genDocKey();
+    }
 
     const props = {
-      imported: process.env._IMPORTING === 'yes',
+      imported,
 
       agent  : (await getUser(business, agent, Role_AGENTS)),
       client : (await getUser(business, client, Role_CLIENTS)),
@@ -90,18 +103,18 @@ export default async function addDoc(request, done) {
 
       company,
 
-      refNo : printDocRef({ dateMission : dateMissionMS, refNo: refNo + 1 }),
+      [DOC_ID_KEY]: refNo,
 
       state,
 
-      business,
+      business: BusinessType.createWithoutData(business.id),
 
       user: request.user,
 
       dateMission : new Date(dateMissionMS),
       date,
 
-      key,
+      key: mKey,
 
       police,
       nature,
@@ -130,7 +143,7 @@ export default async function addDoc(request, done) {
     ];
 
     if (business) {
-      doc = await add(await business.fetch({ useMasterKey: true }));
+      doc = await add(business);
     } else {
       doc = await add(await getOrCreateBusiness());
     }
@@ -139,14 +152,14 @@ export default async function addDoc(request, done) {
       return new ActivityType()
         .setACL(ACL)
         .set({
-          ns        : 'DOCUMENTS',
-          type      : type,
-          metadata  : { ...metadata },
-          timestamp : date,
-          now       : new Date(request.now),
-          document  : doc,
+          ns                : 'DOCUMENTS',
+          type              : type,
+          metadata          : { ...metadata },
+          timestamp         : date,
+          now               : new Date(request.now),
+          [DOC_FOREIGN_KEY] : doc.get(DOC_ID_KEY),
           user,
-          business,
+          business          : BusinessType.createWithoutData(business.id),
         });
     });
 
@@ -178,9 +191,8 @@ export default async function addDoc(request, done) {
 
       // activities
       new Parse.Query(ActivityType)
-      .equalTo('document', doc)
+      .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
       .include([
-        'document',
         'user',
       ])
       .find({ useMasterKey : true })

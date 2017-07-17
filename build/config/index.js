@@ -298,7 +298,7 @@ const config = {
   compiler_babel_options_module_map : moduleMap,
   compiler_babel_query : {
     babelrc        : false,
-    cacheDirectory : false,
+    cacheDirectory : true,
   },
   compiler_babel_options : objectAssign({}, babelOptions, {
     comments: false,

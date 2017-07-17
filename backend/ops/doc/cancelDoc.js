@@ -6,6 +6,8 @@ import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/
 
 import { DocType, ActivityType } from 'data/types';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 export default async function cancelDoc(request, done) {
@@ -20,7 +22,9 @@ export default async function cancelDoc(request, done) {
 
   try {
     const doc = await new Parse.Query(DocType)
-      .get(id, { useMasterKey: true });
+      .equalTo(DOC_ID_KEY, id)
+      .first({ useMasterKey: true });
+
     if (!doc) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
@@ -42,7 +46,6 @@ export default async function cancelDoc(request, done) {
           toState   : 'CANCELED',
         },
         date     : new Date(request.now),
-        now      : new Date(request.now),
         user     : request.user,
       },
     ];
@@ -55,12 +58,13 @@ export default async function cancelDoc(request, done) {
 
     const objects = activities.map(({ type, date, user, metadata }) => {
       return new ActivityType().set({
-        ns        : 'DOCUMENTS',
-        type      : type,
-        metadata  : { ...metadata },
-        timestamp : date,
-        document  : doc,
-        business  : request.user.get('business'),
+        ns                : 'DOCUMENTS',
+        type              : type,
+        metadata          : { ...metadata },
+        timestamp         : date,
+        [DOC_FOREIGN_KEY] : doc.get(DOC_ID_KEY),
+        business          : request.user.get('business'),
+        now               : new Date(request.now),
         user,
       });
     });
@@ -87,8 +91,8 @@ export default async function cancelDoc(request, done) {
     }, 0);
 
     const [ newDoc, newActivities ] = await Promise.all([
-      // new doc
-      new Parse.Query(DocType)
+    // new doc
+    new Parse.Query(DocType)
       .include([
         'manager',
         'client',
@@ -102,9 +106,8 @@ export default async function cancelDoc(request, done) {
 
       // activities
       new Parse.Query(ActivityType)
-      .equalTo('document', doc)
+      .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
       .include([
-        'document',
         'user',
       ])
       .find({ useMasterKey : true })

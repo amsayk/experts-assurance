@@ -14,7 +14,7 @@ import { CloseIcon, SearchIcon } from 'components/icons/MaterialIcons';
 
 import Highlighter from 'react-highlight-words';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import { intlShape } from 'react-intl';
 

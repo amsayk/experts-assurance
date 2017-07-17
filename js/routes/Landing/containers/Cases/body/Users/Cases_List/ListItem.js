@@ -79,7 +79,7 @@ class ListItem extends React.Component {
   }
   render() {
     const { isSelected, hasSelection, intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, company, state, client, agent, vehicle, date } = item;
+    const { id, refNo, company, state, client, agent, vehicle, date, dateMission } = item;
     return (
       <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
 
@@ -172,7 +172,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {intl.formatDate(date)}
+                  {intl.formatDate(dateMission)}
                 </div>
               </div>
             </div>

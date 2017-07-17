@@ -124,7 +124,7 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {intl.formatDate(dateMission)}
+                  {validation && validation.date ? intl.formatDate(validation.date) : '—'}
                 </div>
               </div>
             </div>

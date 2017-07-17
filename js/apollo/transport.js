@@ -15,7 +15,7 @@ import {
 
 class NetworkInterface extends HTTPBatchedNetworkInterface {
   constructor({ uri, batchInterval, opts }) {
-    super(uri, batchInterval, opts);
+    super({ uri, batchInterval, opts });
 
   };
 

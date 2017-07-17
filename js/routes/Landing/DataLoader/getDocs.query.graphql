@@ -3,6 +3,9 @@ query getDocs($query: DocsFetchQuery!) {
     length
     cursor
     docs {
+      nature
+      police
+
       id
       key
       refNo
@@ -45,7 +48,10 @@ query getDocs($query: DocsFetchQuery!) {
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

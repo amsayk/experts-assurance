@@ -104,6 +104,10 @@ const queryDocs = graphql(ES_QUERY_DOCS_QUERY, {
 
           return {
             esQueryDocs : {
+              __typename: 'ESDocsQueryResponse',
+
+              took: fetchMoreResult.esQueryDocs.took,
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.esQueryDocs.cursor,

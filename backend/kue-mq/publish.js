@@ -4,6 +4,8 @@ import config from 'build/config';
 
 import { serializeParseObject } from 'backend/utils';
 
+import invariant from 'invariant';
+
 const log = require('log')('app:backend:mq:frontend');
 
 /**
@@ -17,6 +19,8 @@ const log = require('log')('app:backend:mq:frontend');
  */
 export default function publish(serverName, serverMethod, req, options = {}) {
   return new Promise(function (resolve, reject) {
+    invariant(serverMethod, 'publish: serverMethod is required');
+
     const data = {
       req,
       __serverMethod : serverMethod,

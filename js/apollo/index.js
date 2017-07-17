@@ -60,5 +60,6 @@ export const client = new ApolloClient({
   },
   dataIdFromObject,
   initialState: window.__APOLLO_STATE__ || {},
+  batchMax: 4,
 });
 

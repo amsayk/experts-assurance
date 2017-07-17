@@ -14,7 +14,7 @@ export default function onDocDeleted(id) {
       client.delete({
         index   : config.esIndex,
         type    : 'doc',
-        id      : String(doc.get('refNo')),
+        id      : doc.get('refNo'),
         refresh : 'true',
       }, function (error, response) {
         if (error) {
@@ -22,7 +22,7 @@ export default function onDocDeleted(id) {
           return reject(error);
         }
 
-        log(`Successfully deleting doc ${id} from index`);
+        log(`Successfully deleted doc ${id} from index`);
         return resolve(response);
       });
     } catch(e) {

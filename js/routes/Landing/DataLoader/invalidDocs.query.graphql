@@ -3,6 +3,9 @@ query invalidDocs($category: String, $durationInDays: Float!, $sortConfig: ESSor
     length
     cursor
     docs {
+      nature
+      police
+
       id
       refNo
       date
@@ -37,7 +40,10 @@ query invalidDocs($category: String, $durationInDays: Float!, $sortConfig: ESSor
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

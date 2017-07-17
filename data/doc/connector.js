@@ -16,6 +16,8 @@ import {
   Role_AGENTS,
 } from 'roles';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import { businessQuery } from 'data/utils';
 
 import categories from 'file-categories';
@@ -31,16 +33,13 @@ const RECENT_DOCS_LIMIT = 5;
 
 export class DocConnector {
   constructor() {
-    this.loader = new DataLoader(this.fetch.bind(this), {
-    });
-    this.fileLoader = new DataLoader(this.fetchFile.bind(this), {
-    });
-    this.countByStateLoader = new DataLoader(this.countByState.bind(this), {
-    });
+    this.loader             = new DataLoader(this.fetch.bind(this), {});
+    this.files              = new DataLoader(this.fetchFile.bind(this), {});
+    this.countByStateLoader = new DataLoader(this.countByState.bind(this), {});
   }
   async fetch(ids) {
     const docs = await new Parse.Query(DocType)
-      .containedIn('objectId', ids)
+      .containedIn(DOC_ID_KEY, ids)
       .matchesQuery('business', businessQuery())
       .include([
         'manager',
@@ -54,7 +53,7 @@ export class DocConnector {
       .find({ useMasterKey: true });
 
     return ids.map((id) => {
-      const index = docs.findIndex((doc) => doc.id === id);
+      const index = docs.findIndex((doc) => doc.get(DOC_ID_KEY) === id);
       return index !== -1 ? docs[index] : new Error(`Doc ${id} not found`);
     })
   }
@@ -63,7 +62,6 @@ export class DocConnector {
       .containedIn('objectId', ids)
       .matchesQuery('business', businessQuery())
       .include([
-        'document',
         'fileObj',
         'user',
       ])
@@ -166,8 +164,11 @@ export class DocConnector {
   get(id) {
     return this.loader.load(id);
   }
+  getByRef(ref) {
+    return this.refs.load(ref);
+  }
   getFile(id) {
-    return this.fileLoader.load(id);
+    return this.files.load(id);
   }
 
   getDocFiles(id) {
@@ -176,11 +177,10 @@ export class DocConnector {
     function getQuery() {
       const q = new Parse.Query(FileType)
         .matchesQuery('business', businessQuery())
-        .equalTo('document', DocType.createWithoutData(id))
+        .equalTo(DOC_FOREIGN_KEY, id)
         .doesNotExist('deletion_user')
         .doesNotExist('deletion_date')
         .include([
-          'document',
           'fileObj',
           'user',
         ]);
@@ -215,14 +215,13 @@ export class DocConnector {
         .descending('date')
         .limit(LIMIT_PER_PAGE);
 
-      q.equalTo('document', DocType.createWithoutData(id));
+      q.equalTo(DOC_FOREIGN_KEY, id);
 
       if (cursor) {
         q.lessThan('date', cursor);
       }
 
       q.include([
-        'document',
         'user',
       ]);
 
@@ -233,16 +232,16 @@ export class DocConnector {
 
   async isDocValid(id) {
     try {
-      const doc = await this.get(id);
-
-      if (!doc) {
-        return false;
-      }
+      // const doc = await this.get(id);
+      //
+      // if (!doc) {
+      //   return false;
+      // }
 
       return await categories.reduce(function (p, { slug : category, required }) {
         return p.then(async function (isValid) {
           if (isValid) {
-            return required ? await hasCategory(doc, category) : true;
+            return required ? await hasCategory(id, category) : true;
           }
           return false;
         });
@@ -251,10 +250,10 @@ export class DocConnector {
       return false;
     }
 
-    async function hasCategory(doc, category) {
+    async function hasCategory(id, category) {
       return await new Parse.Query(FileType)
         .matchesQuery('business', businessQuery())
-        .equalTo('document', doc)
+        .equalTo(DOC_FOREIGN_KEY, id)
         .equalTo('category', category)
         .doesNotExist('deletion_user')
         .doesNotExist('deletion_date')
@@ -295,6 +294,8 @@ export class DocConnector {
             .matchesQuery('business', businessQuery())
             .doesNotExist('deletion_user')
             .doesNotExist('deletion_date')
+            .doesNotExist('validation_date')
+            .equalTo('state', 'OPEN')
             .equalTo('category', category);
 
           queries.push(
@@ -326,6 +327,8 @@ export class DocConnector {
         .matchesQuery('business', businessQuery())
         .doesNotExist('deletion_user')
         .doesNotExist('deletion_date')
+        .doesNotExist('validation_date')
+        .equalTo('state', 'OPEN')
         .doesNotExist('files'),
 
         // files missing categories
@@ -337,6 +340,7 @@ export class DocConnector {
       const q = getQuery()
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
+          'user',
           'payment_user',
           'validation_user',
           'manager',
@@ -411,6 +415,7 @@ export class DocConnector {
         .include([
           'payment_user',
           'validation_user',
+          'user',
           'manager',
           'client',
           'agent',
@@ -609,6 +614,24 @@ export class DocConnector {
         must.push({
           range : {
             'closure_date' : range,
+          },
+        });
+      }
+    }
+
+    if (missionRange) {
+      if (missionRange.from || missionRange.to) {
+        const range = {};
+
+        if (missionRange.from) {
+          range.gte = missionRange.from;
+        }
+        if (missionRange.to) {
+          range.lte = missionRange.to;
+        }
+        must.push({
+          range : {
+            'dateMission' : range,
           },
         });
       }
@@ -1023,8 +1046,8 @@ export class DocConnector {
       const q = getQuery()
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
 
-      q[sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
-        !sortConfig.key || sortConfig.key === 'date' ? 'date' : sortConfig.key
+      q[!sortConfig.direction || sortConfig.direction === SORT_DIRECTION_ASC ? 'ascending' : 'descending'](
+        !sortConfig.key || sortConfig.key === 'dateMission' ? 'dateMission' : sortConfig.key
       );
 
       if (cursor) {
@@ -1036,6 +1059,8 @@ export class DocConnector {
         'client',
         'user',
         'agent',
+        'validation_user',
+        'payment_user',
       ]);
 
       return q.find({ useMasterKey: true });
@@ -1147,6 +1172,7 @@ export class DocConnector {
       const q = getQuery()
         .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
         .include([
+          'user',
           'payment_user',
           'validation_user',
           'manager',
@@ -1262,6 +1288,11 @@ export class DocConnector {
       .limit(RECENT_DOCS_LIMIT)
       .include([
         'user',
+        'payment_user',
+        'validation_user',
+        'manager',
+        'client',
+        'agent',
       ])
       .find({ useMasterKey : true });
   }
@@ -1285,4 +1316,3 @@ export class DocConnector {
   }
 
 }
-

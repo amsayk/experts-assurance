@@ -3,6 +3,9 @@ query pendingDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
     length
     cursor
     docs {
+      nature
+      police
+
       id
       refNo
       date
@@ -32,7 +35,10 @@ query pendingDocs($durationInDays: Float!, $sortConfig: ESSortConfig!) {
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

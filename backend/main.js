@@ -1,6 +1,10 @@
 import publish from 'backend/kue-mq/publish';
 
+import * as es from 'backend/es';
+
 import { getOrCreateBusiness, serializeParseObject, deserializeParseObject } from 'backend/utils';
+
+import { BusinessType } from 'data/types';
 
 import {
   UPDATE_USER_BUSINESS,
@@ -14,6 +18,8 @@ import {
 
   AUTHORIZE_MANAGER,
   REVOKE_MANAGER_AUTHORIZATION,
+
+  PURGE_DOC,
 
   ADD_DOC,
   DELETE_DOC,
@@ -89,9 +95,20 @@ Parse.Cloud.define('routeOp', async function (request, response) {
       }
       break;
     }
+    case PURGE_DOC: {
+      try {
+        const { data : { doc } } = await publish('MAIN', operationKey, req, {});
+        response.success({
+          doc : deserializeParseObject(doc),
+        });
+      } catch(e) {
+        response.error(e);
+      }
+      break;
+    }
     case ADD_DOC: {
       try {
-        const { data : { doc, activities } } = await publish('MAIN', operationKey, req, { timeout: 5 * 60 * 1000 });
+        const { data : { doc, activities } } = await publish('MAIN', operationKey, req, {});
         response.success({
           doc        : deserializeParseObject(doc),
           activities : activities.map(deserializeParseObject),
@@ -356,7 +373,7 @@ Parse.Cloud.define('onStart', async function (request, response) {
       p.addUnique('roles', obj.role);
     }
 
-    p.set('business', business);
+    p.set('business', BusinessType.createWithoutData(business.id));
 
     return p.signUp(null, {
       useMasterKey: true,

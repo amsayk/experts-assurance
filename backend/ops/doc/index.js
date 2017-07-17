@@ -1,3 +1,5 @@
+export { default as purgeDoc } from './purgeDoc';
+
 export { default as addDoc } from './addDoc';
 export { default as delDoc } from './delDoc';
 export { default as restoreDoc } from './restoreDoc';

@@ -1,3 +1,5 @@
+import objectAssign from 'object-assign';
+
 const defer = function () {
   let result = {};
   result.promise = new Promise(function (resolve, reject) {
@@ -26,7 +28,7 @@ const applyWorker = (worker) => {
     // Replace dispatcher
     store.dispatch = (action) => {
       if (typeof action.task === 'string') {
-        let task = Object.assign({}, action, { _taskId: taskId });
+        let task = objectAssign({}, action, { _taskId: taskId });
         let deferred = defer();
 
         taskCompleteCallbacks[taskId] = deferred;
@@ -59,3 +61,4 @@ const applyWorker = (worker) => {
 };
 
 export default applyWorker;
+

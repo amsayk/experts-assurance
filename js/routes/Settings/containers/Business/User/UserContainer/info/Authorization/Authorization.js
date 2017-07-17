@@ -12,7 +12,7 @@ import { injectIntl } from 'react-intl';
 
 import { toastr } from 'containers/Toastr';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Settings/styles';
 

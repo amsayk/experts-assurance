@@ -54,7 +54,7 @@ export function logOut(manual = true) {
       log.error(e);
     } finally {
       dispatch({ type: USER_LOGGED_OUT, manual });
-      manual && client.resetStore();
+      manual && await client.resetStore();
     }
   };
 }

@@ -13,6 +13,8 @@ import {
   AUTHORIZE_MANAGER,
   REVOKE_MANAGER_AUTHORIZATION,
 
+  PURGE_DOC,
+
   ADD_DOC,
   DELETE_DOC,
   RESTORE_DOC,
@@ -73,6 +75,7 @@ createWorker(opts, 'MAIN', {
   [REVOKE_MANAGER_AUTHORIZATION] : authOps.revokeManagerAuthorization,
 
   // Docs
+  [PURGE_DOC]   : docOps.purgeDoc,
   [ADD_DOC]     : docOps.addDoc,
   [DELETE_DOC]  : docOps.delDoc,
   [RESTORE_DOC] : docOps.restoreDoc,

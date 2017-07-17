@@ -26,11 +26,17 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
 
       deletion {
         date
-        user { id }
+        user {
+          id
+          displayName
+        }
       }
 
       payment : paymentInfo {
-        user { id }
+        user {
+          id
+          displayName
+        }
         amount
         date
       }

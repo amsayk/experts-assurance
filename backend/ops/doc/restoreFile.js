@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
+import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 import { FileType, ActivityType } from 'data/types';
@@ -12,12 +14,11 @@ export default async function restoreFile(request, done) {
     return;
   }
 
-  const {
-    id,
-  } = request.params;
+  const { id } = request.params;
 
   try {
     const file = await new Parse.Query(FileType).get(id, { useMasterKey: true });
+
     if (file) {
       await file.set({
         deletion_user: null,
@@ -30,14 +31,14 @@ export default async function restoreFile(request, done) {
 
       const objects = activities.map(({ type, date, user, ...metadata }) => {
         return new ActivityType().set({
-          ns        : 'DOCUMENTS',
-          type      : type,
-          metadata  : { ...metadata },
-          timestamp : date,
-          now       : new Date(request.now),
-          document  : file.get('document'),
-          file      : file,
-          business  : request.user.get('business'),
+          ns                : 'DOCUMENTS',
+          type              : type,
+          metadata          : { ...metadata },
+          timestamp         : date,
+          now               : new Date(request.now),
+          [DOC_FOREIGN_KEY] : file.get(DOC_FOREIGN_KEY),
+          file              : file,
+          business          : request.user.get('business'),
           user,
         });
       });
@@ -48,7 +49,6 @@ export default async function restoreFile(request, done) {
         // new file
         new Parse.Query(FileType)
         .include([
-          'document',
           'fileObj',
           'user',
         ])
@@ -58,7 +58,6 @@ export default async function restoreFile(request, done) {
         new Parse.Query(ActivityType)
         .equalTo('file', file)
         .include([
-          'document',
           'file',
           'user',
         ])

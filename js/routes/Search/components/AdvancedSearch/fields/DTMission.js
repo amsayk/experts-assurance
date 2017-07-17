@@ -4,7 +4,7 @@ import style from 'routes/Search/styles';
 
 import DateRangePicker from './react-dates/Range';
 
-export default class DTClosure extends React.Component {
+export default class DTMission extends React.Component {
   constructor() {
     super()
 

@@ -14,7 +14,7 @@ import Clipboard from 'Clipboard';
 
 import { injectIntl } from 'react-intl';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 
@@ -37,6 +37,9 @@ import DTMissionLine from './DTMission';
 import DeletionLine from './DeletionLine';
 import MTRapportsLine from './MTRapports';
 
+import NatureLine from './Nature';
+import PoliceLine from './Police';
+
 import DocMenu from './DocMenu';
 
 import { toastr } from 'containers/Toastr';
@@ -53,7 +56,7 @@ import CANCEL_MUTATION from './cancelDoc.mutation.graphql';
 
 const CONFIRM_MSG = <div style={style.confirmToastr}>
   <h5>Êtes-vous sûr?</h5>
-</div>;
+  </div>;
 
 class Overview extends React.Component {
   static contextTypes = {
@@ -335,14 +338,14 @@ class Overview extends React.Component {
                   const newDoc = mutationResult.data.cancelDoc.doc;
 
                   if (prev && newDoc) {
-                    const index = arrayFindIndex(prev.docs, (id) => newDoc.id === id);
-                    const docs = index !== -1
-                      ? prev.docs.filter((doc) => doc.id !== newDoc.id)
+                    const index = arrayFindIndex(prev.recentDocs, (id) => newDoc.id === id);
+                    const recentDocs = index !== -1
+                      ? prev.recentDocs.filter((doc) => doc.id !== newDoc.id)
                       : [
-                        ...prev.docs
+                        ...prev.recentDocs
                       ];
                     return {
-                      docs,
+                      recentDocs,
                     };
                   }
 
@@ -491,7 +494,7 @@ class Overview extends React.Component {
             }
 
             const { data: { cancelDoc: { error } } } = await self.props.client.mutate({
-              refetchQueries : ['getDoc', 'timeline'],
+              refetchQueries : ['getDoc', 'getTimeline'],
               mutation  : CANCEL_MUTATION,
               variables : { id : doc.id },
               updateQueries : {
@@ -688,14 +691,17 @@ class Overview extends React.Component {
                   const newDoc = mutationResult.data.cancelDoc.doc;
 
                   if (prev && newDoc) {
-                    const index = arrayFindIndex(prev.docs, (id) => newDoc.id === id);
-                    const docs = index !== -1
-                      ? prev.docs.filter((doc) => doc.id !== newDoc.id)
+                    const index = arrayFindIndex(prev.recentDocs, (id) => newDoc.id === id);
+                    const recentDocs = index !== -1
+                      ? prev.recentDocs.filter((doc) => doc.id !== newDoc.id)
                       : [
-                        ...prev.docs
+                        ...prev.recentDocs
                       ];
                     return {
-                      docs,
+                      recentDocs : [
+                        newDoc,
+                        ...recentDocs,
+                      ],
                     };
                   }
 
@@ -845,7 +851,7 @@ class Overview extends React.Component {
             }
 
             const { data: { [isDeletion ? 'delDoc' : 'restoreDoc']: { error } } } = await self.props.client.mutate({
-              refetchQueries : ['getDoc', 'invalidDocs', 'unpaidDocs', 'openDocs', 'timeline'],
+              refetchQueries : ['getDoc', 'invalidDocs', 'unpaidDocs', 'openDocs', 'getTimeline'],
               mutation  : isDeletion ? DEL_MUTATION : RESTORE_MUTATION,
               variables : { id : doc.id },
               updateQueries : {
@@ -1050,14 +1056,14 @@ class Overview extends React.Component {
                     : mutationResult.data.restoreDoc.doc;
 
                   if (prev && newDoc) {
-                    const index = arrayFindIndex(prev.docs, (id) => newDoc.id === id);
-                    const docs = index !== -1
-                      ? prev.docs.filter((doc) => doc.id !== newDoc.id)
+                    const index = arrayFindIndex(prev.recentDocs, (id) => newDoc.id === id);
+                    const recentDocs = index !== -1
+                      ? prev.recentDocs.filter((doc) => doc.id !== newDoc.id)
                       : [
-                        ...prev.docs
+                        ...prev.recentDocs
                       ];
                     return {
-                      docs,
+                      recentDocs,
                     };
                   }
 
@@ -1292,9 +1298,15 @@ class Overview extends React.Component {
                 />
               ) : null;
             })()}
-            <LastActivityLine
+            <NatureLine
               loading={loading}
               doc={doc}
+              currentUser={user}
+            />
+            <PoliceLine
+              loading={loading}
+              doc={doc}
+              currentUser={user}
             />
             {(() => {
               if (loading || (doc && !doc.deletion)) {
@@ -1312,6 +1324,10 @@ class Overview extends React.Component {
 
               return null;
             })()}
+            <LastActivityLine
+              loading={loading}
+              doc={doc}
+            />
           </div>
         </div>
       </div>
@@ -1331,4 +1347,3 @@ export default compose(
   Connect,
   DataLoader.doc,
 )(Overview);
-

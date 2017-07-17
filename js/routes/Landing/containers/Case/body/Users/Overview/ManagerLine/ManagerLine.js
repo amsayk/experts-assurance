@@ -86,12 +86,12 @@ class ManagerLine extends React.Component {
               const newDoc = mutationResult.data.setManager.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 

@@ -12,7 +12,7 @@ import Button from 'components/bootstrap/Button';
 import { startAddingDoc, finishAddingDoc } from 'redux/reducers/app/actions';
 
 import focusNode from 'focusNode';
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 

@@ -54,7 +54,7 @@ export class DashboardState extends Record({
   get viewStatus() {
     return {
       // pending : this.pendingOpen,
-      open    : this.open,
+      open    : this._open,
       closed  : this.closedOpen,
       unpaid  : this.unpaidOpen,
       invalid : this.invalidOpen,
@@ -111,7 +111,7 @@ export class DashboardState extends Record({
       duration   : this.unpaidDurationInDays,
       visible    : this.unpaidOpen,
       sortConfig : {
-        key       : this.unpaidSortConfig.key || 'dateMission',
+        key       : this.unpaidSortConfig.key || 'validation_date',
         direction : this.unpaidSortConfig.direction,
       },
     };
@@ -260,7 +260,7 @@ export default function reducer(state = initialState, action) {
 
         // Toggled?
         // pendingOpen           : typeof viewStatus.pending !== 'undefined' ? viewStatus.pending : initialState.pendingOpen,
-        _open                 : typeof viewStatus.open    !== 'undefined' ? viewStatus.open    : initialState.open,
+        _open                 : typeof viewStatus.open    !== 'undefined' ? viewStatus.open    : initialState._open,
         // closedOpen            : typeof viewStatus.closed  !== 'undefined' ? viewStatus.closed  : initialState.closedOpen,
         unpaidOpen            : typeof viewStatus.unpaid  !== 'undefined' ? viewStatus.unpaid  : initialState.unpaidOpen,
         invalidOpen           : typeof viewStatus.invalid !== 'undefined' ? viewStatus.invalid  : initialState.invalidOpen,

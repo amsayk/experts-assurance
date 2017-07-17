@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import emptyFunction from 'emptyFunction';
 import focusNode from 'focusNode';

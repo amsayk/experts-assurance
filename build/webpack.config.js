@@ -283,7 +283,7 @@ if (__DEV__) {
 }
 
 webpackConfig.plugins.push(
-  // new webpack.optimize.ModuleConcatenationPlugin(),
+  new webpack.optimize.ModuleConcatenationPlugin(),
   new webpack.optimize.CommonsChunkPlugin({
     names      : __DEV__ ? [
       'polyfills',
@@ -366,7 +366,7 @@ if (!__DEV__) {
   ).forEach((loader) => {
     loader.use = ExtractTextPlugin.extract({
       fallback : STYLE_LOADER,
-      use      : [CACHE_LOADER, ...SASS_LOADERS],
+      use      : SASS_LOADERS,
     });
   });
 

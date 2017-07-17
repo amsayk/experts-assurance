@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import focusNode from 'focusNode';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 import MenuItem from 'components/bootstrap/MenuItem';

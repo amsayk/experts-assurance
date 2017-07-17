@@ -1,6 +1,8 @@
 import Parse from 'parse/node';
 
 import {
+  PURGE_DOC,
+
   ADD_DOC,
   DELETE_DOC,
   RESTORE_DOC,
@@ -158,10 +160,18 @@ export class Docs {
 
   // Mutations
 
-  addDoc(payload) {
+  purgeDoc(id) {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: ADD_DOC, args: { payload } },
+      { __operationKey: PURGE_DOC, args: { id } },
+      { sessionToken: this.user.getSessionToken() }
+    );
+  }
+
+  addDoc(payload, meta) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: ADD_DOC, args: { payload, ...meta } },
       { sessionToken: this.user.getSessionToken() }
     );
   }

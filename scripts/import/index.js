@@ -26,10 +26,13 @@ import fs from 'fs';
 
 import createApolloClient from './apollo-client';
 
+import { DOC_ID_KEY } from 'backend/constants';
+
 import * as loaders from './loaders';
 
 import ADD from './addDoc.mutation.graphql';
 import CLOSE from './closeDoc.mutation.graphql';
+import PURGE from './purgeDoc.mutation.graphql';
 
 const log = require('log')('app:import');
 
@@ -62,22 +65,23 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
     process.exit(1);
   }
 
-  docs = orderBy(docs, (doc) => +moment(doc['DT Sinistre']), ['asc']);
+  // docs = orderBy(docs, (doc) => +moment(doc['DT Sinistre']), ['asc']);
 
   function sleep(n) {
     return new Promise(resolve => setTimeout(resolve, n));
   }
 
-  function getCompany(doc) {
-    const ref = doc['Réf'];
+  function getRef(doc) {
+    const key = doc['Réf'];
 
-    if (isEmpty(ref)) {
-      throw new Error('Company is required.');
+    if (isEmpty(key)) {
+      throw new Error('getRef: key is required.');
     }
 
-    const company = ref.substring(0, 3);
+    const company = key.substring(0, 3);
+    const ref = key.substring(3);
 
-    return company;
+    return { company, ref };
   }
 
   try {
@@ -190,11 +194,13 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
     await docs.reduce((p, data) => {
       return p.then(async () => {
+        const { ref, company } = getRef(data);
+
         const payload = {
           dateMission        : +moment(nullthrows(data['DT Mission'])),
           date               : +moment(nullthrows(data['DT Sinistre'])),
 
-          company            : getCompany(data),
+          company,
 
           vehicleManufacturer  : nullthrows(data['Véhicule']),
           vehicleModel         : nullthrows(data['Genre']),
@@ -241,14 +247,55 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
           loaders.displayNames.clear(payload.agentDisplayName);
         }
 
+        const meta = {
+          ref,
+          imported: true,
+          key: null,
+          // events: true,
+        };
+
         await sleep(300);
 
-        log(`Adding doc: ${JSON.stringify(payload)}`);
+        try {
+          const existingDoc = await loaders.docs.load(meta.ref);
+
+          log(`Doc ${meta.ref} exists, purging`);
+          meta.key = existingDoc.get('key');
+
+          if (argv.keep) {
+            // meta.events = false;
+          }
+
+          try {
+            const { data: { purgeDoc: { doc, error } } } = await apolloClient.mutate({
+              mutation  : PURGE,
+              variables : { id: existingDoc.id },
+            });
+
+            if (error) {
+              throw new Error(error);
+            }
+
+            log(`Doc ${meta.ref} successfully purged`);
+          } catch (e) {
+            // purge error
+            log.error(`Error purging doc ${meta.ref}:\n${e}`);
+            process.exit(-1);
+          }
+
+          await sleep(300);
+        } catch (e) {
+          \\ Error finding doc ${meta.ref}
+        } finally {
+          loaders.docs.clear(meta.ref);
+        }
+
+        log(`Adding doc: \ndata=${JSON.stringify(payload)}\nmeta=${JSON.stringify(meta)}`);
 
         try {
           const { data: { addDoc: { doc, error, errors } } } = await apolloClient.mutate({
             mutation  : ADD,
-            variables : { payload },
+            variables : { payload, meta },
           });
 
           if (error) {
@@ -267,7 +314,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
             const { data : { closeDoc : { error } } }  = await apolloClient.mutate({
               mutation  : CLOSE,
               variables : {
-                id   : doc.id,
+                id   : doc[DOC_ID_KEY],
                 info : {
                   dateClosure : +moment(dateValidation),
                   paymentDate : +moment(paymentDate),
@@ -284,7 +331,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
           log(`Successfully added doc: ${doc.refNo}`);
         } catch (e) {
-          log.error(`Error adding doc: ${JSON.stringify(data)}, ${error}`);
+          log.error(`Error adding doc: ${JSON.stringify(data)}, ${e}`);
           return Promise.reject(e);
         }
 
@@ -300,4 +347,3 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
   loaders.displayNames.clearAll();
   user.logOut();
 });
-

@@ -1,5 +1,7 @@
 import React, { PropTypes as T } from 'react';
 
+import objectAssign from 'object-assign';
+
 import {connect} from 'react-redux';
 
 import cx from 'classnames';
@@ -136,7 +138,7 @@ class Snackbar extends React.Component {
    * @return {Object}
    */
   getStyle() {
-    const style = Object.assign({}, this.state.style);
+    const style = objectAssign({}, this.state.style);
     if (this.props.snackbar.active) {
       style.display = 'inline-flex';
     }

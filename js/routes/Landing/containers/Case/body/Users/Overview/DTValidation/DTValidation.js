@@ -105,7 +105,7 @@ class DTValidation extends React.Component {
         }
 
         const { data: { delDTValidation: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'timeline'],
+          refetchQueries     : ['getDoc', 'getTimeline'],
           mutation           : DEL_MUTATION,
           variables          : { id : doc.id },
           updateQueries : {
@@ -113,12 +113,12 @@ class DTValidation extends React.Component {
               const newDoc = mutationResult.data.delDTValidation.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 
@@ -211,7 +211,7 @@ class DTValidation extends React.Component {
         }
 
         const { data: { setDTValidation: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'timeline'],
+          refetchQueries     : ['getDoc', 'getTimeline'],
           mutation           : SET_MUTATION,
           variables          : { id : doc.id, info },
           updateQueries : {
@@ -219,12 +219,12 @@ class DTValidation extends React.Component {
               const newDoc = mutationResult.data.setDTValidation.doc;
 
               if (prev && newDoc) {
-                const docs = [
+                const recentDocs = [
                   newDoc,
-                  ...prev.docs
+                  ...prev.recentDocs
                 ];
                 return {
-                  docs,
+                  recentDocs,
                 };
               }
 

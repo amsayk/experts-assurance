@@ -24,9 +24,18 @@ import {
 
 import { post as addNotification } from 'redux/reducers/notification/actions';
 
+import raf from 'utils/requestAnimationFrame';
+
 export default PUBLIC ? PublicRoute : (store) => [{
   path          : '/',
   component     : CoreLayout,
+  onChange      : (prevState, nextState) => {
+    try {
+      if (nextState.location.action !== 'POP') {
+        raf(() => window.scrollTo(0, 0));
+      }
+    } catch (e) {}
+  },
   getIndexRoute : Landing.getIndexRoute(store),
   childRoutes   : [
     LoginRoute(store),

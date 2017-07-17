@@ -10,9 +10,9 @@ import style from 'routes/Landing/styles';
 import moment from 'moment';
 
 import focusNode from 'focusNode';
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
-import validations from './validations';
+import getValidations from './validations';
 
 import { ErrorIcon } from 'components/icons/MaterialIcons';
 
@@ -29,6 +29,8 @@ import Company from './Company';
 import Vehicle from './Vehicle';
 import Agent from './Agent';
 import Client from './Client';
+
+const validations = getValidations(/* imported = */false);
 
 function parseDate(s) {
   return +moment.utc(s);
@@ -172,7 +174,7 @@ class Form extends React.Component {
             onKeyDown : this.onKeyDown,
             onNext    : this.onNext2,
             label     : 'DT Mission',
-            showClock : true,
+            showClock : false,
           }}
           component={DTMission}
         />

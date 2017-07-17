@@ -17,11 +17,11 @@ import Zoom from 'components/transitions/Zoom';
 
 import Button from 'components/bootstrap/Button';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import { CloseIcon } from 'components/icons/MaterialIcons';
 
-import validations from './validations';
+import getValidations from './validations';
 
 import { PATH_CASES_CASE } from 'vars';
 
@@ -35,6 +35,8 @@ import Form from './Form';
 
 import Title from './Title';
 import Actions from './Actions';
+
+const validations = getValidations(/* imported = */false);
 
 const styles = {
   body : {
@@ -142,7 +144,7 @@ class FormWrapper extends React.Component {
     const { closePortal, router } = this.props;
 
     const { data: { addDoc: { doc, error, errors } } } = await this.props.client.mutate({
-      refetchQueries : ['timeline', 'recentDocs'],
+      refetchQueries : ['getTimeline', 'recentDocs', 'getDocs'],
       mutation  : MUTATION,
       variables : { payload: {
         dateMission          : data.get('dateMission'),
@@ -171,7 +173,8 @@ class FormWrapper extends React.Component {
 
         police               : data.get('police'),
         nature               : data.get('nature'),
-      } },
+      },
+      meta : { ref: null, imported: false }},
       updateQueries : {
         dashboard(prev, { mutationResult }) {
           const newDoc = mutationResult.data.addDoc.doc;
@@ -248,9 +251,9 @@ class FormWrapper extends React.Component {
         //
         //   if (prev && newDoc) {
         //     return {
-        //       docs : [
+        //       recentDocs : [
         //         newDoc,
-        //         ...prev.docs,
+        //         ...prev.recentDocs,
         //       ],
         //     };
         //   }
@@ -280,25 +283,25 @@ class FormWrapper extends React.Component {
         //
         //   return prev;
         // },
-        getDocs(prev, { mutationResult, queryVariables }) {
-          const newDoc = mutationResult.data.addDoc.doc;
-
-          if (prev && newDoc) {
-            const docs = [
-              newDoc,
-              ...prev.getDocs.docs,
-            ];
-            return {
-              getDocs : {
-                cursor : prev.getDocs.cursor + 1,
-                length : prev.getDocs.length + 1,
-                docs,
-              },
-            };
-          }
-
-          return prev;
-        },
+        // getDocs(prev, { mutationResult, queryVariables }) {
+        //   const newDoc = mutationResult.data.addDoc.doc;
+        //
+        //   if (prev && newDoc) {
+        //     const docs = [
+        //       newDoc,
+        //       ...prev.getDocs.docs,
+        //     ];
+        //     return {
+        //       getDocs : {
+        //         cursor : prev.getDocs.cursor + 1,
+        //         length : prev.getDocs.length + 1,
+        //         docs,
+        //       },
+        //     };
+        //   }
+        //
+        //   return prev;
+        // },
       },
     });
 

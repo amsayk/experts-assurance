@@ -18,7 +18,7 @@ class Title extends React.Component {
     return (
       <div className={style.addDocFormTitleWrapper}>
         <div className={style.addDocFormTitle}>
-          <h6>Ajouter dossier <b>{loading ? null : printDocRef({ refNo: lastRefNo + 1, dateMission })}</b>
+          <h6>Ajouter dossier <b style={{color: '#000000'}}>{loading ? null : printDocRef({ refNo: lastRefNo + 1, dateMission })}</b>
           </h6>
           <h4>Entrer les informations nécessaires pour pouvoir enregistrer le dossier.
           </h4>

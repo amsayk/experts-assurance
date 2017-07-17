@@ -27,7 +27,7 @@ const TYPE = 'DOCUMENT_STATE_CHANGED';
 
 const ICON_WRAPPER_STYLE_CLOSED = {
   color: 'rgb(255, 255, 255)',
-  backgroundColor: 'rgb(33, 150, 243)',
+  backgroundColor: 'green',
   userSelect: 'none',
   display: 'inline-flex',
   alignItems: 'center',

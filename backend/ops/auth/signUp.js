@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
 
+import { BusinessType } from 'data/types';
+
 import publish from 'backend/kue-mq/publish';
 
 import { Role_MANAGERS } from 'roles';
@@ -33,7 +35,7 @@ export default async function signUp(request, done) {
         username: email,
         locale,
         roles: [role],
-        business,
+        business: BusinessType.createWithoutData(business.id),
       }).signUp(null, { useMasterKey: true });
 
     setTimeout(() => {

@@ -71,6 +71,7 @@ export default function createRenderEngine(app) {
         },
       },
       dataIdFromObject,
+      batchMax: 4,
     });
 
     const intlSelector = (state) => ({

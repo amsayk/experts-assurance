@@ -4,6 +4,10 @@ import DataLoader from 'dataloader';
 
 import { businessQuery } from 'data/utils';
 
+import { DOC_ID_KEY } from 'backend/constants';
+
+import { DocType } from 'data/types';
+
 // export const usernames = new DataLoader(async function (keys) {
 //   const objects = await new Parse.Query(Parse.User)
 //     .containedIn('username', keys)
@@ -24,6 +28,20 @@ export const displayNames = new DataLoader(async function (keys) {
   return keys.map((displayName) => {
     const index = objects.findIndex((object) => object.get('displayName') === displayName);
     return index !== -1 ? objects[index] : new Error(`User ${displayName} not found`);
+  });
+}, {
+  batch : false,
+});
+
+export const docs = new DataLoader(async function (keys) {
+  const objects = await new Parse.Query(DocType)
+    .matchesQuery('business', businessQuery())
+    .containedIn(DOC_ID_KEY, keys)
+    .find({ useMasterKey: true });
+
+  return keys.map((id) => {
+    const index = objects.findIndex((object) => object.get(DOC_ID_KEY) === id);
+    return index !== -1 ? objects[index] : new Error(`Doc ${id} not found`);
   });
 }, {
   batch : false,

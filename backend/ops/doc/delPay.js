@@ -2,6 +2,8 @@ import Parse from 'parse/node';
 
 import { formatError, serializeParseObject } from 'backend/utils';
 
+import { DOC_ID_KEY } from 'backend/constants';
+
 import * as codes from 'result-codes';
 
 import { DocType, ActivityType } from 'data/types';
@@ -12,12 +14,13 @@ export default async function delPay(request, done) {
     return;
   }
 
-  const {
-    id,
-  } = request.params;
+  const { id } = request.params;
 
   try {
-    const doc = await new Parse.Query(DocType).get(id, { useMasterKey: true });
+    const doc = await new Parse.Query(DocType)
+      .equalTo(DOC_ID_KEY, id)
+      .first({ useMasterKey: true });
+
     if (doc) {
       await doc.set({
         payment_user: null,

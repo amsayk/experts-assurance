@@ -198,8 +198,9 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
           const newActivities = fetchMoreResult.timeline.result;
 
           return {
-            __typename : 'TimelineResponse',
             timeline   : {
+              __typename : 'TimelineResponse',
+
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.timeline.cursor,

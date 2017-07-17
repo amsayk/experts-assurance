@@ -3,6 +3,8 @@ import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
 import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, isAuthorized, userVerified } from 'roles';
 
+import objectAssign from 'object-assign';
+
 import * as codes from 'result-codes';
 
 import signUpValidations from 'routes/Signup/validations';
@@ -144,7 +146,7 @@ export const schema = [`
 
 export const resolvers = {
 
-  User: Object.assign(
+  User: objectAssign(
     {
       roles(user) {
         return user.get('roles') || [];
@@ -177,7 +179,7 @@ export const resolvers = {
     ])
   ),
 
-  AuthorizeManagerResponse : Object.assign(
+  AuthorizeManagerResponse : objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -189,7 +191,7 @@ export const resolvers = {
     ])
   ),
 
-  ChangeEmailResponse : Object.assign(
+  ChangeEmailResponse : objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -200,7 +202,7 @@ export const resolvers = {
     ])
   ),
 
-  SetPasswordResponse : Object.assign(
+  SetPasswordResponse : objectAssign(
     {
     },
     parseGraphqlScalarFields([
@@ -208,18 +210,7 @@ export const resolvers = {
     ])
   ),
 
-  UpdateAccountSettingsResponse : Object.assign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'errors',
-    ])
-  ),
-
-  CreateUserResponse : Object.assign(
+  UpdateAccountSettingsResponse : objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -230,7 +221,18 @@ export const resolvers = {
     ])
   ),
 
-  PasswordResetResponse : Object.assign(
+  CreateUserResponse : objectAssign(
+    {
+    },
+    parseGraphqlObjectFields([
+      'user',
+    ]),
+    parseGraphqlScalarFields([
+      'errors',
+    ])
+  ),
+
+  PasswordResetResponse : objectAssign(
     {
     },
     parseGraphqlScalarFields([
@@ -238,7 +240,7 @@ export const resolvers = {
     ])
   ),
 
-  ResendEmailVerificationResponse : Object.assign(
+  ResendEmailVerificationResponse : objectAssign(
     {
     },
     parseGraphqlScalarFields([
@@ -246,7 +248,7 @@ export const resolvers = {
     ])
   ),
 
-  LogInResponse : Object.assign(
+  LogInResponse : objectAssign(
     {
     },
     parseGraphqlObjectFields([
@@ -257,7 +259,7 @@ export const resolvers = {
     ])
   ),
 
-  LogOutResponse : Object.assign(
+  LogOutResponse : objectAssign(
     {
     },
     parseGraphqlScalarFields([

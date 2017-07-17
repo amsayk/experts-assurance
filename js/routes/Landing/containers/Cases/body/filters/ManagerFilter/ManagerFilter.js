@@ -8,7 +8,7 @@ import MenuItem from 'components/bootstrap/MenuItem';
 
 import focusNode from 'focusNode';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 

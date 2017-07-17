@@ -8,7 +8,7 @@ import MenuItem from 'components/bootstrap/MenuItem';
 
 import focusNode from 'focusNode';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 
@@ -106,7 +106,7 @@ class MTRapportsSetter extends React.Component {
               componentClass={Form}
               onSubmit={this.onSet}
               initialValues={{
-                amount   : doc.validation ? doc.validation.amount : null,
+                amount   : hasAmount ? doc.validation.amount : null,
               }}
               onInputRef={this.onInputRef}
             />

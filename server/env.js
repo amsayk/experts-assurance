@@ -36,7 +36,7 @@ const babelOptions = require('scripts/getBabelOptions')({
     'printDocRef'                        : 'common/printDocRef',
   },
   plugins: [
-    'transform-async-to-generator',
+    // 'transform-async-to-generator',
     'transform-export-extensions',
   ],
   modules: true,

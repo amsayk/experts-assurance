@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
-require('../backend/import');
+require('../scripts/import');
 

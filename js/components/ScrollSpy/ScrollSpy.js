@@ -6,7 +6,7 @@ import addEventListener from 'utils/lib/DOM/addEventListener';
 
 import Button from 'components/bootstrap/Button';
 
-import raf from 'requestAnimationFrame';
+import raf from 'utils/requestAnimationFrame';
 
 import style from './ScrollSpy.scss';
 

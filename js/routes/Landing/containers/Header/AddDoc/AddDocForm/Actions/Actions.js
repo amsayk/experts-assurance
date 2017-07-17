@@ -53,6 +53,10 @@ class Actions extends React.Component {
 const submittingSelector = isSubmitting('addDoc');
 
 const hideSelector = state => {
+  // const pristine = isPristine('addDoc')(state);
+  // if (pristine) {
+  //   return true;
+  // }
   const invalid = isInvalid('addDoc')(state);
   const submissionFailed = hasSubmitFailed('addDoc')(state);
   return invalid && !submissionFailed;

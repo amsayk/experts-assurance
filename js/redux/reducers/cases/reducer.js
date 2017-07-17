@@ -27,7 +27,7 @@ import sortReducer, {
 
 import { Record } from 'immutable';
 
-const initialSortConfig = sortInitialState.merge({ key : 'date' });
+const initialSortConfig = sortInitialState.merge({ key : 'dateMission' });
 
 export class CasesState extends Record({
   selection    : selectionInitialState,
