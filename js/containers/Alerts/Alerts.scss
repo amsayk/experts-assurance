@@ -116,22 +116,42 @@
   position: relative;
 }
 
-.jewelCount {
-  position: absolute;
-  right: 1px;
-  top: -5px;
+// .jewelCount {
+//   position: absolute;
+//   right: 1px;
+//   top: -5px;
+//
+//   .number {
+//     opacity: 1;
+//     background-color: #fa3e3e;
+//     border-radius: 2px;
+//     color: #fff;
+//     padding: 1px 3px;
+//     display: inline-block;
+//     font-family: 'helvetica neue', Helvetica, Arial, sans-serif;
+//     font-size: 10px;
+//     -webkit-font-smoothing: subpixel-antialiased;
+//     line-height: 1.3;
+//     min-height: 13px;
+//   }
+// }
 
-  .number {
-    opacity: 1;
-    background-color: #fa3e3e;
-    border-radius: 2px;
-    color: #fff;
-    padding: 1px 3px;
+.mailStatus {
+  position: absolute;
+  right: 3px;
+  z-index: 2;
+  display: none;
+  width: 14px;
+  height: 14px;
+  color: #fff;
+  text-align: center;
+  background-image: linear-gradient(#54a3ff, #006eed);
+  background-clip: padding-box;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+
+  &.unread {
     display: inline-block;
-    font-family: 'helvetica neue', Helvetica, Arial, sans-serif;
-    font-size: 10px;
-    -webkit-font-smoothing: subpixel-antialiased;
-    line-height: 1.3;
-    min-height: 13px;
   }
 }
+

@@ -22,9 +22,6 @@ const babelOptions = require('scripts/getBabelOptions')({
 
     'Clipboard'                          : 'utils/Clipboard',
 
-    // TODO: remove when subscriptions-transport-ws gets updated
-    'graphql-tag/printer'                : 'graphql/language/printer',
-
     // cookie storage
     'StorageController.cookie'           : 'common/utils/StorageController.cookie',
     'FileController'                     : 'common/utils/FileController',

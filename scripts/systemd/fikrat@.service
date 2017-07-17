@@ -3,7 +3,7 @@ Description=Fikrat: Experts d'assurance (%I)
 After=network.target
 
 [Service]
-WorkingDirectory=/opt/fikrat
+WorkingDirectory=/var/app
 Environment=PORT=%I
 ExecStart=/usr/bin/yarnpkg start
 Restart=always

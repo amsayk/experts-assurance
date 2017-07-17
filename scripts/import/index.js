@@ -285,7 +285,7 @@ fs.readFile(filePath, 'utf8', async function (err, data) {
 
           await sleep(300);
         } catch (e) {
-          \\ Error finding doc ${meta.ref}
+          // Error finding doc ${meta.ref}
         } finally {
           loaders.docs.clear(meta.ref);
         }

@@ -9,6 +9,8 @@ import { BellIcon, CloseIcon } from 'components/icons/MaterialIcons';
 
 import style from './Alerts.scss';
 
+import cx from 'classnames';
+
 import Tooltip from 'components/react-components/Tooltip';
 import Trigger from 'components/react-components/Trigger';
 
@@ -67,11 +69,15 @@ class Alerts extends React.Component {
   render() {
     const { number, isReady, scrolling, toggleAlerts } = this.props;
 
+    // let count = (
+    //   <span className={style.jewelCount}>
+    //     <span className={style.number}>{number}</span>
+    //   </span>
+    // );
+
     let count = (
-      <span className={style.jewelCount}>
-        <span className={style.number}>{number}</span>
-      </span>
-    );
+      <span className={cx(style.mailStatus, number > 0 && style.unread)}></span>
+    )
 
     if (isReady) {
       // count = (
