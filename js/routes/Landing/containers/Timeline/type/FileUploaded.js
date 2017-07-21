@@ -92,7 +92,7 @@ export default function FileUploaded({ intl, doc, file, user, now : timestamp, m
           <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
             {user.displayName}
           </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} dateTime={new Date(new Date(timestamp)).toISOString()}>
+          <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>
             {intl.formatRelative(new Date(timestamp))}
           </time>
         </div>
