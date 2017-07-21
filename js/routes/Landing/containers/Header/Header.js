@@ -25,7 +25,7 @@ import ProfileButton, { MenuItem as ProfileMenuItem } from 'components/Profile';
 
 import SearchBox from './SearchBox';
 import AddDoc from './AddDoc';
-import Importation from 'containers/Importation';
+// import Importation from 'containers/Importation';
 
 import { PlusIcon, NavLeftIcon } from 'components/icons/MaterialIcons';
 
