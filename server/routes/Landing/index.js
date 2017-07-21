@@ -12,6 +12,7 @@ import Dashboard from 'routes/Landing/containers/Dashboard';
 import Cases from 'routes/Landing/containers/Cases';
 import Case from 'routes/Landing/containers/Case';
 
+import importationReducer from 'redux/reducers/importation/reducer';
 import casesReducer from 'redux/reducers/cases/reducer';
 import docSearchReducer from 'redux/reducers/docSearch/reducer';
 import dashboardReducer from 'redux/reducers/dashboard/reducer';
@@ -20,6 +21,7 @@ import toastrReducer from 'redux/reducers/toastr/reducer';
 const getIndexRoute = (store) => (partialNextState, cb) => cb(null, {
   getComponent(nextState, cb) {
     store.injectReducers([
+      { key: 'importation', reducer: importationReducer },
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'dashboard', reducer: dashboardReducer },
       { key: 'toastr',    reducer: toastrReducer },
@@ -33,6 +35,7 @@ const getRoutes = (store) => [{
   path : '/',
   getComponent(nextState, cb) {
     store.injectReducers([
+      { key: 'importation', reducer: importationReducer },
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'dashboard', reducer: dashboardReducer },
       { key: 'toastr',    reducer: toastrReducer },
@@ -44,6 +47,7 @@ const getRoutes = (store) => [{
   path : PATH_DASHBOARD,
   getComponent(nextState, cb) {
     store.injectReducers([
+      { key: 'importation', reducer: importationReducer },
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'toastr',    reducer: toastrReducer },
     ]);
@@ -54,6 +58,7 @@ const getRoutes = (store) => [{
   path : PATH_CASES,
   getComponent(nextState, cb) {
     store.injectReducers([
+      { key: 'importation', reducer: importationReducer },
       { key: 'cases', reducer: casesReducer },
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'toastr',    reducer: toastrReducer },
@@ -65,6 +70,7 @@ const getRoutes = (store) => [{
   path : PATH_CASES_CASE + '/:' + PATH_CASES_CASE_PARAM,
   getComponent(nextState, cb) {
     store.injectReducers([
+      { key: 'importation', reducer: importationReducer },
       { key: 'cases', reducer: casesReducer },
       { key: 'docSearch', reducer: docSearchReducer },
       { key: 'toastr',    reducer: toastrReducer },

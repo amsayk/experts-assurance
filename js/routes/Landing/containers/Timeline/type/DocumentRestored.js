@@ -37,7 +37,7 @@ const ICON_WRAPPER_STYLE = {
   width: 24,
 };
 
-export default function DocumentRestored({ intl, doc, user, timestamp, metadata }, { currentUser }) {
+export default function DocumentRestored({ intl, doc, user, now : timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 

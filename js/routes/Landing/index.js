@@ -10,14 +10,16 @@ const getIndexRoute = (store) => (partialNextState, cb) => {
     const { default : Component } = require('./containers/Home');
     const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+    const { default : importationReducer } = require('redux/reducers/importation/reducer');
     const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
     const { default : dashboardReducer } = require('redux/reducers/dashboard/reducer');
     const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
     store.injectReducers([
-      { key: 'docSearch', reducer: docSearchReducer },
-      { key: 'dashboard', reducer: dashboardReducer },
-      { key: 'toastr',    reducer: toastrReducer },
+      { key: 'importation', reducer: importationReducer },
+      { key: 'docSearch',   reducer: docSearchReducer },
+      { key: 'dashboard',   reducer: dashboardReducer },
+      { key: 'toastr',      reducer: toastrReducer },
     ]);
 
     /* Return Component */
@@ -34,14 +36,16 @@ const getRoutes = (store) => [{
       const { default : Component } = require('./containers/Home');
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+      const { default : importationReducer } = require('redux/reducers/importation/reducer');
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
       const { default : dashboardReducer } = require('redux/reducers/dashboard/reducer');
       const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
-        { key: 'docSearch', reducer: docSearchReducer },
-        { key: 'dashboard', reducer: dashboardReducer },
-        { key: 'toastr',    reducer: toastrReducer },
+        { key: 'importation', reducer: importationReducer },
+        { key: 'docSearch',   reducer: docSearchReducer },
+        { key: 'dashboard',   reducer: dashboardReducer },
+        { key: 'toastr',      reducer: toastrReducer },
       ]);
 
       /* Return Component */
@@ -62,6 +66,7 @@ const getRoutes = (store) => [{
 
       store.injectReducers([
         { key: 'docSearch', reducer: docSearchReducer },
+        { key: 'toastr',    reducer: toastrReducer },
       ]);
 
       /* Return Component */
@@ -77,14 +82,16 @@ const getRoutes = (store) => [{
       const { default : Component } = require('./containers/Cases');
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+      const { default : importationReducer } = require('redux/reducers/importation/reducer');
       const { default : casesReducer } = require('redux/reducers/cases/reducer');
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
       const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
-        { key: 'cases',     reducer: casesReducer },
-        { key: 'docSearch', reducer: docSearchReducer },
-        { key: 'toastr',    reducer: toastrReducer },
+        { key: 'importation', reducer: importationReducer },
+        { key: 'cases',       reducer: casesReducer },
+        { key: 'docSearch',   reducer: docSearchReducer },
+        { key: 'toastr',      reducer: toastrReducer },
       ]);
 
       /* Return Component */
@@ -101,14 +108,16 @@ const getRoutes = (store) => [{
       const { default : Component } = require('./containers/Case');
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
+      const { default : importationReducer } = require('redux/reducers/importation/reducer');
       const { default : casesReducer } = require('redux/reducers/cases/reducer');
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
       const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
-        { key: 'cases',     reducer: casesReducer },
-        { key: 'docSearch', reducer: docSearchReducer },
-        { key: 'toastr',    reducer: toastrReducer },
+        { key: 'importation', reducer: importationReducer },
+        { key: 'cases',       reducer: casesReducer },
+        { key: 'docSearch',   reducer: docSearchReducer },
+        { key: 'toastr',      reducer: toastrReducer },
       ]);
 
       const Case = UserIsAuthenticated(Component);
@@ -123,4 +132,3 @@ const getRoutes = (store) => [{
 }];
 
 export default { routes : getRoutes, getIndexRoute };
-

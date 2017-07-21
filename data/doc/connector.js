@@ -294,8 +294,6 @@ export class DocConnector {
             .matchesQuery('business', businessQuery())
             .doesNotExist('deletion_user')
             .doesNotExist('deletion_date')
-            .doesNotExist('validation_date')
-            .equalTo('state', 'OPEN')
             .equalTo('category', category);
 
           queries.push(
@@ -316,6 +314,9 @@ export class DocConnector {
 
       // Files exists
       q.exists('files');
+
+      q.equalTo('state', 'OPEN');
+      q.doesNotExist('validation_date');
 
       // Not deleted
       q.doesNotExist('deletion_date');
@@ -537,7 +538,7 @@ export class DocConnector {
 
     if (company) {
       must.push({
-        term: { company },
+        match: { company },
       });
     }
 

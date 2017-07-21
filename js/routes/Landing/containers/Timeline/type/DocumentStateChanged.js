@@ -90,7 +90,7 @@ const ICON_WRAPPER_STYLE_CANCELED = {
 //   CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
 // };
 
-export default function DocumentStateChanged({ intl, doc, user, timestamp, metadata }, { currentUser }) {
+export default function DocumentStateChanged({ intl, doc, user, now : timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 

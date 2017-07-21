@@ -10,6 +10,8 @@ export { default as GridIcon } from './Grid';
 
 export { default as BellIcon } from './Bell';
 
+export { default as FullscreenIcon } from './Fullscreen';
+
 export { default as PencilIcon } from './Pencil';
 
 export { default as UpArrowIcon } from './UpArrow';
@@ -73,6 +75,8 @@ export { default as ErrorIcon } from './Error';
 export { default as FileIcon } from './File';
 
 export { default as UploadIcon } from './Upload';
+
+export { default as ImportIcon } from './Import';
 
 export { default as AttachmentIcon } from './Attachment';
 

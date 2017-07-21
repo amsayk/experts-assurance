@@ -21,9 +21,11 @@ export default (store) => ({
       const { default : UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
 
       const { default : docSearchReducer } = require('redux/reducers/docSearch/reducer');
+      const { default : toastrReducer } = require('redux/reducers/toastr/reducer');
 
       store.injectReducers([
         { key: 'docSearch', reducer: docSearchReducer },
+        { key: 'toastr',    reducer: toastrReducer },
       ]);
 
       Search = UserIsAuthenticated(Component);
@@ -35,3 +37,4 @@ export default (store) => ({
     }, 'Search');
   },
 });
+

@@ -26,6 +26,7 @@ import {
   ACTION as SORT,
 } from 'redux/reducers/sorting/constants';
 
+import { ImportState } from 'redux/reducers/importation/reducer';
 import { IntlState } from 'redux/reducers/intl/reducer';
 import { AppState } from 'redux/reducers/app/reducer';
 import { DocSearchState } from 'redux/reducers/docSearch/reducer';
@@ -170,6 +171,7 @@ const enhancer = composeEnhancers(
 export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { intl: { locale: DEFAULT_LANG } }, function (key, value) {
   switch (key) {
     case ''                 : return new Map(value);
+    case 'importation'      : return new ImportState(value);
     case 'intl'             : return new IntlState(value);
     case 'app'              : return new AppState(value);
     case 'docSearch'        : return new DocSearchState(value);

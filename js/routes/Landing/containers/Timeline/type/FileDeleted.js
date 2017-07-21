@@ -63,7 +63,7 @@ const ENTRY_CATEGORY_STYLE = {
   textTransform : 'uppercase',
 };
 
-export default function FileDeleted({ intl, doc, file, user, timestamp, metadata }, { currentUser }) {
+export default function FileDeleted({ intl, doc, file, user, now : timestamp, metadata }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
 
