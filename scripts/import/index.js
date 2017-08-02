@@ -92,8 +92,6 @@ process_RS(fStream, async function(err, docs) {
     process.exit(1);
   }
 
-  console.log(docs);
-
   function sleep(n) {
     return new Promise(resolve => setTimeout(resolve, n));
   }

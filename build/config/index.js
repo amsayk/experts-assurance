@@ -424,7 +424,7 @@ Edit at Your Own Risk
 // N.B.: globals added here must _also_ be added to .eslintrc
 config.globals = {
   'process.env': {
-    VERSION: 11,
+    VERSION: 12,
 
     DEBUG: JSON.stringify(config.debug),
 
