@@ -23,10 +23,6 @@ export default class DTValidation extends React.Component {
   render() {
     const { range, state } = this.props;
 
-    if (state === 'PENDING') {
-      return null;
-    }
-
     return (
       <div className={style.advancedSearch_field}>
         <div className={style.advancedSearch_field_label}>

@@ -1,23 +1,19 @@
-import React from 'react'
+import React from 'react';
 
-export default class Docs extends React.Component {
-  constructor(props) {
-    super(props);
+import style from 'containers/Importation/styles';
 
-    this.onOpen = this.onOpen.bind(this);
+import Title from './Title';
+import Actions from './Actions';
+import DocsList from './DocsList';
 
-  }
-  onOpen () {
-
-  }
-
+export default class Docs extends React.PureComponent {
   render() {
     return (
-      <div>
-        Docs
+      <div className={style.body}>
+        <Title />
+        <DocsList />
+        <Actions />
       </div>
-    )
+    );
   }
 }
-
-

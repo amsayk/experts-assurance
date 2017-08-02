@@ -9,7 +9,6 @@ import {
 // Sorting
 import { sort } from 'redux/reducers/sorting/actions';
 
-// export const sortPending    = sort('pendingDashboard');
 export const sortOpen       = sort('openDashboard');
 // export const sortClosed  = sort('closedDashboard');
 export const sortUnpaid     = sort('unpaidDashboard');

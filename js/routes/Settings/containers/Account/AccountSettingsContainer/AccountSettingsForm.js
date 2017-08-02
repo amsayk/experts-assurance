@@ -1,9 +1,15 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import { withApollo } from 'react-apollo';
 
-import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
+import {
+  reduxForm,
+  Field,
+  propTypes as reduxFormPropTypes,
+  SubmissionError,
+} from 'redux-form/immutable';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
@@ -29,7 +35,7 @@ export class AccountSettingsForm extends React.Component {
     super(props, context);
 
     this.onKeyDown = this._onKeyDown.bind(this);
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   _onKeyDown(e) {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -39,11 +45,15 @@ export class AccountSettingsForm extends React.Component {
   }
 
   async onSubmit(data) {
-    const { data: { updateAccountSettings: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { payload: {
-        displayName : data.get('displayName'),
-      } },
+    const {
+      data: { updateAccountSettings: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
+      variables: {
+        payload: {
+          displayName: data.get('displayName'),
+        },
+      },
     });
 
     if (!isEmpty(errors)) {
@@ -54,7 +64,9 @@ export class AccountSettingsForm extends React.Component {
     const { snackbar } = this.context;
     if (snackbar) {
       snackbar.show({
-        message: intl.formatMessage(messages.accountSettingsChangeSuccessNotification),
+        message: intl.formatMessage(
+          messages.accountSettingsChangeSuccessNotification,
+        ),
       });
     }
 
@@ -66,24 +78,31 @@ export class AccountSettingsForm extends React.Component {
     const { intl, handleSubmit, pristine, submitting, invalid } = this.props;
     return (
       <div className={style.content}>
-        <h1 className={style.formHeading}>{intl.formatMessage(messages.linkAccountSettings)}</h1>
+        <h1 className={style.formHeading}>
+          {intl.formatMessage(messages.linkAccountSettings)}
+        </h1>
         <div className={style.form}>
           <Field
             name='email'
             component={EmailField}
-            label={intl.formatMessage(messages.labelEmail)} />
+            label={intl.formatMessage(messages.labelEmail)}
+          />
           <Field
             name='displayName'
             component={FullNameField}
             label={intl.formatMessage(messages.labelFullName)}
-            onKeyDown={this.onKeyDown} />
-          <button onClick={handleSubmit(this.onSubmit)} disabled={pristine || submitting || invalid} className={style.saveButton}>
+            onKeyDown={this.onKeyDown}
+          />
+          <button
+            onClick={handleSubmit(this.onSubmit)}
+            disabled={pristine || submitting || invalid}
+            className={style.saveButton}
+          >
             {intl.formatMessage(messages.save)}
           </button>
         </div>
       </div>
     );
-
   }
 }
 
@@ -93,8 +112,7 @@ AccountSettingsForm.contextTypes = {
   }),
 };
 
-AccountSettingsForm.defaultProps = {
-};
+AccountSettingsForm.defaultProps = {};
 
 AccountSettingsForm.propTypes = {
   ...reduxFormPropTypes,
@@ -112,8 +130,4 @@ const Form = reduxForm({
   ...validations,
 });
 
-export default compose(
-  withApollo,
-  Form,
-)(AccountSettingsForm);
-
+export default compose(withApollo, Form)(AccountSettingsForm);

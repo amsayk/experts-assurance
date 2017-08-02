@@ -1,9 +1,10 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link, withRouter } from 'react-router';
 import { withApollo } from 'react-apollo';
 
-import {compose, bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import checkBusiness from 'utils/checkBusiness';
 
@@ -23,13 +24,14 @@ import style from '../../Signup.scss';
 
 import Title from 'components/Title';
 
-import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
-
 import {
-  intlShape,
-  injectIntl,
-  FormattedMessage,
-} from 'react-intl';
+  SubmissionError,
+  Field,
+  reduxForm,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
+
+import { intlShape, injectIntl, FormattedMessage } from 'react-intl';
 
 import messages from '../../messages';
 
@@ -45,7 +47,6 @@ import {
   APP_NAME,
   LINK_PRIVACY_POLICY,
   LINK_TERMS_OF_SERVICE,
-
   ENABLE_RECAPTCHA,
 } from 'vars';
 
@@ -54,25 +55,25 @@ import AppLogo from 'components/AppLogo';
 export class SignupContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
-    intl            : intlShape.isRequired,
-    client          : T.shape({
+    intl: intlShape.isRequired,
+    client: T.shape({
       mutate: T.func.isRequired,
     }),
-    actions         : T.shape({
-      logIn : T.func.isRequired,
+    actions: T.shape({
+      logIn: T.func.isRequired,
     }).isRequired,
   };
 
   static defaultProps = {
-    initialValues : {
-      displayName : null,
+    initialValues: {
+      displayName: null,
     },
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
   }
 
@@ -92,15 +93,19 @@ export class SignupContainer extends React.Component {
 
     const { intl, actions } = this.props;
 
-    const { data: { signUp: { user, errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { info: {
-        displayName          : data.get('displayName'),
-        email                : data.get('email'),
-        password             : data.get('password'),
-        passwordConfirmation : data.get('passwordConfirmation'),
-        recaptcha            : data.get('recaptcha'),
-      } },
+    const {
+      data: { signUp: { user, errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
+      variables: {
+        info: {
+          displayName: data.get('displayName'),
+          email: data.get('email'),
+          password: data.get('password'),
+          passwordConfirmation: data.get('passwordConfirmation'),
+          recaptcha: data.get('recaptcha'),
+        },
+      },
     });
 
     if (!isEmpty(errors)) {
@@ -110,8 +115,7 @@ export class SignupContainer extends React.Component {
     invariant(user, '`user` must be defined at this point.');
 
     try {
-      await actions.logIn(
-        user.username, data.get('password'));
+      await actions.logIn(user.username, data.get('password'));
 
       if (process.env.NODE_ENV !== 'production') {
         cookie.save('app.logIn', email, { path: '/' });
@@ -125,36 +129,41 @@ export class SignupContainer extends React.Component {
   }
 
   _renderForm() {
-    const {
-      intl, handleSubmit, submitting, invalid,
-    } = this.props;
+    const { intl, handleSubmit, submitting, invalid } = this.props;
 
     return [
-      <h1 className={ style.heading }>{intl.formatMessage(messages.title, { appName: APP_NAME })}</h1>,
+      <h1 className={style.heading}>
+        {intl.formatMessage(messages.title, { appName: APP_NAME })}
+      </h1>,
 
-      <p className={style.tagLine}>{intl.formatMessage(messages.tagLine)}</p>,
+      <p className={style.tagLine}>
+        {intl.formatMessage(messages.tagLine)}
+      </p>,
 
       <Field
         name='displayName'
         component={DisplayNameField}
         placeholder={intl.formatMessage(messages.displayName)}
-        onKeyDown={this.onKeyDown} />,
+        onKeyDown={this.onKeyDown}
+      />,
 
       <Field
         name='email'
         component={EmailField}
         placeholder={intl.formatMessage(messages.email)}
-        onKeyDown={this.onKeyDown} />,
+        onKeyDown={this.onKeyDown}
+      />,
 
       <Field
         name='password'
         component={PasswordField}
         placeholder={intl.formatMessage(messages.password)}
-        onKeyDown={this.onKeyDown} />,
+        onKeyDown={this.onKeyDown}
+      />,
 
-      ENABLE_RECAPTCHA ? <Field
-        name={'recaptcha'}
-        component={ReCAPTCHAField} /> : null,
+      ENABLE_RECAPTCHA
+        ? <Field name={'recaptcha'} component={ReCAPTCHAField} />
+        : null,
 
       <p className={style.tos}>
         <FormattedMessage
@@ -162,19 +171,27 @@ export class SignupContainer extends React.Component {
           values={{
             action: intl.formatMessage(messages.signUp),
             termsOfService: (
-              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>
+                {intl.formatMessage(messages.termsOfService)}
+              </a>
             ),
             privacyPolicy: (
-              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>
+                {intl.formatMessage(messages.privacyPolicy)}
+              </a>
             ),
           }}
         />
       </p>,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.join} role='button'>
+      <button
+        onClick={handleSubmit(this.onSubmit)}
+        disabled={submitting || invalid}
+        className={style.join}
+        role='button'
+      >
         {intl.formatMessage(messages.signUp)}
       </button>,
-
     ];
   }
 
@@ -182,10 +199,12 @@ export class SignupContainer extends React.Component {
     const { intl } = this.props;
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
+        <Title
+          title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}
+        />
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
-            <AppLogo width={52} height={52}/>
+            <AppLogo width={52} height={52} />
           </Link>
           <div className={style.form}>
             {this._renderForm()}
@@ -209,7 +228,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logIn }, dispatch)};
+  return { actions: bindActionCreators({ logIn }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
@@ -219,11 +238,6 @@ const WithForm = reduxForm({
   // validate: validations.validate,
 });
 
-export default compose(
-  injectIntl,
-  withRouter,
-  withApollo,
-  Connect,
-  WithForm,
-)(SignupContainer);
-
+export default compose(injectIntl, withRouter, withApollo, Connect, WithForm)(
+  SignupContainer,
+);

@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import classNames from 'classnames';
-import ReactBootstrapTransition from 'react-overlays/lib/Transition';
+import ReactBootstrapTransition from 'components/Transition';
 
 const propTypes = {
   /**
@@ -81,4 +82,3 @@ Transition.propTypes = propTypes;
 Transition.defaultProps = defaultProps;
 
 export default Transition;
-

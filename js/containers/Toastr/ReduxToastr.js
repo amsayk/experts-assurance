@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import T from 'prop-types';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import ToastrConfirm from './ToastrConfirm';
 import * as actions from 'redux/reducers/toastr/actions';
-import {updateConfig} from './utils';
-import {TRANSITIONS} from './constants';
+import { updateConfig } from './utils';
+import { TRANSITIONS } from './constants';
 
 import style from './styles';
 
@@ -13,9 +13,9 @@ export class ReduxToastr extends React.Component {
   static displayName = 'ReduxToastr';
 
   static propTypes = {
-    confirmOptions: PropTypes.object,
-    transitionIn: PropTypes.oneOf(TRANSITIONS.in),
-    transitionOut: PropTypes.oneOf(TRANSITIONS.out),
+    confirmOptions: T.object,
+    transitionIn: T.oneOf(TRANSITIONS.in),
+    transitionOut: T.oneOf(TRANSITIONS.out),
   };
 
   static defaultProps = {
@@ -24,8 +24,8 @@ export class ReduxToastr extends React.Component {
     transitionOut: TRANSITIONS.out[0],
     confirmOptions: {
       okText: 'ok',
-      cancelText: 'Annuler'
-    }
+      cancelText: 'Annuler',
+    },
   };
 
   constructor(props) {
@@ -33,22 +33,16 @@ export class ReduxToastr extends React.Component {
     updateConfig(props);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   render() {
-    const {className, toastr} = this.props;
+    const { className, toastr } = this.props;
     return (
       <span className={cx(style.reduxToastr, className)}>
         {toastr.confirm &&
-          <ToastrConfirm
-            confirm={toastr.confirm}
-            {...this.props}
-          />
-        }
+          <ToastrConfirm confirm={toastr.confirm} {...this.props} />}
       </span>
     );
   }
@@ -58,6 +52,5 @@ export default connect(
   state => ({
     toastr: state.get('toastr', {}),
   }),
-  actions
+  actions,
 )(ReduxToastr);
-

@@ -1,7 +1,8 @@
-import React, { PropTypes as T } from 'react';
-import {bindActionCreators} from 'redux';
+import React from 'react';
+import T from 'prop-types';
+import { bindActionCreators } from 'redux';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import cx from 'classnames';
 
@@ -25,7 +26,6 @@ class Notification extends React.Component {
     this.onClose = this.onClose.bind(this);
   }
 
-
   /**
    * Component update optimization.
    * @param  {Object} nextProps
@@ -33,7 +33,6 @@ class Notification extends React.Component {
    * @return {Boolean}
    */
   shouldComponentUpdate(nextProps, nextState) {
-
     // ### id
     // Check if a new id has been requested.
 
@@ -81,8 +80,7 @@ class Notification extends React.Component {
    * Remove the relay subscription when the component unmounts.
    * @return {Void}
    */
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   /**
    * Returns the current class names for the notification.
@@ -91,9 +89,9 @@ class Notification extends React.Component {
   getClass() {
     const { notification: { animation } } = this.props;
     return cx({
-      [style.notification] : true,
-      [style.animated]     : !!animation,
-      [style[animation]]   : !!animation,
+      [style.notification]: true,
+      [style.animated]: !!animation,
+      [style[animation]]: !!animation,
     });
   }
 
@@ -111,38 +109,44 @@ class Notification extends React.Component {
     if (scrollTop === 0 && active && !hidden) {
       switch (id) {
         case 'SessionExpired':
-          return <SessionExpired className={this.getClass()}/>;
+          return <SessionExpired className={this.getClass()} />;
         case 'BusinessRequired':
-          return <BusinessRequired className={this.getClass()}/>;
+          return <BusinessRequired className={this.getClass()} />;
         case 'InvalidLink':
-          return <InvalidLink className={this.getClass()} onClose={this.onClose}/>;
+          return (
+            <InvalidLink className={this.getClass()} onClose={this.onClose} />
+          );
         case 'PasswordResetSuccess':
-          return <PasswordResetSuccess className={this.getClass()}/>;
+          return <PasswordResetSuccess className={this.getClass()} />;
         // case 'VerificationPending':
-          // return <VerificationPending className={this.getClass()}/>;
+        // return <VerificationPending className={this.getClass()}/>;
         case 'VerificationSuccess':
-          return <VerificationSuccess className={this.getClass()} onClose={this.onClose}/>;
+          return (
+            <VerificationSuccess
+              className={this.getClass()}
+              onClose={this.onClose}
+            />
+          );
         default:
           return null;
       }
     }
     return null;
   }
-
 }
 
 Notification.propTypes = {
-  notification : T.shape({
-    id      : T.string.isRequired,
-    options : T.shape({
-      active : T.bool.isRequired,
-    }).isRequired
+  notification: T.shape({
+    id: T.string.isRequired,
+    options: T.shape({
+      active: T.bool.isRequired,
+    }).isRequired,
   }).isRequired,
-  hidden  : T.bool.isRequired,
+  hidden: T.bool.isRequired,
 };
 
 Notification.defaultProps = {
-  hidden : false,
+  hidden: false,
 };
 
 function mapStateToProps(state, props) {
@@ -150,10 +154,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ remove }, dispatch)};
+  return { actions: bindActionCreators({ remove }, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  Notification
-);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Notification);

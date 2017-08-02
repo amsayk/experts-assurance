@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -17,10 +18,9 @@ import selector from './selector';
 
 import ActivityIndicator from 'components/ActivityIndicator';
 
-import {
-  // WatchIcon,
-  // DownloadIcon,
-} from 'components/icons/MaterialIcons';
+import // WatchIcon,
+// DownloadIcon,
+'components/icons/MaterialIcons';
 
 import DurationSelector from '../DurationSelector';
 
@@ -34,60 +34,75 @@ class Unpaid extends React.Component {
   }
 
   _handleToggle(e) {
-    if (e.target === this.header){
+    if (e.target === this.header) {
       this.props.actions.toggle();
     }
   }
   render() {
-    const {
-      isOpen,
-      durationInDays,
-      data,
-      loadMore,
-      actions,
-    } = this.props;
-    const summary = data.length && data.cursor ? <span style={{
-      color: 'rgba(112, 112, 112, 0.85)',
-      fontSize: 13,
-      verticalAlign: 'middle',
-    }}> · {data.length} dossiers</span>  : null;
+    const { isOpen, durationInDays, data, loadMore, actions } = this.props;
+    const summary =
+      data.length && data.cursor
+        ? <span
+            style={{
+              color: 'rgba(112, 112, 112, 0.85)',
+              fontSize: 13,
+              verticalAlign: 'middle',
+            }}
+          >
+            {' '}· {data.length} dossiers
+          </span>
+        : null;
     return (
-      <div className={cx(style.board, isOpen && style.dashboardOpen, style.boardPending)}>
-        <header onClick={this._handleToggle} ref={(header) => this.header = header} className={style.boardHeader}>
-          <div style={{
-            paddingLeft: 10,
-          }} className={cx(style['OPEN'], style.boardIcon)}>
-          {/* <WatchIcon size={18}/> */}
-          #
-        </div>
-        <h5 className={style.boardTitle}>Dossiers non-payés {summary}</h5>
-        <div className={style.ctrls}>
-          <div className={style.icon}>
-            {data.loading ? <ActivityIndicator size='small'/> : null}
+      <div
+        className={cx(
+          style.board,
+          isOpen && style.dashboardOpen,
+          style.boardPending,
+        )}
+      >
+        <header
+          onClick={this._handleToggle}
+          ref={header => (this.header = header)}
+          className={style.boardHeader}
+        >
+          <div
+            style={{
+              paddingLeft: 10,
+            }}
+            className={cx(style['OPEN'], style.boardIcon)}
+          >
+            {/* <WatchIcon size={18}/> */}
+            #
           </div>
-          {/* <div className={cx(style.icon, style.download)}> */}
+          <h5 className={style.boardTitle}>
+            Dossiers non-payés {summary}
+          </h5>
+          <div className={style.ctrls}>
+            <div className={style.icon}>
+              {data.loading ? <ActivityIndicator size='small' /> : null}
+            </div>
+            {/* <div className={cx(style.icon, style.download)}> */}
             {/*   <Button className={style.downloadButton} role='button'> */}
-              {/*     <DownloadIcon */}
-                {/*       size={18} */}
-                {/*     /> */}
-              {/*   </Button> */}
+            {/*     <DownloadIcon */}
+            {/*       size={18} */}
+            {/*     /> */}
+            {/*   </Button> */}
             {/* </div> */}
-          <div className={style.icon}>
-            <DurationSelector
-              label='Durée de validation'
-              duration={durationInDays}
-              onDuration={actions.setDuration}
-            />
+            <div className={style.icon}>
+              <DurationSelector
+                label='Durée de validation'
+                duration={durationInDays}
+                onDuration={actions.setDuration}
+              />
+            </div>
           </div>
-        </div>
-      </header>
-      {isOpen ? <div className={style.boardContent}>
-        <List
-          loadMore={loadMore}
-          {...data}
-        />
-      </div> : null}
-    </div>
+        </header>
+        {isOpen
+          ? <div className={style.boardContent}>
+              <List loadMore={loadMore} {...data} />
+            </div>
+          : null}
+      </div>
     );
   }
 }
@@ -107,17 +122,16 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      toggle : (...args) => toggle('unpaid', ...args),
-      setDuration : (...args) => setDuration('unpaid', ...args),
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        toggle: (...args) => toggle('unpaid', ...args),
+        setDuration: (...args) => setDuration('unpaid', ...args),
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-  DataLoader.unpaidDocs,
-)(Unpaid);
-
+export default compose(Connect, DataLoader.unpaidDocs)(Unpaid);

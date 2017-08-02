@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import ActivityIndicator from 'components/ActivityIndicator';
 
@@ -14,23 +15,23 @@ import cx from 'classnames';
 
 class Spying extends React.Component {
   static propTypes = {
-    offset            : T.number.isRequired,
-    disabled          : T.bool.isRequired,
-    onSpy             : T.func.isRequired,
-    scrollThreshold   : T.number.isRequired,
-    fetchMore         : T.bool.isRequired,
-    bubbles           : T.bool.isRequired,
-    manual            : T.bool.isRequired,
-  }
+    offset: T.number.isRequired,
+    disabled: T.bool.isRequired,
+    onSpy: T.func.isRequired,
+    scrollThreshold: T.number.isRequired,
+    fetchMore: T.bool.isRequired,
+    bubbles: T.bool.isRequired,
+    manual: T.bool.isRequired,
+  };
   static defaultProps = {
-    offset          : 0,
-    disabled        : false,
-    scrollThreshold : 0.8,
-    bubbles         : false,
-    fetchMore       : false,
-    manual          : false,
-    loadMoreLabel   : 'Plus d\'événements',
-  }
+    offset: 0,
+    disabled: false,
+    scrollThreshold: 0.8,
+    bubbles: false,
+    fetchMore: false,
+    manual: false,
+    loadMoreLabel: `Plus d'événements`,
+  };
   constructor(props) {
     super(props);
 
@@ -42,11 +43,16 @@ class Spying extends React.Component {
       this._eventHandler.remove();
       this._eventHandler = null;
     }
-
   }
   _registerEventHandlers() {
     if (!this.props.manual) {
-      this._eventHandler = addEventListener(document, 'scroll', this._handleScroll, /* capture = */ !this.props.bubbles, /* passive = */ true);
+      this._eventHandler = addEventListener(
+        document,
+        'scroll',
+        this._handleScroll,
+        /* capture = */ !this.props.bubbles,
+        /* passive = */ true,
+      );
     }
   }
   componentDidMount() {
@@ -67,17 +73,32 @@ class Spying extends React.Component {
   }
   _isAtBottom(event) {
     if (this.props.bubbles) {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      return ((this.props.scrollThreshold * document.body.scrollHeight) <= scrollTop + window.innerHeight + this.props.offset);
+      const scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+      return (
+        this.props.scrollThreshold * document.body.scrollHeight <=
+        scrollTop + window.innerHeight + this.props.offset
+      );
     } else {
       const target = event.target;
-      const clientHeight = (target === document.body || target === document.documentElement)
-        ? window.screen.availHeight : target.clientHeight;
+      const clientHeight =
+        target === document.body || target === document.documentElement
+          ? window.screen.availHeight
+          : target.clientHeight;
 
-      const scrollTop = target === document.body
-        ? window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
-        : target.scrollTop;
-      const scrolled = this.props.scrollThreshold * (target.scrollHeight - scrollTop - this.props.offset);
+      const scrollTop =
+        target === document.body
+          ? window.pageYOffset ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0
+          : target.scrollTop;
+      const scrolled =
+        this.props.scrollThreshold *
+        (target.scrollHeight - scrollTop - this.props.offset);
       return scrolled < clientHeight;
     }
   }
@@ -85,7 +106,6 @@ class Spying extends React.Component {
     if (this.props.fetchMore && this._isAtBottom(event)) {
       raf(this.props.onSpy);
     }
-
   }
   _onMore() {
     raf(this.props.onSpy);
@@ -105,27 +125,24 @@ class Spying extends React.Component {
 
     return (
       <div className={cx(style.scrollSpy, !fetchMore && style.done)}>
-        {fetchMore && !manual
-          ? null
-          : this.renderLoadMoreButton()}
-        </div>
+        {fetchMore && !manual ? null : this.renderLoadMoreButton()}
+      </div>
     );
   }
 }
 
 class Idle extends React.Component {
   static propTypes = {
-    disabled : T.bool.isRequired,
-    Loading  : T.element.isRequired,
-  }
+    disabled: T.bool.isRequired,
+    Loading: T.element.isRequired,
+  };
   static defaultProps = {
-    disabled : false,
-    Loading  : () => (
+    disabled: false,
+    Loading: () =>
       <div className={style.scrollIdle}>
-        <ActivityIndicator size='large'/>
-      </div>
-    ),
-  }
+        <ActivityIndicator size='large' />
+      </div>,
+  };
 
   render() {
     const { disabled, Loading, done, doneLabel } = this.props;
@@ -134,19 +151,15 @@ class Idle extends React.Component {
     }
 
     if (done) {
-      return doneLabel ? (
-        <div className={style.loaded}>
-          {doneLabel}
-        </div>
-      ) : null;
+      return doneLabel
+        ? <div className={style.loaded}>
+            {doneLabel}
+          </div>
+        : null;
     }
 
-    return (
-      <Loading/>
-    );
-
+    return <Loading />;
   }
 }
 
 export default { Idle, Spying };
-

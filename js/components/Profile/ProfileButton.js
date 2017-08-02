@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import style from './Profile.scss';
 
@@ -6,31 +7,29 @@ import ProfilePic from './ProfilePic';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 
-const ProfileButton = ({ user, size, children }) => (
+const ProfileButton = ({ user, size, children }) =>
   <div className={style.menu}>
     <Dropdown pullRight>
       <Dropdown.Toggle className={style.avatar}>
-        <ProfilePic user={user} size={size}/>
+        <ProfilePic user={user} size={size} />
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {children}
       </Dropdown.Menu>
     </Dropdown>
-  </div>
-);
+  </div>;
 
 ProfileButton.propTypes = {
-  size     : T.number.isRequired,
-  children : T.arrayOf(T.element.isRequired).isRequired,
-  user     : T.shape({
+  size: T.number.isRequired,
+  children: T.arrayOf(T.element.isRequired).isRequired,
+  user: T.shape({
     displayName: T.string.isRequired,
     email: T.string.isRequired,
   }),
 };
 
 ProfileButton.defaultProps = {
-  size : 32,
+  size: 32,
 };
 
 export default ProfileButton;
-

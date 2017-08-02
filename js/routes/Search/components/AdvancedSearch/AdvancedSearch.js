@@ -72,7 +72,7 @@ export default class AdvancedSearch extends React.Component {
 
             <div style={{marginTop: 15}}></div>
 
-        <h6 className={style.advancedSearch_intro}>Individuels/Sociétés</h6>
+        <h6 className={style.advancedSearch_intro}>Individu/Sociétés</h6>
 
         {/* render users ---- */}
         <Company

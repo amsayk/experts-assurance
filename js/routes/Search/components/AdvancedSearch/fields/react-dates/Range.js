@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import momentPropTypes from 'react-moment-proptypes';
 import moment from 'moment';
 import omit from 'lodash.omit';
@@ -6,13 +7,18 @@ import omit from 'lodash.omit';
 import DateRangePicker from 'react-dates/lib/components/DateRangePicker';
 
 import DateRangePickerShape from 'react-dates/lib/shapes/DateRangePickerShape';
-import { START_DATE, END_DATE, HORIZONTAL_ORIENTATION, ANCHOR_LEFT } from 'react-dates/constants';
+import {
+  START_DATE,
+  END_DATE,
+  HORIZONTAL_ORIENTATION,
+  ANCHOR_LEFT,
+} from 'react-dates/constants';
 // import isInclusivelyAfterDay from 'react-dates/lib/utils/isInclusivelyAfterDay';
 
 const propTypes = {
   // example props for the demo
-  autoFocus: PropTypes.bool,
-  autoFocusEndDate: PropTypes.bool,
+  autoFocus: T.bool,
+  autoFocusEndDate: T.bool,
   initialStartDate: momentPropTypes.momentObj,
   initialEndDate: momentPropTypes.momentObj,
 
@@ -102,7 +108,9 @@ class DateRangePickerWrapper extends React.Component {
   }
 
   onDatesChange({ startDate, endDate }) {
-    this.setState({ startDate, endDate }, () => this.props.onRange({from: startDate, to: endDate}));
+    this.setState({ startDate, endDate }, () =>
+      this.props.onRange({ from: startDate, to: endDate }),
+    );
   }
 
   onFocusChange(focusedInput) {
@@ -138,4 +146,3 @@ DateRangePickerWrapper.propTypes = propTypes;
 DateRangePickerWrapper.defaultProps = defaultProps;
 
 export default DateRangePickerWrapper;
-

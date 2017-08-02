@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
@@ -17,7 +18,7 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
-const selectionSelector = (state) => state.getIn(['users', 'selection', 'keys']);
+const selectionSelector = state => state.getIn(['users', 'selection', 'keys']);
 const keySelector = (_, { index }) => index;
 
 const selector = createSelector(
@@ -37,19 +38,46 @@ class ListItem extends React.Component {
     this.props.onItem(this.props.item.id);
   }
   render() {
-    const { isSelected, intl, className, tabIndex, role, onClick, onKeyDown, item } = this.props;
+    const {
+      isSelected,
+      intl,
+      className,
+      tabIndex,
+      role,
+      onClick,
+      onKeyDown,
+      item,
+    } = this.props;
     const { id, displayName, email, updatedAt } = item;
     return (
-      <div data-root-close-ignore role={role} tabIndex={tabIndex} onClick={onClick}  onDoubleClick={this.onDoubleClick} onKeyDown={onKeyDown} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
+      <div
+        data-root-close-ignore
+        role={role}
+        tabIndex={tabIndex}
+        onClick={onClick}
+        onDoubleClick={this.onDoubleClick}
+        onKeyDown={onKeyDown}
+        className={cx(style.listItemWrapper, className, {
+          [style.isSelected]: isSelected,
+        })}
+      >
         <div className={style.listItemName}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.icon}>
-                  <ProfilePic user={item} textSizeRatio={2}/>
+                  <ProfilePic user={item} textSizeRatio={2} />
                 </div>
                 <div className={style.text}>
-                  <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id}>
+                  <Link
+                    to={
+                      PATH_SETTINGS_BASE +
+                      '/' +
+                      PATH_SETTINGS_BUSINESS_USER +
+                      '/' +
+                      id
+                    }
+                  >
                     {displayName}
                   </Link>
                 </div>
@@ -62,7 +90,9 @@ class ListItem extends React.Component {
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <div className={style.text}>{email || '—'}</div>
+                <div className={style.text}>
+                  {email || '—'}
+                </div>
               </div>
             </div>
           </div>
@@ -85,25 +115,27 @@ class ListItem extends React.Component {
 }
 
 ListItem.propTypes = {
-  intl       : intlShape.isRequired,
-  onItem     : T.func.isRequired,
-  onClick    : T.func.isRequired,
-  onKeyDown  : T.func.isRequired,
-  tabIndex   : T.string.isRequired,
-  role       : T.string.isRequired,
-  isSelected : T.bool.isRequired,
-  index      : T.any.isRequired,
-  item       : T.shape({
-    id          : T.string.isRequired,
-    displayName : T.string.isRequired,
-    email   : T.string,
-    createdAt   : T.number.isRequired,
-    updatedAt   : T.number.isRequired,
-    labels      : T.arrayOf(T.shape({
-      slug  : T.string.isRequired,
-      displayName  : T.string.isRequired,
-      color : T.string,
-    })).isRequired,
+  intl: intlShape.isRequired,
+  onItem: T.func.isRequired,
+  onClick: T.func.isRequired,
+  onKeyDown: T.func.isRequired,
+  tabIndex: T.string.isRequired,
+  role: T.string.isRequired,
+  isSelected: T.bool.isRequired,
+  index: T.any.isRequired,
+  item: T.shape({
+    id: T.string.isRequired,
+    displayName: T.string.isRequired,
+    email: T.string,
+    createdAt: T.number.isRequired,
+    updatedAt: T.number.isRequired,
+    labels: T.arrayOf(
+      T.shape({
+        slug: T.string.isRequired,
+        displayName: T.string.isRequired,
+        color: T.string,
+      }),
+    ).isRequired,
   }).isRequired,
 };
 
@@ -113,15 +145,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-    }, dispatch),
+    actions: bindActionCreators({}, dispatch),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(ListItem);
-
+export default compose(injectIntl, Connect)(ListItem);

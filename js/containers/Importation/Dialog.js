@@ -2,7 +2,10 @@ import React from 'react';
 
 import style from 'containers/Importation/styles';
 
+import cx from 'classnames';
+
 import Zoom from 'components/transitions/Zoom';
+import Fade from 'components/transitions/Fade';
 
 import raf from 'utils/requestAnimationFrame';
 
@@ -11,20 +14,20 @@ import { CloseIcon } from 'components/icons/MaterialIcons';
 import Button from 'components/bootstrap/Button';
 
 const styles = {
-  body : {
+  body: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '0 2.25rem',
   },
-  wrapper : {
+  wrapper: {
     position: 'relative',
     zIndex: 1077,
-    height: '100%',
-    width: '100%',
-    overflowY: 'auto',
+    height: '100vh',
+    width: '100vw',
+    // overflowY: 'auto',
   },
-  confirmToastr : {},
+  confirmToastr: {},
 };
 
 export default class Dialog extends React.Component {
@@ -35,7 +38,7 @@ export default class Dialog extends React.Component {
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
 
     this.state = {
-      show : props.show,
+      show: props.show,
     };
   }
   onTransitionEnd() {
@@ -54,12 +57,12 @@ export default class Dialog extends React.Component {
         setTimeout(() => {
           raf(() => {
             self.props.closePortal();
-          })
+          });
         }, 0);
       };
 
       self.setState({
-        show : false,
+        show: false,
       });
     }
 
@@ -74,11 +77,11 @@ export default class Dialog extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.show === true && nextProps.show === false) {
       this.setState({
-        show : false,
+        show: false,
       });
     } else if (this.state.show === false && nextProps.show === true) {
       this.setState({
-        show : true,
+        show: true,
       });
     }
   }
@@ -87,28 +90,38 @@ export default class Dialog extends React.Component {
     const { children, ...props } = this.props;
 
     return (
-      <Zoom onTransitionEnd={this.onTransitionEnd} in={this.state.show} timeout={75} transitionAppear>
+      <Zoom
+        onTransitionEnd={this.onTransitionEnd}
+        in={this.state.show}
+        timeout={75}
+        transitionAppear
+      >
         <div className={style.dialogWrapper}>
-          <div className={style.dialogMask}></div>
+          <div className={style.dialogMask} />
           <div style={styles.wrapper}>
-            <div className={style.dialogInner}>
+            <div className={cx(style.dialogInner, props.className)}>
               <div className={style.dialog}>
-                {this.state.show && children ? React.cloneElement(children, props) : <div/>}
+                {this.state.show && children
+                  ? <Fade in transitionAppear timeout={300}>
+                      {React.cloneElement(children, props)}
+                    </Fade>
+                  : <div />}
               </div>
             </div>
-            {/* <Actions /> */}
           </div>
           <div className={style.dialogClose}>
-            <Button onClick={this.onClose} className={style.dialogCloseButton} role='button'>
+            <Button
+              onClick={this.onClose}
+              className={style.dialogCloseButton}
+              role='button'
+            >
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <CloseIcon size={24}/>
+                <CloseIcon size={24} />
               </div>
             </Button>
           </div>
         </div>
       </Zoom>
     );
-
   }
 }
-

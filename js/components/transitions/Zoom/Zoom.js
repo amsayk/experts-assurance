@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
-import Transition from 'react-overlays/lib/Transition';
+import Transition from 'components/Transition';
 
 import style from './Zoom.scss';
 
@@ -71,7 +72,7 @@ Zoom.propTypes = {
    */
   onExited: T.func,
 };
-Zoom.defaultProps =  {
+Zoom.defaultProps = {
   in: false,
   timeout: 300,
   unmountOnExit: false,
@@ -79,4 +80,3 @@ Zoom.defaultProps =  {
 };
 
 export default Zoom;
-

@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 import Align from 'components/react-components/Align';
 import Transition from '../utils/Transition';
@@ -7,17 +8,17 @@ import LazyRenderBox from './LazyRenderBox';
 
 export default class Popup extends React.Component {
   static propTypes = {
-    visible               : T.bool,
-    style                 : T.object,
-    getClassNameFromAlign : T.func,
-    onAlign               : T.func,
-    getRootDomNode        : T.func,
-    onMouseEnter          : T.func,
-    align                 : T.any,
-    destroyPopupOnHide    : T.bool,
-    className             : T.string,
-    prefixCls             : T.string,
-    onMouseLeave          : T.func,
+    visible: T.bool,
+    style: T.object,
+    getClassNameFromAlign: T.func,
+    onAlign: T.func,
+    getRootDomNode: T.func,
+    onMouseEnter: T.func,
+    align: T.any,
+    destroyPopupOnHide: T.bool,
+    className: T.string,
+    prefixCls: T.string,
+    onMouseLeave: T.func,
   };
 
   componentDidMount() {
@@ -62,15 +63,17 @@ export default class Popup extends React.Component {
     return transitionName;
   };
 
-  getClassName = (currentAlignClassName) => {
-    return `${this.props.prefixCls} ${this.props.className} ${currentAlignClassName}`;
+  getClassName = currentAlignClassName => {
+    return `${this.props.prefixCls} ${this.props
+      .className} ${currentAlignClassName}`;
   };
 
   getPopupElement = () => {
     const props = this.props;
     const { align, style, visible, prefixCls, destroyPopupOnHide } = props;
-    const className = this.getClassName(this.currentAlignClassName ||
-      props.getClassNameFromAlign(align));
+    const className = this.getClassName(
+      this.currentAlignClassName || props.getClassNameFromAlign(align),
+    );
     const hiddenClassName = `${prefixCls}-hidden`;
     if (!visible) {
       this.currentAlignClassName = null;
@@ -88,53 +91,53 @@ export default class Popup extends React.Component {
       style: newStyle,
     };
     if (destroyPopupOnHide) {
-      return (<Transition
+      return (
+        <Transition
+          transitionAppear
+          transitionName={this.getTransitionName()}
+          in={visible}
+        >
+          {visible
+            ? <Align
+                target={this.getTarget}
+                key='popup'
+                childrenProps={{ className: 'className' }}
+                ref={this.saveAlign}
+                monitorWindowResize
+                align={align}
+                onAlign={this.onAlign}
+              >
+                <PopupInner visible {...popupInnerProps}>
+                  {props.children}
+                </PopupInner>
+              </Align>
+            : null}
+        </Transition>
+      );
+    }
+    return (
+      <Transition
         transitionAppear
         transitionName={this.getTransitionName()}
         in={visible}
       >
-        {visible ? (<Align
+        <Align
           target={this.getTarget}
           key='popup'
-          childrenProps={{ className: 'className' }}
           ref={this.saveAlign}
           monitorWindowResize
+          xVisible={visible}
+          childrenProps={{ visible: 'xVisible', className: 'className' }}
+          disabled={!visible}
           align={align}
           onAlign={this.onAlign}
         >
-          <PopupInner
-            visible
-            {...popupInnerProps}
-          >
+          <PopupInner hiddenClassName={hiddenClassName} {...popupInnerProps}>
             {props.children}
           </PopupInner>
-        </Align>) : null}
-      </Transition>);
-    }
-    return (<Transition
-      transitionAppear
-      transitionName={this.getTransitionName()}
-      in={visible}
-    >
-      <Align
-        target={this.getTarget}
-        key='popup'
-        ref={this.saveAlign}
-        monitorWindowResize
-        xVisible={visible}
-        childrenProps={{ visible: 'xVisible', className: 'className' }}
-        disabled={!visible}
-        align={align}
-        onAlign={this.onAlign}
-      >
-        <PopupInner
-          hiddenClassName={hiddenClassName}
-          {...popupInnerProps}
-        >
-          {props.children}
-        </PopupInner>
-      </Align>
-    </Transition>);
+        </Align>
+      </Transition>
+    );
   };
 
   getZIndexStyle = () => {
@@ -176,15 +179,16 @@ export default class Popup extends React.Component {
     return maskElement;
   };
 
-  saveAlign = (align) => {
+  saveAlign = align => {
     this.alignInstance = align;
   };
 
   render() {
-    return (<div>
-      {this.getMaskElement()}
-      {this.getPopupElement()}
-    </div>);
+    return (
+      <div>
+        {this.getMaskElement()}
+        {this.getPopupElement()}
+      </div>
+    );
   }
 }
-

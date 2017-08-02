@@ -81,14 +81,6 @@
   margin-left: 12px;
 }
 
-.tailPending {
-  .tailTop {
-    background-color: darken($brand-warning, 10%);
-  }
-  .tailBody {
-    background-color: $brand-warning;
-  }
-}
 .tailOpen {
   .tailTop {
     background-color: darken($brand-info, 10%);

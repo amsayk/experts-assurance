@@ -1,7 +1,8 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import MenuItem from 'components/bootstrap/MenuItem';
@@ -26,14 +27,9 @@ import cx from 'classnames';
 
 import ProfilePic from 'components/Profile/ProfilePic';
 
-import {
-  search,
-} from 'redux/reducers/users/actions';
+import { search } from 'redux/reducers/users/actions';
 
-import {
-  PATH_SETTINGS_BASE,
-  PATH_SETTINGS_BUSINESS_USER,
-} from 'vars';
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 import selector from './selector';
 
@@ -57,12 +53,18 @@ class SearchBox extends React.Component {
     raf(() => this.props.actions.search(''));
   }
   render() {
-    const { result, loading, queryString : q, intl, onClose } = this.props;
+    const { result, loading, queryString: q, intl, onClose } = this.props;
     return (
-      <Dropdown componentClass={'div'} defaultOpen onClose={onClose} className={style.searchFieldWrapper} role='search'>
+      <Dropdown
+        componentClass={'div'}
+        defaultOpen
+        onClose={onClose}
+        className={style.searchFieldWrapper}
+        role='search'
+      >
         <div className={cx(style.searchField, style.active, style.hasContent)}>
           <Button className={style.showResultsButton}>
-            <SearchIcon size={18}/>
+            <SearchIcon size={18} />
           </Button>
           <div className={style.inputWrapper}>
             <input
@@ -78,17 +80,38 @@ class SearchBox extends React.Component {
               style={{ outline: 'none' }}
             />
           </div>
-          {q ? <Button onClick={this.onClearSearch} className={style.clearSearch} role='button'>
-            <CloseIcon size={18}/>
-          </Button> : null}
+          {q
+            ? <Button
+                onClick={this.onClearSearch}
+                className={style.clearSearch}
+                role='button'
+              >
+                <CloseIcon size={18} />
+              </Button>
+            : null}
         </div>
-        <Dropdown.Menu className={cx(style.searchBoxMenu, result.hits.length > 0 || style.hide)}>
-          <MenuItem header componentClass={Header} title={'Résultat de recherche'}/>
-          {result.hits.map(({ _id, _source : user }, index) => {
+        <Dropdown.Menu
+          className={cx(
+            style.searchBoxMenu,
+            result.hits.length > 0 || style.hide,
+          )}
+        >
+          <MenuItem
+            header
+            componentClass={Header}
+            title={'Résultat de recherche'}
+          />
+          {result.hits.map(({ _id, _source: user }, index) => {
             return (
               <MenuItem
                 q={q}
-                url={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + _id}
+                url={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  _id
+                }
                 key={_id}
                 eventKey={index}
                 ProfilePic={ProfilePic}
@@ -108,7 +131,9 @@ function Header({ title }) {
   return (
     <div className={style.menuSectionTitleRow}>
       <div className={style.menuSectionTitle}>
-        <span>{title}</span>
+        <span>
+          {title}
+        </span>
       </div>
     </div>
   );
@@ -120,7 +145,7 @@ function ListItem({ intl, item, q, url, role }) {
       <Link to={url}>
         <div className={style.icon}>
           <span className={style.iconWrapper}>
-            <ProfilePic user={{ displayName : item.name }}/>
+            <ProfilePic user={{ displayName: item.name }} />
             <span className={style.iconOverlay} />
           </span>
         </div>
@@ -134,17 +159,18 @@ function ListItem({ intl, item, q, url, role }) {
               />
             </span>
           </div>
-          {item.lastModified ? <div className={style.subtitle}>
-            <div className={style.entryByLine}>
-              <span>
-                <span className={style.timeAgo}>
-                  {intl.formatRelative(item.lastModified)}
-                </span>
-              </span>
-              <span>
-              </span>
-            </div>
-          </div> : null}
+          {item.lastModified
+            ? <div className={style.subtitle}>
+                <div className={style.entryByLine}>
+                  <span>
+                    <span className={style.timeAgo}>
+                      {intl.formatRelative(item.lastModified)}
+                    </span>
+                  </span>
+                  <span />
+                </div>
+              </div>
+            : null}
         </div>
       </Link>
     </div>
@@ -152,20 +178,21 @@ function ListItem({ intl, item, q, url, role }) {
 }
 
 SearchBox.propTypes = {
-  users: T.arrayOf(T.shape({
-    id : T.string.isRequired,
-    displayName : T.string.isRequired,
-    email : T.string,
-    createdAt : T.number.isRequired,
-    updatedAt : T.number.isRequired,
-  }).isRequired).isRequired,
-  loading  : T.bool.isRequired,
-  onClose  : T.func.isRequired,
-  intl     : intlShape.isRequired,
+  users: T.arrayOf(
+    T.shape({
+      id: T.string.isRequired,
+      displayName: T.string.isRequired,
+      email: T.string,
+      createdAt: T.number.isRequired,
+      updatedAt: T.number.isRequired,
+    }).isRequired,
+  ).isRequired,
+  loading: T.bool.isRequired,
+  onClose: T.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
-SearchBox.defaultProps = {
-};
+SearchBox.defaultProps = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -173,16 +200,15 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      search,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        search,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-  DataLoader.esSearch,
-)(SearchBox);
-
+export default compose(Connect, DataLoader.esSearch)(SearchBox);

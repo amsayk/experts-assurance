@@ -1,28 +1,34 @@
 import classNames from 'classnames';
 import React from 'react';
+import T from 'prop-types';
+
 import all from 'react-prop-types/lib/all';
 
 import Button from 'components/bootstrap/Button';
-import { bsClass, getClassSet, prefix, splitBsProps } from '../utils/bootstrapUtils';
+import {
+  bsClass,
+  getClassSet,
+  prefix,
+  splitBsProps,
+} from '../utils/bootstrapUtils';
 
 import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './ButtonGroup.scss';
 
 const propTypes = {
-  vertical: React.PropTypes.bool,
-  justified: React.PropTypes.bool,
+  vertical: T.bool,
+  justified: T.bool,
 
   /**
-   * Display block buttons; only useful when used with the "vertical" prop.
+   * Display block buttons; only useful when used with the 'vertical' prop.
    * @type {bool}
    */
   block: all(
-    React.PropTypes.bool,
-    ({ block, vertical }) => (
-      block && !vertical ?
-        new Error('`block` requires `vertical` to be set to have any effect') :
-        null
-    ),
+    T.bool,
+    ({ block, vertical }) =>
+      block && !vertical
+        ? new Error('`block` requires `vertical` to be set to have any effect')
+        : null,
   ),
 };
 
@@ -47,12 +53,7 @@ class ButtonGroup extends React.Component {
       [getLocalCSSClassName(style, prefix(Button.defaultProps, 'block'))]: block,
     };
 
-    return (
-      <div
-        {...elementProps}
-        className={classNames(className, classes)}
-      />
-    );
+    return <div {...elementProps} className={classNames(className, classes)} />;
   }
 }
 
@@ -60,4 +61,3 @@ ButtonGroup.propTypes = propTypes;
 ButtonGroup.defaultProps = defaultProps;
 
 export default bsClass('btn-group', ButtonGroup);
-

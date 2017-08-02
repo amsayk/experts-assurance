@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import Dropdown from 'components/bootstrap/Dropdown';
@@ -36,32 +37,32 @@ class Actions extends React.PureComponent {
     return (
       user && currentUser.isAdmin ? <div className={style.actions}>
         {/* {user.deletion ? null : <div key='edit' className={style.edit}> */}
-        {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Modifier'}> */}
-        {/*     <Button className={style.editButton} onClick={null} role='button'> */}
-        {/*       <PencilIcon size={24}/> */}
-        {/*     </Button> */}
-        {/*   </Tooltip> */}
-        {/* </div>} */}
+          {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Modifier'}> */}
+            {/*     <Button className={style.editButton} onClick={null} role='button'> */}
+              {/*       <PencilIcon size={24}/> */}
+              {/*     </Button> */}
+            {/*   </Tooltip> */}
+          {/* </div>} */}
         {/* <div key='delete' className={style.delete}> */}
-        {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
-        {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
-        {/*       {user.deletion */}
-        {/*           ? <UndoIcon size={24}/> */}
-        {/*           : <TrashIcon size={24}/>} */}
-        {/*         </Button> */}
-        {/*       </Tooltip> */}
-        {/*     </div> */}
-            {/* <div key='more' className={style.more}> */}
-              {/*   <Dropdown> */}
-                {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}
-                {/*     <Dropdown.Menu className={style.userMoreMenu}> */}
-                  {/*       <MenuItem>Changer le role</MenuItem> */}
-                  {/*       <MenuItem>Désactiver le compte</MenuItem> */}
-                  {/*     </Dropdown.Menu> */}
-                {/*   </Dropdown> */}
-              {/* </div> */}
-            <div key='divider' className={style.divider}></div>
-          </div> : null
+          {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
+            {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
+              {/*       {user.deletion */}
+              {/*           ? <UndoIcon size={24}/> */}
+              {/*           : <TrashIcon size={24}/>} */}
+              {/*         </Button> */}
+            {/*       </Tooltip> */}
+          {/*     </div> */}
+        {/* <div key='more' className={style.more}> */}
+          {/*   <Dropdown> */}
+            {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}
+            {/*     <Dropdown.Menu className={style.userMoreMenu}> */}
+              {/*       <MenuItem>Changer le role</MenuItem> */}
+              {/*       <MenuItem>Désactiver le compte</MenuItem> */}
+              {/*     </Dropdown.Menu> */}
+            {/*   </Dropdown> */}
+          {/* </div> */}
+        <div key='divider' className={style.divider}></div>
+      </div> : null
     );
   }
 }

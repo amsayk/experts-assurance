@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { logOut } from 'redux/reducers/user/actions';
@@ -19,30 +20,28 @@ import selector from './selector';
 export class HomeContainer extends React.PureComponent {
   getChildContext() {
     return {
-      currentUser : this.props.user,
-      route       : this.props.route,
+      currentUser: this.props.user,
+      route: this.props.route,
     };
   }
   render() {
     const { user, actions } = this.props;
     return (
       <div className={style.root}>
-        <Header user={user} onLogOut={actions.logOut}/>
-        <Tails user={user}/>
-        <Boards user={user}/>
-        <RecentDocs/>
+        <Header user={user} onLogOut={actions.logOut} />
+        <Tails user={user} />
+        <Boards user={user} />
+        <RecentDocs />
       </div>
     );
   }
 }
 
-HomeContainer.propTypes = {
-
-};
+HomeContainer.propTypes = {};
 
 HomeContainer.childContextTypes = {
-  currentUser : T.object.isRequired,
-  route       : T.object.isRequired,
+  currentUser: T.object.isRequired,
+  route: T.object.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -50,12 +49,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(HomeContainer);
-
+export default compose(Connect)(HomeContainer);

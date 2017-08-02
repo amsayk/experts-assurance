@@ -1,9 +1,10 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 import { withApollo } from 'react-apollo';
 
-import {compose, bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import isEmpty from 'isEmpty';
 
@@ -17,13 +18,14 @@ import Title from 'components/Title';
 
 import AppLogo from 'components/AppLogo';
 
-import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
-
 import {
-  intlShape,
-  injectIntl,
-  FormattedMessage,
-} from 'react-intl';
+  SubmissionError,
+  Field,
+  reduxForm,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
+
+import { intlShape, injectIntl, FormattedMessage } from 'react-intl';
 
 import messages from '../../messages';
 
@@ -47,18 +49,17 @@ export class PasswordResetContainer extends React.Component {
 
   static propTypes = {
     ...formPropTypes,
-    intl            : intlShape.isRequired,
-    client          : T.shape({
+    intl: intlShape.isRequired,
+    client: T.shape({
       mutate: T.func.isRequired,
     }),
-    actions         : T.shape({
-    }).isRequired,
+    actions: T.shape({}).isRequired,
   };
 
   constructor(props, context) {
     super(props, context);
 
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
   }
 
@@ -70,11 +71,15 @@ export class PasswordResetContainer extends React.Component {
   }
 
   async onSubmit(data) {
-    const { data: { passwordReset: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { info: {
-        email      : data.get('email'),
-      } },
+    const {
+      data: { passwordReset: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
+      variables: {
+        info: {
+          email: data.get('email'),
+        },
+      },
     });
 
     if (!isEmpty(errors)) {
@@ -84,40 +89,46 @@ export class PasswordResetContainer extends React.Component {
     const { snackbar } = this.context;
     if (snackbar) {
       const values = {
-        email: <strong className={''}>{data.get('email')}</strong>,
+        email: (
+          <strong className={''}>
+            {data.get('email')}
+          </strong>
+        ),
       };
       snackbar.show({
-        message: (
-          <FormattedMessage
-            {...messages.emailSent}
-            values={values}
-          />
-        ),
+        message: <FormattedMessage {...messages.emailSent} values={values} />,
         duration: 9 * 1000,
       });
     }
   }
 
   _renderForm() {
-    const {
-      intl, handleSubmit, submitting, invalid,
-    } = this.props;
+    const { intl, handleSubmit, submitting, invalid } = this.props;
 
     return [
-      <h5 className={ style.heading }>{intl.formatMessage(messages.title)}</h5>,
+      <h5 className={style.heading}>
+        {intl.formatMessage(messages.title)}
+      </h5>,
 
-      <div className={ style.subheading }>{intl.formatMessage(messages.introText)}</div>,
+      <div className={style.subheading}>
+        {intl.formatMessage(messages.introText)}
+      </div>,
 
       <Field
         name='email'
         component={EmailField}
         placeholder={intl.formatMessage(messages.email)}
-        onKeyDown={this.onKeyDown} />,
+        onKeyDown={this.onKeyDown}
+      />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.passwordResetButton} role='button'>
+      <button
+        onClick={handleSubmit(this.onSubmit)}
+        disabled={submitting || invalid}
+        className={style.passwordResetButton}
+        role='button'
+      >
         {intl.formatMessage(messages.passwordReset)}
       </button>,
-
     ];
   }
 
@@ -125,10 +136,12 @@ export class PasswordResetContainer extends React.Component {
     const { intl } = this.props;
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
+        <Title
+          title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}
+        />
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
-            <AppLogo width={52} height={52}/>
+            <AppLogo width={52} height={52} />
           </Link>
           <div className={style.form}>
             {this._renderForm()}
@@ -137,13 +150,19 @@ export class PasswordResetContainer extends React.Component {
         <footer>
           <ul>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>
+                {intl.formatMessage(messages.termsOfService)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+              <a target='_blank' href={LINK_SUPPORT}>
+                {intl.formatMessage(messages.support)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>
+                {intl.formatMessage(messages.privacyPolicy)}
+              </a>
             </li>
           </ul>
         </footer>
@@ -157,7 +176,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({}, dispatch)};
+  return { actions: bindActionCreators({}, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
@@ -167,10 +186,6 @@ const WithForm = reduxForm({
   ...validations,
 });
 
-export default compose(
-  injectIntl,
-  withApollo,
-  Connect,
-  WithForm,
-)(PasswordResetContainer);
-
+export default compose(injectIntl, withApollo, Connect, WithForm)(
+  PasswordResetContainer,
+);

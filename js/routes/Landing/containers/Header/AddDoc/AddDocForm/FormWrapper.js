@@ -1,7 +1,8 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 import { withRouter } from 'react-router';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 import { withApollo } from 'react-apollo';
 
@@ -36,23 +37,23 @@ import Form from './Form';
 import Title from './Title';
 import Actions from './Actions';
 
-const validations = getValidations(/* imported = */false);
+const validations = getValidations(/* imported = */ false);
 
 const styles = {
-  body : {
+  body: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '0 2.25rem',
   },
-  wrapper : {
+  wrapper: {
     position: 'relative',
     zIndex: 1077,
     height: '100%',
     width: '100%',
     overflowY: 'auto',
   },
-  confirmToastr : {},
+  confirmToastr: {},
 };
 
 // const CONFIRM_MSG = <div style={style.confirmToastr}>
@@ -66,28 +67,27 @@ class FormWrapper extends React.Component {
   static displayName = 'AddDocFormWrapper';
 
   static contextTypes = {
-    store : T.object.isRequired,
+    store: T.object.isRequired,
     snackbar: T.shape({
       show: T.func.isRequired,
     }),
   };
 
   static propTypes = {
-    client          : T.shape({
+    client: T.shape({
       mutate: T.func.isRequired,
     }),
-
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
 
     this.state = {
-      show : props.addingDoc,
+      show: props.addingDoc,
     };
   }
   onTransitionEnd() {
@@ -105,12 +105,12 @@ class FormWrapper extends React.Component {
         setTimeout(() => {
           raf(() => {
             self.props.closePortal();
-          })
+          });
         }, 0);
       };
 
       self.setState({
-        show : false,
+        show: false,
       });
     }
 
@@ -125,11 +125,11 @@ class FormWrapper extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.show === true && nextProps.addingDoc === false) {
       this.setState({
-        show : false,
+        show: false,
       });
     } else if (this.state.show === false && nextProps.addingDoc === true) {
       this.setState({
-        show : true,
+        show: true,
       });
     }
   }
@@ -143,102 +143,71 @@ class FormWrapper extends React.Component {
 
     const { closePortal, router } = this.props;
 
-    const { data: { addDoc: { doc, error, errors } } } = await this.props.client.mutate({
-      refetchQueries : ['getTimeline', 'recentDocs', 'getDocs'],
-      mutation  : MUTATION,
-      variables : { payload: {
-        dateMission          : data.get('dateMission'),
-        date                 : data.get('date'),
+    const {
+      data: { addDoc: { doc, error, errors } },
+    } = await this.props.client.mutate({
+      refetchQueries: ['getTimeline', 'recentDocs', 'getDocs'],
+      mutation: MUTATION,
+      variables: {
+        payload: {
+          dateMission: data.get('dateMission'),
+          date: data.get('date'),
 
-        company              : data.get('company'),
+          company: data.get('company'),
 
-        vehicleManufacturer  : data.get('vehicleManufacturer'),
-        vehicleModel         : data.get('vehicleModel'),
-        vehiclePlateNumber   : data.get('vehiclePlateNumber'),
-        vehicleSeries        : data.get('vehicleSeries'),
-        vehicleMileage       : data.get('vehicleMileage'),
-        vehicleDMC           : data.get('vehicleDMC'),
-        vehicleEnergy        : data.get('vehicleEnergy'),
-        vehiclePower         : data.get('vehiclePower'),
+          vehicleManufacturer: data.get('vehicleManufacturer'),
+          vehicleModel: data.get('vehicleModel'),
+          vehiclePlateNumber: data.get('vehiclePlateNumber'),
+          vehicleSeries: data.get('vehicleSeries'),
+          vehicleMileage: data.get('vehicleMileage'),
+          vehicleDMC: data.get('vehicleDMC'),
+          vehicleEnergy: data.get('vehicleEnergy'),
+          vehiclePower: data.get('vehiclePower'),
 
-        clientId             : data.get('clientId'),
-        clientKey            : data.get('clientKey'),
-        clientDisplayName    : data.get('clientDisplayName'),
-        clientEmail          : data.get('clientEmail'),
+          clientId: data.get('clientId'),
+          clientKey: data.get('clientKey'),
+          clientDisplayName: data.get('clientDisplayName'),
+          clientEmail: data.get('clientEmail'),
 
-        agentId              : data.get('agentId'),
-        agentKey             : data.get('agentKey'),
-        agentDisplayName     : data.get('agentDisplayName'),
-        agentEmail           : data.get('agentEmail'),
+          agentId: data.get('agentId'),
+          agentKey: data.get('agentKey'),
+          agentDisplayName: data.get('agentDisplayName'),
+          agentEmail: data.get('agentEmail'),
 
-        police               : data.get('police'),
-        nature               : data.get('nature'),
+          police: data.get('police'),
+          nature: data.get('nature'),
+        },
+        meta: { ref: null, imported: false },
       },
-      meta : { ref: null, imported: false }},
-      updateQueries : {
+      updateQueries: {
         dashboard(prev, { mutationResult }) {
           const newDoc = mutationResult.data.addDoc.doc;
 
           if (prev && newDoc) {
-            // if (newDoc.state === 'PENDING') {
-            //   return {
-            //     dashboard : {
-            //       ...prev.dashboard,
-            //       pending : {
-            //         count : prev.dashboard.pending.count + 1,
-            //       },
-            //     },
-            //   };
-            // }
-
             if (newDoc.state === 'OPEN') {
               return {
-                dashboard : {
+                dashboard: {
                   ...prev.dashboard,
-                  open : {
-                    count : prev.dashboard.open.count + 1,
+                  open: {
+                    count: prev.dashboard.open.count + 1,
                   },
                 },
               };
             }
-
           }
 
           return prev;
         },
-        // pendingDocs(prev, { mutationResult, queryVariables }) {
-        //   const newDoc = mutationResult.data.addDoc.doc;
-        //
-        //   if (prev && newDoc && newDoc.state === 'PENDING') {
-        //     const docs = [
-        //       newDoc,
-        //       ...prev.pendingDashboard.docs,
-        //     ];
-        //
-        //     return {
-        //       pendingDashboard : {
-        //         length : prev.pendingDashboard.length + 1,
-        //         cursor : prev.pendingDashboard.cursor + 1,
-        //         docs,
-        //       },
-        //     };
-        //   }
-        //
-        //   return prev;
-        // },
         openDocs(prev, { mutationResult, queryVariables }) {
           const newDoc = mutationResult.data.addDoc.doc;
 
           if (prev && newDoc && newDoc.state === 'OPEN') {
-            const docs = [
-              newDoc,
-              ...prev.openDashboard.docs,
-            ];
+            const docs = [newDoc, ...prev.openDashboard.docs];
 
             return {
-              openDashboard : {
-                length : prev.openDashboard.length + 1,
-                cursor : prev.openDashboard.cursor + 1,
+              openDashboard: {
+                length: prev.openDashboard.length + 1,
+                cursor: prev.openDashboard.cursor + 1,
                 docs,
               },
             };
@@ -310,11 +279,11 @@ class FormWrapper extends React.Component {
         case codes.ERROR_ACCOUNT_NOT_VERIFIED:
         case codes.ERROR_NOT_AUTHORIZED:
           throw new SubmissionError({
-            _error : `Vous n'êtes pas authorisé`,
+            _error: `Vous n'êtes pas authorisé`,
           });
         default:
           throw new SubmissionError({
-            _error : 'Erreur inconnu, veuillez réessayer à nouveau.',
+            _error: 'Erreur inconnu, veuillez réessayer à nouveau.',
           });
       }
     }
@@ -329,16 +298,16 @@ class FormWrapper extends React.Component {
     const { snackbar } = this.context;
     if (snackbar) {
       snackbar.show({
-        message  : 'Ajouté avec succès',
-        duration : 7 * 1000,
-        action   : {
-          title : 'Afficher',
-          click : function () {
+        message: 'Ajouté avec succès',
+        duration: 7 * 1000,
+        action: {
+          title: 'Afficher',
+          click: function() {
             this.dismiss();
             setTimeout(() => {
               raf(() => {
                 router.push({
-                  pathname : PATH_CASES_CASE + '/' + doc.id,
+                  pathname: PATH_CASES_CASE + '/' + doc.id,
                 });
               });
             }, 0);
@@ -351,39 +320,42 @@ class FormWrapper extends React.Component {
     const { addingDoc, ...props } = this.props;
 
     return (
-      <Zoom onTransitionEnd={this.onTransitionEnd} in={this.state.show} timeout={75} transitionAppear>
+      <Zoom
+        onTransitionEnd={this.onTransitionEnd}
+        in={this.state.show}
+        timeout={75}
+        transitionAppear
+      >
         <div className={style.addDocFormWrapper}>
-          <div className={style.addDocFormMask}></div>
+          <div className={style.addDocFormMask} />
           <div style={styles.wrapper}>
             <div className={style.addDocFormInner}>
               <div className={style.addDocForm}>
-                <Title/>
+                <Title />
                 {addingDoc ? <Form {...props} onSubmit={this.onSubmit} /> : null}
               </div>
             </div>
             <Actions />
           </div>
           <div className={style.addDocFormClose}>
-            <Button onClick={this.onClose} className={style.addDocFormCloseButton} role='button'>
+            <Button
+              onClick={this.onClose}
+              className={style.addDocFormCloseButton}
+              role='button'
+            >
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <CloseIcon size={24}/>
+                <CloseIcon size={24} />
               </div>
             </Button>
           </div>
         </div>
       </Zoom>
     );
-
   }
 }
 
-const Connect = connect((state) => ({
-  dirty : isDirty('addDoc')(state),
+const Connect = connect(state => ({
+  dirty: isDirty('addDoc')(state),
 }));
 
-export default compose(
-  withApollo,
-  withRouter,
-  Connect,
-)(FormWrapper);
-
+export default compose(withApollo, withRouter, Connect)(FormWrapper);

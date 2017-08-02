@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import { Link } from 'react-router';
 
@@ -9,7 +10,6 @@ import {
 } from 'vars';
 
 import {
-  // UnknownIcon,
   // WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -84,24 +84,34 @@ const ICON_WRAPPER_STYLE_CANCELED = {
 // }
 
 // const STATES = {
-//   // PENDING  : getState('PENDING',  'En attente',  <UnknownIcon  size={12}/>),
 //   OPEN     : getState('OPEN',     'En cours',    <WatchIcon    size={12}/>),
 //   CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon     size={12}/>),
 //   CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon size={12}/>),
 // };
 
-export default function DocumentStateChanged({ intl, doc, user, now : timestamp, metadata }, { currentUser }) {
+export default function DocumentStateChanged(
+  { intl, doc, user, now: timestamp, metadata },
+  { currentUser },
+) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
-
-      <div style={metadata.toState === 'CLOSED' ? ICON_WRAPPER_STYLE_CLOSED : ICON_WRAPPER_STYLE_CANCELED} className={style.profilePic}>
+      <div
+        style={
+          metadata.toState === 'CLOSED'
+            ? ICON_WRAPPER_STYLE_CLOSED
+            : ICON_WRAPPER_STYLE_CANCELED
+        }
+        className={style.profilePic}
+      >
         {/* <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}> */}
-          {/*   <ProfilePic */}
-            {/*     user={user} */}
-            {/*     size={24} */}
-            {/*   /> */}
-          {/* </Link> */}
-        {metadata.toState === 'CLOSED' ? <DoneIcon size={18}/> : <CanceledIcon size={18}/>}
+        {/*   <ProfilePic */}
+        {/*     user={user} */}
+        {/*     size={24} */}
+        {/*   /> */}
+        {/* </Link> */}
+        {metadata.toState === 'CLOSED'
+          ? <DoneIcon size={18} />
+          : <CanceledIcon size={18} />}
       </div>
 
       <div className={style.entry}>
@@ -125,15 +135,27 @@ export default function DocumentStateChanged({ intl, doc, user, now : timestamp,
           </Link>
         </div>
         {/* <div className={style.desc}> */}
-          {/*   <span style={{ marginRight: 5 }}>{STATES[metadata.fromState]}</span> */}
-          {/*   <span style={{ marginRight: 5 }}> → </span> */}
-          {/*   <span>{STATES[metadata.toState]}</span> */}
-          {/* </div> */}
+        {/*   <span style={{ marginRight: 5 }}>{STATES[metadata.fromState]}</span> */}
+        {/*   <span style={{ marginRight: 5 }}> → </span> */}
+        {/*   <span>{STATES[metadata.toState]}</span> */}
+        {/* </div> */}
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+          <Link
+            to={
+              PATH_SETTINGS_BASE +
+              '/' +
+              PATH_SETTINGS_BUSINESS_USER +
+              '/' +
+              user.id
+            }
+          >
             {user.displayName}
-          </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>
+          </Link>{' '}
+          ·{' '}
+          <time
+            title={intl.formatDate(timestamp)}
+            dateTime={new Date(timestamp).toISOString()}
+          >
             {intl.formatRelative(timestamp)}
           </time>
         </div>
@@ -143,6 +165,5 @@ export default function DocumentStateChanged({ intl, doc, user, now : timestamp,
 }
 
 DocumentStateChanged.contextTypes = {
-  currentUser : T.object.isRequired,
+  currentUser: T.object.isRequired,
 };
-

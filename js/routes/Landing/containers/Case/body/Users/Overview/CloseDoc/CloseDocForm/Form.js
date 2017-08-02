@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
-import {compose} from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import getActiveElement from 'getActiveElement';
@@ -18,7 +19,13 @@ import { ErrorIcon } from 'components/icons/MaterialIcons';
 
 import selector from './selector';
 
-import { SubmissionError, Field, reduxForm, submit, propTypes as formPropTypes } from 'redux-form/immutable';
+import {
+  SubmissionError,
+  Field,
+  reduxForm,
+  submit,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
 
 import TextField from 'components/material-ui/TextField';
 
@@ -38,11 +45,22 @@ function getError(error, fieldName) {
   return error.get ? error.get(fieldName) || error[fieldName] : error[fieldName];
 }
 
-function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, onRef, className, input, meta: { touched, error } }) {
+function renderField({
+  name,
+  multiLine = false,
+  onKeyDown,
+  floatingLabelText,
+  onRef,
+  className,
+  input,
+  meta: { touched, error },
+}) {
   let errorText;
 
   if (error && touched) {
-    errorText = getError(error, 'number') ? 'Veuillez entrer des chiffres valides.' : 'Ce champ ne peut pas être vide.';
+    errorText = getError(error, 'number')
+      ? 'Veuillez entrer des chiffres valides.'
+      : 'Ce champ ne peut pas être vide.';
   }
 
   const props = {};
@@ -64,19 +82,18 @@ function renderField({ name, multiLine = false, onKeyDown, floatingLabelText, on
       multiLine={multiLine}
       {...input}
     />
-
   );
 }
 
 const styles = {
-  body : {
+  body: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '0 2.25rem',
   },
 
-  error : {
+  error: {
     lineHeight: 1.5,
     color: 'rgb(244, 67, 54)',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
@@ -87,15 +104,14 @@ const styles = {
     border: '1px solid',
     fontWeight: 500,
     width: '80%',
-  }
+  },
 };
 
 class Form extends React.Component {
   static displayName = 'CloseDocForm';
 
   static contextTypes = {
-    store : T.object.isRequired,
-
+    store: T.object.isRequired,
   };
 
   static propTypes = {
@@ -126,21 +142,25 @@ class Form extends React.Component {
   }
   onNext1() {
     const activeElement = getActiveElement(document);
-    if (!activeElement && activeElement.nodeName !== 'INPUT' && activeElement.nodeName !== 'TEXTAREA') {
+    if (
+      !activeElement &&
+      activeElement.nodeName !== 'INPUT' &&
+      activeElement.nodeName !== 'TEXTAREA'
+    ) {
       setTimeout(() => {
-        raf(
-          () => focusNode(this.secondChild)
-        );
+        raf(() => focusNode(this.secondChild));
       }, 0);
     }
   }
   onNext2() {
     const activeElement = getActiveElement(document);
-    if (!activeElement && activeElement.nodeName !== 'INPUT' && activeElement.nodeName !== 'TEXTAREA') {
+    if (
+      !activeElement &&
+      activeElement.nodeName !== 'INPUT' &&
+      activeElement.nodeName !== 'TEXTAREA'
+    ) {
       setTimeout(() => {
-        raf(
-          () => focusNode(this.paymentFirstChild)
-        );
+        raf(() => focusNode(this.paymentFirstChild));
       }, 0);
     }
   }
@@ -155,8 +175,7 @@ class Form extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-  }
+  componentWillReceiveProps(nextProps) {}
   render() {
     const {
       doc,
@@ -173,9 +192,11 @@ class Form extends React.Component {
     } = this.props;
 
     const fields = [
-      error ? <div key='error' style={styles.error}>
-        <ErrorIcon size={32}/> <div style={{marginLeft: 9}}>{error}</div>
-      </div> : null,
+      error
+        ? <div key='error' style={styles.error}>
+            <ErrorIcon size={32} /> <div style={{ marginLeft: 9 }}>{error}</div>
+          </div>
+        : null,
 
       <section key='dateClosure' className={style.closeSection}>
         <Field
@@ -183,11 +204,11 @@ class Form extends React.Component {
           parse={parseDate}
           props={{
             asyncValidate,
-            locale    : lang,
-            onRef     : onFirstChild,
-            onKeyDown : this.onKeyDown,
-            onNext    : this.onNext1,
-            label     : 'DT Validation',
+            locale: lang,
+            onRef: onFirstChild,
+            onKeyDown: this.onKeyDown,
+            onNext: this.onNext1,
+            label: 'DT Validation',
           }}
           component={DT}
         />
@@ -199,12 +220,13 @@ class Form extends React.Component {
           parse={_parseFloat}
           props={{
             asyncValidate,
-            onRef             : this.onSecondChild,
-            onKeyDown         : this.onKeyDown,
-            onBlur            : this.onNext2,
-            floatingLabelText : 'MT Rapports',
+            onRef: this.onSecondChild,
+            onKeyDown: this.onKeyDown,
+            onBlur: this.onNext2,
+            floatingLabelText: 'MT Rapports',
           }}
-          component={renderField} />
+          component={renderField}
+        />
       </section>,
 
       // <section key='dateValidation' className={style.closeSection}>
@@ -240,8 +262,8 @@ class Form extends React.Component {
       //   />
       // </section>,
 
-      <div style={{marginTop: 15}}></div>,
-      <div style={{marginTop: 15}}></div>,
+      <div style={{ marginTop: 15 }} />,
+      <div style={{ marginTop: 15 }} />,
 
       <Payment
         doc={doc}
@@ -251,21 +273,18 @@ class Form extends React.Component {
         submitting={submitting}
         invalid={invalid}
         asyncValidate={asyncValidate}
-      />
+      />,
     ];
 
     return (
       <div style={styles.body}>
         {fields}
       </div>
-
     );
-
   }
 }
 
-Form.propTypes = {
-};
+Form.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -274,18 +293,14 @@ function mapStateToProps(state, props) {
 const Connect = connect(mapStateToProps);
 
 const WithForm = reduxForm({
-  form                      : 'closeDoc',
-  keepDirtyOnReinitialize   : false,
-  enableReinitialize        : true,
-  destroyOnUnmount          : true,
-  forceUnregisterOnUnmount  : true,
-  asyncValidate             : validations.asyncValidate,
-  validate                  : validations.validate,
-  asyncBlurFields           : validations.asyncBlurFields,
+  form: 'closeDoc',
+  keepDirtyOnReinitialize: false,
+  enableReinitialize: true,
+  destroyOnUnmount: true,
+  forceUnregisterOnUnmount: true,
+  asyncValidate: validations.asyncValidate,
+  validate: validations.validate,
+  asyncBlurFields: validations.asyncBlurFields,
 });
 
-export default compose(
-  Connect,
-  WithForm,
-)(Form);
-
+export default compose(Connect, WithForm)(Form);

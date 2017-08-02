@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import T from 'prop-types';
 import objectAssign from 'object-assign';
 import EventListener from 'react-event-listener';
 
@@ -32,21 +33,21 @@ function getStyles(props, context, state) {
 
 class EnhancedTextarea extends Component {
   static propTypes = {
-    defaultValue: PropTypes.any,
-    disabled: PropTypes.bool,
-    hintText: PropTypes.string,
-    onChange: PropTypes.func,
-    onHeightChange: PropTypes.func,
-    rows: PropTypes.number,
-    rowsMax: PropTypes.number,
-    shadowStyle: PropTypes.object,
+    defaultValue: T.any,
+    disabled: T.bool,
+    hintText: T.string,
+    onChange: T.func,
+    onHeightChange: T.func,
+    rows: T.number,
+    rowsMax: T.number,
+    shadowStyle: T.object,
     /**
      * Override the inline-styles of the root element.
      */
-    style: PropTypes.object,
-    textareaStyle: PropTypes.object,
-    value: PropTypes.string,
-    valueLink: PropTypes.object,
+    style: T.object,
+    textareaStyle: T.object,
+    value: T.string,
+    valueLink: T.object,
   };
 
   static defaultProps = {
@@ -54,7 +55,7 @@ class EnhancedTextarea extends Component {
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: T.object.isRequired,
   };
 
   state = {
@@ -72,13 +73,15 @@ class EnhancedTextarea extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value ||
-        nextProps.rowsMax !== this.props.rowsMax) {
+    if (
+      nextProps.value !== this.props.value ||
+      nextProps.rowsMax !== this.props.rowsMax
+    ) {
       this.syncHeightWithShadow(nextProps.value, null, nextProps);
     }
   }
 
-  handleResize = (event) => {
+  handleResize = event => {
     this.syncHeightWithShadow(undefined, event);
   };
 
@@ -93,8 +96,11 @@ class EnhancedTextarea extends Component {
 
   syncHeightWithShadow(newValue, event, props) {
     const shadow = this.refs.shadow;
-    const displayText = this.props.hintText && (newValue === '' || newValue === undefined || newValue === null) ?
-      this.props.hintText : newValue;
+    const displayText =
+      this.props.hintText &&
+      (newValue === '' || newValue === undefined || newValue === null)
+        ? this.props.hintText
+        : newValue;
 
     if (displayText !== undefined) {
       shadow.value = displayText;
@@ -125,7 +131,7 @@ class EnhancedTextarea extends Component {
     }
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.syncHeightWithShadow(event.target.value);
 
     if (this.props.hasOwnProperty('valueLink')) {
@@ -151,11 +157,16 @@ class EnhancedTextarea extends Component {
       ...other
     } = this.props;
 
-    const {prepareStyles} = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const rootStyles = objectAssign(styles.root, style);
     const textareaStyles = objectAssign(styles.textarea, textareaStyle);
-    const shadowStyles = objectAssign({}, textareaStyles, styles.shadow, shadowStyle);
+    const shadowStyles = objectAssign(
+      {},
+      textareaStyles,
+      styles.shadow,
+      shadowStyle,
+    );
 
     if (this.props.hasOwnProperty('valueLink')) {
       other.value = this.props.valueLink.value;
@@ -187,4 +198,3 @@ class EnhancedTextarea extends Component {
 }
 
 export default EnhancedTextarea;
-

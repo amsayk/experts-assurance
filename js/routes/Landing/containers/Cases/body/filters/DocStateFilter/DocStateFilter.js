@@ -9,8 +9,6 @@ import Button from 'components/bootstrap/Button';
 
 import {
   CloseIcon,
-
-  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -30,18 +28,20 @@ function getState(state, stateText, icon) {
       <span className={style[state]}>
         {icon}
       </span>
-      <span className={style.text} style={{ textTransform: 'uppercase', marginLeft: 5, marginTop: -2 }}>
+      <span
+        className={style.text}
+        style={{ textTransform: 'uppercase', marginLeft: 5, marginTop: -2 }}
+      >
         {stateText}
       </span>
     </div>
-  )
+  );
 }
 
 const STATES = {
-  // PENDING  : getState('PENDING',  'En attente',   <UnknownIcon   size={18}/>),
-  OPEN     : getState('OPEN',     'En cours',     <WatchIcon     size={18}/>),
-  CLOSED   : getState('CLOSED',   'Clos',         <DoneIcon      size={18}/>),
-  CANCELED : getState('CANCELED', 'Annulé',       <CanceledIcon  size={18}/>),
+  OPEN: getState('OPEN', 'En cours', <WatchIcon size={18} />),
+  CLOSED: getState('CLOSED', 'Clos', <DoneIcon size={18} />),
+  CANCELED: getState('CANCELED', 'Annulé', <CanceledIcon size={18} />),
 };
 
 class StateToggle extends React.Component {
@@ -59,28 +59,34 @@ class StateToggle extends React.Component {
     const { state } = this.props;
 
     return (
-      <Button style={{
-        paddingTop: 2,
-        paddingBottom: 1,
-      }} onClick={this.onClear} className={style.selectedUserButton} role='button'>
-      {STATES[state]}
-      <CloseIcon className={style.docStateCloseIcon} size={12}/>
-    </Button>
+      <Button
+        style={{
+          paddingTop: 2,
+          paddingBottom: 1,
+        }}
+        onClick={this.onClear}
+        className={style.selectedUserButton}
+        role="button"
+      >
+        {STATES[state]}
+        <CloseIcon className={style.docStateCloseIcon} size={12} />
+      </Button>
     );
   }
 }
 
 class DocStateFilter extends React.Component {
-  state ={
-    open : false,
-  }
+  state = {
+    open: false,
+  };
 
   onToggle() {
-    this.setState(({ open }) => ({
-      open : !open,
-    }), () => {
-
-    });
+    this.setState(
+      ({ open }) => ({
+        open: !open,
+      }),
+      () => {}
+    );
   }
   constructor() {
     super();
@@ -97,56 +103,44 @@ class DocStateFilter extends React.Component {
     const { state, actions } = this.props;
     return (
       <div className={style.filterGroup}>
-        <div className={cx(this.state.open && style.mask)}></div>
+        <div className={cx(this.state.open && style.mask)} />
         <Dropdown
           open={this.state.open}
           onToggle={this.onToggle}
-          className={cx(style.pickUserDropdown, this.state.open && style.pickUserOpen)}
-
+          className={cx(
+            style.pickUserDropdown,
+            this.state.open && style.pickUserOpen
+          )}
           onSelect={this.onSelect}
         >
-          {state ? <StateToggle state={state} onClear={this.onSelect}/> : <Dropdown.Toggle className={style.togglePickState}>
-            État
-          </Dropdown.Toggle>}
+          {state
+            ? <StateToggle state={state} onClear={this.onSelect} />
+            : <Dropdown.Toggle className={style.togglePickState}>
+                État
+              </Dropdown.Toggle>}
           <Dropdown.Menu className={style.stateMenu}>
-            {/* <MenuItem eventKey='PENDING'> */}
-            {/*   <div style={{ display: 'flex', flexDirection: 'row' }}> */}
-            {/*     <div className={style['PENDING']}> */}
-            {/*       <UnknownIcon size={18}/> */}
-            {/*     </div> */}
-            {/*     <div style={{ marginLeft: 9 }}> */}
-            {/*       En attente */}
-            {/*     </div> */}
-            {/*   </div> */}
-            {/* </MenuItem> */}
-            <MenuItem eventKey='OPEN'>
+            <MenuItem eventKey="OPEN">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div className={style['OPEN']}>
-                  <WatchIcon size={18}/>
+                  <WatchIcon size={18} />
                 </div>
-                <div style={{ marginLeft: 9 }}>
-                  En cours
-                </div>
+                <div style={{ marginLeft: 9 }}>En cours</div>
               </div>
             </MenuItem>
-            <MenuItem eventKey='CLOSED'>
+            <MenuItem eventKey="CLOSED">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div className={style['CLOSED']}>
-                  <DoneIcon size={18}/>
+                  <DoneIcon size={18} />
                 </div>
-                <div style={{ marginLeft: 9 }}>
-                  Clos
-                </div>
+                <div style={{ marginLeft: 9 }}>Clos</div>
               </div>
             </MenuItem>
-            <MenuItem eventKey='CANCELED'>
+            <MenuItem eventKey="CANCELED">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div className={style['CANCELED']}>
-                  <CanceledIcon size={18}/>
+                  <CanceledIcon size={18} />
                 </div>
-                <div style={{ marginLeft: 9 }}>
-                  Annulé
-                </div>
+                <div style={{ marginLeft: 9 }}>Annulé</div>
               </div>
             </MenuItem>
           </Dropdown.Menu>
@@ -154,7 +148,6 @@ class DocStateFilter extends React.Component {
       </div>
     );
   }
-
 }
 
 function mapStateToProps(state, props) {
@@ -162,12 +155,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ onState }, dispatch)};
+  return { actions: bindActionCreators({ onState }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(DocStateFilter);
-
+export default compose(Connect)(DocStateFilter);

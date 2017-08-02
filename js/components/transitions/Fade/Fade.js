@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import cx from 'classnames';
-import Transition from 'react-overlays/lib/Transition';
+import Transition from 'components/Transition';
 
 import style from './Fade.scss';
 
@@ -69,7 +70,7 @@ Fade.propTypes = {
    */
   onExited: T.func,
 };
-Fade.defaultProps =  {
+Fade.defaultProps = {
   in: false,
   timeout: 300,
   unmountOnExit: false,
@@ -77,4 +78,3 @@ Fade.defaultProps =  {
 };
 
 export default Fade;
-

@@ -1,8 +1,9 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import cookie from 'react-cookie';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { PATH_CASES, PATH_CASES_CASE_PARAM } from 'vars';
@@ -33,7 +34,7 @@ const KEY = 'timeline.key';
 
 export class CaseContainer extends React.PureComponent {
   state: State = {
-    nav : 'case.overview',
+    nav: 'case.overview',
   };
   constructor() {
     super();
@@ -41,9 +42,9 @@ export class CaseContainer extends React.PureComponent {
     this.onNav = this.onNav.bind(this);
 
     this.state = {
-      selectedNavItem : function () {
+      selectedNavItem: (function() {
         try {
-          const value = cookie.load(KEY, /* doNotParse = */false);
+          const value = cookie.load(KEY, /* doNotParse = */ false);
 
           if (typeof value !== 'undefined' && value !== null) {
             if (typeof value === 'string') {
@@ -58,55 +59,53 @@ export class CaseContainer extends React.PureComponent {
           cookie.remove(KEY);
           return 'timeline.events';
         }
-      }(),
-    }
+      })(),
+    };
   }
 
   onNav(selectedNavItem) {
-    this.setState({
-      selectedNavItem,
-    }, () => {
-      setTimeout(() => {
-        cookie.save(KEY, this.state.selectedNavItem, { path: '/', httpOnly: false, secure: SECURE });
-      }, 0);
-    });
+    this.setState(
+      {
+        selectedNavItem,
+      },
+      () => {
+        setTimeout(() => {
+          cookie.save(KEY, this.state.selectedNavItem, {
+            path: '/',
+            httpOnly: false,
+            secure: SECURE,
+          });
+        }, 0);
+      },
+    );
   }
   getChildContext() {
     return {
-      currentUser : this.props.user,
-      route       : this.props.route,
+      currentUser: this.props.user,
+      route: this.props.route,
     };
   }
   render() {
-    const { user, actions, nav, params : { [PATH_CASES_CASE_PARAM] : id } } = this.props;
+    const {
+      user,
+      actions,
+      nav,
+      params: { [PATH_CASES_CASE_PARAM]: id },
+    } = this.props;
     return (
       <div className={style.root}>
-        <Title title={`Dossiers · ${APP_NAME}`}/>
-        <Header
-          id={id}
-          user={user}
-          onLogOut={actions.logOut}
-        />
-        <Body
-          user={user}
-          id={id}
-          nav={this.state.nav}
-        />
+        <Title title={`Dossiers · ${APP_NAME}`} />
+        <Header id={id} user={user} onLogOut={actions.logOut} />
+        <Body user={user} id={id} nav={this.state.nav} />
         {(() => {
           if (this.state.selectedNavItem === 'timeline.files') {
-            return (
-              <Files onNav={this.onNav} id={id}/>
-            );
+            return <Files onNav={this.onNav} id={id} />;
           }
           if (this.state.selectedNavItem === 'timeline.events') {
-            return (
-              <Timeline onNav={this.onNav} id={id}/>
-            );
+            return <Timeline onNav={this.onNav} id={id} />;
           }
           if (this.state.selectedNavItem === 'timeline.comments') {
-            return (
-              <Observations onNav={this.onNav} id={id}/>
-            );
+            return <Observations onNav={this.onNav} id={id} />;
           }
         })()}
       </div>
@@ -115,12 +114,12 @@ export class CaseContainer extends React.PureComponent {
 }
 
 type State = {
-  nav : 'case.overview' | 'case.files' | 'case.messages',
+  nav: 'case.overview' | 'case.files' | 'case.messages',
 };
 
 CaseContainer.childContextTypes = {
-  currentUser : T.object.isRequired,
-  route       : T.object.isRequired,
+  currentUser: T.object.isRequired,
+  route: T.object.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -128,12 +127,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(CaseContainer);
-
+export default compose(Connect)(CaseContainer);

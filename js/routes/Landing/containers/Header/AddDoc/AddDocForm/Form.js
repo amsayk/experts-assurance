@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
-import {compose} from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import getActiveElement from 'getActiveElement';
@@ -18,7 +19,13 @@ import { ErrorIcon } from 'components/icons/MaterialIcons';
 
 import selector from './selector';
 
-import { SubmissionError, Field, reduxForm, submit, propTypes as formPropTypes } from 'redux-form/immutable';
+import {
+  SubmissionError,
+  Field,
+  reduxForm,
+  submit,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
 
 import TextField from 'components/material-ui/TextField';
 
@@ -30,13 +37,13 @@ import Vehicle from './Vehicle';
 import Agent from './Agent';
 import Client from './Client';
 
-const validations = getValidations(/* imported = */false);
+const validations = getValidations(/* imported = */ false);
 
 function parseDate(s) {
   return +moment.utc(s);
 }
 
-function renderField({ onKeyDown, label : floatingLabelText, className, input }) {
+function renderField({ onKeyDown, label: floatingLabelText, className, input }) {
   return (
     <TextField
       className={className}
@@ -44,12 +51,11 @@ function renderField({ onKeyDown, label : floatingLabelText, className, input })
       onKeyDown={onKeyDown}
       {...input}
     />
-
   );
 }
 
 const styles = {
-  body : {
+  body: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -57,7 +63,7 @@ const styles = {
     minHeight: 1125,
   },
 
-  error : {
+  error: {
     lineHeight: 1.5,
     color: 'rgb(244, 67, 54)',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
@@ -68,15 +74,14 @@ const styles = {
     border: '1px solid',
     fontWeight: 500,
     width: '80%',
-  }
+  },
 };
 
 class Form extends React.Component {
   static displayName = 'AddDocForm';
 
   static contextTypes = {
-    store : T.object.isRequired,
-
+    store: T.object.isRequired,
   };
 
   static propTypes = {
@@ -104,9 +109,7 @@ class Form extends React.Component {
     const activeElement = getActiveElement(document);
     if (!activeElement || activeElement.nodeName !== 'INPUT') {
       setTimeout(() => {
-        raf(
-          () => focusNode(this.date)
-        );
+        raf(() => focusNode(this.date));
       }, 0);
     }
   }
@@ -114,9 +117,7 @@ class Form extends React.Component {
     const activeElement = getActiveElement(document);
     if (!activeElement || activeElement.nodeName !== 'INPUT') {
       setTimeout(() => {
-        raf(
-          () => focusNode(this.companyRef)
-        );
+        raf(() => focusNode(this.companyRef));
       }, 0);
     }
   }
@@ -131,8 +132,7 @@ class Form extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-  }
+  componentWillReceiveProps(nextProps) {}
   render() {
     const {
       error,
@@ -146,21 +146,27 @@ class Form extends React.Component {
     } = this.props;
 
     const fields = [
-      error ? <div key='error' style={styles.error}>
-        <ErrorIcon size={32}/> <div style={{marginLeft: 9}}>{error}</div>
-      </div> : null,
+      error
+        ? <div key='error' style={styles.error}>
+            <ErrorIcon size={32} /> <div style={{ marginLeft: 9 }}>{error}</div>
+          </div>
+        : null,
 
-      <section style={{display: 'flex', flexDirection: 'row'}} key='date' className={style.addDocSectionDates}>
+      <section
+        style={{ display: 'flex', flexDirection: 'row' }}
+        key='date'
+        className={style.addDocSectionDates}
+      >
         <Field
           name='date'
           parse={parseDate}
           props={{
             asyncValidate,
-            locale    : lang,
-            onKeyDown : this.onKeyDown,
-            onRef     : onDTField,
-            onNext    : this.onNext1,
-            label     : 'DT Sinistre',
+            locale: lang,
+            onKeyDown: this.onKeyDown,
+            onRef: onDTField,
+            onNext: this.onNext1,
+            label: 'DT Sinistre',
           }}
           component={DTSinistre}
         />
@@ -169,12 +175,12 @@ class Form extends React.Component {
           parse={parseDate}
           props={{
             asyncValidate,
-            locale    : lang,
-            onRef     : this.onDTField,
-            onKeyDown : this.onKeyDown,
-            onNext    : this.onNext2,
-            label     : 'DT Mission',
-            showClock : false,
+            locale: lang,
+            onRef: this.onDTField,
+            onKeyDown: this.onKeyDown,
+            onNext: this.onNext2,
+            label: 'DT Mission',
+            showClock: false,
           }}
           component={DTMission}
         />
@@ -184,24 +190,21 @@ class Form extends React.Component {
         <Field
           name='company'
           props={{
-            onKeyDown : this.onKeyDown,
-            onRef     : this.onCompanyRef,
-            label     : 'COMPAGNIE',
+            onKeyDown: this.onKeyDown,
+            onRef: this.onCompanyRef,
+            label: 'COMPAGNIE',
           }}
           component={Company}
         />
       </section>,
 
-      <div style={{marginTop: 15}}></div>,
-      <div style={{marginTop: 15}}></div>,
+      <div style={{ marginTop: 15 }} />,
+      <div style={{ marginTop: 15 }} />,
 
-      <Vehicle
-        key='vehicle'
-        onKeyDown={this.onKeyDown}
-      />,
+      <Vehicle key='vehicle' onKeyDown={this.onKeyDown} />,
 
-      <div style={{marginTop: 15}}></div>,
-      <div style={{marginTop: 15}}></div>,
+      <div style={{ marginTop: 15 }} />,
+      <div style={{ marginTop: 15 }} />,
 
       <Client
         key='client'
@@ -209,8 +212,8 @@ class Form extends React.Component {
         asyncValidate={asyncValidate}
       />,
 
-      <div style={{marginTop: 15}}></div>,
-      <div style={{marginTop: 15}}></div>,
+      <div style={{ marginTop: 15 }} />,
+      <div style={{ marginTop: 15 }} />,
 
       <Agent
         key='agent'
@@ -218,20 +221,24 @@ class Form extends React.Component {
         asyncValidate={asyncValidate}
       />,
 
-      <div style={{marginTop: 15}}></div>,
-      <div style={{marginTop: 15}}></div>,
+      <div style={{ marginTop: 15 }} />,
+      <div style={{ marginTop: 15 }} />,
 
       <header>
         <h5>Informations additionnelles</h5>
       </header>,
 
-      <section style={{display: 'flex', flexDirection: 'row'}} key='last' className={style.addDocSectionDates}>
+      <section
+        style={{ display: 'flex', flexDirection: 'row' }}
+        key='last'
+        className={style.addDocSectionDates}
+      >
         <div>
           <Field
             name='police'
             props={{
-              onKeyDown : this.onKeyDown,
-              label     : 'N° Sinistre ou N° Police',
+              onKeyDown: this.onKeyDown,
+              label: 'N° Sinistre ou N° Police',
             }}
             component={renderField}
           />
@@ -240,8 +247,8 @@ class Form extends React.Component {
           <Field
             name='nature'
             props={{
-              onKeyDown : this.onKeyDown,
-              label     : 'Nature',
+              onKeyDown: this.onKeyDown,
+              label: 'Nature',
             }}
             component={renderField}
           />
@@ -253,14 +260,11 @@ class Form extends React.Component {
       <div style={styles.body}>
         {fields}
       </div>
-
     );
-
   }
 }
 
-Form.propTypes = {
-};
+Form.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -269,13 +273,13 @@ function mapStateToProps(state, props) {
 const Connect = connect(mapStateToProps);
 
 const WithForm = reduxForm({
-  form                      : 'addDoc',
-  keepDirtyOnReinitialize   : false,
-  enableReinitialize        : true,
-  destroyOnUnmount          : true,
-  forceUnregisterOnUnmount  : true,
-  asyncValidate             : validations.asyncValidate,
-  validate                  : validations.validate,
+  form: 'addDoc',
+  keepDirtyOnReinitialize: false,
+  enableReinitialize: true,
+  destroyOnUnmount: true,
+  forceUnregisterOnUnmount: true,
+  asyncValidate: validations.asyncValidate,
+  validate: validations.validate,
   // asyncBlurFields           : [
   //   'dateMission',
   //   'date',
@@ -292,11 +296,7 @@ const WithForm = reduxForm({
   //   'agentDisplayName',
   //   'agentEmail',
   // ],
-  asyncBlurFields           : validations.asyncBlurFields,
+  asyncBlurFields: validations.asyncBlurFields,
 });
 
-export default compose(
-  Connect,
-  WithForm,
-)(Form);
-
+export default compose(Connect, WithForm)(Form);

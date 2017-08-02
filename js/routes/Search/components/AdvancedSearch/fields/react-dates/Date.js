@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import momentPropTypes from 'react-moment-proptypes';
 import moment from 'moment';
 import omit from 'lodash.omit';
@@ -11,7 +12,7 @@ import { HORIZONTAL_ORIENTATION, ANCHOR_LEFT } from 'react-dates/constants';
 
 const propTypes = {
   // example props for the demo
-  autoFocus: PropTypes.bool,
+  autoFocus: T.bool,
   initialDate: momentPropTypes.momentObj,
   ...omit(SingleDatePickerShape, [
     'date',
@@ -107,4 +108,3 @@ SingleDatePickerWrapper.propTypes = propTypes;
 SingleDatePickerWrapper.defaultProps = defaultProps;
 
 export default SingleDatePickerWrapper;
-

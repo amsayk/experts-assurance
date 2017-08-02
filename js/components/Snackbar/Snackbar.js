@@ -1,8 +1,9 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import objectAssign from 'object-assign';
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import cx from 'classnames';
 
@@ -18,17 +19,17 @@ class Snackbar extends React.Component {
   constructor(props) {
     super(props);
     this._width = 0;
-    this.state  = {};
+    this.state = {};
 
     // ### Style
 
     this.state.style = {
-      bottom     : 60,
-      display    : 'none',
-      left       : '50%',
-      marginLeft : 0,
-      position   : 'fixed',
-      zIndex     : 9999,
+      bottom: 60,
+      display: 'none',
+      left: '50%',
+      marginLeft: 0,
+      position: 'fixed',
+      zIndex: 9999,
     };
   }
 
@@ -47,7 +48,6 @@ class Snackbar extends React.Component {
    * @return {Boolean}
    */
   shouldComponentUpdate(nextProps, nextState) {
-
     // ### Animation
     // Check if a new animation sequence has been requested.
 
@@ -85,8 +85,7 @@ class Snackbar extends React.Component {
    * Remove the relay subscription when the component unmounts.
    * @return {Void}
    */
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   /**
    * Centers the snackbar object.
@@ -107,9 +106,9 @@ class Snackbar extends React.Component {
     // ### Update Alignment
 
     this.setState({
-      style : {
+      style: {
         ...this.state.style,
-        marginLeft   : -(cWidth / 2),
+        marginLeft: -(cWidth / 2),
         // paddingRight : aWidth,
       },
     });
@@ -127,10 +126,10 @@ class Snackbar extends React.Component {
   getClass() {
     const { snackbar: { type, animation } } = this.props;
     return cx({
-      [style.snackbar]    : true,
-      [style[type]]       : !!type,
-      [style.animated]    : !!animation,
-      [style[animation]]  : !!animation,
+      [style.snackbar]: true,
+      [style[type]]: !!type,
+      [style.animated]: !!animation,
+      [style[animation]]: !!animation,
     });
   }
 
@@ -150,15 +149,16 @@ class Snackbar extends React.Component {
    */
   getAction() {
     const { snackbar: { action } } = this.props;
-    return (action) ? (
-      <button
-        type='button'
-        className={style['btn-snackbar']}
-        onClick={ action.click }
-        ref='action'>
-        { action.title }
-      </button>
-    ) : null;
+    return action
+      ? <button
+          type='button'
+          className={style['btn-snackbar']}
+          onClick={action.click}
+          ref='action'
+        >
+          {action.title}
+        </button>
+      : null;
   }
 
   /**
@@ -171,7 +171,8 @@ class Snackbar extends React.Component {
         type='button'
         className={style.close}
         aria-label={'Close'}
-        onClick={ dismiss }>
+        onClick={dismiss}
+      >
         <span aria-hidden={true}>&times;</span>
       </button>
     );
@@ -184,21 +185,19 @@ class Snackbar extends React.Component {
   render() {
     const { closeable, message } = this.props.snackbar;
     return (
-      <div className={ this.getClass() } style={ this.getStyle() } ref='snackbar'>
-        <span>{ message }</span>
-        { this.getAction() }
-        { closeable ? this.getCloseButton() : null }
+      <div className={this.getClass()} style={this.getStyle()} ref='snackbar'>
+        <span>
+          {message}
+        </span>
+        {this.getAction()}
+        {closeable ? this.getCloseButton() : null}
       </div>
     );
   }
-
 }
 
 function mapStateToProps(state, props) {
   return selector(state, props);
 }
 
-export default connect(mapStateToProps)(
-  Snackbar
-);
-
+export default connect(mapStateToProps)(Snackbar);

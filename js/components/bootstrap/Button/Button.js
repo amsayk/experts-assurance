@@ -1,8 +1,16 @@
 import classNames from 'classnames';
 import React from 'react';
+import T from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
-import { bsClass, bsSizes, bsStyles, getClassSet, prefix, splitBsProps } from '../utils/bootstrapUtils';
+import {
+  bsClass,
+  bsSizes,
+  bsStyles,
+  getClassSet,
+  prefix,
+  splitBsProps,
+} from '../utils/bootstrapUtils';
 import { Size, State, Style } from '../utils/StyleConfig';
 
 import SafeAnchor from 'components/bootstrap/SafeAnchor';
@@ -11,17 +19,17 @@ import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './Button.scss';
 
 const propTypes = {
-  active: React.PropTypes.bool,
-  disabled: React.PropTypes.bool,
-  block: React.PropTypes.bool,
-  onClick: React.PropTypes.func,
+  active: T.bool,
+  disabled: T.bool,
+  block: T.bool,
+  onClick: T.func,
   componentClass: elementType,
-  href: React.PropTypes.string,
+  href: T.string,
   /**
    * Defines HTML button type attribute
    * @defaultValue 'button'
    */
-  type: React.PropTypes.oneOf(['button', 'reset', 'submit']),
+  type: T.oneOf(['button', 'reset', 'submit']),
 };
 
 const defaultProps = {
@@ -36,7 +44,8 @@ class Button extends React.Component {
       <SafeAnchor
         {...elementProps}
         className={classNames(
-          className, elementProps.disabled && getLocalCSSClassName(style, 'disabled')
+          className,
+          elementProps.disabled && getLocalCSSClassName(style, 'disabled'),
         )}
       />
     );
@@ -76,12 +85,13 @@ class Button extends React.Component {
 Button.propTypes = propTypes;
 Button.defaultProps = defaultProps;
 
-export default bsClass('btn',
-  bsSizes([Size.LARGE, Size.SMALL, Size.XSMALL],
+export default bsClass(
+  'btn',
+  bsSizes(
+    [Size.LARGE, Size.SMALL, Size.XSMALL],
     bsStyles(
       [...Object.values(State), Style.SECONDARY, Style.PRIMARY, Style.LINK],
-      Button
-    )
-  )
+      Button,
+    ),
+  ),
 );
-

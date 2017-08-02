@@ -1,10 +1,11 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
 import style from 'routes/Landing/styles';
 
 const HEIGHT = '1.3em';
 
-const WIDTHS = [ 125, 135, 155 ];
+const WIDTHS = [125, 135, 155];
 
 function genRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -19,15 +20,16 @@ export default class Loading extends React.Component {
           <div
             className={style.placeholder}
             style={{ width: `${width * 0.8}ch`, height: HEIGHT }}
-          >
-          </div>
+          />
         </div>
         <div className={style.overviewValue}>
           <div
             className={style.placeholder}
-            style={{ width: WIDTHS[genRandomNumber(0, WIDTHS.length - 1)], height: HEIGHT }}
-          >
-          </div>
+            style={{
+              width: WIDTHS[genRandomNumber(0, WIDTHS.length - 1)],
+              height: HEIGHT,
+            }}
+          />
         </div>
       </div>
     );
@@ -35,6 +37,5 @@ export default class Loading extends React.Component {
 }
 
 Loading.propTypes = {
-  width : T.number.isRequired,
+  width: T.number.isRequired,
 };
-

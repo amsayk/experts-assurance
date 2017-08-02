@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
@@ -16,9 +17,17 @@ import MenuItem from 'components/bootstrap/MenuItem';
 
 import Highlighter from 'react-highlight-words';
 
-import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER, PATH_CASES_CASE } from 'vars';
+import {
+  PATH_SETTINGS_BASE,
+  PATH_SETTINGS_BUSINESS_USER,
+  PATH_CASES_CASE,
+} from 'vars';
 
-import { SearchIcon, ArrowDropdownIcon, CloseIcon } from 'components/icons/MaterialIcons';
+import {
+  SearchIcon,
+  ArrowDropdownIcon,
+  CloseIcon,
+} from 'components/icons/MaterialIcons';
 
 import memoizeStringOnly from 'memoizeStringOnly';
 
@@ -33,7 +42,6 @@ import Tooltip from 'components/react-components/Tooltip';
 import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
-  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -57,10 +65,9 @@ const tooltipAlign = {
 };
 
 const STATE_MAP = {
-  // PENDING  : 'Dossiers en attente',
-  OPEN     : 'Dossiers en cours',
-  CLOSED   : 'Dossiers clos',
-  CANCELED : 'Dossiers annulés',
+  OPEN: 'Dossiers en cours',
+  CLOSED: 'Dossiers clos',
+  CANCELED: 'Dossiers annulés',
 };
 
 const isValidQ = memoizeStringOnly(function isValidQ(q) {
@@ -71,37 +78,36 @@ class SearchBox extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSearch              = this.onSearch.bind(this);
+    this.onSearch = this.onSearch.bind(this);
 
-    this.onLastModified        = this.onLastModified.bind(this);
-    this.onVehicleManufacturer             = this.onVehicleManufacturer.bind(this);
-    this.onVehicleModel             = this.onVehicleModel.bind(this);
-    this.onTextInput           = this.onTextInput.bind(this);
-    this.onState               = this.onState.bind(this);
-    this.onCompany             = this.onCompany.bind(this);
-    this.onManager             = this.onManager.bind(this);
-    this.onClient              = this.onClient.bind(this);
-    this.onUser                = this.onUser.bind(this);
-    this.onCloser              = this.onCloser.bind(this);
-    this.onValidator           = this.onValidator.bind(this);
-    this.onDTMissionRange      = this.onDTMissionRange.bind(this);
-    this.onRange               = this.onRange.bind(this);
-    // this.onValidationRange     = this.onValidationRange.bind(this);
-    this.onClosureRange        = this.onClosureRange.bind(this);
+    this.onLastModified = this.onLastModified.bind(this);
+    this.onVehicleManufacturer = this.onVehicleManufacturer.bind(this);
+    this.onVehicleModel = this.onVehicleModel.bind(this);
+    this.onTextInput = this.onTextInput.bind(this);
+    this.onState = this.onState.bind(this);
+    this.onCompany = this.onCompany.bind(this);
+    this.onManager = this.onManager.bind(this);
+    this.onClient = this.onClient.bind(this);
+    this.onUser = this.onUser.bind(this);
+    this.onCloser = this.onCloser.bind(this);
+    this.onValidator = this.onValidator.bind(this);
+    this.onDTMissionRange = this.onDTMissionRange.bind(this);
+    this.onRange = this.onRange.bind(this);
+    this.onClosureRange = this.onClosureRange.bind(this);
 
-    this.onClearSearch         = this.onClearSearch.bind(this);
-    this._onKeyDown            = this._onKeyDown.bind(this);
+    this.onClearSearch = this.onClearSearch.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
 
-    this.onToggleAdvancedMode  = this.onToggleAdvancedMode.bind(this);
+    this.onToggleAdvancedMode = this.onToggleAdvancedMode.bind(this);
 
     this.state = {
-      search : props.search,
+      search: props.search,
     };
   }
 
   onLastModified(date) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         lastModified: date,
       }),
     }));
@@ -109,23 +115,23 @@ class SearchBox extends React.Component {
 
   onVehicleManufacturer(manufacturer) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        vehicleManufacturer : manufacturer,
+      search: search.merge({
+        vehicleManufacturer: manufacturer,
       }),
     }));
   }
 
   onVehicleModel(model) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        vehicleModel : model,
+      search: search.merge({
+        vehicleModel: model,
       }),
     }));
   }
 
   onState(state) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         state,
       }),
     }));
@@ -133,15 +139,15 @@ class SearchBox extends React.Component {
 
   onManager(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        manager : id ? {id} : null,
+      search: search.merge({
+        manager: id ? { id } : null,
       }),
     }));
   }
 
   onCompany(company) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         company,
       }),
     }));
@@ -149,41 +155,39 @@ class SearchBox extends React.Component {
 
   onClient(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        client : id ? {id} : null,
+      search: search.merge({
+        client: id ? { id } : null,
       }),
     }));
   }
-
 
   onUser(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        user : id ? {id} : null,
+      search: search.merge({
+        user: id ? { id } : null,
       }),
     }));
   }
 
-
   onValidator(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        validator : id ? {id} : null,
+      search: search.merge({
+        validator: id ? { id } : null,
       }),
     }));
   }
 
   onCloser(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        closer: id ? {id} : null,
+      search: search.merge({
+        closer: id ? { id } : null,
       }),
     }));
   }
 
   onRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         range,
       }),
     }));
@@ -191,24 +195,15 @@ class SearchBox extends React.Component {
 
   onDTMissionRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        missionRange : range,
+      search: search.merge({
+        missionRange: range,
       }),
     }));
   }
 
-
-  // onValidationRange(range) {
-  //   this.setState(({ search }) => ({
-  //     search : search.merge({
-  //       validationRange: range,
-  //     }),
-  //   }));
-  // }
-
   onClosureRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         closureRange: range,
       }),
     }));
@@ -217,7 +212,7 @@ class SearchBox extends React.Component {
   onTextInput(e) {
     const q = e.target.value;
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         q,
       }),
     }));
@@ -228,9 +223,16 @@ class SearchBox extends React.Component {
 
     this.props.actions.onClear();
     setTimeout(() => {
-      this.setState({
-        search : this.props.search,
-      });
+      this.setState(
+        {
+          search: this.props.search,
+        },
+        () => {
+          try {
+            this.input.value = '';
+          } catch (e) {}
+        },
+      );
     }, 0);
   }
   onToggleAdvancedMode(e) {
@@ -262,6 +264,10 @@ class SearchBox extends React.Component {
 
     if (e.key === 'Backspace') {
       if (isEmpty(this.state.search.q)) {
+        try {
+          e.target.value = '';
+        } catch (e) {}
+
         this.onState(null);
       }
     }
@@ -274,29 +280,28 @@ class SearchBox extends React.Component {
         search={this.state.search}
         qClassName={style.full}
         actions={{
-          onState                   : this.onState,
-          onCompany                 : this.onCompany,
-          onManager                 : this.onManager,
-          onClient                  : this.onClient,
-          onUser                    : this.onUser,
-          onCloser                  : this.onCloser,
-          onValidator               : this.onValidator,
-          onLastModified            : this.onLastModified,
-          onVehicleManufacturer     : this.onVehicleManufacturer,
-          onVehicleModel            : this.onVehicleModel,
-          onDTMissionRange          : this.onDTMissionRange,
-          onRange                   : this.onRange,
-          // onValidationRange      : this.onValidationRange,
-          onClosureRange            : this.onClosureRange,
-          onClear                   : this.onClearSearch,
-          onSearch                  : this.onSearch,
+          onState: this.onState,
+          onCompany: this.onCompany,
+          onManager: this.onManager,
+          onClient: this.onClient,
+          onUser: this.onUser,
+          onCloser: this.onCloser,
+          onValidator: this.onValidator,
+          onLastModified: this.onLastModified,
+          onVehicleManufacturer: this.onVehicleManufacturer,
+          onVehicleModel: this.onVehicleModel,
+          onDTMissionRange: this.onDTMissionRange,
+          onRange: this.onRange,
+          onClosureRange: this.onClosureRange,
+          onClear: this.onClearSearch,
+          onSearch: this.onSearch,
         }}
       />
     );
   }
   render() {
     const { search: { advancedMode }, loading = false, actions } = this.props;
-    const { search : { state, q } } = this.state;
+    const { search: { state, q } } = this.state;
 
     let menu = null;
 
@@ -306,21 +311,48 @@ class SearchBox extends React.Component {
     }
 
     return (
-      <Dropdown componentClass={'div'} open onToggle={emptyFunction} onClose={this.onClose} className={style.searchFieldWrapper} role='search'>
-        <div data-root-close-ignore className={cx(style.searchField, isValidQ(q) && style.hasInput, style.active)}  role='dropdown-toggle'>
-          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Recherche des dossiers'}>
-            {loading ? <ActivityIndicator className={style.searchLoading}/> : <Button onClick={this.onSearch} bsStyle={'link'} className={style.showResultsButton} role='button'>
-              <SearchIcon size={22}/>
-            </Button>}
+      <Dropdown
+        componentClass={'div'}
+        open
+        onToggle={emptyFunction}
+        onClose={this.onClose}
+        className={style.searchFieldWrapper}
+        role='search'
+      >
+        <div
+          data-root-close-ignore
+          className={cx(
+            style.searchField,
+            isValidQ(q) && style.hasInput,
+            style.active,
+          )}
+          role='dropdown-toggle'
+        >
+          <Tooltip
+            placement='bottom'
+            align={tooltipAlign}
+            overlay={'Recherche des dossiers'}
+          >
+            {loading
+              ? <ActivityIndicator className={style.searchLoading} />
+              : <Button
+                  onClick={this.onSearch}
+                  bsStyle={'link'}
+                  className={style.showResultsButton}
+                  role='button'
+                >
+                  <SearchIcon size={22} />
+                </Button>}
           </Tooltip>
-          {state && <div className={style[`docSearchState_${state}`]}>
-            {STATE_MAP[state]}
-          </div>}
+          {state &&
+            <div className={style[`docSearchState_${state}`]}>
+              {STATE_MAP[state]}
+            </div>}
           <div className={style.inputWrapper}>
             <input
               id='gSearchInput'
               autoFocus
-              ref={(input) => this.input = input}
+              ref={input => (this.input = input)}
               className={style.input}
               autoComplete='off'
               autoCorrect='off'
@@ -333,14 +365,30 @@ class SearchBox extends React.Component {
               onKeyDown={this._onKeyDown}
             />
           </div>
-          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Recherche avancée'}>
-            <Button onClick={this.onToggleAdvancedMode} bsStyle={'link'} className={style.toggleAdvancedMode} role='button'>
-              <ArrowDropdownIcon size={22}/>
+          <Tooltip
+            placement='bottom'
+            align={tooltipAlign}
+            overlay={'Recherche avancée'}
+          >
+            <Button
+              onClick={this.onToggleAdvancedMode}
+              bsStyle={'link'}
+              className={style.toggleAdvancedMode}
+              role='button'
+            >
+              <ArrowDropdownIcon size={22} />
             </Button>
           </Tooltip>
-          {isValidQ(q) ? <Button onClick={this.onClearSearch} bsStyle={'link'} className={style.clearSearch} role='button'>
-            <CloseIcon size={20}/>
-          </Button> : null}
+          {isValidQ(q)
+            ? <Button
+                onClick={this.onClearSearch}
+                bsStyle={'link'}
+                className={style.clearSearch}
+                role='button'
+              >
+                <CloseIcon size={20} />
+              </Button>
+            : null}
         </div>
         <Dropdown.Menu className={style.searchBoxMenu}>
           {menu}
@@ -351,7 +399,7 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  intl     : intlShape.isRequired,
+  intl: intlShape.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -360,18 +408,17 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      toggleAdvancedMode,
-      onClear,
-      merge,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        toggleAdvancedMode,
+        onClear,
+        merge,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(SearchBox);
-
+export default compose(injectIntl, Connect)(SearchBox);

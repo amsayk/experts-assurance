@@ -1,37 +1,39 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 function loadAdvancedSearch(onLoad) {
-  require.ensure([], (require) => {
-    const { default : Component } = require('./AdvancedSearch');
-    onLoad(Component);
-  }, 'AdvancedSearch');
+  require.ensure(
+    [],
+    require => {
+      const { default: Component } = require('./AdvancedSearch');
+      onLoad(Component);
+    },
+    'AdvancedSearch',
+  );
 }
 
-class Loader extends React.PureComponent{
+class Loader extends React.PureComponent {
   static propTypes = {
     children: T.func.isRequired,
   };
   static defaultProps = {
-    children: (Component, props) => <Component {...props}/>
-  }
+    children: (Component, props) => <Component {...props} />,
+  };
   state = {
     Component: null,
-  }
-  componentWillMount(){
+  };
+  componentWillMount() {
     const self = this;
-    this.props.load(function (Component) {
+    this.props.load(function(Component) {
       self.setState({ Component });
-    })
+    });
   }
-  render(){
+  render() {
     const { Component } = this.state;
     return Component ? this.props.children(Component, this.props) : null;
   }
 }
 
 export default function AdvancedSearch(props) {
-  return (
-    <Loader load={loadAdvancedSearch} {...props}/>
-  );
+  return <Loader load={loadAdvancedSearch} {...props} />;
 }
-

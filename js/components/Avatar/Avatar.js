@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import assign from 'object-assign';
 
@@ -55,15 +56,14 @@ function getRandomColor(value, colors = defaultColors) {
   // a rerender would show a new color which would will
   // give strange effects when an interface is loading
   // and gets rerendered a few consequent times
-  if(!value)
-    return 'transparent';
+  if (!value) return 'transparent';
 
   // value based random color index
   // the reason we don't just use a random number is to make sure that
   // a certain value will always get the same color assigned given
   // a fixed set of colors
   const sum = _stringAsciiCodeSum(value);
-  const colorIndex = (sum % colors.length);
+  const colorIndex = sum % colors.length;
   return colors[colorIndex];
 }
 
@@ -90,7 +90,12 @@ function getStyles(props) {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      font: Math.floor(typeof size === 'number' ? size / textSizeRatio : Avatar.defaultProps.size / textSizeRatio) + 'px Helvetica, Arial, sans-serif',
+      font:
+        Math.floor(
+          typeof size === 'number'
+            ? size / textSizeRatio
+            : Avatar.defaultProps.size / textSizeRatio,
+        ) + 'px Helvetica, Arial, sans-serif',
       fontWeight: 'bolder',
       borderRadius: square ? 0 : '50%',
       textTransform: 'uppercase',
@@ -184,19 +189,15 @@ export default class Avatar extends React.Component {
       );
     } else {
       return (
-        <div
-          {...other}
-          style={assign(styles.root, style)}
-          className={className}
-        >
-          {icon && React.cloneElement(icon, {
-            color: styles.icon.color,
-            style: assign(styles.icon, icon.props.style),
-          })}
+        <div {...other} style={assign(styles.root, style)} className={className}>
+          {icon &&
+            React.cloneElement(icon, {
+              color: styles.icon.color,
+              style: assign(styles.icon, icon.props.style),
+            })}
           {this.props.children}
         </div>
       );
     }
   }
 }
-

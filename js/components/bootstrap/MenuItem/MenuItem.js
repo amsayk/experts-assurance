@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import T from 'prop-types';
 import all from 'react-prop-types/lib/all';
 import elementType from 'react-prop-types/lib/elementType';
 
@@ -11,52 +12,51 @@ import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './MenuItem.scss';
 
 const propTypes = {
-  disableClick : React.PropTypes.bool,
+  disableClick: T.bool,
 
   componentClass: elementType,
 
   /**
    * Disable the menu item, making it unselectable.
    */
-  disabled: React.PropTypes.bool,
+  disabled: T.bool,
 
   /**
    * style the menu item as a horizontal rule, providing visual separation between
    * groups of menu items.
    */
   divider: all(
-    React.PropTypes.bool,
-    ({ divider, children }) => (
-      divider && children ?
-      new Error('Children will not be rendered for dividers') :
-      null
-    ),
+    T.bool,
+    ({ divider, children }) =>
+      divider && children
+        ? new Error('Children will not be rendered for dividers')
+        : null,
   ),
 
   /**
    * Value passed to the `onSelect` handler, useful for identifying the selected menu item.
    */
-  eventKey: React.PropTypes.any,
+  eventKey: T.any,
 
   /**
    * style the menu item as a header label, useful for describing a group of menu items.
    */
-  header: React.PropTypes.bool,
+  header: T.bool,
 
   /**
    * HTML `href` attribute corresponding to `a.href`.
    */
-  href: React.PropTypes.string,
+  href: T.string,
 
   /**
    * React-router `to` attribute.
    */
-  to: React.PropTypes.string,
+  to: T.string,
 
   /**
    * Callback fired when the menu item is clicked.
    */
-  onClick: React.PropTypes.func,
+  onClick: T.func,
 
   /**
    * Callback fired when the menu item is selected.
@@ -65,7 +65,7 @@ const propTypes = {
    * (eventKey: any, event: Object) => any
    * ```
    */
-  onSelect: React.PropTypes.func,
+  onSelect: T.func,
 };
 
 const defaultProps = {
@@ -112,7 +112,8 @@ class MenuItem extends React.Component {
     } = this.props;
 
     const [bsProps, elementProps] = splitBsPropsAndOmit(props, [
-      'eventKey', 'onSelect',
+      'eventKey',
+      'onSelect',
     ]);
 
     if (divider) {
@@ -123,19 +124,26 @@ class MenuItem extends React.Component {
         <div
           {...elementProps}
           role='separator'
-          className={classNames(className, getLocalCSSClassName(style, 'divider'))}
-        ></div>
+          className={classNames(
+            className,
+            getLocalCSSClassName(style, 'divider'),
+          )}
+        />
       );
     }
 
     if (header) {
-      const Header = Component === defaultProps.componentClass ? 'h6' : Component;
+      const Header =
+        Component === defaultProps.componentClass ? 'h6' : Component;
       return (
         <Header
           {...elementProps}
           role='heading'
-          className={classNames(className, getLocalCSSClassName(style, prefix(bsProps, 'header')))}
-        ></Header>
+          className={classNames(
+            className,
+            getLocalCSSClassName(style, prefix(bsProps, 'header')),
+          )}
+        />
       );
     }
 
@@ -144,7 +152,9 @@ class MenuItem extends React.Component {
       [getLocalCSSClassName(style, prefix(bsProps, 'item'))]: true,
     };
 
-    const _onClick = disableClick ? null : createChainedFunction(onClick, this.handleClick);
+    const _onClick = disableClick
+      ? null
+      : createChainedFunction(onClick, this.handleClick);
 
     return (
       <Component
@@ -162,4 +172,3 @@ MenuItem.propTypes = propTypes;
 MenuItem.defaultProps = defaultProps;
 
 export default bsClass('dropdown', MenuItem);
-

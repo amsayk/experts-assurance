@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import T from 'prop-types';
 
 import objectAssign from 'object-assign';
 
@@ -11,13 +12,13 @@ export default class Switch extends Component {
   static displayName = 'Switch';
 
   static propTypes = {
-    activeThumbColor: PropTypes.string,
-    activeTrackColor: PropTypes.string,
-    disabled: PropTypes.bool,
-    onValueChange: PropTypes.func,
-    thumbColor: PropTypes.string,
-    trackColor: PropTypes.string,
-    value: PropTypes.bool
+    activeThumbColor: T.string,
+    activeTrackColor: T.string,
+    disabled: T.bool,
+    onValueChange: T.func,
+    thumbColor: T.string,
+    trackColor: T.string,
+    value: T.bool,
   };
 
   static defaultProps = {
@@ -27,14 +28,12 @@ export default class Switch extends Component {
     style: emptyObject,
     thumbColor: '#FAFAFA',
     trackColor: '#939393',
-    value: false
+    value: false,
   };
 
-  blur() {
-  }
+  blur() {}
 
-  focus() {
-  }
+  focus() {}
 
   render() {
     const {
@@ -94,7 +93,7 @@ export default class Switch extends Component {
       onFocus: this._handleFocusState,
       ref: this._setCheckboxRef,
       style: { ...styles.nativeControl, ...styles.cursorInherit },
-      type: 'checkbox'
+      type: 'checkbox',
     });
 
     return (
@@ -105,7 +104,7 @@ export default class Switch extends Component {
           style={{
             ...thumbStyle,
             ...(value ? styles.thumbOn : {}),
-            marginLeft: value ? thumbWidth * -1 : 0
+            marginLeft: value ? thumbWidth * -1 : 0,
           }}
         />
         {nativeControl}
@@ -138,9 +137,8 @@ const absoluteFillObject = {
   left: 0,
   right: 0,
   top: 0,
-  bottom: 0
+  bottom: 0,
 };
-
 
 const styles = {
   root: {
@@ -149,20 +147,20 @@ const styles = {
     position: 'relative',
   },
   cursorDefault: {
-    cursor: 'default'
+    cursor: 'default',
   },
   cursorInherit: {
-    cursor: 'inherit'
+    cursor: 'inherit',
   },
   track: {
     ...absoluteFillObject,
     height: '70%',
     margin: 'auto',
     transitionDuration: '0.1s',
-    width: '90%'
+    width: '90%',
   },
   disabledTrack: {
-    backgroundColor: '#D5D5D5'
+    backgroundColor: '#D5D5D5',
   },
   thumb: {
     ...absoluteFillObject,
@@ -171,13 +169,13 @@ const styles = {
     boxShadow: thumbDefaultBoxShadow,
     left: '0%',
     transform: [{ translateZ: 0 }],
-    transitionDuration: '0.1s'
+    transitionDuration: '0.1s',
   },
   thumbOn: {
-    left: '100%'
+    left: '100%',
   },
   disabledThumb: {
-    backgroundColor: '#BDBDBD'
+    backgroundColor: '#BDBDBD',
   },
   nativeControl: {
     ...absoluteFillObject,
@@ -185,7 +183,6 @@ const styles = {
     margin: 0,
     opacity: 0,
     padding: 0,
-    width: '100%'
-  }
+    width: '100%',
+  },
 };
-

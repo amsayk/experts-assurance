@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Button from 'components/bootstrap/Button';
 
@@ -19,7 +20,7 @@ export default function SearchButton({ intl, toggleSearch }) {
     <div className={style.search}>
       <Tooltip align={align} placement='bottomRight' overlay={'Rechercher'}>
         <Button className={style.searchBtn} onClick={toggleSearch} role='button'>
-          <SearchIcon size={24}/>
+          <SearchIcon size={24} />
         </Button>
       </Tooltip>
     </div>
@@ -27,10 +28,8 @@ export default function SearchButton({ intl, toggleSearch }) {
 }
 
 SearchButton.propTypes = {
-  toggleSearch : T.func.isRequired,
-  intl         : intlShape.isRequired,
+  toggleSearch: T.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
-SearchButton.defaultProps = {
-};
-
+SearchButton.defaultProps = {};

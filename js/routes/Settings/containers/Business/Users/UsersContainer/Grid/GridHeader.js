@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -17,10 +18,7 @@ import Dropdown from 'components/bootstrap/Dropdown';
 import MenuItem from 'components/bootstrap/MenuItem';
 import Button from 'components/bootstrap/Button';
 
-import {
-  UpArrowIcon,
-  DownArrowIcon,
-} from 'components/icons/MaterialIcons';
+import { UpArrowIcon, DownArrowIcon } from 'components/icons/MaterialIcons';
 
 import {
   SORT_DIRECTION_ASC,
@@ -32,18 +30,23 @@ import {
   sortUsersByDirection,
 } from 'redux/reducers/users/actions';
 
-const sortConfigSelector = (state) => state.getIn(['users', 'sortConfig']);
+const sortConfigSelector = state => state.getIn(['users', 'sortConfig']);
 
-const selector = createSelector(
-  sortConfigSelector,
-  (sortConfig) => ({ sortConfig }),
-);
+const selector = createSelector(sortConfigSelector, sortConfig => ({
+  sortConfig,
+}));
 
 function SortDirection({ direction, onSortByDirection }) {
   if (direction) {
     return (
-      <Button onClick={onSortByDirection} className={style.sortDirection} role='button'>
-        {direction === SORT_DIRECTION_ASC ? <UpArrowIcon size={18}/> : <DownArrowIcon size={18}/>}
+      <Button
+        onClick={onSortByDirection}
+        className={style.sortDirection}
+        role='button'
+      >
+        {direction === SORT_DIRECTION_ASC
+          ? <UpArrowIcon size={18} />
+          : <DownArrowIcon size={18} />}
       </Button>
     );
   }
@@ -60,8 +63,7 @@ class GridHeader extends React.Component {
   }
   onSortByKey(key) {
     const { actions } = this.props;
-    actions.sortUsersByKey(
-      key);
+    actions.sortUsersByKey(key);
   }
 
   onSortByDirection() {
@@ -69,22 +71,26 @@ class GridHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sortUsersByDirection(
-      !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      !direction || direction === SORT_DIRECTION_DESC
+        ? SORT_DIRECTION_ASC
+        : SORT_DIRECTION_DESC,
+    );
   }
 
   render() {
     const { intl, sortConfig } = this.props;
-    const {
-      key = 'date',
-      direction = SORT_DIRECTION_DESC,
-    } = sortConfig;
+    const { key = 'date', direction = SORT_DIRECTION_DESC } = sortConfig;
     return (
       <div className={style.gridHeader}>
         <div className={style.gridHeaderItem}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
-                <Dropdown pullRight className={style.info} onSelect={this.onSortByKey}>
+                <Dropdown
+                  pullRight
+                  className={style.info}
+                  onSelect={this.onSortByKey}
+                >
                   <Dropdown.Toggle className={style.sortButton}>
                     {intl.formatMessage(messages['sortKey_' + key])}
                   </Dropdown.Toggle>
@@ -103,7 +109,10 @@ class GridHeader extends React.Component {
                     </MenuItem>
                   </Dropdown.Menu>
                 </Dropdown>
-                <SortDirection onSortByDirection={this.onSortByDirection} direction={direction}/>
+                <SortDirection
+                  onSortByDirection={this.onSortByDirection}
+                  direction={direction}
+                />
               </div>
             </div>
           </div>
@@ -116,8 +125,8 @@ class GridHeader extends React.Component {
 GridHeader.propTypes = {
   intl: intlShape.isRequired,
   sortConfig: T.shape({
-    key       : T.oneOf(['displayName', 'date']),
-    direction : T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
+    key: T.oneOf(['displayName', 'date']),
+    direction: T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
   }).isRequired,
 };
 
@@ -127,17 +136,16 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      sortUsersByKey,
-      sortUsersByDirection,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        sortUsersByKey,
+        sortUsersByDirection,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(GridHeader);
-
+export default compose(injectIntl, Connect)(GridHeader);

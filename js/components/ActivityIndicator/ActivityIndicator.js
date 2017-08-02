@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import objectAssign from 'object-assign';
 
@@ -13,47 +14,51 @@ export default function ActivityIndicator({
   ...other
 }) {
   return (
-    <div {...other}
+    <div
+      {...other}
       accessibilityRole='progressbar'
       aria-valuemax='1'
       aria-valuemin='0'
       style={objectAssign(
         styles.container,
         typeof size === 'number' && { height: size, width: size },
-      )}>
-      <div style={objectAssign(
-        indicatorSizes[size],
-        styles.animation,
-        !animating && styles.animationPause,
-        !animating && hidesWhenStopped && styles.hidesWhenStopped,
-      )}>
-      <svg height='100%' viewBox='0 0 32 32' width='100%'>
-        <circle
-          cx='16'
-          cy='16'
-          fill='none'
-          r='14'
-          strokeWidth='4'
-          style={{
-            stroke: color,
+      )}
+    >
+      <div
+        style={objectAssign(
+          indicatorSizes[size],
+          styles.animation,
+          !animating && styles.animationPause,
+          !animating && hidesWhenStopped && styles.hidesWhenStopped,
+        )}
+      >
+        <svg height='100%' viewBox='0 0 32 32' width='100%'>
+          <circle
+            cx='16'
+            cy='16'
+            fill='none'
+            r='14'
+            strokeWidth='4'
+            style={{
+              stroke: color,
               opacity: 0.2,
-          }}
-        />
-        <circle
-          cx='16'
-          cy='16'
-          fill='none'
-          r='14'
-          strokeWidth='4'
-          style={{
-            stroke: color,
+            }}
+          />
+          <circle
+            cx='16'
+            cy='16'
+            fill='none'
+            r='14'
+            strokeWidth='4'
+            style={{
+              stroke: color,
               strokeDasharray: 80,
               strokeDashoffset: 60,
-          }}
-        />
-      </svg>
+            }}
+          />
+        </svg>
+      </div>
     </div>
-  </div>
   );
 }
 ActivityIndicator.propTypes = {
@@ -100,4 +105,3 @@ const indicatorSizes = {
     height: 36,
   },
 };
-

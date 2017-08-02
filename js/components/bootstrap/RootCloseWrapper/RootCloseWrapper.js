@@ -1,5 +1,6 @@
 import contains from 'dom-helpers/query/contains';
 import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import addEventListener from 'utils/lib/DOM/addEventListener';
@@ -47,14 +48,20 @@ export default class RootCloseWrapper extends React.Component {
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
     // element is removed in the React mouse callback.
-    this.documentMouseCaptureListener =
-      addEventListener(doc, event, this.handleMouseCapture, true);
+    this.documentMouseCaptureListener = addEventListener(
+      doc,
+      event,
+      this.handleMouseCapture,
+      true,
+    );
 
-    this.documentMouseListener =
-      addEventListener(doc, event, this.handleMouse);
+    this.documentMouseListener = addEventListener(doc, event, this.handleMouse);
 
-    this.documentKeyupListener =
-      addEventListener(doc, 'keyup', this.handleKeyUp);
+    this.documentKeyupListener = addEventListener(
+      doc,
+      'keyup',
+      this.handleKeyUp,
+    );
   }
 
   removeEventListeners() {
@@ -71,13 +78,12 @@ export default class RootCloseWrapper extends React.Component {
     }
   }
 
-  handleMouseCapture = (e) => {
-    this.preventMouseRootClose = (
+  handleMouseCapture = e => {
+    this.preventMouseRootClose =
       isModifiedEvent(e) ||
       !isLeftClickEvent(e) ||
-      contains(ReactDOM.findDOMNode(this), e.target)  ||
-      this.props.preventMouseRootClose(e)
-    );
+      contains(ReactDOM.findDOMNode(this), e.target) ||
+      this.props.preventMouseRootClose(e);
   };
 
   handleMouse = () => {
@@ -86,7 +92,7 @@ export default class RootCloseWrapper extends React.Component {
     }
   };
 
-  handleKeyUp = (e) => {
+  handleKeyUp = e => {
     if (e.keyCode === 27 && this.props.onRootClose) {
       this.props.onRootClose();
     }
@@ -100,19 +106,19 @@ export default class RootCloseWrapper extends React.Component {
 RootCloseWrapper.displayName = 'RootCloseWrapper';
 
 RootCloseWrapper.propTypes = {
-  onRootClose: React.PropTypes.func,
-  preventMouseRootClose: React.PropTypes.func,
-  children: React.PropTypes.element,
+  onRootClose: T.func,
+  preventMouseRootClose: T.func,
+  children: T.element,
 
   /**
    * Disable the the RootCloseWrapper, preventing it from triggering
    * `onRootClose`.
    */
-  disabled: React.PropTypes.bool,
+  disabled: T.bool,
   /**
    * Choose which document mouse event to bind to
    */
-  event: React.PropTypes.oneOf(['click', 'mousedown']),
+  event: T.oneOf(['click', 'mousedown']),
 };
 
 RootCloseWrapper.defaultProps = {
@@ -126,9 +132,8 @@ RootCloseWrapper.defaultProps = {
         }
         el = el.parentNode;
       }
-    } catch(e) {}
+    } catch (e) {}
 
     return false;
   },
 };
-

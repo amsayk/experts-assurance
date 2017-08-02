@@ -15,9 +15,6 @@ import GET_TIMELINE_QUERY from './getTimeline.query.graphql';
 
 import GET_RECENT_DOCS_QUERY from './recentDocs.query.graphql';
 
-// import GET_PENDING_DOCS from './pendingDocs.query.graphql';
-// import GET_MORE_PENDING_DOCS from './morePendingDocs.query.graphql';
-
 import GET_OPEN_DOCS from './openDocs.query.graphql';
 import GET_MORE_OPEN_DOCS from './moreOpenDocs.query.graphql';
 
@@ -226,52 +223,6 @@ const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
   }),
 });
 
-// const pendingDocs = graphql(GET_PENDING_DOCS, {
-//   options: (ownProps) => ({
-//     variables: {
-//       durationInDays : ownProps.durationInDays,
-//       sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
-//     },
-//   }),
-//   props: ({ ownProps, data: { loading, pendingDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
-//     data: {
-//       loading,
-//       docs,
-//       cursor,
-//       length,
-//     },
-//     loadMore() {
-//       return fetchMore({
-//         query: GET_MORE_PENDING_DOCS,
-//         variables: {
-//           cursor,
-//           durationInDays : ownProps.durationInDays,
-//           sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
-//         },
-//         updateQuery: (previousResult, { fetchMoreResult }) => {
-//           const newDocs = fetchMoreResult.pendingDashboard.docs;
-//
-//           return {
-//             pendingDashboard : {
-//               // By returning `cursor` here, we update the `loadMore` function
-//               // to the new cursor.
-//               cursor: fetchMoreResult.pendingDashboard.cursor,
-//
-//               // length: fetchMoreResult.data.pendingDashboard.length,
-//
-//               // Put the new docs at the end of the list
-//               docs: [
-//                 ...previousResult.pendingDashboard.docs,
-//                 ...newDocs,
-//               ],
-//             },
-//           };
-//         },
-//       });
-//     },
-//   }),
-// });
-
 const openDocs = graphql(GET_OPEN_DOCS, {
   options: (ownProps) => ({
     variables: {
@@ -473,10 +424,9 @@ const dashboard = graphql(DASHBOARD_QUERY, {
     variables: {
     },
   }),
-  props: ({ ownProps, data: { loading, dashboard: { /*pending = {}, */open = {}, closed = {}, canceled = {} } = {} } }) => ({
+  props: ({ ownProps, data: { loading, dashboard: { open = {}, closed = {}, canceled = {} } = {} } }) => ({
     loading,
     info: {
-      // pending,
       open,
       closed,
       canceled,
@@ -559,7 +509,6 @@ export default {
   docs,
   timeline,
   recentDocs,
-  // pendingDocs,
   openDocs,
   // closedDocs,
   dashboard,

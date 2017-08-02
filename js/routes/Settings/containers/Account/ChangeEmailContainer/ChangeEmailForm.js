@@ -1,11 +1,17 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import refreshCurrentUser from 'utils/refreshCurrentUser';
 
 import { withApollo } from 'react-apollo';
 
-import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
+import {
+  reduxForm,
+  Field,
+  propTypes as reduxFormPropTypes,
+  SubmissionError,
+} from 'redux-form/immutable';
 
 import isEmpty from 'isEmpty';
 
@@ -24,7 +30,7 @@ export class ChangeEmailForm extends React.Component {
     super(props, context);
 
     this.onKeyDown = this._onKeyDown.bind(this);
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   _onKeyDown(e) {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -34,11 +40,15 @@ export class ChangeEmailForm extends React.Component {
   }
 
   async onSubmit(data) {
-    const { data: { changeEmail: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { payload: {
-        email: data.get('email'),
-      } },
+    const {
+      data: { changeEmail: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
+      variables: {
+        payload: {
+          email: data.get('email'),
+        },
+      },
     });
 
     if (!isEmpty(errors)) {
@@ -49,8 +59,8 @@ export class ChangeEmailForm extends React.Component {
     const { snackbar } = this.context;
     if (snackbar) {
       snackbar.show({
-        message  : intl.formatMessage(messages.emailChangeSuccessNotification),
-        duration : 9 * 1000,
+        message: intl.formatMessage(messages.emailChangeSuccessNotification),
+        duration: 9 * 1000,
       });
     }
 
@@ -59,15 +69,28 @@ export class ChangeEmailForm extends React.Component {
   }
 
   render() {
-    const { intl, user, handleSubmit, pristine, submitting, invalid } = this.props;
+    const {
+      intl,
+      user,
+      handleSubmit,
+      pristine,
+      submitting,
+      invalid,
+    } = this.props;
     return (
       <div className={style.content}>
-        <h1 className={style.changeEmailFormHeading}>{intl.formatMessage(messages.titleChangeEmail)}</h1>
+        <h1 className={style.changeEmailFormHeading}>
+          {intl.formatMessage(messages.titleChangeEmail)}
+        </h1>
         <p className={style.currentEmailIntro}>
           <FormattedMessage
             {...messages.currentEmailIntro}
             values={{
-              email: <strong>{user.email}</strong>,
+              email: (
+                <strong>
+                  {user.email}
+                </strong>
+              ),
             }}
           />
         </p>
@@ -76,14 +99,18 @@ export class ChangeEmailForm extends React.Component {
             name='email'
             component={NewEmailField}
             label={intl.formatMessage(messages.labelNewEmail)}
-            onKeyDown={this.onKeyDown} />
-          <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.saveButton}>
+            onKeyDown={this.onKeyDown}
+          />
+          <button
+            onClick={handleSubmit(this.onSubmit)}
+            disabled={submitting || invalid}
+            className={style.saveButton}
+          >
             {intl.formatMessage(messages.changeEmail)}
           </button>
         </div>
       </div>
     );
-
   }
 }
 
@@ -93,8 +120,7 @@ ChangeEmailForm.contextTypes = {
   }),
 };
 
-ChangeEmailForm.defaultProps = {
-};
+ChangeEmailForm.defaultProps = {};
 
 ChangeEmailForm.propTypes = {
   ...reduxFormPropTypes,
@@ -110,8 +136,4 @@ const Form = reduxForm({
   keepDirtyOnReinitialize: false,
 });
 
-export default compose(
-  withApollo,
-  Form,
-)(ChangeEmailForm);
-
+export default compose(withApollo, Form)(ChangeEmailForm);

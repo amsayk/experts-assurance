@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -22,37 +23,38 @@ import style from 'routes/Landing/styles';
 import selector from './selector';
 
 class List extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.onSpy   = this.onSpy.bind(this);
-    this.onItem  = this.onItem.bind(this);
+    this.onSpy = this.onSpy.bind(this);
+    this.onItem = this.onItem.bind(this);
 
     this.state = {
-      items     : props.docs,
-      spy       : !props.loading,
-      fetchMore : props.docs.length < props.length,
+      items: props.docs,
+      spy: !props.loading,
+      fetchMore: props.docs.length < props.length,
     };
   }
 
-  onItem(id) {
-  }
+  onItem(id) {}
 
   onSpy() {
-    this.setState({
-      spy       : false,
-      fetchMore : true,
-    }, () => {
-      this.props.loadMore();
-    });
+    this.setState(
+      {
+        spy: false,
+        fetchMore: true,
+      },
+      () => {
+        this.props.loadMore();
+      },
+    );
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.cursor !== nextProps.cursor && nextProps.loading === false) {
       this.setState({
-        spy       : true,
-        fetchMore : nextProps.cursor < this.props.length,
+        spy: true,
+        fetchMore: nextProps.cursor < this.props.length,
       });
     }
 
@@ -68,19 +70,17 @@ class List extends React.Component {
     const { items } = this.state;
 
     if (loading === false && length === 0) {
-      return (
-        <Empty/>
-      );
+      return <Empty />;
     }
 
-    if ((typeof loading === 'undefined' || loading === true) && items.length === 0) {
+    if (
+      (typeof loading === 'undefined' || loading === true) &&
+      items.length === 0
+    ) {
       return (
         <div style={{ paddingLeft: 0 }} className={style.docsContainer}>
-          <Dropdown
-            defaultOpen
-            className={style.listContainer}
-          >
-            <ListHeader sortConfig={sortConfig}/>
+          <Dropdown defaultOpen className={style.listContainer}>
+            <ListHeader sortConfig={sortConfig} />
             <Dropdown.Menu className={style.listItemsWrapper}>
               {/* {Array.from(new Array(5)).map(() => <LoadingItem/>)} */}
             </Dropdown.Menu>
@@ -92,40 +92,37 @@ class List extends React.Component {
     let scrollSpy = null;
     if (isReady && !SERVER) {
       const { spy, fetchMore } = this.state;
-      const disabled = (length < 30);
-      scrollSpy = (
-        spy ? <ScrollSpy.Spying
-          bubbles
-          manual
-          loadMoreLabel='Plus des dossiers'
-          fetchMore={fetchMore}
-          disabled={disabled}
-          onSpy={this.onSpy}
-        /> : <ScrollSpy.Idle
-          Loading={LoadingItem}
-          doneLabel='Dossiers chargés'
-          done={cursor === length}
-        />
-      );
+      const disabled = length < 30;
+      scrollSpy = spy
+        ? <ScrollSpy.Spying
+            bubbles
+            manual
+            loadMoreLabel='Plus des dossiers'
+            fetchMore={fetchMore}
+            disabled={disabled}
+            onSpy={this.onSpy}
+          />
+        : <ScrollSpy.Idle
+            Loading={LoadingItem}
+            doneLabel='Dossiers chargés'
+            done={cursor === length}
+          />;
     }
 
     return (
       <div style={{ paddingLeft: 0 }} className={style.docsContainer}>
-        <Dropdown
-          defaultOpen
-          className={style.listContainer}
-        >
-          <ListHeader sortConfig={sortConfig}/>
+        <Dropdown defaultOpen className={style.listContainer}>
+          <ListHeader sortConfig={sortConfig} />
           <Dropdown.Menu className={style.listItemsWrapper}>
-            {items.map((item, index) => (
+            {items.map((item, index) =>
               <MenuItem
                 key={item.id}
                 componentClass={ListItem}
                 eventKey={index}
                 item={item}
                 onItem={this.onItem}
-              />
-            ))}
+              />,
+            )}
             {scrollSpy}
           </Dropdown.Menu>
         </Dropdown>
@@ -135,18 +132,20 @@ class List extends React.Component {
 }
 
 List.defaultProps = {
-  docs : [],
-  loading : false,
+  docs: [],
+  loading: false,
   length: 0,
 };
 
 List.propTypes = {
-  length : T.number,
-  loading : T.bool.isRequired,
-  docs : T.arrayOf(T.shape({
-    id : T.string.isRequired,
-  })).isRequired,
-  loadMore : T.func.isRequired,
+  length: T.number,
+  loading: T.bool.isRequired,
+  docs: T.arrayOf(
+    T.shape({
+      id: T.string.isRequired,
+    }),
+  ).isRequired,
+  loadMore: T.func.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -155,14 +154,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-    }, dispatch),
+    actions: bindActionCreators({}, dispatch),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(List);
-
+export default compose(Connect)(List);

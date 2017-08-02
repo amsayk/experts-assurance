@@ -1,16 +1,20 @@
 import React from 'react';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import selector from './selector';
 
-import { Stage_DOCS } from 'redux/reducers/importation/constants';
+import {
+  Stage_UPLOAD,
+  Stage_VALIDATION,
+} from 'redux/reducers/importation/constants';
 
 import Dialog from '../Dialog';
 
 import Files from '../Files';
 import Docs from '../Docs';
+import Upload from '../Upload';
 import Report from '../ImportReport';
 
 class Controller extends React.Component {
@@ -22,53 +26,49 @@ class Controller extends React.Component {
     let rendered = null;
 
     if (id) {
-      rendered = (
-        <Report ref={onRef} id={id}/>
-      );
+      rendered = <Report ref={onRef} id={id} />;
     } else {
-
       switch (stage) {
-        case Stage_DOCS:
-          rendered = (
-            <Docs ref={onRef}/>
-          );
+        case Stage_UPLOAD:
+          rendered = <Upload ref={onRef} />;
+          break;
+
+        case Stage_VALIDATION:
+          rendered = <Docs ref={onRef} />;
           break;
 
         default:
-          rendered = (
-            <Files ref={onRef}/>
-          );
+          rendered = <Files ref={onRef} />;
       }
     }
 
     this.state = {
       rendered,
     };
-
   }
+
   componentWillReceiveProps(nextProps) {
     const { id, stage } = nextProps;
     if (id) {
       if (id !== this.props.id) {
         this.setState({
-          rendered : <Report ref={this.props.onRef} id={id}/>,
+          rendered: <Report ref={this.props.onRef} id={id} />,
         });
       }
     } else if (stage !== this.props.stage) {
-
       let rendered = null;
 
       switch (stage) {
-        case Stage_DOCS:
-          rendered = (
-            <Docs ref={this.props.onRef}/>
-          );
+        case Stage_UPLOAD:
+          rendered = <Upload ref={this.props.onRef} />;
+          break;
+
+        case Stage_VALIDATION:
+          rendered = <Docs ref={this.props.onRef} />;
           break;
 
         default:
-          rendered = (
-            <Files ref={this.props.onRef}/>
-          );
+          rendered = <Files ref={this.props.onRef} />;
       }
 
       this.setState({
@@ -87,8 +87,7 @@ class Controller extends React.Component {
   }
 }
 
-Controller.propTypes = {
-};
+Controller.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -96,14 +95,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-    }, dispatch),
+    actions: bindActionCreators({}, dispatch),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(Controller);
-
+export default compose(Connect)(Controller);

@@ -1,7 +1,8 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { withRouter } from 'react-router';
 import { withApollo, graphql } from 'react-apollo';
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Title from 'components/Title';
@@ -28,7 +29,7 @@ export class SearchContainer extends React.PureComponent {
     const {
       intl,
       isReady,
-      user : currentUser,
+      user: currentUser,
       loading = false,
       cursor = 0,
       length = 0,
@@ -39,8 +40,10 @@ export class SearchContainer extends React.PureComponent {
     } = this.props;
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
-        <Header length={length} user={currentUser} onLogOut={actions.logOut}/>
+        <Title
+          title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}
+        />
+        <Header length={length} user={currentUser} onLogOut={actions.logOut} />
         <List
           cursor={cursor}
           length={length}
@@ -70,9 +73,14 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({
-    logOut,
-  }, dispatch)};
+  return {
+    actions: bindActionCreators(
+      {
+        logOut,
+      },
+      dispatch,
+    ),
+  };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
@@ -84,4 +92,3 @@ export default compose(
   Connect,
   DataLoader.queryDocs,
 )(SearchContainer);
-

@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Portal from 'react-portal';
@@ -27,7 +28,6 @@ class CloseDoc extends React.Component {
     this.onOpen = this.onOpen.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onFirstChild = this.onFirstChild.bind(this);
-
   }
 
   onFirstChild(ref) {
@@ -38,11 +38,9 @@ class CloseDoc extends React.Component {
     try {
       document.body.style.overflowY = 'hidden';
       setTimeout(() => {
-        raf(
-          () => {
-            focusNode(this.firstChild);
-          }
-        );
+        raf(() => {
+          focusNode(this.firstChild);
+        });
       }, 100);
     } catch (e) {}
   }
@@ -51,7 +49,6 @@ class CloseDoc extends React.Component {
     try {
       document.body.style.overflowY = 'visible';
     } catch (e) {}
-
   }
   render() {
     const { closingDoc, doc, actions } = this.props;
@@ -63,23 +60,24 @@ class CloseDoc extends React.Component {
           closingDoc={closingDoc}
           initialValues={{
             // dateValidation : Date.now(),
-            dateClosure    : Date.now(),
-            mtRapports     : doc.validation && doc.validation.amount ? doc.validation.amount : null,
+            dateClosure: Date.now(),
+            mtRapports:
+              doc.validation && doc.validation.amount
+                ? doc.validation.amount
+                : null,
 
-            paymentAmount  : doc.payment ? doc.payment.amount : null,
-            paymentDate    : doc.payment ? doc.payment.date   : Date.now(),
+            paymentAmount: doc.payment ? doc.payment.amount : null,
+            paymentDate: doc.payment ? doc.payment.date : Date.now(),
           }}
           actions={actions}
           onFirstChild={this.onFirstChild}
         />
       </Portal>
     );
-
   }
 }
 
-CloseDoc.propTypes = {
-};
+CloseDoc.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -87,15 +85,15 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      finishClosingDoc,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        finishClosingDoc,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(CloseDoc);
-
+export default compose(Connect)(CloseDoc);

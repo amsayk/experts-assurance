@@ -1,15 +1,15 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Helmet from 'react-helmet';
 
 export default class extends React.Component {
   static displayName = 'Title';
 
-  static contextTypes = {
-  };
+  static contextTypes = {};
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: T.string.isRequired,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -18,9 +18,6 @@ export default class extends React.Component {
 
   render() {
     const { title } = this.props;
-    return (
-      <Helmet title={title}/>
-    );
+    return <Helmet title={title} />;
   }
 }
-

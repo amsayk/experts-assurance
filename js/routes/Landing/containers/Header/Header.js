@@ -1,7 +1,8 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import AppBrand from 'components/AppBrand';
@@ -25,13 +26,11 @@ import ProfileButton, { MenuItem as ProfileMenuItem } from 'components/Profile';
 
 import SearchBox from './SearchBox';
 import AddDoc from './AddDoc';
-// import Importation from 'containers/Importation';
+import Importation from 'containers/Importation';
 
 import { PlusIcon, NavLeftIcon } from 'components/icons/MaterialIcons';
 
-import {
-  toggleAlerts,
-} from 'redux/reducers/app/actions';
+import { toggleAlerts } from 'redux/reducers/app/actions';
 
 import selector from './selector';
 
@@ -43,7 +42,7 @@ const tooltipAlign = {
 
 const styles = {
   show: (notificationOpen, scrollTop) => ({
-    top : notificationOpen && scrollTop === 0 ? NOTIFICATION_HEIGHT : 0,
+    top: notificationOpen && scrollTop === 0 ? NOTIFICATION_HEIGHT : 0,
   }),
 };
 
@@ -54,24 +53,30 @@ const NOTIFICATION_HEIGHT = 45;
 
 class Header extends React.Component {
   state = {
-    show : true,
+    show: true,
   };
 
   componentWillReceiveProps(nextProps) {
     const { scrollTop, lastScrollTop } = nextProps.scrolling;
-    if (this.props.scrolling.scrollTop !== scrollTop || this.props.scrolling.lastScrollTop !== lastScrollTop) {
-      if (scrollTop > lastScrollTop){
+    if (
+      this.props.scrolling.scrollTop !== scrollTop ||
+      this.props.scrolling.lastScrollTop !== lastScrollTop
+    ) {
+      if (scrollTop > lastScrollTop) {
         // downscroll code
         if (scrollTop >= MIN_HEIGHT && this.state.show === true) {
           this.setState({
-            show : false,
+            show: false,
           });
         }
       } else {
         // upscroll code
-        if (Math.abs(lastScrollTop - scrollTop) >= MIN_SCROLL_UP_DELTA && this.state.show === false) {
+        if (
+          Math.abs(lastScrollTop - scrollTop) >= MIN_SCROLL_UP_DELTA &&
+          this.state.show === false
+        ) {
           this.setState({
-            show : true,
+            show: true,
           });
         }
       }
@@ -91,58 +96,75 @@ class Header extends React.Component {
     } = this.props;
     const isEmployee = user && user.isAdminOrManager;
     return (
-      <nav style={this.state.show || searching ? styles.show(notificationOpen, scrolling.scrollTop) : emptyObject} className={style.navbar}>
+      <nav
+        style={
+          this.state.show || searching
+            ? styles.show(notificationOpen, scrolling.scrollTop)
+            : emptyObject
+        }
+        className={style.navbar}
+      >
         <div className={style.leftNav}>
-          {id ? <div className={style.back}>
-            <Link className={style.backButton} to={PATH_CASES}>
-              <Tooltip placement='bottomLeft' align={tooltipAlign} overlay={'Rétour aux dossiers'}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <NavLeftIcon size={36}/>
-                </div>
-              </Tooltip>
-            </Link>
-          </div> : null}
-          <AppBrand/>
+          {id
+            ? <div className={style.back}>
+                <Link className={style.backButton} to={PATH_CASES}>
+                  <Tooltip
+                    placement='bottomLeft'
+                    align={tooltipAlign}
+                    overlay={'Rétour aux dossiers'}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <NavLeftIcon size={36} />
+                    </div>
+                  </Tooltip>
+                </Link>
+              </div>
+            : null}
+          <AppBrand />
         </div>
 
         <div className={style.middleNav}>
-          <SearchBox/>
+          <SearchBox />
         </div>
 
         <div className={style.rightNav}>
-          {isEmployee ? [
-            // <Importation/>,
-            <AddDoc/>,
-            <Alerts toggleAlerts={actions.toggleAlerts} intl={intl} alertsOpen={app.alertsOpen}/>,
-          ]: null}
+          {isEmployee
+            ? [
+                <Importation />,
+                <AddDoc />,
+                <Alerts
+                  toggleAlerts={actions.toggleAlerts}
+                  intl={intl}
+                  alertsOpen={app.alertsOpen}
+                />,
+              ]
+            : null}
           <ProfileButton user={user}>
-            <MenuItem componentClass={ProfileMenuItem} user={user}/>
+            <MenuItem componentClass={ProfileMenuItem} user={user} />
             <MenuItem componentClass={Link} to={PATH_SETTINGS_BASE}>
               {intl.formatMessage(messages.manageAccount)}
             </MenuItem>
-            <MenuItem divider/>
+            <MenuItem divider />
             <MenuItem onClick={onLogOut}>
               {intl.formatMessage(messages.logOut)}
             </MenuItem>
           </ProfileButton>
         </div>
-
       </nav>
     );
   }
 }
 
 Header.propTypes = {
-  intl     : intlShape.isRequired,
-  onLogOut : T.func.isRequired,
+  intl: intlShape.isRequired,
+  onLogOut: T.func.isRequired,
   user: T.shape({
     displayName: T.string.isRequired,
     email: T.string.isRequired,
   }),
-  app  : T.shape({
+  app: T.shape({
     alertsOpen: T.bool.isRequired,
   }),
-
 };
 
 function mapStateToProps(state, props) {
@@ -151,16 +173,15 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      toggleAlerts,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        toggleAlerts,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(Header);
-
+export default compose(injectIntl, Connect)(Header);

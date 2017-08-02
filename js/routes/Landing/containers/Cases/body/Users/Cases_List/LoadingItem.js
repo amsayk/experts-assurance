@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import style from 'routes/Landing/styles';
 
@@ -14,30 +15,28 @@ function StateIcon() {
         borderRadius: '50%',
         marginRight: 25,
       }}
-    >
-    </div>
+    />
   );
 }
 
 const SIZE = 115;
 
 export default class LoadingItem extends React.Component {
-
   render() {
     const { className, tabIndex, role } = this.props;
     return (
-      <div data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, style.loadingItem)}>
-
+      <div
+        data-root-close-ignore
+        role={role}
+        tabIndex={tabIndex}
+        className={cx(style.listItemWrapper, className, style.loadingItem)}
+      >
         <div style={{}} className={style.listItemCompany}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
@@ -49,13 +48,9 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 {/* <StateIcon */}
-                  {/* /> */}
+                {/* /> */}
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width : 75 }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: 75 }} />
                 </div>
               </div>
             </div>
@@ -67,11 +62,7 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
@@ -83,11 +74,7 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
@@ -99,11 +86,7 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
@@ -115,11 +98,7 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
@@ -131,23 +110,18 @@ export default class LoadingItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <div
-                    className={style.placeholder}
-                    style={{ width: SIZE }}
-                  >
-                  </div>
+                  <div className={style.placeholder} style={{ width: SIZE }} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     );
   }
 }
 
 LoadingItem.propTypes = {
-  tabIndex   : T.string.isRequired,
-  role       : T.string.isRequired,
+  tabIndex: T.string.isRequired,
+  role: T.string.isRequired,
 };

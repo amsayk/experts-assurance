@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
@@ -14,12 +15,20 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import messages from 'routes/Settings/messages';
 
-function PasswordMeter({ intl, score}) {
+function PasswordMeter({ intl, score }) {
   return (
-    <div className={cx(style.passwordStrength, { [style[`passwordStrength-${score}`]]: score })}>
-      {score ? intl.formatMessage(messages.passwordStrength, {
-        scoreWord: intl.formatMessage(messages[`passwordStrengthScoreWord${score}`]),
-      }) : null}
+    <div
+      className={cx(style.passwordStrength, {
+        [style[`passwordStrength-${score}`]]: score,
+      })}
+    >
+      {score
+        ? intl.formatMessage(messages.passwordStrength, {
+            scoreWord: intl.formatMessage(
+              messages[`passwordStrengthScoreWord${score}`],
+            ),
+          })
+        : null}
     </div>
   );
 }
@@ -31,20 +40,16 @@ PasswordMeter.propTypes = {
 
 const passwordSelector = createSelector(
   (_, { password }) => password,
-  (password) => password
+  password => password,
 );
-
 
 const zxcvbnSelector = createSelector(
   passwordSelector,
   (_, { zxcvbn }) => zxcvbn,
-  (password, zxcvbn) => (password ? zxcvbn(password) : { score: 0 })
+  (password, zxcvbn) => (password ? zxcvbn(password) : { score: 0 }),
 );
 
-const selector = createSelector(
-  zxcvbnSelector,
-  ({ score }) => ({ score })
-);
+const selector = createSelector(zxcvbnSelector, ({ score }) => ({ score }));
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -52,9 +57,4 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  injectIntl,
-  withZxcvbn,
-  Connect,
-)(PasswordMeter);
-
+export default compose(injectIntl, withZxcvbn, Connect)(PasswordMeter);

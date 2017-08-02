@@ -1,11 +1,17 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import { compose } from 'redux';
 
 import { withApollo } from 'react-apollo';
 
-import { reduxForm, Field, propTypes as reduxFormPropTypes, SubmissionError } from 'redux-form/immutable';
+import {
+  reduxForm,
+  Field,
+  propTypes as reduxFormPropTypes,
+  SubmissionError,
+} from 'redux-form/immutable';
 
 import isEmpty from 'isEmpty';
 
@@ -27,7 +33,7 @@ export class ChangePasswordForm extends React.Component {
     super(props, context);
 
     this.onKeyDown = this._onKeyDown.bind(this);
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   _onKeyDown(e) {
     if (e.key === 'Enter' && e.shiftKey === false) {
@@ -37,12 +43,16 @@ export class ChangePasswordForm extends React.Component {
   }
 
   async onSubmit(data) {
-    const { data: { setPassword: { errors } } } = await this.props.client.mutate({
-      mutation  : MUTATION,
-      variables : { payload: {
-        currentPassword : data.get('currentPassword'),
-        newPassword     : data.get('newPassword'),
-      } },
+    const {
+      data: { setPassword: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
+      variables: {
+        payload: {
+          currentPassword: data.get('currentPassword'),
+          newPassword: data.get('newPassword'),
+        },
+      },
     });
 
     if (!isEmpty(errors)) {
@@ -62,21 +72,29 @@ export class ChangePasswordForm extends React.Component {
     const { intl, handleSubmit, pristine, submitting } = this.props;
     return (
       <div className={style.content}>
-        <h1 className={style.formHeading}>{intl.formatMessage(messages.titleChangePassword)}</h1>
+        <h1 className={style.formHeading}>
+          {intl.formatMessage(messages.titleChangePassword)}
+        </h1>
         <div className={style.form}>
           <Field
             name='currentPassword'
             component={CurrentPasswordField}
             label={intl.formatMessage(messages.labelCurrentPassword)}
-            onKeyDown={this.onKeyDown} />
-          <div style={{marginTop: 15}}></div>,
+            onKeyDown={this.onKeyDown}
+          />
+          <div style={{ marginTop: 15 }} />,
           <Field
             name='newPassword'
             component={NewPasswordField}
             label={intl.formatMessage(messages.labelNewPassword)}
-            onKeyDown={this.onKeyDown} />
+            onKeyDown={this.onKeyDown}
+          />
           <div className={style.buttonGroup}>
-            <button onClick={handleSubmit(this.onSubmit)} disabled={pristine || submitting} className={style.changePasswordButton}>
+            <button
+              onClick={handleSubmit(this.onSubmit)}
+              disabled={pristine || submitting}
+              className={style.changePasswordButton}
+            >
               {intl.formatMessage(messages.changePassword)}
             </button>
             <Link to={PATH_SETTINGS_BASE} className={style.cancelButton}>
@@ -86,7 +104,6 @@ export class ChangePasswordForm extends React.Component {
         </div>
       </div>
     );
-
   }
 }
 
@@ -96,8 +113,7 @@ ChangePasswordForm.contextTypes = {
   }),
 };
 
-ChangePasswordForm.defaultProps = {
-};
+ChangePasswordForm.defaultProps = {};
 
 ChangePasswordForm.propTypes = {
   ...reduxFormPropTypes,
@@ -108,8 +124,4 @@ const Form = reduxForm({
   form: 'changePassword',
 });
 
-export default compose(
-  withApollo,
-  Form,
-)(ChangePasswordForm);
-
+export default compose(withApollo, Form)(ChangePasswordForm);

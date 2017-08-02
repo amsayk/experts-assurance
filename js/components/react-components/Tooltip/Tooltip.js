@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 // import { placements } from './placements';
 // import Trigger from 'components/react-components/Trigger';
 
@@ -97,4 +98,3 @@ import React, { PropTypes as T } from 'react';
 // }
 
 export default ({ children }) => React.Children.only(children);
-

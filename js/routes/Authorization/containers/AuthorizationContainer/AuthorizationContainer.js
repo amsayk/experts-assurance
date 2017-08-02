@@ -1,5 +1,6 @@
-import React, { PropTypes as T } from 'react';
-import {compose, bindActionCreators} from 'redux';
+import React from 'react';
+import T from 'prop-types';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { APP_NAME } from 'vars';
@@ -21,24 +22,24 @@ export class AuthorizationContainer extends React.PureComponent {
     const { intl, user, className, actions } = this.props;
     return (
       <div className={style.root}>
-        <Header user={user} onLogOut={actions.logOut}/>
+        <Header user={user} onLogOut={actions.logOut} />
         <div className={style.center}>
           <p className={style.infoLine}>
             <h3>
               <FormattedMessage
                 {...messages.Thanks}
                 values={{
-                  appName: <strong>{APP_NAME}</strong>,
+                  appName: (
+                    <strong>
+                      {APP_NAME}
+                    </strong>
+                  ),
                 }}
               />
             </h3>
           </p>
           <p className={style.infoLine}>
-            <FormattedMessage
-              {...messages.AuthorizationPending}
-              values={{
-              }}
-            />
+            <FormattedMessage {...messages.AuthorizationPending} values={{}} />
           </p>
         </div>
       </div>
@@ -58,13 +59,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(AuthorizationContainer);
-
+export default compose(injectIntl, Connect)(AuthorizationContainer);

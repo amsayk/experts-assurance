@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 import { withApollo } from 'react-apollo';
 import EventListener from 'react-event-listener';
@@ -24,8 +25,8 @@ import MUTATION from './uploadFile.mutation.graphql';
 const ICON_SIZE = 18;
 
 const STATUS = {
-  SUCCESS   : 2,
-  ERROR     : 3,
+  SUCCESS: 2,
+  ERROR: 3,
 };
 
 const ACCEPT = [
@@ -59,10 +60,9 @@ const ACCEPT = [
 
 class NewEntry extends React.PureComponent {
   static propTypes = {
-    client          : T.shape({
+    client: T.shape({
       mutate: T.func.isRequired,
     }),
-
   };
 
   dragCount = 0;
@@ -81,9 +81,9 @@ class NewEntry extends React.PureComponent {
     this.onFileDialogCancel = this.onFileDialogCancel.bind(this);
 
     this.state = {
-      status : null,
-      dragging : false,
-      dropzoneEnter : false,
+      status: null,
+      dragging: false,
+      dropzoneEnter: false,
     };
   }
 
@@ -91,8 +91,8 @@ class NewEntry extends React.PureComponent {
     this.dragCount = 0;
     if (this.state.dropzoneEnter || this.state.dragging) {
       this.setState({
-        dropzoneEnter : false,
-        dragging : false,
+        dropzoneEnter: false,
+        dragging: false,
       });
     }
   }
@@ -100,135 +100,149 @@ class NewEntry extends React.PureComponent {
   onFiles(files) {
     const self = this;
     self.dragCount = 0;
-    self.setState({
-      error  : null,
-      dropzoneEnter : false,
-      dragging : false,
-      status : STATUS.UPLOADING,
-      files,
-    }, async () => {
+    self.setState(
+      {
+        error: null,
+        dropzoneEnter: false,
+        dragging: false,
+        status: STATUS.UPLOADING,
+        files,
+      },
+      async () => {
+        try {
+          await Promise.all(
+            self.state.files.map(async metadata => {
+              const {
+                data: { uploadFile: { error } },
+              } = await self.props.client.mutate({
+                refetchQueries: [
+                  'getDoc',
+                  'invalidDocs',
+                  'getTimeline',
+                  'getDocFiles',
+                ],
+                mutation: MUTATION,
+                variables: {
+                  docId: self.props.id,
+                  category: self.props.category,
+                  metadata: metadata,
+                },
+                updateQueries: {
+                  // getTimeline(prev, { mutationResult, queryVariables }) {
+                  //   const newFile = mutationResult.data.uploadFile.file;
+                  //   const newActivities = mutationResult.data.uploadFile.activities;
+                  //
+                  //   if (prev && newActivities && newActivities.length) {
+                  //
+                  //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
+                  //       return prev;
+                  //     }
+                  //
+                  //     return {
+                  //       timeline : {
+                  //         cursor : prev.timeline.cursor,
+                  //         result : [
+                  //           ...newActivities,
+                  //           ...prev.timeline.result,
+                  //         ],
+                  //       },
+                  //     };
+                  //   }
+                  //
+                  //   return prev;
+                  // },
+                  // getDocFiles(prev, { mutationResult, queryVariables }) {
+                  //   const newFile = mutationResult.data.uploadFile.file;
+                  //
+                  //   if (prev && newFile) {
+                  //
+                  //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
+                  //       return prev;
+                  //     }
+                  //
+                  //     const files = [
+                  //       newFile,
+                  //       ...prev.getDocFiles,
+                  //     ];
+                  //     return {
+                  //       getDocFiles : files,
+                  //     };
+                  //   }
+                  //
+                  //   return prev;
+                  // },
+                },
+              });
 
-      try {
-        await Promise.all(self.state.files.map(async (metadata) => {
-          const { data: { uploadFile: { error } } } = await self.props.client.mutate({
-            refetchQueries : ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
-            mutation       : MUTATION,
-            variables      : {
-              docId    : self.props.id,
-              category : self.props.category,
-              metadata : metadata,
+              if (error) {
+                switch (error.code) {
+                  case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+                  case codes.ERROR_NOT_AUTHORIZED:
+                    throw new Error(`Vous n'êtes pas authorisé`);
+                  default:
+                    throw new Error(
+                      'Erreur inconnu, veuillez réessayer à nouveau.',
+                    );
+                }
+              }
+
+              // self.setState(({ files }) => ({
+              //   files : files.filter((f) => f.name !== metadata.name),
+              // }));
+            }),
+          );
+
+          // Successfully saved!
+          self.setState(
+            {
+              status: STATUS.SUCCESS,
+              files: [],
+              error: null,
             },
-            updateQueries : {
-              // getTimeline(prev, { mutationResult, queryVariables }) {
-              //   const newFile = mutationResult.data.uploadFile.file;
-              //   const newActivities = mutationResult.data.uploadFile.activities;
-              //
-              //   if (prev && newActivities && newActivities.length) {
-              //
-              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
-              //       return prev;
-              //     }
-              //
-              //     return {
-              //       timeline : {
-              //         cursor : prev.timeline.cursor,
-              //         result : [
-              //           ...newActivities,
-              //           ...prev.timeline.result,
-              //         ],
-              //       },
-              //     };
-              //   }
-              //
-              //   return prev;
-              // },
-              // getDocFiles(prev, { mutationResult, queryVariables }) {
-              //   const newFile = mutationResult.data.uploadFile.file;
-              //
-              //   if (prev && newFile) {
-              //
-              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== self.props.id ) {
-              //       return prev;
-              //     }
-              //
-              //     const files = [
-              //       newFile,
-              //       ...prev.getDocFiles,
-              //     ];
-              //     return {
-              //       getDocFiles : files,
-              //     };
-              //   }
-              //
-              //   return prev;
-              // },
+            () => {
+              setTimeout(() => {
+                self.setState({
+                  status: null,
+                  files: [],
+                  error: null,
+                });
+              }, 2 * 1000);
             },
-          });
-
-          if (error) {
-            switch (error.code) {
-              case codes.ERROR_ACCOUNT_NOT_VERIFIED:
-              case codes.ERROR_NOT_AUTHORIZED:
-                throw new Error(
-                  `Vous n'êtes pas authorisé`,
-                );
-              default:
-                throw new Error(
-                  'Erreur inconnu, veuillez réessayer à nouveau.',
-                );
-            }
-          }
-
-          // self.setState(({ files }) => ({
-          //   files : files.filter((f) => f.name !== metadata.name),
-          // }));
-        }));
-
-        // Successfully saved!
-        self.setState({
-          status : STATUS.SUCCESS,
-          files  : [],
-          error  : null,
-        }, () => {
-          setTimeout(() => {
-            self.setState({
-              status : null,
-              files  : [],
-              error  : null,
-            });
-          }, 2 * 1000);
-        });
-      } catch (e) {
-
-        self.setState({
-          status : STATUS.ERROR,
-          error  : e.message,
-        }, () => {
-          setTimeout(() => {
-            self.setState({
-              status : null,
-              // files  : [],
-              error  : null,
-            });
-          }, 2 * 1000);
-        });
-      }
-    });
+          );
+        } catch (e) {
+          self.setState(
+            {
+              status: STATUS.ERROR,
+              error: e.message,
+            },
+            () => {
+              setTimeout(() => {
+                self.setState({
+                  status: null,
+                  // files  : [],
+                  error: null,
+                });
+              }, 2 * 1000);
+            },
+          );
+        }
+      },
+    );
   }
 
   onDrag(e) {
     e.preventDefault();
-    this.dragCount += (e.type === 'dragenter' ? 1 : -1);
+    this.dragCount += e.type === 'dragenter' ? 1 : -1;
     if (this.dragCount === 1) {
       if (this.state.dragging === false) {
         this.setState({
-          dragging : true,
+          dragging: true,
         });
       }
     } else if (this.dragCount === 0) {
       if (this.state.dragging === true) {
         this.setState({
-          dragging : false,
+          dragging: false,
         });
       }
     }
@@ -239,7 +253,7 @@ class NewEntry extends React.PureComponent {
       return;
     }
     this.setState({
-      dropzoneEnter : true,
+      dropzoneEnter: true,
     });
   }
   onDragLeave() {
@@ -247,12 +261,11 @@ class NewEntry extends React.PureComponent {
       return;
     }
     this.setState({
-      dropzoneEnter : false,
+      dropzoneEnter: false,
     });
   }
 
-  onFileDialogCancel() {
-  }
+  onFileDialogCancel() {}
 
   render() {
     const { height } = this.props;
@@ -260,8 +273,16 @@ class NewEntry extends React.PureComponent {
     return (
       <Dropzone
         disableClick={status !== null}
-        style={dragging || dropzoneEnter || status ? {height : height + 13} : emptyObject}
-        className={cx(style.newFileEntry, !status && dragging && style.newFileEntryDrag, !status && dropzoneEnter && style.newFileEntryDragEnter)}
+        style={
+          dragging || dropzoneEnter || status
+            ? { height: height + 13 }
+            : emptyObject
+        }
+        className={cx(
+          style.newFileEntry,
+          !status && dragging && style.newFileEntryDrag,
+          !status && dropzoneEnter && style.newFileEntryDragEnter,
+        )}
         accept={ACCEPT}
         disablePreview
         maxSize={Infinity}
@@ -274,78 +295,71 @@ class NewEntry extends React.PureComponent {
           if (status === STATUS.UPLOADING) {
             return (
               <div className={style.newFileEntry__uploading}>
-                <BlinkingDots>
-                  Sauvegarde en cours
-                </BlinkingDots>
+                <BlinkingDots>Sauvegarde en cours</BlinkingDots>
               </div>
             );
           }
 
           if (status === STATUS.SUCCESS) {
-            return (
-              <div className={style.newFileEntry__success}>
-                Succès
-              </div>
-            );
+            return <div className={style.newFileEntry__success}>Succès</div>;
           }
 
           if (status === STATUS.ERROR) {
             return (
               <div className={style.newFileEntry__error}>
-                <strong>
-                  Erreur! …
-                </strong>
-                <div>
-                  Veuillez essayer encore
-                </div>
+                <strong>Erreur! …</strong>
+                <div>Veuillez essayer encore</div>
               </div>
             );
           }
 
           if (dragging || dropzoneEnter) {
             return [
-              SERVER ? null : <EventListener
-                key='eventListener'
-                target={document}
-                onDragEnterCapture={this.onDrag}
-                onDragLeaveCapture={this.onDrag}
-                onDrop={this.onDrop}
-              />,
+              SERVER
+                ? null
+                : <EventListener
+                    key='eventListener'
+                    target={document}
+                    onDragEnterCapture={this.onDrag}
+                    onDragLeaveCapture={this.onDrag}
+                    onDrop={this.onDrop}
+                  />,
               <div className={style.fileEntryDropIntro}>
                 <div key='icon' className={style.fileEntryIcon}>
                   <UploadIcon className={style.newFileEntry__icon} size={48} />
                 </div>
-                <div key='label' style={{ marginLeft: 6 }} className={style.fileEntryDisplayName}>
+                <div
+                  key='label'
+                  style={{ marginLeft: 6 }}
+                  className={style.fileEntryDisplayName}
+                >
                   Déposez les fichiers ici.
                 </div>
-              </div>
+              </div>,
             ];
           }
 
-
           return [
-            SERVER ? null : <EventListener
-              key='eventListener'
-              target={document}
-              onDragEnterCapture={this.onDrag}
-              onDragLeaveCapture={this.onDrag}
-              onDrop={this.onDrop}
-            />,
+            SERVER
+              ? null
+              : <EventListener
+                  key='eventListener'
+                  target={document}
+                  onDragEnterCapture={this.onDrag}
+                  onDragLeaveCapture={this.onDrag}
+                  onDrop={this.onDrop}
+                />,
             <div key='icon' className={style.fileEntryIcon}>
               <PlusIcon size={ICON_SIZE} />
             </div>,
             <div key='label' className={style.fileEntryDisplayName}>
               Ajouter…
-            </div>
+            </div>,
           ];
-
         })()}
       </Dropzone>
     );
   }
 }
 
-export default compose(
-  withApollo,
-)(NewEntry);
-
+export default compose(withApollo)(NewEntry);

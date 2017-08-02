@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import Avatar from 'components/Avatar';
 
@@ -15,8 +16,7 @@ function getInitials(name) {
     if (parts.length >= 3) {
       return parts[1][0];
     }
-  } catch (e) {
-  }
+  } catch (e) {}
 
   return name[0];
 }
@@ -41,15 +41,14 @@ const ProfilePic = ({ user, size, ...props }) => {
 };
 
 ProfilePic.propTypes = {
-  user : T.shape({
+  user: T.shape({
     displayName: T.string.isRequired,
   }),
-  size : T.number.isRequired,
+  size: T.number.isRequired,
 };
 
 ProfilePic.defaultProps = {
-  size : 32,
+  size: 32,
 };
 
 export default ProfilePic;
-

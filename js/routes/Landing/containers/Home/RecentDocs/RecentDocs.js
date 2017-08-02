@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import { compose } from 'redux';
@@ -8,11 +9,10 @@ import {
   PATH_CASES_CASE,
   PATH_SETTINGS_BASE,
   PATH_SETTINGS_BUSINESS_USER,
-  PATH_CASES
+  PATH_CASES,
 } from 'vars';
 
 import {
-  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -42,55 +42,59 @@ const TOP = NAVBAR_HEIGHT + TOOLBAR_HEIGHT + 20;
 const NOTIFICATION_HEIGHT = 45;
 
 const styles = {
-  notificationOpen : {
-    top : TOP + NOTIFICATION_HEIGHT,
+  notificationOpen: {
+    top: TOP + NOTIFICATION_HEIGHT,
   },
 };
 
 class RecentDocs extends React.Component {
   render() {
-    const { intl, notificationOpen, isReady, currentUser, loading, docs : items, extrapolation : periods } = this.props;
+    const {
+      intl,
+      notificationOpen,
+      isReady,
+      currentUser,
+      loading,
+      docs: items,
+      extrapolation: periods,
+    } = this.props;
 
     // if (items.length === 0) {
     // return null;
     // }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter(({ lastModified : timestamp }) => {
-        const res = to
-          ? to > timestamp && timestamp >= from
-          : timestamp >= from;
+      const acts = items.filter(({ lastModified: timestamp }) => {
+        const res = to ? to > timestamp && timestamp >= from : timestamp >= from;
 
         return res;
       });
 
-      return acts.length ? (
-        <div className={style.feedGroup} key={id}>
-          <h5 className={style.feedGroupTitle}>{title}</h5>
-          <section className={style.feedGroupItems}>
-            {acts.map((entry) => (
-              <Entry
-                key={entry.id}
-                intl={intl}
-                doc={entry}
-              />
-            ))}
-          </section>
-        </div>
-      ) : <div className={style.feedGroup} key={id}></div>;
+      return acts.length
+        ? <div className={style.feedGroup} key={id}>
+            <h5 className={style.feedGroupTitle}>
+              {title}
+            </h5>
+            <section className={style.feedGroupItems}>
+              {acts.map(entry =>
+                <Entry key={entry.id} intl={intl} doc={entry} />,
+              )}
+            </section>
+          </div>
+        : <div className={style.feedGroup} key={id} />;
     });
 
     return (
-      <div className={style.recentDocs} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        <h2>Récemment modifiés
-        </h2>
+      <div
+        className={style.recentDocs}
+        style={notificationOpen ? styles.notificationOpen : emptyObject}
+      >
+        <h2>Récemment modifiés</h2>
         <div className={style.feed}>
           {groups}
         </div>
         <div className={style.allDocsLink}>
-          <Link to={PATH_CASES}>
-            Afficher tous les dossiers
-          </Link>
+          <Link to={PATH_CASES}>Afficher tous les dossiers</Link>
         </div>
       </div>
     );
@@ -115,24 +119,26 @@ function getState(state, stateText, icon) {
     // <span className={cx(style[state], style.docStateToggle)}>
     //   {icon}
     // </span>,
-    <span className={style.text} style={{
-      // textTransform: 'uppercase',
-      marginRight: 5,
-      border: '1px solid #000',
-      borderRadius: '15%',
-      padding: '1px 4px',
-      marginLeft: 5,
-    }}>
-    {stateText}
-  </span>,
+    <span
+      className={style.text}
+      style={{
+        // textTransform: 'uppercase',
+        marginRight: 5,
+        border: '1px solid #000',
+        borderRadius: '15%',
+        padding: '1px 4px',
+        marginLeft: 5,
+      }}
+    >
+      {stateText}
+    </span>,
   ];
 }
 
 const STATES = {
-  // PENDING  : getState('PENDING',  'En attente',  <UnknownIcon   size={12}/>),
-  OPEN     : getState('OPEN',     'En cours',    <WatchIcon     size={12}/>),
-  CLOSED   : getState('CLOSED',   'Clos',        <DoneIcon      size={12}/>),
-  CANCELED : getState('CANCELED', 'Annulé',      <CanceledIcon  size={12}/>),
+  OPEN: getState('OPEN', 'En cours', <WatchIcon size={12} />),
+  CLOSED: getState('CLOSED', 'Clos', <DoneIcon size={12} />),
+  CANCELED: getState('CANCELED', 'Annulé', <CanceledIcon size={12} />),
 };
 
 const TYPE = 'RECENT_DOCUMENT';
@@ -140,13 +146,17 @@ const TYPE = 'RECENT_DOCUMENT';
 function Entry({ intl, doc }, { currentUser }) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
-
       <div className={style.profilePic}>
-        <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
-          <ProfilePic
-            user={doc.user}
-            size={24}
-          />
+        <Link
+          to={
+            PATH_SETTINGS_BASE +
+            '/' +
+            PATH_SETTINGS_BUSINESS_USER +
+            '/' +
+            doc.user.id
+          }
+        >
+          <ProfilePic user={doc.user} size={24} />
         </Link>
       </div>
 
@@ -157,16 +167,31 @@ function Entry({ intl, doc }, { currentUser }) {
           </Link>
         </div>
         {/* <div className={style.desc}> */}
-          {/*   {STATES[doc.state]} */}
-          {/* </div> */}
+        {/*   {STATES[doc.state]} */}
+        {/* </div> */}
         <div className={style.desc}>
-          <h6 style={{ marginBottom: 3, marginTop: 3 }}>{doc.vehicle.model || doc.vehicle.manufacturer}, {doc.vehicle.plateNumber}</h6>
+          <h6 style={{ marginBottom: 3, marginTop: 3 }}>
+            {doc.vehicle.model || doc.vehicle.manufacturer},{' '}
+            {doc.vehicle.plateNumber}
+          </h6>
         </div>
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + doc.user.id}>
+          <Link
+            to={
+              PATH_SETTINGS_BASE +
+              '/' +
+              PATH_SETTINGS_BUSINESS_USER +
+              '/' +
+              doc.user.id
+            }
+          >
             {doc.user.displayName}
-          </Link> ·{' '}
-          <time title={intl.formatDate(doc.date)} dateTime={new Date(doc.date).toISOString()}>
+          </Link>{' '}
+          ·{' '}
+          <time
+            title={intl.formatDate(doc.date)}
+            dateTime={new Date(doc.date).toISOString()}
+          >
             {intl.formatRelative(doc.lastModified)}
           </time>
         </div>
@@ -176,6 +201,5 @@ function Entry({ intl, doc }, { currentUser }) {
 }
 
 Entry.contextTypes = {
-  currentUser : T.object.isRequired,
+  currentUser: T.object.isRequired,
 };
-

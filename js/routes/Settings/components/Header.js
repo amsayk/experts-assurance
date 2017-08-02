@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import { compose } from 'redux';
@@ -13,8 +14,9 @@ import style from 'routes/Settings/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-const scrollingSelector = (state) => state.get('scrolling');
-const notificationOpenSelector = (state) => state.getIn(['notification', 'options']).active;
+const scrollingSelector = state => state.get('scrolling');
+const notificationOpenSelector = state =>
+  state.getIn(['notification', 'options']).active;
 
 const selector = createSelector(
   scrollingSelector,
@@ -25,24 +27,32 @@ const selector = createSelector(
 const NOTIFICATION_HEIGHT = 45;
 const DEFAULT_TOP = 0;
 
-const getStyle = (notificationOpen, scrollTop) => notificationOpen ? ({
-  top : scrollTop === 0 ? NOTIFICATION_HEIGHT : DEFAULT_TOP,
-}) : {};
+const getStyle = (notificationOpen, scrollTop) =>
+  notificationOpen
+    ? {
+        top: scrollTop === 0 ? NOTIFICATION_HEIGHT : DEFAULT_TOP,
+      }
+    : {};
 
 function Header({ intl, scrolling, notificationOpen, onLogOut }) {
   return (
-    <nav style={getStyle(notificationOpen, scrolling.scrollTop)} className={style.navbar}>
-      <AppBrand/>
+    <nav
+      style={getStyle(notificationOpen, scrolling.scrollTop)}
+      className={style.navbar}
+    >
+      <AppBrand />
       <div className={style.menu}>
-        <a className={style.logoutLink} onClick={onLogOut}>{intl.formatMessage(messages.logOut)}</a>
+        <a className={style.logoutLink} onClick={onLogOut}>
+          {intl.formatMessage(messages.logOut)}
+        </a>
       </div>
     </nav>
   );
 }
 
 Header.propTypes = {
-  intl     : intlShape.isRequired,
-  onLogOut : T.func.isRequired,
+  intl: intlShape.isRequired,
+  onLogOut: T.func.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -51,8 +61,4 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(Header);
-
+export default compose(injectIntl, Connect)(Header);

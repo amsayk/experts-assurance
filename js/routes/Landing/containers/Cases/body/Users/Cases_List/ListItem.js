@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link, withRouter } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
@@ -11,22 +12,23 @@ import style from 'routes/Landing/styles';
 
 import cx from 'classnames';
 
-import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER, PATH_CASES_CASE } from 'vars';
+import {
+  PATH_SETTINGS_BASE,
+  PATH_SETTINGS_BUSINESS_USER,
+  PATH_CASES_CASE,
+} from 'vars';
 
 import {
   CloseIcon,
-
-  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
-
   CheckboxIcon,
 } from 'components/icons/MaterialIcons';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-const selectionSelector = (state) => state.getIn(['cases', 'selection', 'keys']);
+const selectionSelector = state => state.getIn(['cases', 'selection', 'keys']);
 const keySelector = (_, { item }) => item.id;
 
 const selector = createSelector(
@@ -39,21 +41,35 @@ const selector = createSelector(
 );
 
 const STATE_ICON = {
-  // PENDING  : <UnknownIcon   className={style.stateIcon} size={24}/>,
-  OPEN     : <WatchIcon     className={style.stateIcon} size={24}/>,
-  CLOSED   : <DoneIcon      className={style.stateIcon} size={24}/>,
-  CANCELED : <CanceledIcon  className={style.stateIcon} size={24}/>,
+  OPEN: <WatchIcon className={style.stateIcon} size={24} />,
+  CLOSED: <DoneIcon className={style.stateIcon} size={24} />,
+  CANCELED: <CanceledIcon className={style.stateIcon} size={24} />,
 };
 
 function StateIcon({ isSelected, hasSelection, state, onClick }) {
   const selecting = isSelected || hasSelection;
   return (
-    <div className={cx(style.icon, style.state, style[state], selecting && style.selecting)}>
+    <div
+      className={cx(
+        style.icon,
+        style.state,
+        style[state],
+        selecting && style.selecting,
+      )}
+    >
       {isSelected
-        ? <CheckboxIcon.Checked onClick={onClick} className={cx(style.checkbox, style.isSelected)} size={24}/>
-        : <CheckboxIcon.Blank onClick={onClick} className={style.checkbox} size={24}/>}
-        {STATE_ICON[state]}
-      </div>
+        ? <CheckboxIcon.Checked
+            onClick={onClick}
+            className={cx(style.checkbox, style.isSelected)}
+            size={24}
+          />
+        : <CheckboxIcon.Blank
+            onClick={onClick}
+            className={style.checkbox}
+            size={24}
+          />}
+      {STATE_ICON[state]}
+    </div>
   );
 }
 
@@ -65,12 +81,13 @@ class ListItem extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(e) {
-    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+    if (
+      e.target.nodeName !== 'A' &&
+      (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)
+    ) {
       e.preventDefault();
       e.stopPropagation();
-      this.props.router.push(
-        PATH_CASES_CASE + '/' + this.props.item.id,
-      );
+      this.props.router.push(PATH_CASES_CASE + '/' + this.props.item.id);
     }
   }
 
@@ -78,11 +95,36 @@ class ListItem extends React.Component {
     this.props.onItem(this.props.item.id);
   }
   render() {
-    const { isSelected, hasSelection, intl, className, tabIndex, role, item } = this.props;
-    const { id, refNo, company, state, client, agent, vehicle, date, dateMission } = item;
+    const {
+      isSelected,
+      hasSelection,
+      intl,
+      className,
+      tabIndex,
+      role,
+      item,
+    } = this.props;
+    const {
+      id,
+      refNo,
+      company,
+      state,
+      client,
+      agent,
+      vehicle,
+      date,
+      dateMission,
+    } = item;
     return (
-      <div onClickCapture={this.handleClick} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(style.listItemWrapper, className, { [style.isSelected]: isSelected })}>
-
+      <div
+        onClickCapture={this.handleClick}
+        data-root-close-ignore
+        role={role}
+        tabIndex={tabIndex}
+        className={cx(style.listItemWrapper, className, {
+          [style.isSelected]: isSelected,
+        })}
+      >
         <div style={{}} className={style.listItemCompany}>
           <div className={style.wrapper}>
             <div className={style.innerWrapper}>
@@ -100,14 +142,16 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 {/* <StateIcon */}
-                  {/*   state={state} */}
-                  {/*   hasSelection={hasSelection} */}
-                  {/*   isSelected={isSelected} */}
-                  {/*   onClick={this.onItem} */}
-                  {/* /> */}
+                {/*   state={state} */}
+                {/*   hasSelection={hasSelection} */}
+                {/*   isSelected={isSelected} */}
+                {/*   onClick={this.onItem} */}
+                {/* /> */}
                 <div className={style.text}>
                   <Link to={PATH_CASES_CASE + '/' + id}>
-                    <b>{refNo}</b>
+                    <b>
+                      {refNo}
+                    </b>
                   </Link>
                 </div>
               </div>
@@ -120,7 +164,15 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + client.id}>
+                  <Link
+                    to={
+                      PATH_SETTINGS_BASE +
+                      '/' +
+                      PATH_SETTINGS_BUSINESS_USER +
+                      '/' +
+                      client.id
+                    }
+                  >
                     {client.displayName}
                   </Link>
                 </div>
@@ -134,9 +186,19 @@ class ListItem extends React.Component {
             <div className={style.innerWrapper}>
               <div className={style.item}>
                 <div className={style.text}>
-                  {agent ? <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
-                    {agent.displayName}
-                  </Link> : '—'}
+                  {agent
+                    ? <Link
+                        to={
+                          PATH_SETTINGS_BASE +
+                          '/' +
+                          PATH_SETTINGS_BUSINESS_USER +
+                          '/' +
+                          agent.id
+                        }
+                      >
+                        {agent.displayName}
+                      </Link>
+                    : '—'}
                 </div>
               </div>
             </div>
@@ -178,24 +240,23 @@ class ListItem extends React.Component {
             </div>
           </div>
         </div>
-
       </div>
     );
   }
 }
 
 ListItem.propTypes = {
-  intl       : intlShape.isRequired,
-  onItem     : T.func.isRequired,
-  tabIndex   : T.string.isRequired,
-  role       : T.string.isRequired,
-  isSelected : T.bool.isRequired,
-  index      : T.any.isRequired,
-  item       : T.shape({
-    id          : T.string.isRequired,
-    refNo       : T.string.isRequired,
-    createdAt   : T.number.isRequired,
-    updatedAt   : T.number.isRequired,
+  intl: intlShape.isRequired,
+  onItem: T.func.isRequired,
+  tabIndex: T.string.isRequired,
+  role: T.string.isRequired,
+  isSelected: T.bool.isRequired,
+  index: T.any.isRequired,
+  item: T.shape({
+    id: T.string.isRequired,
+    refNo: T.string.isRequired,
+    createdAt: T.number.isRequired,
+    updatedAt: T.number.isRequired,
   }).isRequired,
 };
 
@@ -205,16 +266,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-    }, dispatch),
+    actions: bindActionCreators({}, dispatch),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  withRouter,
-  injectIntl,
-  Connect,
-)(ListItem);
-
+export default compose(withRouter, injectIntl, Connect)(ListItem);

@@ -9,10 +9,7 @@ import bufferActions from 'redux/middleware/buffer-actions';
 
 import { fromJS, Set, Map } from 'immutable';
 
-import {
-  VIEW_TYPE_GRID,
-  VIEW_TYPE_LIST,
-} from 'redux/reducers/users/constants';
+import { VIEW_TYPE_GRID, VIEW_TYPE_LIST } from 'redux/reducers/users/constants';
 
 import {
   SET_CATEGORY as DASHBOARD_SET_CATEGORY,
@@ -22,9 +19,7 @@ import {
   // SET_ONLY_VALID_OPEN as DASHBOARD_SET_ONLY_VALID_OPEN,
 } from 'redux/reducers/dashboard/constants';
 
-import {
-  ACTION as SORT,
-} from 'redux/reducers/sorting/constants';
+import { ACTION as SORT } from 'redux/reducers/sorting/constants';
 
 import { ImportState } from 'redux/reducers/importation/reducer';
 import { IntlState } from 'redux/reducers/intl/reducer';
@@ -60,11 +55,7 @@ import { updateLocation } from 'redux/reducers/routing/actions';
 import { applyWorker } from 'redux-worker';
 
 export const history = useQueries(
-  useBeforeUnload(
-    useRouterHistory(
-      createHistory
-    )
-  )
+  useBeforeUnload(useRouterHistory(createHistory)),
 )({ basename: BASENAME });
 
 // ======================================================
@@ -82,28 +73,28 @@ const middlewares = [
   reduxCookieMiddleware({
     // Users
     [VIEW_TYPE_GRID]: {
-      reducerKey : 'users.viewType',
-      cookieKey  : 'users.viewType',
+      reducerKey: 'users.viewType',
+      cookieKey: 'users.viewType',
     },
     [VIEW_TYPE_LIST]: {
-      reducerKey : 'users.viewType',
-      cookieKey  : 'users.viewType',
+      reducerKey: 'users.viewType',
+      cookieKey: 'users.viewType',
     },
     [`${SORT}/users`]: {
-      reducerKey : 'users.sortConfig',
-      cookieKey  : 'users.sortConfig',
+      reducerKey: 'users.sortConfig',
+      cookieKey: 'users.sortConfig',
     },
 
     // Cases
     [`${SORT}/cases`]: {
-      reducerKey : 'cases.sortConfig',
-      cookieKey  : 'cases.sortConfig',
+      reducerKey: 'cases.sortConfig',
+      cookieKey: 'cases.sortConfig',
     },
 
     // Dashboard
     [DASHBOARD_TOGGLE]: {
-      reducerKey : (state) => state.get('dashboard').viewStatus,
-      cookieKey  : 'dashboard.viewStatus',
+      reducerKey: state => state.get('dashboard').viewStatus,
+      cookieKey: 'dashboard.viewStatus',
     },
 
     // [DASHBOARD_TOGGLE_INCLUDE_CANCELED]: {
@@ -112,13 +103,13 @@ const middlewares = [
     // },
 
     [DASHBOARD_SET_DURATION]: {
-      reducerKey : (state) => state.get('dashboard').durations,
-      cookieKey  : 'dashboard.durations',
+      reducerKey: state => state.get('dashboard').durations,
+      cookieKey: 'dashboard.durations',
     },
 
     [DASHBOARD_SET_CATEGORY]: {
-      reducerKey : 'dashboard.category',
-      cookieKey  : 'dashboard.category',
+      reducerKey: 'dashboard.category',
+      cookieKey: 'dashboard.category',
     },
 
     // [DASHBOARD_SET_ONLY_VALID_OPEN]: {
@@ -126,21 +117,20 @@ const middlewares = [
     //   cookieKey  : 'dashboard.onlyValidOpen',
     // },
 
-    // [`${SORT}/pendingDashboard`]: {
-    //   reducerKey : (state) => pick(state.get('dashboard').pendingSortConfig, ['key', 'direction']),
-    //   cookieKey  : 'dashboard.pendingSortConfig',
-    // },
     [`${SORT}/openDashboard`]: {
-      reducerKey : (state) => pick(state.get('dashboard').openSortConfig, ['key', 'direction']),
-      cookieKey  : 'dashboard.openSortConfig',
+      reducerKey: state =>
+        pick(state.get('dashboard').openSortConfig, ['key', 'direction']),
+      cookieKey: 'dashboard.openSortConfig',
     },
     [`${SORT}/unpaidDashboard`]: {
-      reducerKey : (state) => pick(state.get('dashboard').unpaidSortConfig, ['key', 'direction']),
-      cookieKey  : 'dashboard.unpaidSortConfig',
+      reducerKey: state =>
+        pick(state.get('dashboard').unpaidSortConfig, ['key', 'direction']),
+      cookieKey: 'dashboard.unpaidSortConfig',
     },
     [`${SORT}/invalidDashboard`]: {
-      reducerKey : (state) => pick(state.get('dashboard').invalidSortConfig, ['key', 'direction']),
-      cookieKey  : 'dashboard.invalidSortConfig',
+      reducerKey: state =>
+        pick(state.get('dashboard').invalidSortConfig, ['key', 'direction']),
+      cookieKey: 'dashboard.invalidSortConfig',
     },
     // [`${SORT}/closedDashboard`]: {
     //   reducerKey : (state) => pick(state.get('dashboard').closedSortConfig, ['key', 'direction']),
@@ -152,57 +142,84 @@ const middlewares = [
 // ======================================================
 // Store Enhancers
 // ======================================================
-const enhancers = [
-  applyWorker(worker),
-];
+const enhancers = [applyWorker(worker)];
 
 const composeEnhancers =
-  (__DEV__ || DEBUG) &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-    name: APP_NAME,
-  }) : compose;
+  (__DEV__ || DEBUG) && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        name: APP_NAME,
+      })
+    : compose;
 
-const enhancer = composeEnhancers(
-  applyMiddleware(...middlewares),
-  ...enhancers
+const enhancer = composeEnhancers(applyMiddleware(...middlewares), ...enhancers);
+
+export const store = createStore(
+  makeRootReducer(),
+  fromJS(window.__APP_STATE__ || { intl: { locale: DEFAULT_LANG } }, function(
+    key,
+    value,
+  ) {
+    switch (key) {
+      case '':
+        return new Map(value);
+      case 'importation':
+        return new ImportState(value);
+      case 'intl':
+        return new IntlState(value);
+      case 'app':
+        return new AppState(value);
+      case 'docSearch':
+        return new DocSearchState(value);
+      case 'dashboard':
+        return new DashboardState(value);
+      case 'notification':
+        return new NotificationState(value);
+      case 'scrolling':
+        return new ScrollState(value);
+      case 'snackbar':
+        return new SnackState(value);
+      case 'toastr':
+        return new ToastrState(value);
+      case 'user':
+        return new User(value);
+      case 'users':
+        return new UsersState(value);
+      case 'cases':
+        return new CasesState(value);
+      case 'selection':
+        return new SelectionState(value);
+      case 'sortConfig':
+        return new SortConfig(value);
+      case 'keys':
+        return new Set(value);
+      case 'form':
+        return new Map(value);
+
+      case 'options':
+      case 'roles':
+      case 'business':
+      case 'authorization':
+      case 'confirm':
+        return value;
+
+      case 'files':
+      case 'docs':
+        return new Set(value);
+
+      case 'messages':
+      case 'formats':
+      case 'extractionError':
+      case 'importError':
+        return value;
+    }
+
+    return new Map(value);
+  }),
+  enhancer,
 );
 
-export const store = createStore(makeRootReducer(), fromJS(window.__APP_STATE__ || { intl: { locale: DEFAULT_LANG } }, function (key, value) {
-  switch (key) {
-    case ''                 : return new Map(value);
-    case 'importation'      : return new ImportState(value);
-    case 'intl'             : return new IntlState(value);
-    case 'app'              : return new AppState(value);
-    case 'docSearch'        : return new DocSearchState(value);
-    case 'dashboard'        : return new DashboardState(value);
-    case 'notification'     : return new NotificationState(value);
-    case 'scrolling'        : return new ScrollState(value);
-    case 'snackbar'         : return new SnackState(value);
-    case 'toastr'           : return new ToastrState(value);
-    case 'user'             : return new User(value);
-    case 'users'            : return new UsersState(value);
-    case 'cases'            : return new CasesState(value);
-    case 'selection'        : return new SelectionState(value);
-    case 'sortConfig'       : return new SortConfig(value);
-    case 'keys'             : return new Set(value);
-    case 'form'             : return new Map(value);
-
-    case 'options'          : return value;
-    case 'roles'            : return value;
-    case 'business'         : return value;
-    case 'authorization'    : return value;
-    case 'confirm'          : return value;
-
-    case 'messages'         : return value;
-    case 'formats'          : return value;
-  }
-
-  return new Map(value);
-}), enhancer);
-
 store.asyncReducers = {};
-store.injectReducers = (reducers) => injectReducers(store, reducers);
+store.injectReducers = reducers => injectReducers(store, reducers);
 
 // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
 store.unsubscribeHistory = history.listenBefore(updateLocation(store));
@@ -216,4 +233,3 @@ if (module.hot) {
     store.replaceReducer(makeRootReducer(store.asyncReducers));
   });
 }
-

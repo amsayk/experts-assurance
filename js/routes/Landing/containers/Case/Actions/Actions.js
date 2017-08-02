@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import Dropdown from 'components/bootstrap/Dropdown';
@@ -26,7 +27,7 @@ const tooltipAlign = {
 function MoreActions({ ...props }) {
   return (
     <Button {...props}>
-      <MoreVertIcon size={18}/>
+      <MoreVertIcon size={18} />
     </Button>
   );
 }
@@ -34,7 +35,6 @@ function MoreActions({ ...props }) {
 class Actions extends React.PureComponent {
   constructor() {
     super();
-
   }
 
   render() {
@@ -52,21 +52,25 @@ class Actions extends React.PureComponent {
         <div key='delete' className={style.delete}>
           <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}>
             <Button className={style.deleteButton} onClick={null} role='button'>
-              <TrashIcon size={18}/>
+              <TrashIcon size={18} />
             </Button>
           </Tooltip>
         </div>
         <div key='archive' className={style.archive}>
           <Tooltip align={tooltipAlign} placement='bottom' overlay={'Archiver'}>
             <Button className={style.archiveButton} onClick={null} role='button'>
-              <ArchiveIcon size={18}/>
+              <ArchiveIcon size={18} />
             </Button>
           </Tooltip>
         </div>
         <div key='print' className={style.print}>
-          <Tooltip align={tooltipAlign} placement='bottomRight' overlay={'Imprimer'}>
+          <Tooltip
+            align={tooltipAlign}
+            placement='bottomRight'
+            overlay={'Imprimer'}
+          >
             <Button className={style.printButton} onClick={null} role='button'>
-              <PrintIcon size={18}/>
+              <PrintIcon size={18} />
             </Button>
           </Tooltip>
         </div>
@@ -87,10 +91,7 @@ class Actions extends React.PureComponent {
 }
 
 Actions.propTypes = {
-  intl : intlShape.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default compose(
-  injectIntl,
-)(Actions);
-
+export default compose(injectIntl)(Actions);

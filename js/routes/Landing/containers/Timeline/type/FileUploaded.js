@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import {
@@ -60,39 +61,59 @@ const ENTRY_CATEGORY_STYLE = {
   overflow: 'hidden',
   marginLeft: 4,
   alignSelf: 'flex-start',
-  textTransform : 'uppercase',
+  textTransform: 'uppercase',
 };
 
-export default function FileUploaded({ intl, doc, file, user, now : timestamp, metadata }, { currentUser }) {
+export default function FileUploaded(
+  { intl, doc, file, user, now: timestamp, metadata },
+  { currentUser },
+) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
-
       <div style={ICON_WRAPPER_STYLE} className={style.profilePic}>
-        <AttachmentIcon size={22}/>
+        <AttachmentIcon size={22} />
       </div>
 
       <div className={style.entry}>
         <div className={style.title}>
-          <Link to={PATH_CASES_CASE + '/' + doc.id}>
-            Nouvelle pièce jointe
-          </Link>
+          <Link to={PATH_CASES_CASE + '/' + doc.id}>Nouvelle pièce jointe</Link>
         </div>
-        <div className={style.desc} title={file.category} style={ENTRY_CATEGORY_STYLE}>
-          <b>{file.category}</b>
+        <div
+          className={style.desc}
+          title={file.category}
+          style={ENTRY_CATEGORY_STYLE}
+        >
+          <b>
+            {file.category}
+          </b>
         </div>
         <div className={style.desc}>
           <div className={style.fileEntryIcon}>
             {getFileIcon(file.type)}
           </div>
           <div title={file.name} style={ENTRY_NAME_STYLE}>
-            <b>{file.name}</b>
+            <b>
+              {file.name}
+            </b>
           </div>
         </div>
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+          <Link
+            to={
+              PATH_SETTINGS_BASE +
+              '/' +
+              PATH_SETTINGS_BUSINESS_USER +
+              '/' +
+              user.id
+            }
+          >
             {user.displayName}
-          </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>
+          </Link>{' '}
+          ·{' '}
+          <time
+            title={intl.formatDate(timestamp)}
+            dateTime={new Date(timestamp).toISOString()}
+          >
             {intl.formatRelative(new Date(timestamp))}
           </time>
         </div>
@@ -102,7 +123,7 @@ export default function FileUploaded({ intl, doc, file, user, now : timestamp, m
 }
 
 FileUploaded.contextTypes = {
-  currentUser : T.object.isRequired,
+  currentUser: T.object.isRequired,
 };
 
 const getFileIcon = memoizeStringOnly(function getFileIcon(type) {
@@ -140,4 +161,3 @@ const getFileIcon = memoizeStringOnly(function getFileIcon(type) {
 
   return <FileIcon.Unknown size={ICON_SIZE} />;
 });
-

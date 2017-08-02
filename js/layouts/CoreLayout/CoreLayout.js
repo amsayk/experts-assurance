@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import { connect } from 'react-redux';
 
@@ -28,10 +29,10 @@ import Notification from 'components/notification';
 
 class CoreLayout extends React.PureComponent {
   static propTypes = {
-    children       : T.element.isRequired,
-    displayMatches : T.bool.isRequired,
-    onLine         : T.bool.isRequired,
-    intl           : intlShape.isRequired,
+    children: T.element.isRequired,
+    displayMatches: T.bool.isRequired,
+    onLine: T.bool.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor() {
@@ -43,13 +44,16 @@ class CoreLayout extends React.PureComponent {
     this.props.actions.resize();
   }
   componentDidMount() {
-    this._resizeEventListener = addEventListener(window, 'resize', this.onResize);
+    this._resizeEventListener = addEventListener(
+      window,
+      'resize',
+      this.onResize,
+    );
   }
   componentWillUnmount() {
     try {
       this._resizeEventListener.remove();
-    } catch (e) {
-    }
+    } catch (e) {}
   }
   render() {
     const { intl, displayMatches, onLine, children } = this.props;
@@ -69,8 +73,10 @@ class CoreLayout extends React.PureComponent {
     }
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.title, { appName : APP_NAME })}/>
-        <Notification hidden={!displayMatches || !onLine}/>
+        <Title
+          title={intl.formatMessage(messages.title, { appName: APP_NAME })}
+        />
+        <Notification hidden={!displayMatches || !onLine} />
         {body}
       </div>
     );
@@ -82,15 +88,13 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: {
-    resize: debounce(() => raf(() => dispatch(resize()))),
-  }};
+  return {
+    actions: {
+      resize: debounce(() => raf(() => dispatch(resize()))),
+    },
+  };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect
-)(CoreLayout);
-
+export default compose(injectIntl, Connect)(CoreLayout);

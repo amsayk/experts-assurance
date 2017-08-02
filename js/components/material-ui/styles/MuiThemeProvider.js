@@ -1,15 +1,15 @@
-import {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import T from 'prop-types';
 import getMuiTheme from './getMuiTheme';
 
 class MuiThemeProvider extends Component {
-
   static propTypes = {
-    children: PropTypes.element,
-    muiTheme: PropTypes.object,
+    children: T.element,
+    muiTheme: T.object,
   };
 
   static childContextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: T.object.isRequired,
   };
 
   getChildContext() {
@@ -24,4 +24,3 @@ class MuiThemeProvider extends Component {
 }
 
 export default MuiThemeProvider;
-

@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 import classNames from 'classnames';
 import Button from 'components/bootstrap/Button';
 import SafeAnchor from 'components/bootstrap/SafeAnchor';
@@ -9,10 +10,10 @@ import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './Dropdown.scss';
 
 const propTypes = {
-  open: React.PropTypes.bool,
-  title: React.PropTypes.string,
-  noCaret: React.PropTypes.bool,
-  useAnchor: React.PropTypes.bool,
+  open: T.bool,
+  title: T.string,
+  noCaret: T.bool,
+  useAnchor: T.bool,
 };
 
 const defaultProps = {
@@ -47,7 +48,11 @@ class DropdownToggle extends React.Component {
       <Component
         {...props}
         role='button'
-        className={classNames(className, noCaret && style.noCaret, getLocalCSSClassName(style, bsClass))}
+        className={classNames(
+          className,
+          noCaret && style.noCaret,
+          getLocalCSSClassName(style, bsClass),
+        )}
         aria-haspopup
         aria-expanded={open}
       >
@@ -61,4 +66,3 @@ DropdownToggle.propTypes = propTypes;
 DropdownToggle.defaultProps = defaultProps;
 
 export default setBsClass('dropdown-toggle', DropdownToggle);
-

@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { withRouter } from 'react-router';
 import { compose, bindActionCreators } from 'redux';
 
@@ -12,10 +13,7 @@ import DataLoader from '../../DataLoader';
 
 import Toolbar from '../Toolbar';
 
-import {
-  PATH_SETTINGS_BASE,
-  PATH_SETTINGS_BUSINESS_USER,
-} from 'vars';
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 import ListHeader from './ListHeader';
 import ListItem from './ListItem';
@@ -39,22 +37,23 @@ class List extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSelect   = this.onSelect.bind(this);
-    this.onNext     = this.onNext.bind(this);
+    this.onSelect = this.onSelect.bind(this);
+    this.onNext = this.onNext.bind(this);
     this.onPrevious = this.onPrevious.bind(this);
-    this.onSpy      = this.onSpy.bind(this);
-    this.onItem     = this.onItem.bind(this);
-    this.onClose    = this.onClose.bind(this);
+    this.onSpy = this.onSpy.bind(this);
+    this.onItem = this.onItem.bind(this);
+    this.onClose = this.onClose.bind(this);
 
     this.state = {
-      spy       : !props.loading,
-      fetchMore : props.users.length < props.length,
+      spy: !props.loading,
+      fetchMore: props.users.length < props.length,
     };
   }
 
   onItem(id) {
     this.props.router.push({
-      pathname : PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id,
+      pathname:
+        PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id,
     });
   }
 
@@ -63,19 +62,22 @@ class List extends React.Component {
   }
 
   onSpy() {
-    this.setState({
-      spy       : false,
-      fetchMore : true,
-    }, () => {
-      this.props.loadMoreUsers();
-    });
+    this.setState(
+      {
+        spy: false,
+        fetchMore: true,
+      },
+      () => {
+        this.props.loadMoreUsers();
+      },
+    );
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.loading === false) {
       this.setState({
-        spy       : nextProps.cursor < nextProps.length,
-        fetchMore : nextProps.cursor < nextProps.length,
+        spy: nextProps.cursor < nextProps.length,
+        fetchMore: nextProps.cursor < nextProps.length,
       });
     }
   }
@@ -98,7 +100,7 @@ class List extends React.Component {
     setSelection(activeIndex - 1);
   }
   render() {
-    const { user, cursor, loading, length, users : items, isReady } = this.props;
+    const { user, cursor, loading, length, users: items, isReady } = this.props;
 
     if (loading === false && length === 0) {
       // return (
@@ -106,8 +108,8 @@ class List extends React.Component {
       // );
       return (
         <div className={style.usersContainer}>
-          <Toolbar user={user} cursor={cursor} length={length}/>
-          <Empty/>
+          <Toolbar user={user} cursor={cursor} length={length} />
+          <Empty />
         </div>
       );
     }
@@ -115,25 +117,25 @@ class List extends React.Component {
     let scrollSpy = null;
     if (isReady && !SERVER) {
       const { spy, fetchMore } = this.state;
-      const disabled = (length < 30);
-      scrollSpy = (
-        spy ? <ScrollSpy.Spying
-          bubbles
-          fetchMore={fetchMore}
-          offset={NAVBAR_HEIGHT}
-          disabled={disabled}
-          onSpy={this.onSpy}
-        /> : <ScrollSpy.Idle
-          disabled={disabled}
-          done={cursor === length}
-          doneLabel='Utilisateurs chargés'
-        />
-      );
+      const disabled = length < 30;
+      scrollSpy = spy
+        ? <ScrollSpy.Spying
+            bubbles
+            fetchMore={fetchMore}
+            offset={NAVBAR_HEIGHT}
+            disabled={disabled}
+            onSpy={this.onSpy}
+          />
+        : <ScrollSpy.Idle
+            disabled={disabled}
+            done={cursor === length}
+            doneLabel='Utilisateurs chargés'
+          />;
     }
 
     return (
       <div className={style.usersContainer}>
-        <Toolbar user={user} cursor={cursor} length={length}/>
+        <Toolbar user={user} cursor={cursor} length={length} />
         <Dropdown
           defaultOpen
           onNext={this.onNext}
@@ -141,9 +143,9 @@ class List extends React.Component {
           onSelect={this.onSelect}
           className={style.listContainer}
         >
-          <ListHeader/>
+          <ListHeader />
           <Dropdown.Menu className={style.listItemsWrapper}>
-            {items.map((item, index) => (
+            {items.map((item, index) =>
               <MenuItem
                 key={item.id}
                 componentClass={ListItem}
@@ -151,8 +153,8 @@ class List extends React.Component {
                 index={index}
                 item={item}
                 onItem={this.onItem}
-              />
-            ))}
+              />,
+            )}
             {scrollSpy}
           </Dropdown.Menu>
         </Dropdown>
@@ -162,14 +164,16 @@ class List extends React.Component {
 }
 
 List.propTypes = {
-  length : T.number,
-  loading : T.bool.isRequired,
-  users : T.arrayOf(T.shape({
-    id : T.string.isRequired,
-  })).isRequired,
-  loadMoreUsers : T.func.isRequired,
-  router     : T.shape({
-    push : T.func.isRequired,
+  length: T.number,
+  loading: T.bool.isRequired,
+  users: T.arrayOf(
+    T.shape({
+      id: T.string.isRequired,
+    }),
+  ).isRequired,
+  loadMoreUsers: T.func.isRequired,
+  router: T.shape({
+    push: T.func.isRequired,
   }).isRequired,
 };
 
@@ -179,18 +183,16 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      setSelection,
-      addToSelection,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        setSelection,
+        addToSelection,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  withRouter,
-  Connect,
-  DataLoader.users,
-)(List);
-
+export default compose(withRouter, Connect, DataLoader.users)(List);

@@ -1,10 +1,16 @@
 import classNames from 'classnames';
 import keycode from 'keycode';
 import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 import RootCloseWrapper from 'components/bootstrap/RootCloseWrapper';
 
-import { bsClass, getClassSet, prefix, splitBsProps } from '../utils/bootstrapUtils';
+import {
+  bsClass,
+  getClassSet,
+  prefix,
+  splitBsProps,
+} from '../utils/bootstrapUtils';
 import createChainedFunction from '../utils/createChainedFunction';
 import ValidComponentChildren from '../utils/ValidComponentChildren';
 
@@ -12,16 +18,14 @@ import getLocalCSSClassName from '../utils/getLocalCSSClassName';
 import style from './Dropdown.scss';
 
 const propTypes = {
-  open: React.PropTypes.bool,
-  pullRight: React.PropTypes.bool,
-  onClose: React.PropTypes.func,
-  labelledBy: React.PropTypes.oneOfType([
-    React.PropTypes.string, React.PropTypes.number,
-  ]),
-  onSelect: React.PropTypes.func,
-  rootCloseEvent: React.PropTypes.oneOf(['click', 'mousedown']),
-  onNext: React.PropTypes.func,
-  onPrevious: React.PropTypes.func,
+  open: T.bool,
+  pullRight: T.bool,
+  onClose: T.func,
+  labelledBy: T.oneOfType([T.string, T.number]),
+  onSelect: T.func,
+  rootCloseEvent: T.oneOf(['click', 'mousedown']),
+  onNext: T.func,
+  onPrevious: T.func,
 };
 
 const defaultProps = {
@@ -67,7 +71,7 @@ class DropdownMenu extends React.Component {
       return [];
     }
 
-    return Array.from(node.querySelectorAll('[tabIndex="-1"]'));
+    return Array.from(node.querySelectorAll(`[tabIndex='-1']`));
   }
 
   focusNext(event) {
@@ -115,31 +119,34 @@ class DropdownMenu extends React.Component {
       [getLocalCSSClassName(style, prefix(bsProps, 'right'))]: pullRight,
     };
 
-    const content = <div
-      {...elementProps}
-      role='menu'
-      className={classNames(className, classes)}
-      aria-labelledby={labelledBy}
-    >
-      {ValidComponentChildren.map(children, child => (
-        React.cloneElement(child, {
-          onKeyDown: createChainedFunction(
-            child.props.onKeyDown, this.handleKeyDown
-          ),
-          onSelect: createChainedFunction(child.props.onSelect, onSelect),
-        })
-      ))}
-    </div>;
-
-    return (
-      noRootClose ? content : <RootCloseWrapper
-        disabled={!open}
-        onRootClose={onClose}
-        event={rootCloseEvent}
+    const content = (
+      <div
+        {...elementProps}
+        role='menu'
+        className={classNames(className, classes)}
+        aria-labelledby={labelledBy}
       >
-        {content}
-      </RootCloseWrapper>
+        {ValidComponentChildren.map(children, child =>
+          React.cloneElement(child, {
+            onKeyDown: createChainedFunction(
+              child.props.onKeyDown,
+              this.handleKeyDown,
+            ),
+            onSelect: createChainedFunction(child.props.onSelect, onSelect),
+          }),
+        )}
+      </div>
     );
+
+    return noRootClose
+      ? content
+      : <RootCloseWrapper
+          disabled={!open}
+          onRootClose={onClose}
+          event={rootCloseEvent}
+        >
+          {content}
+        </RootCloseWrapper>;
   }
 }
 
@@ -147,4 +154,3 @@ DropdownMenu.propTypes = propTypes;
 DropdownMenu.defaultProps = defaultProps;
 
 export default bsClass('dropdown-menu', DropdownMenu);
-

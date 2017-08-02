@@ -7,27 +7,27 @@ const jestPluginHoist = require('babel-plugin-jest-hoist');
 const babelOptions = require('../getBabelOptions')({
   env: 'test',
   moduleMap: {
-    'validation'            : 'common/validation',
-    'vars'                  : 'common/vars',
-    'roles'                 : 'common/roles',
-    'validation-messages'   : 'common/messages/validation-messages',
-    'loadScript'            : 'utils/loadScript',
-    'log'                   : 'common/log/server',
-    'countries'             : 'common/countries',
+    validation: 'common/validation',
+    vars: 'common/vars',
+    roles: 'common/roles',
+    'validation-messages': 'common/messages/validation-messages',
+    loadScript: 'utils/loadScript',
+    log: 'common/log/server',
+    countries: 'common/countries',
+    delay: 'common/delay',
+    getDataTransferItems: 'common/getDataTransferItems',
 
     // cookie storage
-    'StorageController.cookie' : 'common/utils/StorageController.cookie',
-    'FileController'           : 'common/utils/FileController',
+    'StorageController.cookie': 'common/utils/StorageController.cookie',
+    FileController: 'common/utils/FileController',
 
-    'result-codes'             : 'common/result-codes',
-    'intl-formats'             : 'common/intl-formats',
-    'file-categories'          : 'common/file-categories',
+    'result-codes': 'common/result-codes',
+    'intl-formats': 'common/intl-formats',
+    'file-categories': 'common/file-categories',
 
-    'printDocRef'              : 'common/printDocRef',
+    printDocRef: 'common/printDocRef',
   },
-  plugins: [
-    jestPluginHoist,
-  ],
+  plugins: [jestPluginHoist],
   modules: true,
 });
 
@@ -45,9 +45,14 @@ module.exports = {
 
   getCacheKey: createCacheKeyFunction([
     __filename,
-    path.join(path.dirname(require.resolve('babel-preset-fbjs')), 'package.json'),
-    path.join(path.dirname(require.resolve('build/babel-preset')), 'package.json'),
+    path.join(
+      path.dirname(require.resolve('babel-preset-fbjs')),
+      'package.json',
+    ),
+    path.join(
+      path.dirname(require.resolve('build/babel-preset')),
+      'package.json',
+    ),
     path.join(__dirname, '..', 'getBabelOptions.js'),
   ]),
 };
-

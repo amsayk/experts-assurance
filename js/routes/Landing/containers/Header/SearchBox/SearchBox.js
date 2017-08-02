@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link, withRouter } from 'react-router';
 
 import { compose, bindActionCreators } from 'redux';
@@ -20,9 +21,17 @@ import MenuItem from 'components/bootstrap/MenuItem';
 
 import Highlighter from 'react-highlight-words';
 
-import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER, PATH_CASES_CASE } from 'vars';
+import {
+  PATH_SETTINGS_BASE,
+  PATH_SETTINGS_BUSINESS_USER,
+  PATH_CASES_CASE,
+} from 'vars';
 
-import { SearchIcon, ArrowDropdownIcon, CloseIcon } from 'components/icons/MaterialIcons';
+import {
+  SearchIcon,
+  ArrowDropdownIcon,
+  CloseIcon,
+} from 'components/icons/MaterialIcons';
 
 import memoizeStringOnly from 'memoizeStringOnly';
 
@@ -37,7 +46,6 @@ import Tooltip from 'components/react-components/Tooltip';
 import ActivityIndicator from 'components/ActivityIndicator';
 
 import {
-  // UnknownIcon,
   WatchIcon,
   DoneIcon,
   CanceledIcon,
@@ -61,10 +69,9 @@ import selector from './selector';
 import { injectIntl } from 'react-intl';
 
 const STATE_MAP = {
-  // PENDING  : 'Dossiers en attente',
-  OPEN     : 'Dossiers en cours',
-  CLOSED   : 'Dossiers clos',
-  CANCELED : 'Dossiers annulés',
+  OPEN: 'Dossiers en cours',
+  CLOSED: 'Dossiers clos',
+  CANCELED: 'Dossiers annulés',
 };
 
 const tooltipAlign = {
@@ -76,7 +83,7 @@ const isValidQ = memoizeStringOnly(function isValidQ(q) {
   return q && q.length >= 2;
 });
 
-function *intersperse(a, delim) {
+function* intersperse(a, delim) {
   let first = true;
   for (const x of a) {
     if (!first) yield delim;
@@ -89,17 +96,40 @@ function toArray(str) {
   return (str || '').split(/\s+/);
 }
 
-const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex, role, hit: { highlight, _source: { id, refNo, company, state, date, lastModified, manager, client, agent, user, validation, closure, vehicle } } }) => {
-
-  const matches = highlight.reduce(function (matches, highlight) {
+const Doc = ({
+  q,
+  onToggle,
+  onClick,
+  intl,
+  qClassName,
+  className,
+  tabIndex,
+  role,
+  hit: {
+    highlight,
+    _source: {
+      id,
+      refNo,
+      company,
+      state,
+      date,
+      lastModified,
+      manager,
+      client,
+      agent,
+      user,
+      validation,
+      closure,
+      vehicle,
+    },
+  },
+}) => {
+  const matches = highlight.reduce(function(matches, highlight) {
     switch (highlight) {
       case 'company':
-        // case 'manager.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Compagnie:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Compagnie: </span>
             <span className={style.highlightGroupLinkWrapper}>
               <span>
                 <Highlighter
@@ -109,17 +139,14 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                 />
               </span>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'refNo':
-        // case 'manager.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Réf:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Réf: </span>
             <span className={style.highlightGroupLinkWrapper}>
               <span>
                 <Highlighter
@@ -129,19 +156,24 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                 />
               </span>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'manager.name':
-        // case 'manager.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Gestionnaire:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Gestionnaire: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + manager.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  manager.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -149,21 +181,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={manager.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'client.name':
-        // case 'client.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Assuré:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Assuré: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + client.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  client.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -171,21 +208,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={client.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'agent.name':
-        // case 'agent.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Agent:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Agent: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + agent.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  agent.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -193,21 +235,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={agent.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'user.name':
-        // case 'user.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Crée par:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Crée par: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  user.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -215,21 +262,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={user.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'validation_user.name':
-        // case 'validation_user.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Validé par:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Validé par: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + validation.user.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  validation.user.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -237,20 +289,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={validation.user.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'payment_user.name':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Paiement par:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Paiement par: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + validation.user.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  validation.user.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -258,21 +316,26 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={validation.user.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
       case 'closure_user.name':
-        // case 'closure_user.email':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Clôturé par:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Clôturé par: </span>
             <span className={style.highlightGroupLinkWrapper}>
-              <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + closure.user.id}>
+              <a
+                to={
+                  PATH_SETTINGS_BASE +
+                  '/' +
+                  PATH_SETTINGS_BUSINESS_USER +
+                  '/' +
+                  closure.user.id
+                }
+              >
                 <span>
                   <Highlighter
                     highlightClassName={style.hit}
@@ -280,9 +343,9 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
                     textToHighlight={closure.user.name}
                   />
                 </span>
-              </Link>
+              </a>
             </span>
-          </div>
+          </div>,
         );
         break;
 
@@ -296,46 +359,73 @@ const Doc = ({ q, onClickCapture, onClick, intl, qClassName, className, tabIndex
       case 'vehicle.power':
         matches.push(
           <div className={style.highlightGroup}>
-            <span className={style.highlightGroupLabel}>
-              Véhicule:{' '}
-            </span>
+            <span className={style.highlightGroupLabel}>Véhicule: </span>
             <span className={style.highlightGroupLinkWrapper}>
               <span>
                 <Highlighter
                   highlightClassName={style.hit}
                   searchWords={toArray(q)}
-                  textToHighlight={get({vehicle}, highlight)}
+                  textToHighlight={get({ vehicle }, highlight)}
                 />
               </span>
             </span>
-          </div>
+          </div>,
         );
         break;
-
     }
 
     return matches;
   }, []);
 
+  const _onKeyDown = e => {
+    if (e.key === 'Enter') {
+      setTimeout(() => {
+        raf(() => onToggle(false));
+      }, 10);
+    }
+  };
+
   return (
-    <div onClickCapture={onClickCapture} data-root-close-ignore role={role} tabIndex={tabIndex} className={cx(qClassName, style.docSearchDoc, className)}>
-      {STATES_2[state]}
-      <div style={{ marginLeft: 12 }} className={style.docSearchDocInfo}>
-        <div className={style.docSearchDocTop}>
-          <Link to={PATH_CASES_CASE + '/' + id}>
-            Dossier <b>{refNo}</b>
-          </Link>
-        </div>
-        <div className={style.docSearchDocMiddle}>
-          {[...intersperse(matches, <div style={{ margin: 'auto 6px' }} className={style.highlightGroupLabel}> · </div>)]}
-        </div>
-        {/* <div className={style.docSearchDocBottom}> */}
+    <div
+      onKeyDown={_onKeyDown}
+      onClick={onClick}
+      data-root-close-ignore
+      tabIndex={tabIndex}
+    >
+      <Link
+        role={role}
+        to={PATH_CASES_CASE + '/' + id}
+        className={cx(qClassName, style.docSearchDoc, className)}
+      >
+        {STATES_2[state]}
+        <div style={{ marginLeft: 12 }} className={style.docSearchDocInfo}>
+          <div className={style.docSearchDocTop}>
+            <a>
+              <span style={{ color: '#7d97ad' }}>Dossier</span>{' '}
+              <b style={{ color: 'black' }}>{refNo}</b>
+            </a>
+          </div>
+          <div className={style.docSearchDocMiddle}>
+            {[
+              ...intersperse(
+                matches,
+                <div
+                  style={{ margin: 'auto 6px' }}
+                  className={style.highlightGroupLabel}
+                >
+                  {' '}·{' '}
+                </div>,
+              ),
+            ]}
+          </div>
+          {/* <div className={style.docSearchDocBottom}> */}
           {/*   {intl.formatRelative(lastModified || date)} */}
           {/* </div> */}
-      </div>
+        </div>
+      </Link>
     </div>
   );
-}
+};
 
 function getState2(state, icon) {
   return (
@@ -361,46 +451,42 @@ function getState(state, stateText, icon) {
 }
 
 const STATES_2 = {
-  // PENDING  : getState2('PENDING',  <UnknownIcon   size={32}/>),
-  OPEN     : getState2('OPEN',     <WatchIcon     size={32}/>),
-  CLOSED   : getState2('CLOSED',   <DoneIcon      size={32}/>),
-  CANCELED : getState2('CANCELED', <CanceledIcon  size={32}/>),
+  OPEN: getState2('OPEN', <WatchIcon size={32} />),
+  CLOSED: getState2('CLOSED', <DoneIcon size={32} />),
+  CANCELED: getState2('CANCELED', <CanceledIcon size={32} />),
 };
 
 const STATES = {
-  // PENDING  : getState('PENDING',  'Dossiers en attente',  <UnknownIcon   size={24}/>),
-  OPEN     : getState('OPEN',     'Dossiers en cours',    <WatchIcon     size={24}/>),
-  CLOSED   : getState('CLOSED',   'Dossiers clos',        <DoneIcon      size={24}/>),
-  CANCELED : getState('CANCELED', 'Dossiers annulés',     <CanceledIcon  size={24}/>),
+  OPEN: getState('OPEN', 'Dossiers en cours', <WatchIcon size={24} />),
+  CLOSED: getState('CLOSED', 'Dossiers clos', <DoneIcon size={24} />),
+  CANCELED: getState('CANCELED', 'Dossiers annulés', <CanceledIcon size={24} />),
 };
 
 class SearchBox extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSearch                  = this.onSearch.bind(this);
-    this.onLastModified            = this.onLastModified.bind(this);
-    this.onVehicleModel                 = this.onVehicleModel.bind(this);
-    this.onVehicleManufacturer                 = this.onVehicleManufacturer.bind(this);
-    this.onSearchAdvancedSearch    = this.onSearchAdvancedSearch.bind(this);
-    this.onTextInput               = this.onTextInput.bind(this);
-    this.onClearSearch             = this.onClearSearch.bind(this);
-    this._onKeyDown                = this._onKeyDown.bind(this);
-    this.onToggleAdvancedMode      = this.onToggleAdvancedMode.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+    this.onLastModified = this.onLastModified.bind(this);
+    this.onVehicleModel = this.onVehicleModel.bind(this);
+    this.onVehicleManufacturer = this.onVehicleManufacturer.bind(this);
+    this.onSearchAdvancedSearch = this.onSearchAdvancedSearch.bind(this);
+    this.onTextInput = this.onTextInput.bind(this);
+    this.onClearSearch = this.onClearSearch.bind(this);
+    this._onKeyDown = this._onKeyDown.bind(this);
+    this.onToggleAdvancedMode = this.onToggleAdvancedMode.bind(this);
 
     this.onTextInputAdvancedSearch = this.onTextInputAdvancedSearch.bind(this);
-    this.onState                   = this.onState.bind(this);
-    this.onCompany                 = this.onCompany.bind(this);
-    this.onManager                 = this.onManager.bind(this);
-    this.onClient                  = this.onClient.bind(this);
-    this.onUser                    = this.onUser.bind(this);
-    this.onCloser                  = this.onCloser.bind(this);
-    this.onValidator               = this.onValidator.bind(this);
-    this.onDTMissionRange          = this.onDTMissionRange.bind(this);
-    this.onRange                   = this.onRange.bind(this);
-    // this.onValidationRange         = this.onValidationRange.bind(this);
-    this.onClosureRange            = this.onClosureRange.bind(this);
-
+    this.onState = this.onState.bind(this);
+    this.onCompany = this.onCompany.bind(this);
+    this.onManager = this.onManager.bind(this);
+    this.onClient = this.onClient.bind(this);
+    this.onUser = this.onUser.bind(this);
+    this.onCloser = this.onCloser.bind(this);
+    this.onValidator = this.onValidator.bind(this);
+    this.onDTMissionRange = this.onDTMissionRange.bind(this);
+    this.onRange = this.onRange.bind(this);
+    this.onClosureRange = this.onClosureRange.bind(this);
 
     this.onFocus = this.props.actions.onToggle.bind(null, true);
     this.onBlur = this.onBlur.bind(this);
@@ -410,7 +496,7 @@ class SearchBox extends React.Component {
     this.onStateFilter = this.onStateFilter.bind(this);
 
     this.state = {
-      search : props.search,
+      search: props.search,
     };
   }
   onBlur(e) {
@@ -418,7 +504,7 @@ class SearchBox extends React.Component {
     e.preventDefault();
 
     setTimeout(() => {
-      raf(() => this.props.actions.onToggle(false));
+      // raf(() => this.props.actions.onToggle(false));
     }, 50);
   }
   onClose() {
@@ -433,7 +519,7 @@ class SearchBox extends React.Component {
 
   onLastModified(date) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         lastModified: date,
       }),
     }));
@@ -441,23 +527,23 @@ class SearchBox extends React.Component {
 
   onVehicleManufacturer(manufacturer) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        vehicleManufacturer : manufacturer,
+      search: search.merge({
+        vehicleManufacturer: manufacturer,
       }),
     }));
   }
 
   onVehicleModel(model) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        vehicleModel : model,
+      search: search.merge({
+        vehicleModel: model,
       }),
     }));
   }
 
   onState(state) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         state,
       }),
     }));
@@ -465,15 +551,15 @@ class SearchBox extends React.Component {
 
   onManager(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        manager : id ? {id} : null,
+      search: search.merge({
+        manager: id ? { id } : null,
       }),
     }));
   }
 
   onCompany(company) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         company,
       }),
     }));
@@ -481,41 +567,39 @@ class SearchBox extends React.Component {
 
   onClient(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        client : id ? {id} : null,
+      search: search.merge({
+        client: id ? { id } : null,
       }),
     }));
   }
-
 
   onUser(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        user : id ? {id} : null,
+      search: search.merge({
+        user: id ? { id } : null,
       }),
     }));
   }
 
-
   onValidator(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        validator : id ? {id} : null,
+      search: search.merge({
+        validator: id ? { id } : null,
       }),
     }));
   }
 
   onCloser(id) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        closer: id ? {id} : null,
+      search: search.merge({
+        closer: id ? { id } : null,
       }),
     }));
   }
 
   onRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         range,
       }),
     }));
@@ -523,24 +607,15 @@ class SearchBox extends React.Component {
 
   onDTMissionRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
-        missionRange : range,
+      search: search.merge({
+        missionRange: range,
       }),
     }));
   }
 
-
-  // onValidationRange(range) {
-  //   this.setState(({ search }) => ({
-  //     search : search.merge({
-  //       validationRange: range,
-  //     }),
-  //   }));
-  // }
-
   onClosureRange(range) {
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         closureRange: range,
       }),
     }));
@@ -549,7 +624,7 @@ class SearchBox extends React.Component {
   onTextInputAdvancedSearch(e) {
     const q = e.target.value;
     this.setState(({ search }) => ({
-      search : search.merge({
+      search: search.merge({
         q,
       }),
     }));
@@ -561,9 +636,16 @@ class SearchBox extends React.Component {
 
     this.props.actions.onClear();
     setTimeout(() => {
-      this.setState({
-        search: this.props.search,
-      });
+      this.setState(
+        {
+          search: this.props.search,
+        },
+        () => {
+          try {
+            this.input.value = '';
+          } catch (e) {}
+        },
+      );
     }, 0);
   }
   onToggleAdvancedMode(e) {
@@ -589,28 +671,40 @@ class SearchBox extends React.Component {
   }
   onSearch() {
     this.props.router.push({
-      pathname : PATH_SEARCH,
+      pathname: PATH_SEARCH,
     });
   }
   onSearchAdvancedSearch() {
     this.props.router.push({
-      pathname : PATH_SEARCH,
+      pathname: PATH_SEARCH,
     });
     this.props.actions.merge(this.state.search);
   }
+  onDropdownRef = ref => {
+    this._dropdown = ref;
+  };
   _onKeyDown(e) {
     if (e.key === 'Enter' && e.shiftKey === false) {
       this.onSearch();
+      return;
     }
 
     if (e.key === 'Backspace') {
       if (isEmpty(this.props.search.q)) {
+        try {
+          e.target.value = '';
+        } catch (e) {}
         this.props.actions.onState(null);
+        return;
       }
     }
   }
   onStateFilter(key) {
-    const { onState, onToggle, toggleAdvancedMode : onToggleAdvancedMode } = this.props.actions;
+    const {
+      onState,
+      onToggle,
+      toggleAdvancedMode: onToggleAdvancedMode,
+    } = this.props.actions;
     switch (key) {
       case 'advancedMode':
         return setTimeout(() => {
@@ -630,57 +724,82 @@ class SearchBox extends React.Component {
   }
   renderStateFilters() {
     return [
-      // <MenuItem onSelect={this.onStateFilter} key='PENDING' eventKey='PENDING' className={style.stateFilter_PENDING}>
-      //   {STATES.PENDING}
-      // </MenuItem>,
-      <MenuItem onSelect={this.onStateFilter} key='OPEN' eventKey='OPEN' className={style.stateFilter_OPEN}>
+      <MenuItem
+        onSelect={this.onStateFilter}
+        key='OPEN'
+        eventKey='OPEN'
+        className={style.stateFilter_OPEN}
+      >
         {STATES.OPEN}
       </MenuItem>,
-      <MenuItem onSelect={this.onStateFilter} key='CLOSED' eventKey='CLOSED' className={style.stateFilter_CLOSED}>
+      <MenuItem
+        onSelect={this.onStateFilter}
+        key='CLOSED'
+        eventKey='CLOSED'
+        className={style.stateFilter_CLOSED}
+      >
         {STATES.CLOSED}
       </MenuItem>,
-      <MenuItem onSelect={this.onStateFilter} key='CANCELED' eventKey='CANCELED' className={style.stateFilter_CANCELED}>
+      <MenuItem
+        onSelect={this.onStateFilter}
+        key='CANCELED'
+        eventKey='CANCELED'
+        className={style.stateFilter_CANCELED}
+      >
         {STATES.CANCELED}
       </MenuItem>,
-      <MenuItem divider></MenuItem>,
-      <MenuItem onSelect={this.onStateFilter} key='advancedMode' eventKey='advancedMode' className={style.stateFilterAdvancedSearch}>
+      <MenuItem divider />,
+      <MenuItem
+        onSelect={this.onStateFilter}
+        key='advancedMode'
+        eventKey='advancedMode'
+        className={style.stateFilterAdvancedSearch}
+      >
         Recherche avancée
       </MenuItem>,
     ];
-
   }
   handleClick(id, e) {
-    if (e.target.nodeName !== 'A' && (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)) {
+    if (
+      e.target.nodeName !== 'A' &&
+      (e.target.parentNode ? e.target.parentNode.nodeName !== 'A' : false)
+    ) {
       e.preventDefault();
       e.stopPropagation();
-      this.props.router.push(
-        PATH_CASES_CASE + '/' + id,
-      );
+      setTimeout(() => {
+        raf(() => this.props.actions.onToggle(false));
+      }, 10);
+
+      this.props.router.push(PATH_CASES_CASE + '/' + id);
     }
   }
-  renderDocs(hits) {
-    const docs = hits.map((hit, index) => (
+  renderDocs(hits, { length }) {
+    const docs = hits.map((hit, index) =>
       <MenuItem
         qClassName={index === 0 && style.noTopBorder}
         q={this.props.search.q}
         intl={this.props.intl}
         key={hit._id}
-        onClickCapture={this.handleClick.bind(this, hit._source.id)}
+        onClick={this.handleClick.bind(this, hit._source.id)}
         eventKey={hit._id}
+        onToggle={this.props.actions.onToggle}
         componentClass={Doc}
         hit={hit}
-      />
-    ));
-
-    docs.push(
-      <MenuItem divider />,
-      <MenuItem
-        onClickCapture={this.onSearch}
-        className={style.docsSearchResultShowAll}
-        key={'showAll'}
-        eventKey={'showAll'}
-      >Afficher tous</MenuItem>
+      />,
     );
+
+    length > 1 &&
+      docs.push(
+        <MenuItem divider />,
+        <MenuItem
+          onClick={this.onSearch}
+          className={style.docsSearchResultShowAll}
+          key={'showAll'}
+          eventKey={'showAll'}
+        >
+          Afficher tous les {length} dossiers
+        </MenuItem>,
+      );
 
     return docs;
   }
@@ -690,30 +809,36 @@ class SearchBox extends React.Component {
         componentClass={AdvancedSearch}
         search={this.state.search}
         actions={{
-          onState                 : this.onState,
-          onCompany               : this.onCompany,
-          onManager               : this.onManager,
-          onClient                : this.onClient,
-          onUser                  : this.onUser,
-          onCloser                : this.onCloser,
-          onValidator             : this.onValidator,
-          onLastModified          : this.onLastModified,
-          onRange                 : this.onRange,
-          onDTMissionRange        : this.onDTMissionRange,
-          // onValidationRange       : this.onValidationRange,
-          onClosureRange          : this.onClosureRange,
-          onClear                 : this.onClearSearch,
-          onSearch                : this.onSearchAdvancedSearch,
-          onLastModified          : this.onLastModified,
-          onVehicleManufacturer               : this.onVehicleManufacturer,
-          onVehicleModel               : this.onVehicleModel,
+          onState: this.onState,
+          onCompany: this.onCompany,
+          onManager: this.onManager,
+          onClient: this.onClient,
+          onUser: this.onUser,
+          onCloser: this.onCloser,
+          onValidator: this.onValidator,
+          onLastModified: this.onLastModified,
+          onRange: this.onRange,
+          onDTMissionRange: this.onDTMissionRange,
+          onClosureRange: this.onClosureRange,
+          onClear: this.onClearSearch,
+          onSearch: this.onSearchAdvancedSearch,
+          onLastModified: this.onLastModified,
+          onVehicleManufacturer: this.onVehicleManufacturer,
+          onVehicleModel: this.onVehicleModel,
         }}
       />
     );
   }
   render() {
-    const { search : { state, active, showStateFilter, q, advancedMode }, loading = false, cursor = 0, length = 0, hits = [], actions } = this.props;
-    const { search : { state: sState, q: sQ } } = this.state;
+    const {
+      search: { state, active, showStateFilter, q, advancedMode },
+      loading = false,
+      cursor = 0,
+      length = 0,
+      hits = [],
+      actions,
+    } = this.props;
+    const { search: { state: sState, q: sQ } } = this.state;
 
     let menu = null;
 
@@ -723,38 +848,71 @@ class SearchBox extends React.Component {
         menu = this.renderAdvancedSearch();
       } else if (!q) {
         // state filter menu
-        menu =  showStateFilter && !state
-          ? this.renderStateFilters()
-          : null;
+        menu = showStateFilter && !state ? this.renderStateFilters() : null;
       } else {
         // search results
         if (!loading) {
           menu = hits.length
-            ? this.renderDocs(hits)
-            : isValidQ(q) && (
-              <div style={{ display: 'flex', opacity: 0.54, alignItems: 'center', justifyContent: 'center' }}>
+            ? this.renderDocs(hits, { length })
+            : isValidQ(q) &&
+              <div
+                style={{
+                  display: 'flex',
+                  opacity: 0.54,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 Aucun résultat
-              </div>
-            );
+              </div>;
         }
       }
     }
 
     return (
-      <Dropdown componentClass={'div'} open onToggle={emptyFunction} onClose={this.onClose} className={style.searchFieldWrapper} role='search'>
-        <div data-root-close-ignore className={cx(style.searchField, isValidQ(q) && style.hasInput, active && style.active)}  role='dropdown-toggle'>
-          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Recherche des dossiers'}>
-            {loading ? <ActivityIndicator className={style.searchLoading}/> : <Button onClick={this.onSearch} bsStyle={'link'} className={style.showResultsButton} role='button'>
-              <SearchIcon size={22}/>
-            </Button>}
+      <Dropdown
+        ref={this.onDropdownRef}
+        componentClass={'div'}
+        open
+        onToggle={emptyFunction}
+        onClose={this.onClose}
+        className={style.searchFieldWrapper}
+        role='search'
+      >
+        <div
+          data-root-close-ignore
+          className={cx(
+            style.searchField,
+            isValidQ(q) && style.hasInput,
+            active && style.active,
+          )}
+          role='dropdown-toggle'
+        >
+          <Tooltip
+            placement='bottom'
+            align={tooltipAlign}
+            overlay={'Recherche des dossiers'}
+          >
+            {loading
+              ? <ActivityIndicator className={style.searchLoading} />
+              : <Button
+                  onClick={this.onSearch}
+                  bsStyle={'link'}
+                  className={style.showResultsButton}
+                  role='button'
+                >
+                  <SearchIcon size={22} />
+                </Button>}
           </Tooltip>
-          {state || sState ? <div className={style[`docSearchState_${state || sState}`]}>
-            {STATE_MAP[state || sState]}
-          </div> : null}
+          {state || sState
+            ? <div className={style[`docSearchState_${state || sState}`]}>
+                {STATE_MAP[state || sState]}
+              </div>
+            : null}
           <div className={style.inputWrapper}>
             <input
               id='gSearchInput'
-              ref={(input) => this.input = input}
+              ref={input => (this.input = input)}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
               className={style.input}
@@ -769,16 +927,37 @@ class SearchBox extends React.Component {
               onKeyDown={this._onKeyDown}
             />
           </div>
-          <Tooltip placement='bottom' align={tooltipAlign} overlay={'Recherche avancée'}>
-            <Button onClick={this.onToggleAdvancedMode} bsStyle={'link'} className={style.toggleAdvancedMode} role='button'>
-              <ArrowDropdownIcon size={22}/>
-            </Button>
+          <Tooltip
+            placement='bottom'
+            align={tooltipAlign}
+            overlay={'Recherche avancée'}
+          >
+            <a
+              onClick={this.onToggleAdvancedMode}
+              bsStyle={'link'}
+              className={style.toggleAdvancedMode}
+              role='button'
+            >
+              <ArrowDropdownIcon size={22} />
+            </a>
           </Tooltip>
-          {isValidQ(q) ? <Button onClick={this.onClearSearch} bsStyle={'link'} className={style.clearSearch} role='button'>
-            <CloseIcon size={20}/>
-          </Button> : null}
+          {isValidQ(q)
+            ? <a
+                onClick={this.onClearSearch}
+                bsStyle={'link'}
+                className={style.clearSearch}
+                role='button'
+              >
+                <CloseIcon size={20} />
+              </a>
+            : null}
         </div>
-        <Dropdown.Menu className={cx(style.searchBoxMenu, active && !loading && hits.length && style.scrollY)}>
+        <Dropdown.Menu
+          className={cx(
+            style.searchBoxMenu,
+            active && !loading && hits.length && style.scrollY,
+          )}
+        >
           {menu}
         </Dropdown.Menu>
       </Dropdown>
@@ -787,7 +966,7 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  intl     : intlShape.isRequired,
+  intl: intlShape.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -796,23 +975,22 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      onToggle : toggleSearch,
-      onTextInput,
-      toggleAdvancedMode,
-      onState,
-      onClear,
-      merge,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        onToggle: toggleSearch,
+        onTextInput,
+        toggleAdvancedMode,
+        onState,
+        onClear,
+        merge,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  withRouter,
-  Connect,
-  DataLoader.searchDocs,
-)(SearchBox);
-
+export default compose(injectIntl, withRouter, Connect, DataLoader.searchDocs)(
+  SearchBox,
+);

@@ -1,11 +1,12 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 export default class LazyRenderBox extends React.Component {
   static propTypes = {
-    children        : T.any,
-    className       : T.string,
-    visible         : T.bool,
-    hiddenClassName : T.string,
+    children: T.any,
+    className: T.string,
+    visible: T.bool,
+    hiddenClassName: T.string,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -19,10 +20,9 @@ export default class LazyRenderBox extends React.Component {
       if (!visible && hiddenClassName) {
         props.className += ` ${hiddenClassName}`;
       }
-      return <div {...props}/>;
+      return <div {...props} />;
     }
 
     return React.Children.only(props.children);
   }
 }
-

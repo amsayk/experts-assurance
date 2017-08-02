@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -17,10 +18,9 @@ import selector from './selector';
 
 import ActivityIndicator from 'components/ActivityIndicator';
 
-import {
-  // WatchIcon,
-  // DownloadIcon,
-} from 'components/icons/MaterialIcons';
+import // WatchIcon,
+// DownloadIcon,
+'components/icons/MaterialIcons';
 
 import CategorySelector from './CategorySelector';
 
@@ -34,61 +34,74 @@ class Invalid extends React.Component {
   }
 
   _handleToggle(e) {
-    if (e.target === this.header){
+    if (e.target === this.header) {
       this.props.actions.toggle();
     }
   }
   render() {
-    const {
-      sortConfig,
-      isOpen,
-      category,
-      data,
-      loadMore,
-      actions,
-    } = this.props;
-    const summary = data.length && data.cursor ? <span style={{
-      color: 'rgba(112, 112, 112, 0.85)',
-      fontSize: 13,
-      verticalAlign: 'middle',
-    }}> · {data.length} dossiers</span>  : null;
+    const { sortConfig, isOpen, category, data, loadMore, actions } = this.props;
+    const summary =
+      data.length && data.cursor
+        ? <span
+            style={{
+              color: 'rgba(112, 112, 112, 0.85)',
+              fontSize: 13,
+              verticalAlign: 'middle',
+            }}
+          >
+            {' '}· {data.length} dossiers
+          </span>
+        : null;
     return (
-      <div className={cx(style.board, isOpen && style.dashboardOpen, style.boardPending)}>
-        <header onClick={this._handleToggle} ref={(header) => this.header = header} className={style.boardHeader}>
-          <div style={{
-            paddingLeft: 10,
-          }} className={cx(style['OPEN'], style.boardIcon)}>
-          {/* <WatchIcon size={18}/> */}
-          #
-        </div>
-        <h5 className={style.boardTitle}>Dossiers avec pièces manquantes {summary}</h5>
-        <div className={style.ctrls}>
-          <div className={style.icon}>
-            {data.loading ? <ActivityIndicator size='small'/> : null}
+      <div
+        className={cx(
+          style.board,
+          isOpen && style.dashboardOpen,
+          style.boardPending,
+        )}
+      >
+        <header
+          onClick={this._handleToggle}
+          ref={header => (this.header = header)}
+          className={style.boardHeader}
+        >
+          <div
+            style={{
+              paddingLeft: 10,
+            }}
+            className={cx(style['OPEN'], style.boardIcon)}
+          >
+            {/* <WatchIcon size={18}/> */}
+            #
           </div>
-          {/* <div className={cx(style.icon, style.download)}> */}
+          <h5 className={style.boardTitle}>
+            Dossiers avec pièces manquantes {summary}
+          </h5>
+          <div className={style.ctrls}>
+            <div className={style.icon}>
+              {data.loading ? <ActivityIndicator size='small' /> : null}
+            </div>
+            {/* <div className={cx(style.icon, style.download)}> */}
             {/*   <Button className={style.downloadButton} role='button'> */}
-              {/*     <DownloadIcon */}
-                {/*       size={18} */}
-                {/*     /> */}
-              {/*   </Button> */}
+            {/*     <DownloadIcon */}
+            {/*       size={18} */}
+            {/*     /> */}
+            {/*   </Button> */}
             {/* </div> */}
-          <div className={style.icon}>
-            <CategorySelector
-              category={category}
-              onCategory={actions.setCategory}
-            />
+            <div className={style.icon}>
+              <CategorySelector
+                category={category}
+                onCategory={actions.setCategory}
+              />
+            </div>
           </div>
-        </div>
-      </header>
-      {isOpen ? <div className={style.boardContent}>
-        <List
-          sortConfig={sortConfig}
-          loadMore={loadMore}
-          {...data}
-        />
-      </div> : null}
-    </div>
+        </header>
+        {isOpen
+          ? <div className={style.boardContent}>
+              <List sortConfig={sortConfig} loadMore={loadMore} {...data} />
+            </div>
+          : null}
+      </div>
     );
   }
 }
@@ -108,17 +121,16 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      toggle : (...args) => toggle('invalid', ...args),
-      setCategory,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        toggle: (...args) => toggle('invalid', ...args),
+        setCategory,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-  DataLoader.invalidDocs,
-)(Invalid);
-
+export default compose(Connect, DataLoader.invalidDocs)(Invalid);

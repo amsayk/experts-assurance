@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import style from '../Notification.scss';
 
@@ -11,7 +12,13 @@ import cx from 'classnames';
 function InvalidLink({ intl, className, onClose }) {
   return (
     <div className={cx(className, style.notificationInvalidLink)}>
-      <button type='button' onClick={onClose} className={style.close} data-dismiss='alert' aria-label='Close'>
+      <button
+        type='button'
+        onClick={onClose}
+        className={style.close}
+        data-dismiss='alert'
+        aria-label='Close'
+      >
         <span aria-hidden='true'>&times;</span>
       </button>
       {intl.formatMessage(messages.InvalidLink)}
@@ -20,9 +27,8 @@ function InvalidLink({ intl, className, onClose }) {
 }
 
 InvalidLink.propTypes = {
-  intl    : intlShape.isRequired,
-  onClose : T.func.isRequired,
+  intl: intlShape.isRequired,
+  onClose: T.func.isRequired,
 };
 
 export default injectIntl(InvalidLink);
-

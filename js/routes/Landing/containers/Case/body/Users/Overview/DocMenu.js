@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -22,8 +23,8 @@ import MUTATION from './isDocValid.query.graphql';
 
 class DocMenu extends React.Component {
   static contextTypes = {
-    snackbar : T.shape({
-      show : T.func.isRequired,
+    snackbar: T.shape({
+      show: T.func.isRequired,
     }),
   };
 
@@ -49,26 +50,28 @@ class DocMenu extends React.Component {
     const { doc, busy } = self.props;
 
     const startTime = Date.now();
-    busy(true, async function () {
-      const { data : { isDocValid } } = await self.props.client.query({
-        query       : MUTATION,
-        fetchPolicy : 'network-only',
-        variables   : { id : doc.id },
+    busy(true, async function() {
+      const { data: { isDocValid } } = await self.props.client.query({
+        query: MUTATION,
+        fetchPolicy: 'network-only',
+        variables: { id: doc.id },
       });
 
       const duration = Date.now() - startTime;
-      setTimeout(function () {
-        busy(false, function () {
+      setTimeout(function() {
+        busy(false, function() {
           if (isDocValid) {
             self.props.actions.startClosingDoc();
           } else {
             self.context.snackbar.show({
-              message   : <b>Des pièces jointes manquent. Clôturer de toute façon?</b>,
-              duration  : 5 * 1000,
+              message: (
+                <b>Des pièces jointes manquent. Clôturer de toute façon?</b>
+              ),
+              duration: 5 * 1000,
               // closeable : true,
-              action    : {
-                title : 'Clôturer',
-                click : function () {
+              action: {
+                title: 'Clôturer',
+                click: function() {
                   this.dismiss();
                   setTimeout(() => {
                     raf(() => {
@@ -80,7 +83,6 @@ class DocMenu extends React.Component {
             });
           }
         });
-
       }, duration >= 1500 ? 0 : 1500 - duration);
     });
   }
@@ -92,37 +94,32 @@ class DocMenu extends React.Component {
     }
 
     return (
-      <Dropdown
-        pullRight
-        onSelect={this.onSelect}
-      >
+      <Dropdown pullRight onSelect={this.onSelect}>
         <Dropdown.Toggle className={style.docMenuAction}>
-          <MoreHorizIcon size={32}/>
+          <MoreHorizIcon size={32} />
         </Dropdown.Toggle>
         <Dropdown.Menu className={style.docMenu}>
           <MenuItem eventKey='close'>
-            <CloseDoc doc={doc}/>
+            <CloseDoc doc={doc} />
             Clôturer
           </MenuItem>
           <MenuItem eventKey='cancel'>Annuler</MenuItem>
-          {user.isAdmin || user.isManager(doc) ? [
-            <MenuItem divider />,
-            <MenuItem eventKey='delete'>Supprimer</MenuItem>
-          ] : null}
+          {user.isAdmin || user.isManager(doc)
+            ? [
+                <MenuItem divider />,
+                <MenuItem eventKey='delete'>Supprimer</MenuItem>,
+              ]
+            : null}
         </Dropdown.Menu>
       </Dropdown>
-    )
+    );
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ startClosingDoc }, dispatch)};
+  return { actions: bindActionCreators({ startClosingDoc }, dispatch) };
 }
 
 const Connect = connect(null, mapDispatchToProps);
 
-export default compose(
-  withApollo,
-  Connect,
-)(DocMenu);
-
+export default compose(withApollo, Connect)(DocMenu);

@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import objectAssign from 'object-assign';
 import transitions from '../styles/transitions';
 
@@ -15,26 +16,25 @@ function getStyles(props) {
     userSelect: 'none',
   };
 
-  const shrinkStyles = props.shrink ? objectAssign({
-    transform: 'scale(0.75) translate(0, -28px)',
-    pointerEvents: 'none',
-  }, props.shrinkStyle) : null;
+  const shrinkStyles = props.shrink
+    ? objectAssign(
+        {
+          transform: 'scale(0.75) translate(0, -28px)',
+          pointerEvents: 'none',
+        },
+        props.shrinkStyle,
+      )
+    : null;
 
   return {
     root: objectAssign(defaultStyles, props.style, shrinkStyles),
   };
 }
 
-const TextFieldLabel = (props) => {
-  const {
-    muiTheme,
-    className,
-    children,
-    htmlFor,
-    onTouchTap,
-  } = props;
+const TextFieldLabel = props => {
+  const { muiTheme, className, children, htmlFor, onTouchTap } = props;
 
-  const {prepareStyles} = muiTheme;
+  const { prepareStyles } = muiTheme;
   const styles = getStyles(props);
 
   return (
@@ -53,42 +53,42 @@ TextFieldLabel.propTypes = {
   /**
    * The label contents.
    */
-  children: PropTypes.node,
+  children: T.node,
   /**
    * The css class name of the root element.
    */
-  className: PropTypes.string,
+  className: T.string,
   /**
    * Disables the label if set to true.
    */
-  disabled: PropTypes.bool,
+  disabled: T.bool,
   /**
    * The id of the target element that this label should refer to.
    */
-  htmlFor: PropTypes.string,
+  htmlFor: T.string,
   /**
    * @ignore
    * The material-ui theme applied to this component.
    */
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: T.object.isRequired,
   /**
    * Callback function for when the label is selected via a touch tap.
    *
    * @param {object} event TouchTap event targeting the text field label.
    */
-  onTouchTap: PropTypes.func,
+  onTouchTap: T.func,
   /**
    * True if the floating label should shrink.
    */
-  shrink: PropTypes.bool,
+  shrink: T.bool,
   /**
    * Override the inline-styles of the root element when shrunk.
    */
-  shrinkStyle: PropTypes.object,
+  shrinkStyle: T.object,
   /**
    * Override the inline-styles of the root element.
    */
-  style: PropTypes.object,
+  style: T.object,
 };
 
 TextFieldLabel.defaultProps = {
@@ -97,4 +97,3 @@ TextFieldLabel.defaultProps = {
 };
 
 export default TextFieldLabel;
-

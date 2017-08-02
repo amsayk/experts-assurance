@@ -1,7 +1,13 @@
 import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
 import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
 
-import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, userVerified } from 'roles';
+import {
+  Role_ADMINISTRATORS,
+  Role_MANAGERS,
+  userHasRoleAll,
+  userHasRoleAny,
+  userVerified,
+} from 'roles';
 
 import * as codes from 'result-codes';
 
@@ -27,7 +33,8 @@ import { fromJS } from 'immutable';
 
 const log = require('log')('app:backend:docs');
 
-export const schema = [`
+export const schema = [
+  `
 
   type Observation {
     id: ID!
@@ -110,7 +117,6 @@ export const schema = [`
 
   input AddDocMeta {
     ref: ID
-    key: ID
     imported: Boolean!
   }
 
@@ -194,9 +200,6 @@ export const schema = [`
 
   # Dashboard
 
-  type PendingShape {
-    count: Int!
-  }
   type OpenShape {
     count: Int!
   }
@@ -208,7 +211,6 @@ export const schema = [`
   }
 
   type Dashboard {
-    pending: PendingShape!
     open: OpenShape!
     closed: ClosedShape!
     canceled: CanceledShape!
@@ -349,7 +351,6 @@ export const schema = [`
   # DocState type
   # ------------------------------------
   enum DocState {
-    # PENDING
     OPEN
     CLOSED
     CANCELED
@@ -370,7 +371,7 @@ export const schema = [`
   # ------------------------------------
   type Vehicle {
     manufacturer: String
-    model: String! # Type
+    model: String
     plateNumber: ID!
     series: String
     mileage: String
@@ -440,15 +441,13 @@ export const schema = [`
     nature: String
   }
 
-`];
+`,
+];
 
 export const resolvers = {
-
   Vehicle: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-    ]),
+    {},
+    parseGraphqlObjectFields([]),
     parseGraphqlScalarFields([
       'manufacturer',
       'model',
@@ -458,30 +457,29 @@ export const resolvers = {
       'DMC',
       'energy',
       'power',
-    ])
+    ]),
   ),
 
   File: objectAssign(
+    {},
     {
-    },
-    {
-      deletion: (file) => {
-        const deletion_date  = file.get('deletion_date');
-        const deletion_user  = file.get('deletion_user');
+      deletion: file => {
+        const deletion_date = file.get('deletion_date');
+        const deletion_user = file.get('deletion_user');
 
         if (deletion_date && deletion_user) {
           return {
-            date  : deletion_date,
-            user  : deletion_user,
+            date: deletion_date,
+            user: deletion_user,
           };
         }
 
         return null;
       },
-      url: (file) => {
+      url: file => {
         if (file.has('fileObj')) {
           try {
-            return file.get('fileObj').url({ forceSecure : config.secure });
+            return file.get('fileObj').url({ forceSecure: config.secure });
           } catch (e) {
             log.error('File.url threw error', e);
           }
@@ -490,97 +488,83 @@ export const resolvers = {
         return null;
       },
     },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'name',
-      'category',
-      'type',
-      'size',
-      'date',
-    ])
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields(['name', 'category', 'type', 'size', 'date']),
   ),
 
   Observation: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-      'document',
-    ]),
-    parseGraphqlScalarFields([
-      'id',
-      'text',
-      'date',
-    ])
+    {},
+    parseGraphqlObjectFields(['user', 'document']),
+    parseGraphqlScalarFields(['id', 'text', 'date']),
   ),
 
   Doc: objectAssign(
+    {},
     {
-    },
-    {
-      objectId: (doc) => {
+      objectId: doc => {
         return doc.id;
       },
-      id: (doc) => {
+      id: doc => {
         return doc.get(DOC_ID_KEY);
       },
-      validation: (doc) => {
-        const validation_date   = doc.validation_date    || doc.get('validation_date');
-        const validation_amount = doc.validation_amount  || doc.get('validation_amount');
-        const validation_user   = doc.validation_user    || doc.get('validation_user');
+      validation: doc => {
+        const validation_date =
+          doc.validation_date || doc.get('validation_date');
+        const validation_amount =
+          doc.validation_amount || doc.get('validation_amount');
+        const validation_user =
+          doc.validation_user || doc.get('validation_user');
 
         if (validation_user) {
           return {
-            amount : validation_amount || null,
-            date   : validation_date   || null,
-            user   : validation_user,
+            amount: validation_amount || null,
+            date: validation_date || null,
+            user: validation_user,
           };
         }
 
         return null;
       },
-      paymentInfo: (doc) => {
-        const payment_date   = doc.payment_date   || doc.get('payment_date');
+      paymentInfo: doc => {
+        const payment_date = doc.payment_date || doc.get('payment_date');
         const payment_amount = doc.payment_amount || doc.get('payment_amount');
-        const payment_user   = doc.payment_user   || doc.get('payment_user');
-        const payment_meta   = doc.payment_meta   || doc.get('payment_meta');
+        const payment_user = doc.payment_user || doc.get('payment_user');
+        const payment_meta = doc.payment_meta || doc.get('payment_meta');
 
         if (payment_date && payment_user) {
           return {
-            date   : payment_date,
-            amount : payment_amount || null,
-            user   : payment_user,
-            meta   : payment_meta || {},
+            date: payment_date,
+            amount: payment_amount || null,
+            user: payment_user,
+            meta: payment_meta || {},
           };
         }
 
         return null;
       },
-      closure: (doc) => {
-        const closure_date  = doc.closure_date  || doc.get('closure_date');
+      closure: doc => {
+        const closure_date = doc.closure_date || doc.get('closure_date');
         const closure_state = doc.closure_state || doc.get('closure_state');
-        const closure_user  = doc.closure_user  || doc.get('closure_user');
+        const closure_user = doc.closure_user || doc.get('closure_user');
 
         if (closure_date && closure_state && closure_user) {
           return {
-            date  : closure_date,
-            state : closure_state,
-            user  : closure_user,
+            date: closure_date,
+            state: closure_state,
+            user: closure_user,
           };
         }
 
         return null;
       },
-      deletion: (doc) => {
-        const deletion_date  = doc.deletion_date  || doc.get('deletion_date');
-        const deletion_user  = doc.deletion_user  || doc.get('deletion_user');
+      deletion: doc => {
+        const deletion_date = doc.deletion_date || doc.get('deletion_date');
+        const deletion_user = doc.deletion_user || doc.get('deletion_user');
 
         if (deletion_date && deletion_user) {
           return {
-            date  : deletion_date,
-            user  : deletion_user,
+            date: deletion_date,
+            user: deletion_user,
           };
         }
 
@@ -590,16 +574,18 @@ export const resolvers = {
         let ret;
 
         if (!context.user) {
-          ret = doc.get
-            ? doc.get('lastModified')
-            : doc.lastModified;
+          ret = doc.get ? doc.get('lastModified') : doc.lastModified;
         } else {
           ret = doc.get
-            ? doc.get(`lastModified_${context.user.id}`) || doc.get('lastModified') || doc.updatedAt
-            : doc[`lastModified_${context.user.id}`] || doc.lastModified || doc.updatedAt;
+            ? doc.get(`lastModified_${context.user.id}`) ||
+              doc.get('lastModified') ||
+              doc.updatedAt
+            : doc[`lastModified_${context.user.id}`] ||
+              doc.lastModified ||
+              doc.updatedAt;
         }
 
-        return typeof ret !== 'undefined' ? ret :  null;
+        return typeof ret !== 'undefined' ? ret : null;
       },
     },
     parseGraphqlObjectFields([
@@ -623,57 +609,56 @@ export const resolvers = {
       'updatedAt',
       'police',
       'nature',
-    ])
+    ]),
   ),
 
   ESDocSource: objectAssign(
+    {},
     {
-    },
-    {
-      id: (doc) => {
+      id: doc => {
         return doc[DOC_ID_KEY];
       },
-      validation: (doc) => {
+      validation: doc => {
         const validation_date = doc.validation_date;
         const validation_amount = doc.validation_amount;
         const validation_user = doc.validation_user;
 
         if (validation_user) {
           return {
-            date   : validation_date   || null,
-            amount : validation_amount || null,
-            user   : validation_user,
-          }
+            date: validation_date || null,
+            amount: validation_amount || null,
+            user: validation_user,
+          };
         }
         return null;
       },
-      paymentInfo: (doc) => {
-        const payment_date   = doc.payment_date;
+      paymentInfo: doc => {
+        const payment_date = doc.payment_date;
         const payment_amount = doc.payment_amount;
-        const payment_user   = doc.payment_user;
-        const payment_meta   = doc.payment_meta;
+        const payment_user = doc.payment_user;
+        const payment_meta = doc.payment_meta;
 
         if (payment_date && payment_amount && payment_user) {
           return {
-            date   : payment_date,
-            amount : payment_amount || null,
-            user   : payment_user,
-            meta   : payment_meta || {},
+            date: payment_date,
+            amount: payment_amount || null,
+            user: payment_user,
+            meta: payment_meta || {},
           };
         }
 
         return null;
       },
-      closure: (doc) => {
-        const closure_date  = doc.closure_date;
+      closure: doc => {
+        const closure_date = doc.closure_date;
         const closure_state = doc.closure_state;
-        const closure_user  = doc.closure_user;
+        const closure_user = doc.closure_user;
 
         if (closure_date && closure_state && closure_user) {
           return {
-            date  : closure_date,
-            state : closure_state,
-            user  : closure_user,
+            date: closure_date,
+            state: closure_state,
+            user: closure_user,
           };
         }
 
@@ -688,7 +673,7 @@ export const resolvers = {
           ret = doc[`lastModified_${context.user.id}`] || doc.lastModified;
         }
 
-        return typeof ret !== 'undefined' ? ret :  null;
+        return typeof ret !== 'undefined' ? ret : null;
       },
     },
     parseGraphqlScalarFields([
@@ -707,150 +692,79 @@ export const resolvers = {
 
       'police',
       'nature',
-    ])
+    ]),
   ),
 
-  ESDoc: objectAssign(
-    {
-      highlight(_source, {}, {}) {
-        return Object.keys(_source.highlight || {});
-      },
+  ESDoc: objectAssign({
+    highlight(_source, {}, {}) {
+      return Object.keys(_source.highlight || {});
     },
-  ),
+  }),
 
   AddDocResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'errors',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'errors', 'error']),
   ),
 
   PurgeDocResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['error']),
   ),
 
   DelOrRestoreDocResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   SetOrDelPayResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   SetOrDelDTValidationResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   SetOrDelMTRapportsResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   DocObservationsResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-    ]),
-    parseGraphqlScalarFields([
-      'items',
-      'prevCursor',
-      'cursor',
-    ])
+    {},
+    parseGraphqlObjectFields([]),
+    parseGraphqlScalarFields(['items', 'prevCursor', 'cursor']),
   ),
 
   UploadFileResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-      'file',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc', 'file']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   DelOrRestoreFileResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-      'file',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc', 'file']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   SetManagerResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-      'manager',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc', 'manager']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   SetStateResponse: objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'doc',
-    ]),
-    parseGraphqlScalarFields([
-      'activities',
-      'error',
-    ])
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
   ),
 
   Mutation: {
@@ -874,58 +788,55 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED }, errors: {} };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+          errors: {},
+        };
       }
 
       if (userHasRoleAny(context.user, Role_ADMINISTRATORS, Role_MANAGERS)) {
-
-        function getUser({
-          key,
-          id,
-          displayName,
-          email,
-        }) {
-
+        function getUser({ key, id, displayName, email }) {
           if (key === 'id') {
             return { key, id };
           }
 
           // if (key === 'userData') {
-          return { key : 'userData', userData : {displayName, email} };
+          return { key: 'userData', userData: { displayName, email } };
           // }
 
           // throw new Error(`addDoc: Invalid user entry`);
         }
 
         const data = {
-          dateMission : payload.dateMission,
-          date        : payload.date,
+          dateMission: payload.dateMission,
+          date: payload.date,
 
-          company     : payload.company,
+          company: payload.company,
 
-          vehicle : {
-            manufacturer  : payload.vehicleManufacturer,
-            model         : payload.vehicleModel,
-            plateNumber   : payload.vehiclePlateNumber,
-            series        : payload.vehicleSeries,
-            mileage       : payload.vehicleMileage,
-            DMC           : payload.vehicleDMC,
-            energy        : payload.vehicleEnergy,
-            power         : payload.vehiclePower,
+          vehicle: {
+            manufacturer: payload.vehicleManufacturer,
+            model: payload.vehicleModel,
+            plateNumber: payload.vehiclePlateNumber,
+            series: payload.vehicleSeries,
+            mileage: payload.vehicleMileage,
+            DMC: payload.vehicleDMC,
+            energy: payload.vehicleEnergy,
+            power: payload.vehiclePower,
           },
 
-          client : getUser({
-            key         : payload.clientKey,
-            id          : payload.clientId,
-            displayName : payload.clientDisplayName,
-            email       : payload.clientEmail,
+          client: getUser({
+            key: payload.clientKey,
+            id: payload.clientId,
+            displayName: payload.clientDisplayName,
+            email: payload.clientEmail,
           }),
 
-          agent : getUser({
-            key         : payload.agentKey,
-            id          : payload.agentId,
-            displayName : payload.agentDisplayName,
-            email       : payload.agentEmail,
+          agent: getUser({
+            key: payload.agentKey,
+            id: payload.agentId,
+            displayName: payload.agentDisplayName,
+            email: payload.agentEmail,
           }),
         };
 
@@ -935,7 +846,11 @@ export const resolvers = {
         return { doc, activities, errors: {} };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED }, errors: {} };
+      return {
+        activities: [],
+        error: { code: codes.ERROR_NOT_AUTHORIZED },
+        errors: {},
+      };
     },
     async delDoc(_, { id }, context) {
       if (!context.user) {
@@ -943,11 +858,14 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       const { doc, activities } = await context.Docs.delDoc(id);
@@ -961,11 +879,14 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       const { doc, activities } = await context.Docs.restoreDoc(id);
@@ -979,17 +900,23 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       if (userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        const { doc, manager: user, activities } = await context.Docs.setManager(id, manager);
+        const { doc, manager: user, activities } = await context.Docs.setManager(
+          id,
+          manager,
+        );
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
-        return { doc, manager : user, activities };
+        return { doc, manager: user, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async setDTValidation(_, { id, info }, context) {
       if (!context.user) {
@@ -1005,23 +932,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.setDTValidation(id, info);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async delDTValidation(_, { id }, context) {
       if (!context.user) {
@@ -1031,23 +964,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.delDTValidation(id);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async setMTRapports(_, { id, info }, context) {
       if (!context.user) {
@@ -1063,23 +1002,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.setMTRapports(id, info);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async delMTRapports(_, { id }, context) {
       if (!context.user) {
@@ -1089,23 +1034,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.delMTRapports(id);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async setPay(_, { id, info }, context) {
       if (!context.user) {
@@ -1121,23 +1072,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.setPay(id, info);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async delPay(_, { id }, context) {
       if (!context.user) {
@@ -1147,23 +1104,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.delPay(id);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async setState(_, { id, state }, context) {
       if (!context.user) {
@@ -1173,23 +1136,29 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         const { doc, activities } = await context.Docs.setState(id, state);
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async closeDoc(_, { id, info }, context) {
       if (!context.user) {
@@ -1205,7 +1174,7 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
@@ -1219,12 +1188,21 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         if (!await isDocOpen(id)) {
-          return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+          return {
+            activities: [],
+            error: { code: codes.ERROR_ILLEGAL_OPERATION },
+          };
         }
 
         const { doc, activities } = await context.Docs.closeDoc(id, info);
@@ -1233,7 +1211,7 @@ export const resolvers = {
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async cancelDoc(_, { id }, context) {
       if (!context.user) {
@@ -1243,7 +1221,7 @@ export const resolvers = {
       async function isDocManager(user, id) {
         const doc = await context.Docs.get(id);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === user.id);
+          return doc.has('manager') && doc.get('manager').id === user.id;
         }
         return false;
       }
@@ -1257,12 +1235,21 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS) || await isDocManager(request.user, id)) {
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
         if (!await isDocOpen(id)) {
-          return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+          return {
+            activities: [],
+            error: { code: codes.ERROR_ILLEGAL_OPERATION },
+          };
         }
 
         const { doc, activities } = await context.Docs.cancelDoc(id);
@@ -1271,7 +1258,7 @@ export const resolvers = {
         return { doc, activities };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async uploadFile(_, { docId, category, metadata }, context) {
       if (!context.user) {
@@ -1279,27 +1266,35 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       async function isManager() {
         const doc = await context.Docs.get(docId);
         if (doc) {
-          return doc.has('manager') && (doc.get('manager').id === context.user.id);
+          return doc.has('manager') && doc.get('manager').id === context.user.id;
         }
         return false;
       }
 
-      if (userHasRoleAll(context.user, Role_ADMINISTRATORS)
-        || (userHasRoleAll(context.user, Role_MANAGERS) && await isManager())) {
-
-        const { file, activities } = await context.Docs.uploadFile({ docId, category, metadata });
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (userHasRoleAll(context.user, Role_MANAGERS) && (await isManager()))
+      ) {
+        const { file, activities } = await context.Docs.uploadFile({
+          docId,
+          category,
+          metadata,
+        });
         // publish subscription notification
         // pubsub.publish('uploadFileChannel', file);
         return { file, activities, errors: {} };
       }
 
-      return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
     async delFile(_, { id }, context) {
       if (!context.user) {
@@ -1307,7 +1302,10 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       async function isManager() {
@@ -1315,7 +1313,9 @@ export const resolvers = {
         if (file) {
           const doc = await context.Docs.get(file.get('document').id);
           if (doc) {
-            return doc.has('manager') && (doc.get('manager').id === context.user.id);
+            return (
+              doc.has('manager') && doc.get('manager').id === context.user.id
+            );
           }
         }
         return false;
@@ -1326,15 +1326,21 @@ export const resolvers = {
         if (file) {
           const doc = await context.Docs.get(file.get('document').id);
           if (doc) {
-            return !doc.has('deletion_date') && (doc.get('state') === 'OPEN');
+            return !doc.has('deletion_date') && doc.get('state') === 'OPEN';
           }
         }
         return false;
       }
 
-      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
-        && !(userHasRoleAll(context.user, Role_MANAGERS) && !await isValid() && !await isManager())) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      if (
+        !userHasRoleAll(context.user, Role_ADMINISTRATORS) &&
+        !(
+          userHasRoleAll(context.user, Role_MANAGERS) &&
+          !await isValid() &&
+          !await isManager()
+        )
+      ) {
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       const { file, activities } = await context.Docs.delFile(id);
@@ -1348,7 +1354,10 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       async function isManager() {
@@ -1356,15 +1365,19 @@ export const resolvers = {
         if (file) {
           const doc = await context.Docs.get(file.get('document').id);
           if (doc) {
-            return doc.has('manager') && (doc.get('manager').id === context.user.id);
+            return (
+              doc.has('manager') && doc.get('manager').id === context.user.id
+            );
           }
         }
         return false;
       }
 
-      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)
-        && !(userHasRoleAll(context.user, Role_MANAGERS) && !await isManager())) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      if (
+        !userHasRoleAll(context.user, Role_ADMINISTRATORS) &&
+        !(userHasRoleAll(context.user, Role_MANAGERS) && !await isManager())
+      ) {
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       const { file, activities } = await context.Docs.restoreFile(id);
@@ -1378,104 +1391,115 @@ export const resolvers = {
     getDoc(obj, { id }, context) {
       return context.Docs.get(id);
     },
-      getFile(obj, { id }, context) {
-        return context.Docs.getFile(id);
-      },
-      getDocs(obj, { query }, context, info) {
-        const topLevelFields = Object.keys(graphqlFields(info));
-        return context.Docs.getDocs(query, topLevelFields);
-      },
-      // usersByRoles(obj, { queryString, roles }, context) {
-      //   return context.Docs.searchUsersByRoles(queryString, roles);
-      // },
+    getFile(obj, { id }, context) {
+      return context.Docs.getFile(id);
+    },
+    getDocs(obj, { query }, context, info) {
+      const topLevelFields = Object.keys(graphqlFields(info));
+      return context.Docs.getDocs(query, topLevelFields);
+    },
+    // usersByRoles(obj, { queryString, roles }, context) {
+    //   return context.Docs.searchUsersByRoles(queryString, roles);
+    // },
 
-      esUsersByRoles(obj, { queryString, roles }, context) {
-        return context.Docs.esSearchUsersByRoles(queryString, roles);
-      },
-      esSearchDocs(obj, { queryString, state }, context) {
-        return context.Docs.esSearchDocs(queryString, state);
-      },
-      esQueryDocs(obj, { query }, context) {
-        return context.Docs.esQueryDocs(query);
-      },
+    esUsersByRoles(obj, { queryString, roles }, context) {
+      return context.Docs.esSearchUsersByRoles(queryString, roles);
+    },
+    esSearchDocs(obj, { queryString, state }, context) {
+      return context.Docs.esSearchDocs(queryString, state);
+    },
+    esQueryDocs(obj, { query }, context) {
+      return context.Docs.esQueryDocs(query);
+    },
 
-      // pendingDashboard(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
-      //   const selectionSet = Object.keys(graphqlFields(info));
-      //   return context.Docs.pendingDashboard(
-      //     durationInDays,
-      //     cursor,
-      //     sortConfig,
-      //     selectionSet,
-      //     context.Now,
-      //   );
-      // },
-      openDashboard(_, { durationInDays, cursor = 0, sortConfig, validOnly }, context, info) {
-        const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.openDashboard(
-          durationInDays,
-          cursor,
-          sortConfig,
-          selectionSet,
-          validOnly,
-          context.Now,
-        );
-      },
-      // closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
-      //   const selectionSet = Object.keys(graphqlFields(info));
-      //   return context.Docs.closedDashboard(
-      //     durationInDays,
-      //     cursor,
-      //     sortConfig,
-      //     selectionSet,
-      //     includeCanceled,
-      //     context.Now,
-      //   );
-      // },
+    openDashboard(
+      _,
+      { durationInDays, cursor = 0, sortConfig, validOnly },
+      context,
+      info,
+    ) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.openDashboard(
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        validOnly,
+        context.Now,
+      );
+    },
+    // closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
+    //   const selectionSet = Object.keys(graphqlFields(info));
+    //   return context.Docs.closedDashboard(
+    //     durationInDays,
+    //     cursor,
+    //     sortConfig,
+    //     selectionSet,
+    //     includeCanceled,
+    //     context.Now,
+    //   );
+    // },
 
-      recentDocs(_, {}, context) {
-        return context.Docs.recent();
-      },
+    recentDocs(_, {}, context) {
+      return context.Docs.recent();
+    },
 
-      dashboard(_, {}, context, info) {
-        const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.dashboard(selectionSet);
-      },
+    dashboard(_, {}, context, info) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.dashboard(selectionSet);
+    },
 
-      getLastRefNo(_, { now }, context) {
-        return context.Business.getLastRefNo(now);
-      },
+    getLastRefNo(_, { now }, context) {
+      return context.Business.getLastRefNo(now);
+    },
 
-      getDocFiles(_, { id }, context) {
-        return context.Docs.getDocFiles(id);
-      },
+    getDocFiles(_, { id }, context) {
+      return context.Docs.getDocFiles(id);
+    },
 
-      isDocValid(_, { id }, context) {
-        return context.Docs.isDocValid(id);
-      },
-      getInvalidDocs(_, { category, durationInDays, cursor = 0, sortConfig }, context, info) {
-        const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.getInvalidDocs({ category, durationInDays, cursor, sortConfig, selectionSet, now : context.Now });
-      },
-      getUnpaidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
-        const selectionSet = Object.keys(graphqlFields(info));
-        return context.Docs.getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now : context.Now });
-      },
+    isDocValid(_, { id }, context) {
+      return context.Docs.isDocValid(id);
+    },
+    getInvalidDocs(
+      _,
+      { category, durationInDays, cursor = 0, sortConfig },
+      context,
+      info,
+    ) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.getInvalidDocs({
+        category,
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        now: context.Now,
+      });
+    },
+    getUnpaidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
+      const selectionSet = Object.keys(graphqlFields(info));
+      return context.Docs.getUnpaidDocs({
+        durationInDays,
+        cursor,
+        sortConfig,
+        selectionSet,
+        now: context.Now,
+      });
+    },
 
-      getDocObservations(_, { id, cursor }, context) {
-        return context.Docs.getDocObservations({ id, cursor });
-      },
+    getDocObservations(_, { id, cursor }, context) {
+      return context.Docs.getDocObservations({ id, cursor });
+    },
 
-      searchVehicles(_, { queryString }, context) {
-        return context.Docs.searchVehicles(queryString);
-      },
-      vehicleByPlateNumber(_, { plateNumber }, context) {
-        return context.Docs.vehicleByPlateNumber(plateNumber);
-      },
+    searchVehicles(_, { queryString }, context) {
+      return context.Docs.searchVehicles(queryString);
+    },
+    vehicleByPlateNumber(_, { plateNumber }, context) {
+      return context.Docs.vehicleByPlateNumber(plateNumber);
+    },
 
-      queryCompanies(_, { queryString }, context) {
-        return context.Docs.queryCompanies(queryString);
-      },
-
+    queryCompanies(_, { queryString }, context) {
+      return context.Docs.queryCompanies(queryString);
+    },
   },
-
 };

@@ -1,16 +1,10 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import objectAssign from 'object-assign';
 import transitions from '../styles/transitions';
 
 function getStyles(props) {
-  const {
-    muiTheme: {
-      textField: {
-        hintColor,
-      },
-    },
-    show,
-  } = props;
+  const { muiTheme: { textField: { hintColor } }, show } = props;
 
   return {
     root: {
@@ -23,14 +17,8 @@ function getStyles(props) {
   };
 }
 
-const TextFieldHint = (props) => {
-  const {
-    muiTheme: {
-      prepareStyles,
-    },
-    style,
-    text,
-  } = props;
+const TextFieldHint = props => {
+  const { muiTheme: { prepareStyles }, style, text } = props;
 
   const styles = getStyles(props);
 
@@ -46,19 +34,19 @@ TextFieldHint.propTypes = {
    * @ignore
    * The material-ui theme applied to this component.
    */
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: T.object.isRequired,
   /**
    * True if the hint text should be visible.
    */
-  show: PropTypes.bool,
+  show: T.bool,
   /**
    * Override the inline-styles of the root element.
    */
-  style: PropTypes.object,
+  style: T.object,
   /**
    * The hint text displayed.
    */
-  text: PropTypes.node,
+  text: T.node,
 };
 
 TextFieldHint.defaultProps = {
@@ -66,4 +54,3 @@ TextFieldHint.defaultProps = {
 };
 
 export default TextFieldHint;
-

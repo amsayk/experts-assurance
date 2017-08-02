@@ -1,6 +1,7 @@
-import React, { PropTypes as T } from 'react'
-import {compose} from 'redux';
-import {connect} from 'react-redux';
+import React from 'react';
+import T from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 import { withApollo } from 'react-apollo';
 
@@ -38,20 +39,20 @@ import Title from './Title';
 import Actions from './Actions';
 
 const styles = {
-  body : {
+  body: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '0 2.25rem',
   },
-  wrapper : {
+  wrapper: {
     position: 'relative',
     zIndex: 1077,
     height: '100%',
     width: '100%',
     overflowY: 'auto',
   },
-  confirmToastr : {},
+  confirmToastr: {},
 };
 
 // const CONFIRM_MSG = <div style={style.confirmToastr}>
@@ -65,28 +66,27 @@ class FormWrapper extends React.Component {
   static displayName = 'CloseDocFormWrapper';
 
   static contextTypes = {
-    store : T.object.isRequired,
+    store: T.object.isRequired,
     snackbar: T.shape({
       show: T.func.isRequired,
     }),
   };
 
   static propTypes = {
-    client          : T.shape({
+    client: T.shape({
       mutate: T.func.isRequired,
     }),
-
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onTransitionEnd = this.onTransitionEnd.bind(this);
 
     this.state = {
-      show : props.closingDoc,
+      show: props.closingDoc,
     };
   }
   onTransitionEnd() {
@@ -104,12 +104,12 @@ class FormWrapper extends React.Component {
         setTimeout(() => {
           raf(() => {
             self.props.closePortal();
-          })
+          });
         }, 0);
       };
 
       self.setState({
-        show : false,
+        show: false,
       });
     }
 
@@ -124,11 +124,11 @@ class FormWrapper extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.show === true && nextProps.closingDoc === false) {
       this.setState({
-        show : false,
+        show: false,
       });
     } else if (this.state.show === false && nextProps.closingDoc === true) {
       this.setState({
-        show : true,
+        show: true,
       });
     }
   }
@@ -144,22 +144,18 @@ class FormWrapper extends React.Component {
 
     const { closePortal, doc } = self.props;
 
-    async function undoClosure() {
+    async function undoClosure() {}
 
-    }
-
-    function retry() {
-
-    }
+    function retry() {}
 
     function onError(errorText) {
       self.context.snackbar.show({
-        message   : errorText,
-        persist   : true,
-        closeable : true,
-        action    : {
-          title : 'Réessayer',
-          click : function () {
+        message: errorText,
+        persist: true,
+        closeable: true,
+        action: {
+          title: 'Réessayer',
+          click: function() {
             this.dismiss();
             setTimeout(() => {
               raf(() => {
@@ -172,39 +168,30 @@ class FormWrapper extends React.Component {
     }
 
     const info = {
-      dateClosure       : data.get('dateClosure'),
-      mtRapports        : data.get('mtRapports'),
+      dateClosure: data.get('dateClosure'),
+      mtRapports: data.get('mtRapports'),
       // dateValidation    : data.get('dateValidation'),
-      paymentAmount     : data.get('paymentAmount'),
-      paymentDate       : data.get('paymentDate'),
+      paymentAmount: data.get('paymentAmount'),
+      paymentDate: data.get('paymentDate'),
     };
 
-    const { data: { closeDoc: { errors, error } } } = await self.props.client.mutate({
-      refetchQueries : ['getDoc', 'unpaidDocs', 'getTimeline'],
-      mutation  : MUTATION,
-      variables : { id : doc.id, info },
-      updateQueries : {
+    const {
+      data: { closeDoc: { errors, error } },
+    } = await self.props.client.mutate({
+      refetchQueries: ['getDoc', 'unpaidDocs', 'getTimeline'],
+      mutation: MUTATION,
+      variables: { id: doc.id, info },
+      updateQueries: {
         dashboard(prev, { mutationResult }) {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc) {
-            // if (newDoc.state === 'PENDING') {
-            //   return {
-            //     dashboard : {
-            //       ...prev.dashboard,
-            //       pending : {
-            //         count : prev.dashboard.pending.count - 1,
-            //       },
-            //     },
-            //   };
-            // }
-
             if (newDoc.state === 'OPEN') {
               return {
-                dashboard : {
+                dashboard: {
                   ...prev.dashboard,
-                  open : {
-                    count : prev.dashboard.open.count - 1,
+                  open: {
+                    count: prev.dashboard.open.count - 1,
                   },
                 },
               };
@@ -212,10 +199,10 @@ class FormWrapper extends React.Component {
 
             if (newDoc.state === 'CLOSED') {
               return {
-                dashboard : {
+                dashboard: {
                   ...prev.dashboard,
-                  closed : {
-                    count : prev.dashboard.closed.count - 1,
+                  closed: {
+                    count: prev.dashboard.closed.count - 1,
                   },
                 },
               };
@@ -223,81 +210,35 @@ class FormWrapper extends React.Component {
 
             if (newDoc.state === 'CANCELED') {
               return {
-                dashboard : {
+                dashboard: {
                   ...prev.dashboard,
-                  canceled : {
-                    count : prev.dashboard.canceled.count - 1,
+                  canceled: {
+                    count: prev.dashboard.canceled.count - 1,
                   },
                 },
               };
             }
-
           }
 
           return prev;
         },
-        // pendingDocs(prev, { mutationResult, queryVariables }) {
-        //   const newDoc = isDeletion
-        //     ? mutationResult.data.delDoc.doc
-        //     : mutationResult.data.restoreDoc.doc;
-        //
-        //   if (prev && newDoc && newDoc.state === 'PENDING') {
-        //     const index = arrayFindIndex(prev.pendingDashboard.docs, (id) => newDoc.id === id);
-        //     const docs = index !== -1
-        //       ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-        //       : [
-        //         ...prev.pendingDashboard.docs
-        //       ];
-        //
-        //     return {
-        //       pendingDashboard : {
-        //         length : prev.pendingDashboard.length - 1,
-        //         cursor : prev.pendingDashboard.cursor - 1,
-        //         docs,
-        //       },
-        //     };
-        //   }
-        //
-        //   return prev;
-        // },
-        // morePendingDocs(prev, { mutationResult, queryVariables }) {
-        //   const newDoc = isDeletion
-        //     ? mutationResult.data.delDoc.doc
-        //     : mutationResult.data.restoreDoc.doc;
-        //
-        //   if (prev && newDoc && newDoc.state === 'PENDING') {
-        //     const index = arrayFindIndex(prev.pendingDashboard.docs, (id) => newDoc.id === id);
-        //     const docs = index !== -1
-        //       ? prev.pendingDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-        //       : [
-        //         ...prev.pendingDashboard.docs
-        //       ];
-        //
-        //     return {
-        //       pendingDashboard : {
-        //         cursor : prev.pendingDashboard.cursor - 1,
-        //         docs,
-        //       },
-        //     };
-        //   }
-        //
-        //   return prev;
-        // },
         openDocs(prev, { mutationResult, queryVariables }) {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc && newDoc.state === 'OPEN') {
-            const index = arrayFindIndex(prev.openDashboard.docs, (id) => newDoc.id === id);
-            const docs = index !== -1
-              ? prev.openDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-              : [
-                ...prev.openDashboard.docs
-              ];
+            const index = arrayFindIndex(
+              prev.openDashboard.docs,
+              id => newDoc.id === id,
+            );
+            const docs =
+              index !== -1
+                ? prev.openDashboard.docs.filter(doc => doc.id !== newDoc.id)
+                : [...prev.openDashboard.docs];
 
             return {
-              openDashboard : {
-                length : prev.openDashboard.length - 1,
-                cursor : prev.openDashboard.cursor - 1,
+              openDashboard: {
+                length: prev.openDashboard.length - 1,
+                cursor: prev.openDashboard.cursor - 1,
                 docs,
               },
             };
@@ -309,16 +250,18 @@ class FormWrapper extends React.Component {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc && newDoc.state === 'OPEN') {
-            const index = arrayFindIndex(prev.openDashboard.docs, (id) => newDoc.id === id);
-            const docs = index !== -1
-              ? prev.openDashboard.docs.filter((doc) => doc.id !== newDoc.id)
-              : [
-                ...prev.openDashboard.docs
-              ];
+            const index = arrayFindIndex(
+              prev.openDashboard.docs,
+              id => newDoc.id === id,
+            );
+            const docs =
+              index !== -1
+                ? prev.openDashboard.docs.filter(doc => doc.id !== newDoc.id)
+                : [...prev.openDashboard.docs];
 
             return {
-              openDashboard : {
-                cursor : prev.openDashboard.cursor - 1,
+              openDashboard: {
+                cursor: prev.openDashboard.cursor - 1,
                 docs,
               },
             };
@@ -377,17 +320,16 @@ class FormWrapper extends React.Component {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc) {
-            const index = arrayFindIndex(prev.recentDocs, (id) => newDoc.id === id);
-            const recentDocs = index !== -1
-              ? prev.recentDocs.filter((doc) => doc.id !== newDoc.id)
-              : [
-                ...prev.recentDocs
-              ];
+            const index = arrayFindIndex(
+              prev.recentDocs,
+              id => newDoc.id === id,
+            );
+            const recentDocs =
+              index !== -1
+                ? prev.recentDocs.filter(doc => doc.id !== newDoc.id)
+                : [...prev.recentDocs];
             return {
-              recentDocs : [
-                newDoc,
-                ...recentDocs,
-              ],
+              recentDocs: [newDoc, ...recentDocs],
             };
           }
 
@@ -422,17 +364,19 @@ class FormWrapper extends React.Component {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc) {
-            const index = arrayFindIndex(prev.getDocs.docs, (id) => newDoc.id === id);
-            const docs = index !== -1
-              ? prev.getDocs.docs.filter((doc) => doc.id !== newDoc.id)
-              : [
-                ...prev.getDocs.docs
-              ];
+            const index = arrayFindIndex(
+              prev.getDocs.docs,
+              id => newDoc.id === id,
+            );
+            const docs =
+              index !== -1
+                ? prev.getDocs.docs.filter(doc => doc.id !== newDoc.id)
+                : [...prev.getDocs.docs];
 
             return {
-              getDocs : {
-                cursor : prev.getDocs.cursor - 1,
-                length : prev.getDocs.length - 1,
+              getDocs: {
+                cursor: prev.getDocs.cursor - 1,
+                length: prev.getDocs.length - 1,
                 docs,
               },
             };
@@ -444,16 +388,18 @@ class FormWrapper extends React.Component {
           const newDoc = mutationResult.data.closeDoc.doc;
 
           if (prev && newDoc) {
-            const index = arrayFindIndex(prev.getDocs.docs, (id) => newDoc.id === id);
-            const docs = index !== -1
-              ? prev.getDocs.docs.filter((doc) => doc.id !== newDoc.id)
-              : [
-                ...prev.getDocs.docs
-              ];
+            const index = arrayFindIndex(
+              prev.getDocs.docs,
+              id => newDoc.id === id,
+            );
+            const docs =
+              index !== -1
+                ? prev.getDocs.docs.filter(doc => doc.id !== newDoc.id)
+                : [...prev.getDocs.docs];
 
             return {
-              getDocs : {
-                cursor : prev.getDocs.cursor - 1,
+              getDocs: {
+                cursor: prev.getDocs.cursor - 1,
                 docs,
               },
             };
@@ -473,11 +419,11 @@ class FormWrapper extends React.Component {
         case codes.ERROR_ACCOUNT_NOT_VERIFIED:
         case codes.ERROR_NOT_AUTHORIZED:
           throw new SubmissionError({
-            _error : `Vous n'êtes pas authorisé`,
+            _error: `Vous n'êtes pas authorisé`,
           });
         default:
           throw new SubmissionError({
-            _error : 'Erreur inconnu, veuillez réessayer à nouveau.',
+            _error: 'Erreur inconnu, veuillez réessayer à nouveau.',
           });
       }
     } else {
@@ -487,8 +433,8 @@ class FormWrapper extends React.Component {
       const { snackbar } = self.context;
       if (snackbar) {
         snackbar.show({
-          message  : 'Succès',
-          duration : 7 * 1000,
+          message: 'Succès',
+          duration: 7 * 1000,
           // action   : {
           //   title : 'Annuler la clôture',
           //   click : function () {
@@ -503,44 +449,49 @@ class FormWrapper extends React.Component {
         });
       }
     }
-
   }
   render() {
     const { closingDoc, ...props } = this.props;
 
     return (
-      <Zoom onTransitionEnd={this.onTransitionEnd} in={this.state.show} timeout={75} transitionAppear>
+      <Zoom
+        onTransitionEnd={this.onTransitionEnd}
+        in={this.state.show}
+        timeout={75}
+        transitionAppear
+      >
         <div className={style.closeDocFormWrapper}>
-          <div className={style.closeDocFormMask}></div>
+          <div className={style.closeDocFormMask} />
           <div style={styles.wrapper}>
             <div className={style.closeDocFormInner}>
               <div className={style.closeDocForm}>
-                <Title doc={props.doc}/>
-                {closingDoc ? <Form {...props} onSubmit={this.onSubmit} /> : null}
+                <Title doc={props.doc} />
+                {closingDoc
+                  ? <Form {...props} onSubmit={this.onSubmit} />
+                  : null}
               </div>
             </div>
             <Actions />
           </div>
           <div className={style.closeDocFormClose}>
-            <Button onClick={this.onClose} className={style.closeDocFormCloseButton} role='button'>
+            <Button
+              onClick={this.onClose}
+              className={style.closeDocFormCloseButton}
+              role='button'
+            >
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <CloseIcon size={24}/>
+                <CloseIcon size={24} />
               </div>
             </Button>
           </div>
         </div>
       </Zoom>
     );
-
   }
 }
 
-const Connect = connect((state) => ({
-  dirty : isDirty('closeDoc')(state),
+const Connect = connect(state => ({
+  dirty: isDirty('closeDoc')(state),
 }));
 
-export default compose(
-  withApollo,
-  Connect,
-)(FormWrapper);
-
+export default compose(withApollo, Connect)(FormWrapper);

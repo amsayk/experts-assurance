@@ -3,6 +3,11 @@
     "index.mapping.total_fields.limit": 10000,
     "analysis": {
       "filter": {
+        "ngram_filter": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 8
+        },
         "email": {
           "type": "pattern_capture",
           "preserve_original": 1,
@@ -27,6 +32,16 @@
         }
       },
       "analyzer": {
+        "index_ngram": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": [ "ngram_filter", "lowercase" ]
+        },
+        "search_ngram": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": "lowercase"
+        },
         "email": {
           "tokenizer": "uax_url_email",
           "filter": [
@@ -59,13 +74,13 @@
     "person": {
       "properties": {
         "name": {
-          "type": "string",
+          "type": "text",
           "index_options": "offsets",
-          "analyzer": "nGram_analyzer",
-          "search_analyzer": "whitespace_analyzer"
+          "analyzer":"index_ngram",
+          "search_analyzer":"search_ngram"
         },
         "email": {
-          "type": "string",
+          "type": "text",
           "index_options": "offsets",
           "analyzer": "email"
         },
@@ -73,7 +88,7 @@
           "type": "keyword"
         },
         "type": {
-          "type": "string",
+          "type": "text",
           "index": "not_analyzed"
         },
         "isAdmin": {
@@ -90,86 +105,86 @@
     "doc": {
       "properties": {
         "refNo": {
-          "type": "string",
+          "type": "text",
           "index_options": "offsets",
           "analyzer": "nGram_analyzer",
           "search_analyzer": "whitespace_analyzer",
           "fielddata": true
         },
         "state": {
-          "type": "string",
+          "type": "text",
           "index": "not_analyzed"
         },
         "company": {
-          "type": "string",
+          "type": "text",
           "index_options": "offsets",
-          "analyzer": "nGram_analyzer",
-          "search_analyzer": "whitespace_analyzer",
+          "analyzer":"index_ngram",
+          "search_analyzer":"search_ngram",
           "fielddata": true
         },
         "vehicle": {
           "properties": {
             "manufacturer": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "model": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "plateNumber": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "series": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "mileage": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "DMC": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "energy": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             },
             "power": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
 
             }
@@ -181,21 +196,21 @@
               "type": "keyword"
             },
             "type": {
-              "type": "string",
+              "type": "text",
               "index": "not_analyzed"
             },
             "isAdmin": {
               "type": "boolean"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
@@ -207,14 +222,14 @@
               "type": "keyword"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
@@ -226,14 +241,14 @@
               "type": "keyword"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
@@ -245,21 +260,21 @@
               "type": "keyword"
             },
             "type": {
-              "type": "string",
+              "type": "text",
               "index": "not_analyzed"
             },
             "isAdmin": {
               "type": "boolean"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
@@ -277,21 +292,21 @@
               "type": "keyword"
             },
             "type": {
-              "type": "string",
+              "type": "text",
               "index": "not_analyzed"
             },
             "isAdmin": {
               "type": "boolean"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
@@ -303,28 +318,28 @@
               "type": "keyword"
             },
             "type": {
-              "type": "string",
+              "type": "text",
               "index": "not_analyzed"
             },
             "isAdmin": {
               "type": "boolean"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }
           }
         },
         "closure_state": {
-          "type": "string",
+          "type": "text",
           "index": "not_analyzed"
         },
         "closure_user": {
@@ -333,21 +348,21 @@
               "type": "keyword"
             },
             "type": {
-              "type": "string",
+              "type": "text",
               "index": "not_analyzed"
             },
             "isAdmin": {
               "type": "boolean"
             },
             "name": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
-              "analyzer": "nGram_analyzer",
-              "search_analyzer": "whitespace_analyzer",
+              "analyzer":"index_ngram",
+              "search_analyzer":"search_ngram",
               "fielddata": true
             },
             "email": {
-              "type": "string",
+              "type": "text",
               "index_options": "offsets",
               "analyzer": "email"
             }

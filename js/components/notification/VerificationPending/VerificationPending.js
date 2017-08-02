@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router';
@@ -27,8 +28,10 @@ class VerificationPending extends React.Component {
     this.onResendEmailVerification = this.onResendEmailVerification.bind(this);
   }
   async onResendEmailVerification() {
-    const { data: { resendEmailVerification: { errors } } } = await this.props.client.mutate({
-      mutation : MUTATION,
+    const {
+      data: { resendEmailVerification: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
     });
 
     if (!isEmpty(errors)) {
@@ -45,14 +48,21 @@ class VerificationPending extends React.Component {
   render() {
     const { intl, user, className } = this.props;
     const values = {
-      email: <strong className={''}>{user.email}</strong>,
+      email: (
+        <strong className={''}>
+          {user.email}
+        </strong>
+      ),
       resendEmailVerificationLink: (
         <a onClick={this.onResendEmailVerification} className={style.resendLink}>
           {intl.formatMessage(messages.ResendVerification)}
         </a>
       ),
       changeEmail: (
-        <Link className={style.changeEmailLink} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
+        <Link
+          className={style.changeEmailLink}
+          to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}
+        >
           {intl.formatMessage(messages.ChangeEmail)}
         </Link>
       ),
@@ -75,8 +85,8 @@ VerificationPending.contextTypes = {
 };
 
 VerificationPending.propTypes = {
-  intl : intlShape.isRequired,
-  user : T.object.isRequired,
+  intl: intlShape.isRequired,
+  user: T.object.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -85,9 +95,4 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  injectIntl,
-  withApollo,
-  Connect,
-)(VerificationPending);
-
+export default compose(injectIntl, withApollo, Connect)(VerificationPending);

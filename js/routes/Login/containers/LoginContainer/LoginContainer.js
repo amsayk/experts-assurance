@@ -1,10 +1,11 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
 import cookie from 'react-cookie';
 
-import {compose, bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import selector from './selector';
 
@@ -18,14 +19,16 @@ import Title from 'components/Title';
 
 import isEmpty from 'isEmpty';
 
-import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
+import {
+  SubmissionError,
+  Field,
+  reduxForm,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
 
 import AppLogo from 'components/AppLogo';
 
-import {
-  intlShape,
-  injectIntl,
-} from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import messages from 'routes/Login/messages';
 
@@ -41,16 +44,16 @@ import {
 export class LoginContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
-    intl            : intlShape.isRequired,
-    actions         : T.shape({
-      logIn : T.func.isRequired,
+    intl: intlShape.isRequired,
+    actions: T.shape({
+      logIn: T.func.isRequired,
     }).isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit  = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.onKeyDown = this._onKeyDown.bind(this);
   }
 
@@ -67,7 +70,11 @@ export class LoginContainer extends React.Component {
 
     try {
       await actions.logIn(
-        email, /*password = */isEmpty(password) && __DEV__ ? process.env.DEV_PASSWORD : password);
+        email,
+        /*password = */ isEmpty(password) && __DEV__
+          ? process.env.DEV_PASSWORD
+          : password,
+      );
 
       if (process.env.NODE_ENV !== 'production') {
         cookie.save('app.logIn', email, { path: '/' });
@@ -81,12 +88,12 @@ export class LoginContainer extends React.Component {
   }
 
   _renderForm() {
-    const {
-      intl, error, handleSubmit, submitting,
-    } = this.props;
+    const { intl, error, handleSubmit, submitting } = this.props;
 
     return [
-      <h1 className={ style.heading }>{intl.formatMessage(messages.title, { appName: APP_NAME })}</h1>,
+      <h1 className={style.heading}>
+        {intl.formatMessage(messages.title, { appName: APP_NAME })}
+      </h1>,
 
       <Field
         name='email'
@@ -96,7 +103,8 @@ export class LoginContainer extends React.Component {
         className={style.emailFieldControl}
         autoComplete={'off'}
         onKeyDown={this.onKeyDown}
-        autoFocus />,
+        autoFocus
+      />,
 
       <Field
         name='password'
@@ -108,18 +116,23 @@ export class LoginContainer extends React.Component {
       />,
 
       <div className={style.error}>
-
-        {error && !submitting ?
-          <small className={style.formControlFeedback}>{intl.formatMessage(messages.error)}</small>
+        {error && !submitting
+          ? <small className={style.formControlFeedback}>
+              {intl.formatMessage(messages.error)}
+            </small>
           : null}
+      </div>,
 
-        </div>,
-
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting} className={style.logIn} role='button'>
+      <button
+        onClick={handleSubmit(this.onSubmit)}
+        disabled={submitting}
+        className={style.logIn}
+        role='button'
+      >
         {intl.formatMessage(messages.logIn)}
       </button>,
 
-      <div className={ style.passwordReset }>
+      <div className={style.passwordReset}>
         <Link className={style.passwordResetButton} to={PATH_PASSWORD_RESET}>
           {intl.formatMessage(messages.passwordReset)}
         </Link>
@@ -131,10 +144,12 @@ export class LoginContainer extends React.Component {
     const { intl } = this.props;
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
+        <Title
+          title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}
+        />
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
-            <AppLogo width={52} height={52}/>
+            <AppLogo width={52} height={52} />
           </Link>
           <div className={style.form}>
             {this._renderForm()}
@@ -151,13 +166,19 @@ export class LoginContainer extends React.Component {
         <footer>
           <ul>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>
+                {intl.formatMessage(messages.termsOfService)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+              <a target='_blank' href={LINK_SUPPORT}>
+                {intl.formatMessage(messages.support)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>
+                {intl.formatMessage(messages.privacyPolicy)}
+              </a>
             </li>
           </ul>
         </footer>
@@ -171,7 +192,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logIn }, dispatch)};
+  return { actions: bindActionCreators({ logIn }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
@@ -180,9 +201,4 @@ const WithForm = reduxForm({
   form: 'logIn',
 });
 
-export default compose(
-  injectIntl,
-  Connect,
-  WithForm,
-)(LoginContainer);
-
+export default compose(injectIntl, Connect, WithForm)(LoginContainer);

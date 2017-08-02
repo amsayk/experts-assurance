@@ -2,7 +2,6 @@ import React from 'react'
 
 import style from 'routes/Landing/styles';
 
-// import Pending from './Pending';
 import Open from './Open';
 import Unpaid from './Unpaid';
 import Invalid from './Invalid';
@@ -12,7 +11,6 @@ export default class Users extends React.PureComponent {
   render() {
     return (
       <div className={style.boards}>
-        {/* <Pending/> */}
         <Open/>
         <Invalid/>
         <Unpaid/>

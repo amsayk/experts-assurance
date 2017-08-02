@@ -1,5 +1,6 @@
-import React, { PropTypes as T } from 'react'
-import {compose} from 'redux';
+import React from 'react';
+import T from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 import { createSelector } from 'utils/reselect';
@@ -23,8 +24,7 @@ class Actions extends React.Component {
   static displayName = 'AddDocFormActions';
 
   static contextTypes = {
-    store : T.object.isRequired,
-
+    store: T.object.isRequired,
   };
 
   constructor() {
@@ -32,17 +32,21 @@ class Actions extends React.Component {
 
     this.onSubmit = this.onSubmit.bind(this);
   }
-  onSubmit () {
+  onSubmit() {
     this.context.store.dispatch(submit('addDoc'));
   }
   render() {
     const { hide, submitting } = this.props;
     return (
       <div className={cx(style.addDocFormActions, hide && style.hideActions)}>
-        <div>
-          Les données ont été validés avec succès.
-        </div>
-        <Button disabled={submitting} bsStyle='primary' className={style.addDocFormActions_saveButton} onClick={this.onSubmit} role='button'>
+        <div>Les données ont été validés avec succès.</div>
+        <Button
+          disabled={submitting}
+          bsStyle='primary'
+          className={style.addDocFormActions_saveButton}
+          onClick={this.onSubmit}
+          role='button'
+        >
           Créer le dossier
         </Button>
       </div>
@@ -74,7 +78,4 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  Connect,
-)(Actions);
-
+export default compose(Connect)(Actions);

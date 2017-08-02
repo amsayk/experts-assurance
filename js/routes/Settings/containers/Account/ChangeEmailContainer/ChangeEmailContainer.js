@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -24,11 +25,11 @@ import ChangeEmailForm from './ChangeEmailForm';
 function ChangeEmailContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
-      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
-      <Header onLogOut={actions.logOut}/>
+      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })} />
+      <Header onLogOut={actions.logOut} />
       {/* <div className={style.body}> */}
-        <Sidebar user={user} selectedMenuItem={'account.change_email'}/>
-        <ChangeEmailForm intl={intl} user={user}/>
+      <Sidebar user={user} selectedMenuItem={'account.change_email'} />
+      <ChangeEmailForm intl={intl} user={user} />
       {/* </div> */}
     </div>
   );
@@ -36,7 +37,6 @@ function ChangeEmailContainer({ intl, user, actions }) {
 
 ChangeEmailContainer.propTypes = {
   intl: intlShape.isRequired,
-
 };
 
 function mapStateToProps(state, props) {
@@ -44,13 +44,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(ChangeEmailContainer);
-
+export default compose(injectIntl, Connect)(ChangeEmailContainer);

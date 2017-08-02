@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router';
 
@@ -22,10 +23,7 @@ import GridHeader from './GridHeader';
 import GridItem from './GridItem';
 import Empty from './EmptyGrid';
 
-import {
-  PATH_SETTINGS_BASE,
-  PATH_SETTINGS_BUSINESS_USER,
-} from 'vars';
+import { PATH_SETTINGS_BASE, PATH_SETTINGS_BUSINESS_USER } from 'vars';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 
@@ -44,22 +42,23 @@ class Grid extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onSelect   = this.onSelect.bind(this);
-    this.onNext     = this.onNext.bind(this);
+    this.onSelect = this.onSelect.bind(this);
+    this.onNext = this.onNext.bind(this);
     this.onPrevious = this.onPrevious.bind(this);
-    this.onSpy      = this.onSpy.bind(this);
-    this.onItem     = this.onItem.bind(this);
-    this.onClose    = this.onClose.bind(this);
+    this.onSpy = this.onSpy.bind(this);
+    this.onItem = this.onItem.bind(this);
+    this.onClose = this.onClose.bind(this);
 
     this.state = {
-      spy       : !props.loading,
-      fetchMore : props.users.length < props.length,
+      spy: !props.loading,
+      fetchMore: props.users.length < props.length,
     };
   }
 
   onItem(id) {
     this.props.router.push({
-      pathname : PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id,
+      pathname:
+        PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + id,
     });
   }
 
@@ -68,19 +67,22 @@ class Grid extends React.Component {
   }
 
   onSpy() {
-    this.setState({
-      spy       : false,
-      fetchMore : true,
-    }, () => {
-      this.props.loadMoreUsers();
-    });
+    this.setState(
+      {
+        spy: false,
+        fetchMore: true,
+      },
+      () => {
+        this.props.loadMoreUsers();
+      },
+    );
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.loading === false) {
       this.setState({
-        spy       : nextProps.cursor < nextProps.length,
-        fetchMore : nextProps.cursor < nextProps.length,
+        spy: nextProps.cursor < nextProps.length,
+        fetchMore: nextProps.cursor < nextProps.length,
       });
     }
   }
@@ -90,7 +92,7 @@ class Grid extends React.Component {
       try {
         const dropdown = ReactDOM.findDOMNode(this.dropdown);
         dropdown && Scroll.setTop(dropdown, NAVBAR_HEIGHT);
-      } catch(e) {}
+      } catch (e) {}
     });
   }
 
@@ -113,7 +115,7 @@ class Grid extends React.Component {
     setSelection(activeIndex - 1);
   }
   render() {
-    const { user, loading, cursor, length, users : items, isReady } = this.props;
+    const { user, loading, cursor, length, users: items, isReady } = this.props;
 
     if (loading === false && length === 0) {
       // return (
@@ -121,8 +123,8 @@ class Grid extends React.Component {
       // );
       return (
         <div className={style.usersContainer}>
-          <Toolbar user={user} cursor={cursor} length={length}/>
-          <Empty/>
+          <Toolbar user={user} cursor={cursor} length={length} />
+          <Empty />
         </div>
       );
     }
@@ -130,36 +132,36 @@ class Grid extends React.Component {
     let scrollSpy = null;
     if (isReady && !SERVER) {
       const { spy, fetchMore } = this.state;
-      const disabled = (length < 30);
-      scrollSpy = (
-        spy ? <ScrollSpy.Spying
-          bubbles
-          fetchMore={fetchMore}
-          offset={NAVBAR_HEIGHT}
-          disabled={disabled}
-          onSpy={this.onSpy}
-        /> : <ScrollSpy.Idle
-          disabled={disabled}
-          done={length > 0 && cursor === length}
-          doneLabel='Utilisateurs chargés'
-        />
-      );
+      const disabled = length < 30;
+      scrollSpy = spy
+        ? <ScrollSpy.Spying
+            bubbles
+            fetchMore={fetchMore}
+            offset={NAVBAR_HEIGHT}
+            disabled={disabled}
+            onSpy={this.onSpy}
+          />
+        : <ScrollSpy.Idle
+            disabled={disabled}
+            done={length > 0 && cursor === length}
+            doneLabel='Utilisateurs chargés'
+          />;
     }
 
     return (
       <div className={style.usersContainer}>
-        <Toolbar user={user} cursor={cursor} length={length}/>
+        <Toolbar user={user} cursor={cursor} length={length} />
         <Dropdown
-          ref={(dropdown) => this.dropdown = dropdown}
+          ref={dropdown => (this.dropdown = dropdown)}
           defaultOpen
           onSelect={this.onSelect}
           onNext={this.onNext}
           onPrevious={this.onPrevious}
           className={style.listContainer}
         >
-          <GridHeader/>
+          <GridHeader />
           <Dropdown.Menu className={style.gridItemsWrapper}>
-            {items.map((item, index) => (
+            {items.map((item, index) =>
               <MenuItem
                 key={item.id}
                 componentClass={GridItem}
@@ -167,8 +169,8 @@ class Grid extends React.Component {
                 index={index}
                 item={item}
                 onItem={this.onItem}
-              />
-            ))}
+              />,
+            )}
             {scrollSpy}
           </Dropdown.Menu>
         </Dropdown>
@@ -178,15 +180,17 @@ class Grid extends React.Component {
 }
 
 Grid.propTypes = {
-  cursor : T.number,
-  length : T.number,
-  loading : T.bool.isRequired,
-  users : T.arrayOf(T.shape({
-    id : T.string.isRequired,
-  })).isRequired,
-  loadMoreUsers : T.func.isRequired,
-  router     : T.shape({
-    push : T.func.isRequired,
+  cursor: T.number,
+  length: T.number,
+  loading: T.bool.isRequired,
+  users: T.arrayOf(
+    T.shape({
+      id: T.string.isRequired,
+    }),
+  ).isRequired,
+  loadMoreUsers: T.func.isRequired,
+  router: T.shape({
+    push: T.func.isRequired,
   }).isRequired,
 };
 
@@ -196,18 +200,16 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      setSelection,
-      addToSelection,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        setSelection,
+        addToSelection,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  withRouter,
-  Connect,
-  DataLoader.users,
-)(Grid);
-
+export default compose(withRouter, Connect, DataLoader.users)(Grid);

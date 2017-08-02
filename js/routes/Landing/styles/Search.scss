@@ -59,28 +59,36 @@
 
 .clearSearch {
   padding-left: 0.6rem;
+  padding-right: 0.6rem;
+
+  & + .toggleAdvancedMode {
+    padding-right: 0;
+  }
 }
 
 .toggleAdvancedMode {
   visibility: hidden;
   padding-left: 0;
+  padding-right: 0.6rem;
 
   .searchFieldWrapper .hasInput & {
     padding-right: 0;
   }
 
   .searchFieldWrapper:hover &,
-  .searchFieldWrapper .active &{
+  .searchFieldWrapper .active & {
     visibility: visible;
   }
 }
 
+.searchField a,
 .searchField button,
 .searchField input {
   color: #212121;
 }
 
-.searchField button {
+.searchField button,
+.searchField a {
   background: none;
   border: none;
   cursor: pointer;
@@ -91,6 +99,7 @@
     text-decoration: none;
     box-shadow: none;
   }
+
   opacity: 0.54;
 
   &:hover {
@@ -102,7 +111,6 @@
 .docsSearchResultShowAll,
 .docSearchDoc {
   cursor: pointer;
-
 }
 
 .searchBoxMenu {
@@ -115,6 +123,7 @@
   display: block;
   max-width: 720px;
   max-height: 800px;
+
   // max-height: 677.375px;
   // height: 677.375px;
   // overflow-y: auto;
@@ -129,8 +138,7 @@
 
   z-index: 2399999;
 
-  & > div {
-  }
+  & > div {}
 }
 
 .scrollY {
@@ -149,7 +157,6 @@
 }
 
 .stateFilterAdvancedSearch,
-// .stateFilter_PENDING,
 .stateFilter_OPEN,
 .stateFilter_CLOSED,
 .stateFilter_CANCELED {
@@ -158,10 +165,12 @@
 
 .stateFilterAdvancedSearch {
   font-weight: 700;
+
   // background-color: #fafafa;
 
   &:hover {
     // background-color: #eee;
+
   }
 }
 
@@ -171,11 +180,9 @@
   }
 
   padding: .4rem 0;
-
   height: 32px;
   border-right: 1px solid #eaecef;
   margin-right: 12px;
-
   padding-right: 12px;
   font-size: 12px;
   color: #586069;
@@ -184,16 +191,12 @@
   user-select: none;
 }
 
-// .docSearchState_PENDING,
 .docSearchState_OPEN,
 .docSearchState_CLOSED,
 .docSearchState_CANCELED {
   composes: docSearchState;
 }
 
-// .docSearchState_PENDING {
-//   color: $brand-warning;
-// }
 .docSearchState_OPEN {
   color: $brand-info;
 }
@@ -201,6 +204,7 @@
 .docSearchState_CLOSED {
   color: $brand-success;
 }
+
 .docSearchState_CANCELED {
   color: $brand-danger;
 }
@@ -211,6 +215,15 @@
   composes: d-flex flex-row from 'styles/_base.scss';
   flex: 1;
   padding: 15px 8px 14px 25px;
+
+  &:active {
+    background-color: darken(#f7f7f9, 3%);
+    color: #1d1e1f;
+  }
+
+  &:focus {
+    outline: 0;
+  }
 }
 
 .docSearchDocInfo {
@@ -226,7 +239,6 @@
   composes: d-flex flex-row justify-content-start align-items-center from 'styles/_base.scss';
   flex: 1;
 }
-
 
 // Highlight
 
@@ -248,7 +260,6 @@
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-
 }
 
 // Hits
@@ -263,5 +274,6 @@
 // Advanced search
 .advancedSearch {
   max-height: 677.375px;
+
   // height: 677.375px;
 }

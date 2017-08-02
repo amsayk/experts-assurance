@@ -8,7 +8,6 @@ import {
   // SET_ONLY_VALID_OPEN,
 
   // sort
-  // SORT_PENDING,
   SORT_OPEN,
   SORT_UNPAID,
   SORT_INVALID,
@@ -27,9 +26,6 @@ import sortReducer, {
 import { Record } from 'immutable';
 
 export class DashboardState extends Record({
-  // pendingOpen           : true,
-  // pendingDurationInDays : 60,
-  // pendingSortConfig     : sortInitialState,
 
   _open                 : true,
   // onlyValidOpen         : false,
@@ -53,7 +49,6 @@ export class DashboardState extends Record({
 
   get viewStatus() {
     return {
-      // pending : this.pendingOpen,
       open    : this._open,
       closed  : this.closedOpen,
       unpaid  : this.unpaidOpen,
@@ -63,24 +58,12 @@ export class DashboardState extends Record({
 
   get durations() {
     return {
-      // pending : this.pendingDurationInDays,
       open    : this.durationInDays,
       closed  : this.closedDurationInDays,
       unpaid  : this.unpaidDurationInDays,
       invalid : this.invalidDurationInDays,
     };
   }
-
-  // get pending() {
-  //   return {
-  //     duration : this.pendingDurationInDays,
-  //     visible : this.pendingOpen,
-  //     sortConfig : {
-  //       key: this.pendingSortConfig.key || 'dateMission',
-  //       direction: this.pendingSortConfig.direction,
-  //     },
-  //   };
-  // }
 
   get open() {
     return {
@@ -134,11 +117,6 @@ const initialState = new DashboardState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-      // case SORT_PENDING: {
-      //   return state.merge({
-      //     pendingSortConfig: sortReducer(state.pendingSortConfig, action.payload),
-      //   });
-      // }
     case SORT_OPEN: {
       return state.merge({
         openSortConfig: sortReducer(state.openSortConfig, action.payload),
@@ -166,10 +144,6 @@ export default function reducer(state = initialState, action) {
       // }
     case TOGGLE: {
       switch (action.dashboard) {
-          // case 'pending':
-          //   return state.merge({
-          //     pendingOpen : ! state.pendingOpen,
-          //   });
         case 'open':
           return state.merge({
             _open : ! state._open,
@@ -192,10 +166,6 @@ export default function reducer(state = initialState, action) {
     }
     case SET_DURATION: {
       switch (action.dashboard) {
-          // case 'pending':
-          //   return state.merge({
-          //     pendingDurationInDays : action.duration,
-          //   });
         case 'open':
           return state.merge({
             durationInDays : action.duration,
@@ -241,7 +211,6 @@ export default function reducer(state = initialState, action) {
 
       return state.merge({ // TODO: rehydrate from currentUser
         // sort configs
-        // pendingSortConfig     : sortInitialState.merge(cookie.load('dashboard.pendingSortConfig', #<{(| doNotParse = |)}>#false) || {}),
         openSortConfig        : sortInitialState.merge(cookie.load('dashboard.openSortConfig', /* doNotParse = */false) || {}),
         // closedSortConfig      : sortInitialState.merge(cookie.load('dashboard.closedSortConfig', #<{(| doNotParse = |)}>#false) || {}),
         unpaidSortConfig      : sortInitialState.merge(cookie.load('dashboard.unpaidSortConfig', /* doNotParse = */false) || {}),
@@ -249,7 +218,6 @@ export default function reducer(state = initialState, action) {
         category              : cookie.load('dashboard.category', /* doNotParse = */false),
 
         // Durations
-        // pendingDurationInDays : durations.pending || initialState.pendingDurationInDays,
         durationInDays        : durations.open    || initialState.durationInDays,
         // closedDurationInDays  : durations.closed  || initialState.closedDurationInDays,
         unpaidDurationInDays  : durations.unpaid  || initialState.unpaidDurationInDays,
@@ -259,7 +227,6 @@ export default function reducer(state = initialState, action) {
         // includeCanceled       : typeof includeCanceled !== 'undefined' ? includeCanceled : initialState.includeCanceled,
 
         // Toggled?
-        // pendingOpen           : typeof viewStatus.pending !== 'undefined' ? viewStatus.pending : initialState.pendingOpen,
         _open                 : typeof viewStatus.open    !== 'undefined' ? viewStatus.open    : initialState._open,
         // closedOpen            : typeof viewStatus.closed  !== 'undefined' ? viewStatus.closed  : initialState.closedOpen,
         unpaidOpen            : typeof viewStatus.unpaid  !== 'undefined' ? viewStatus.unpaid  : initialState.unpaidOpen,

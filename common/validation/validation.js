@@ -1,8 +1,12 @@
-import { Map } from 'immutable';
+import { Map, Record } from 'immutable';
 import invariant from 'invariant';
 import * as basicValidations from './basic-validations';
 function isPromise(obj) {
-  return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+  return (
+    !!obj &&
+    (typeof obj === 'object' || typeof obj === 'function') &&
+    typeof obj.then === 'function'
+  );
 }
 const validationStore = {};
 
@@ -11,15 +15,17 @@ export function addValidation(key, fn) {
 }
 
 export function addMultipleValidations(obj) {
-  Object.keys(obj).forEach((key) => addValidation(key, obj[key]));
+  Object.keys(obj).forEach(key => addValidation(key, obj[key]));
 }
 
 addMultipleValidations(basicValidations);
 
-
 export function generateSyncValidation(validationConfig) {
-  return (values) => {
-    invariant(Map.isMap(values), '`values` must be an immutable Map.');
+  return values => {
+    invariant(
+      Map.isMap(values) || Record.isRecord(values),
+      '`values` must be an immutable Map or Record.',
+    );
     const errors = {};
 
     function addError(field, validatorName, message = true) {
@@ -27,20 +33,30 @@ export function generateSyncValidation(validationConfig) {
         errors[field] = {};
       }
       errors[field][validatorName] = message;
-
     }
 
-    Object.keys(validationConfig).map((fieldName) => {
+    Object.keys(validationConfig).map(fieldName => {
       const validation = validationConfig[fieldName];
       if (typeof validation === 'object') {
-        Object.keys(validation).map((validationType) => {
-          if (validationType in ['promise'] || typeof validationStore[validationType] !== 'function') {
+        Object.keys(validation).map(validationType => {
+          if (
+            ['promise'].indexOf(validationType) > 0 ||
+            typeof validationStore[validationType] !== 'function'
+          ) {
             return;
           }
-          const hasError = validationStore[validationType](fieldName, values.get(fieldName), validation[validationType], values.toJS(), validation); // eslint-disable-line max-len
-          if (isPromise(hasError)) {
-
-          } else if (hasError) {
+          const hasError = validationStore[validationType](
+            fieldName,
+            values.get(fieldName),
+            validation[validationType],
+            values.toJS(),
+            validation,
+          ); // eslint-disable-line max-len
+          invariant(
+            !isPromise(hasError),
+            'Returning promise is not allowed in sync validation.',
+          );
+          if (hasError) {
             addError(fieldName, validationType, hasError);
           }
         });
@@ -51,8 +67,11 @@ export function generateSyncValidation(validationConfig) {
 }
 
 export function generateAsyncValidation(validationConfig) {
-  return (values) => {
-    invariant(Map.isMap(values), '`values` must be an immutable Map.');
+  return values => {
+    invariant(
+      Map.isMap(values) || Record.isRecord(values),
+      '`values` must be an immutable Map or Record.',
+    );
     const promiseList = [Promise.resolve()];
     const errors = {};
 
@@ -61,25 +80,31 @@ export function generateAsyncValidation(validationConfig) {
         errors[field] = {};
       }
       errors[field][validatorName] = message;
-
     }
 
-    Object.keys(validationConfig).map((fieldName) => {
+    Object.keys(validationConfig).map(fieldName => {
       const validation = validationConfig[fieldName];
       if (typeof validation === 'object') {
-        Object.keys(validation).map((validationType) => {
+        Object.keys(validation).map(validationType => {
           if (typeof validationStore[validationType] !== 'function') {
             return;
           }
-          const hasError = validationStore[validationType](fieldName, values.get(fieldName), validation[validationType], values.toJS(), validation); // eslint-disable-line max-len
+          const hasError = validationStore[validationType](
+            fieldName,
+            values.get(fieldName),
+            validation[validationType],
+            values.toJS(),
+            validation,
+          ); // eslint-disable-line max-len
           if (isPromise(hasError)) {
-            promiseList.push(new Promise((resolve, reject) => {
-              hasError.then(resolve).catch((msg) => {
-                addError(fieldName, validationType, msg);
-                resolve();
-              });
-            }));
-
+            promiseList.push(
+              new Promise((resolve, reject) => {
+                hasError.then(resolve).catch(msg => {
+                  addError(fieldName, validationType, msg);
+                  resolve();
+                });
+              }),
+            );
           } else if (hasError) {
             addError(fieldName, validationType, hasError);
           }
@@ -95,8 +120,11 @@ export function generateAsyncValidation(validationConfig) {
 }
 
 export function generateAsyncBlurFields(validationConfig) {
-  return Object.keys(validationConfig).filter((fieldName) => {
-    return typeof (validationConfig[fieldName]) === 'object' && validationConfig[fieldName].validateOnBlur;
+  return Object.keys(validationConfig).filter(fieldName => {
+    return (
+      typeof validationConfig[fieldName] === 'object' &&
+      validationConfig[fieldName].validateOnBlur
+    );
   });
 }
 
@@ -107,4 +135,3 @@ export function generateValidation(validationConfig) {
     asyncBlurFields: generateAsyncBlurFields(validationConfig),
   };
 }
-

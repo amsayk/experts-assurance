@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -11,32 +12,28 @@ import cx from 'classnames';
 
 import { injectIntl, intlShape } from 'react-intl';
 
-import {
-  UpArrowIcon,
-  DownArrowIcon,
-} from 'components/icons/MaterialIcons';
+import { UpArrowIcon, DownArrowIcon } from 'components/icons/MaterialIcons';
 
 import {
   SORT_DIRECTION_ASC,
   SORT_DIRECTION_DESC,
 } from 'redux/reducers/sorting/constants';
 
-import {
-  sortClosed,
-} from 'redux/reducers/dashboard/actions';
+import { sortClosed } from 'redux/reducers/dashboard/actions';
 
-const dashboardSelector = (state) => state.getIn(['dashboard']);
+const dashboardSelector = state => state.getIn(['dashboard']);
 
-const selector = createSelector(
-  dashboardSelector,
-  (dashboard) => ({ sortConfig: dashboard.closed.sortConfig }),
-);
+const selector = createSelector(dashboardSelector, dashboard => ({
+  sortConfig: dashboard.closed.sortConfig,
+}));
 
 function SortDirection({ direction }) {
   // if (direction) {
   return (
     <div className={style.sortDirection}>
-      {direction === SORT_DIRECTION_ASC ? <UpArrowIcon size={18}/> : <DownArrowIcon size={18}/>}
+      {direction === SORT_DIRECTION_ASC
+        ? <UpArrowIcon size={18} />
+        : <DownArrowIcon size={18} />}
     </div>
   );
   // }
@@ -57,7 +54,11 @@ class ListHeader extends React.Component {
     const { direction } = sortConfig;
 
     actions.sort(
-      key, !direction || direction === SORT_DIRECTION_DESC ? SORT_DIRECTION_ASC : SORT_DIRECTION_DESC);
+      key,
+      !direction || direction === SORT_DIRECTION_DESC
+        ? SORT_DIRECTION_ASC
+        : SORT_DIRECTION_DESC,
+    );
   }
 
   render() {
@@ -65,84 +66,108 @@ class ListHeader extends React.Component {
     const { key, direction } = sortConfig;
     return (
       <div style={{ position: 'sticky' }} className={style.listHeader}>
-        <div style={{
-          maxWidth: 115,
-          minWidth: 115,
-        }} onClick={this.onSortByRef} className={cx(style.listHeaderItemRef, key === 'refNo' && style.sorting)}>
-        <div className={style.wrapper}>
-          <div className={style.innerWrapper}>
-            <div className={style.item}>
-              <div className={style.text}>Réf</div>
-              {key === 'refNo' ? <SortDirection direction={direction}/> : null}
+        <div
+          style={{
+            maxWidth: 115,
+            minWidth: 115,
+          }}
+          onClick={this.onSortByRef}
+          className={cx(
+            style.listHeaderItemRef,
+            key === 'refNo' && style.sorting,
+          )}
+        >
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>Réf</div>
+                {key === 'refNo'
+                  ? <SortDirection direction={direction} />
+                  : null}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div style={{
-        maxWidth: 140,
-        minWidth: 140,
-      }} className={style.listHeaderItemClient}>
-      <div className={style.wrapper}>
-        <div className={style.innerWrapper}>
-          <div className={style.item}>
-            <div className={cx(style.text)}>
-              Assuré
+        <div
+          style={{
+            maxWidth: 140,
+            minWidth: 140,
+          }}
+          className={style.listHeaderItemClient}
+        >
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>Assuré</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div style={{
-      maxWidth: 140,
-      minWidth: 140,
-    }} className={style.listHeaderItemManager}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={cx(style.text)}>
-            Gestionaire
+        <div
+          style={{
+            maxWidth: 140,
+            minWidth: 140,
+          }}
+          className={style.listHeaderItemManager}
+        >
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>Gestionaire</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div className={style.listHeaderItemManager}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={cx(style.text)}>
-            Véhicule
+        <div className={style.listHeaderItemManager}>
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={cx(style.text)}>Véhicule</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div onClick={this.onSortByClosureDate} className={cx(style.listHeaderItemDate, key === 'closure_date' && style.sorting)}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>DT Clôture</div>
-          {key === 'closure_date' ? <SortDirection direction={direction}/> : null}
+        <div
+          onClick={this.onSortByClosureDate}
+          className={cx(
+            style.listHeaderItemDate,
+            key === 'closure_date' && style.sorting,
+          )}
+        >
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>DT Clôture</div>
+                {key === 'closure_date'
+                  ? <SortDirection direction={direction} />
+                  : null}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div onClick={this.onSortByDate} className={cx(style.listHeaderItemDate, key === 'dateMission' && style.sorting)}>
-    <div className={style.wrapper}>
-      <div className={style.innerWrapper}>
-        <div className={style.item}>
-          <div className={style.text}>DT Mission</div>
-          {key === 'dateMission' ? <SortDirection direction={direction}/> : null}
+        <div
+          onClick={this.onSortByDate}
+          className={cx(
+            style.listHeaderItemDate,
+            key === 'dateMission' && style.sorting,
+          )}
+        >
+          <div className={style.wrapper}>
+            <div className={style.innerWrapper}>
+              <div className={style.item}>
+                <div className={style.text}>DT Mission</div>
+                {key === 'dateMission'
+                  ? <SortDirection direction={direction} />
+                  : null}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-
       </div>
     );
   }
@@ -151,8 +176,8 @@ class ListHeader extends React.Component {
 ListHeader.propTypes = {
   intl: intlShape.isRequired,
   sortConfig: T.shape({
-    key       : T.oneOf(['refNo', 'closure_date', 'dateMission']),
-    direction : T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
+    key: T.oneOf(['refNo', 'closure_date', 'dateMission']),
+    direction: T.oneOf([SORT_DIRECTION_ASC, SORT_DIRECTION_DESC]),
   }).isRequired,
 };
 
@@ -162,16 +187,15 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-      sort : sortClosed,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        sort: sortClosed,
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(ListHeader);
-
+export default compose(injectIntl, Connect)(ListHeader);

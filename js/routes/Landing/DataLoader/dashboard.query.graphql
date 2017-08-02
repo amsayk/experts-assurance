@@ -1,6 +1,5 @@
 query dashboard {
   dashboard {
-    # pending { count }
     open { count }
     closed { count }
     canceled { count }

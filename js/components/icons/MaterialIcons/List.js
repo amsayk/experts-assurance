@@ -1,8 +1,15 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 export default function List({ size, color }) {
   return (
-    <svg fill={color} height={size} viewBox='0 0 20 20' width={size} xmlns='http://www.w3.org/2000/svg'>
+    <svg
+      fill={color}
+      height={size}
+      viewBox='0 0 20 20'
+      width={size}
+      xmlns='http://www.w3.org/2000/svg'
+    >
       <g>
         <rect x={5} y={3} width={14} height={3} />
         <rect x={1} y={3} width={3} height={3} />
@@ -16,11 +23,10 @@ export default function List({ size, color }) {
 }
 
 List.propTypes = {
-  color : T.string,
-  size  : T.number.isRequired,
+  color: T.string,
+  size: T.number.isRequired,
 };
 
 List.defaultProps = {
-  color : 'currentColor',
+  color: 'currentColor',
 };
-

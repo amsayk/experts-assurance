@@ -1,13 +1,12 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import Dropdown from 'components/bootstrap/Dropdown';
 import MenuItem from 'components/bootstrap/MenuItem';
 import Button from 'components/bootstrap/Button';
 
-import {
-  DownloadIcon,
-} from 'components/icons/MaterialIcons';
+import { DownloadIcon } from 'components/icons/MaterialIcons';
 
 import Tooltip from 'components/react-components/Tooltip';
 
@@ -25,8 +24,7 @@ class Actions extends React.PureComponent {
 
     this.onClose = this.onClose.bind(this);
   }
-  onClose() {
-  }
+  onClose() {}
 
   render() {
     const { length } = this.props;
@@ -35,27 +33,31 @@ class Actions extends React.PureComponent {
     }
 
     return (
-        <div className={style.actions}>
-
-          <div key='download' className={style.download}>
-            <Tooltip align={tooltipAlign} placement='bottom' overlay={'Télécharger'}>
-              <Button className={style.downloadButton} onClick={null} role='button'>
-                <DownloadIcon size={32}/>
-              </Button>
-            </Tooltip>
-          </div>
-          <div key='divider' className={style.divider}></div>
+      <div className={style.actions}>
+        <div key='download' className={style.download}>
+          <Tooltip
+            align={tooltipAlign}
+            placement='bottom'
+            overlay={'Télécharger'}
+          >
+            <Button
+              className={style.downloadButton}
+              onClick={null}
+              role='button'
+            >
+              <DownloadIcon size={32} />
+            </Button>
+          </Tooltip>
         </div>
+        <div key='divider' className={style.divider} />
+      </div>
     );
   }
 }
 
 Actions.propTypes = {
-  intl    : intlShape.isRequired,
-  length  : T.number.isRequired,
+  intl: intlShape.isRequired,
+  length: T.number.isRequired,
 };
 
-export default compose(
-  injectIntl,
-)(Actions);
-
+export default compose(injectIntl)(Actions);

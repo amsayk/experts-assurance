@@ -1,5 +1,6 @@
-import React, { PropTypes as T } from 'react';
-import {compose, bindActionCreators} from 'redux';
+import React from 'react';
+import T from 'prop-types';
+import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
 
@@ -30,23 +31,16 @@ export class PublicContainer extends React.PureComponent {
   }
 }
 
-PublicContainer.propTypes = {
-
-};
+PublicContainer.propTypes = {};
 
 function mapStateToProps(state, props) {
   return {};
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({}, dispatch)};
+  return { actions: bindActionCreators({}, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  withApollo,
-  Connect,
-)(PublicContainer);
-
+export default compose(injectIntl, withApollo, Connect)(PublicContainer);

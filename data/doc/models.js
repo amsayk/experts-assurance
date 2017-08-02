@@ -117,16 +117,6 @@ export class Docs {
     return this.connector.queryCompanies(q);
   }
 
-  // pendingDashboard(durationInDays, cursor, sortConfig, selectionSet, now) {
-  //   return this.connector.pendingDashboard(
-  //     durationInDays,
-  //     cursor,
-  //     sortConfig,
-  //     this.user,
-  //     now,
-  //     selectionSet,
-  //   );
-  // }
   openDashboard(durationInDays, cursor, sortConfig, selectionSet, validOnly, now) {
     return this.connector.openDashboard(
       durationInDays,

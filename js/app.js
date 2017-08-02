@@ -8,7 +8,8 @@ import MuiThemeProvider from 'components/material-ui/styles/MuiThemeProvider';
 
 import checkBusiness from 'utils/checkBusiness';
 
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 
 import { Router, match } from 'react-router';
@@ -52,8 +53,7 @@ const APP_MOUNT_NODE = document.querySelector('main');
 const SNACKBAR_MOUNT_NODE = document.querySelector('#snackbar');
 const TOASTR_MOUNT_NODE = document.querySelector('#toastr');
 
-const muiTheme = getMuiTheme({
-});
+const muiTheme = getMuiTheme({});
 
 let render = async function render() {
   store.dispatch(scrolling());
@@ -63,18 +63,18 @@ let render = async function render() {
 
   const locale = store.getState().getIn(['intl', 'locale']);
 
-  const { messages : translations } = await intlLoader(locale);
+  const { messages: translations } = await intlLoader(locale);
 
   // Update messages if not default locale
   if (locale !== DEFAULT_LANG) {
-    store.dispatch(updateIntl({ locale, messages : translations, formats }));
+    store.dispatch(updateIntl({ locale, messages: translations, formats }));
   }
 
-  const intlSelector = (state) => ({
-    defaultLocale : state.getIn(['intl', 'defaultLocale']),
-    locale        : state.getIn(['intl', 'locale']),
-    messages      : state.getIn(['intl', 'messages']),
-    formats       : state.getIn(['intl', 'formats']),
+  const intlSelector = state => ({
+    defaultLocale: state.getIn(['intl', 'defaultLocale']),
+    locale: state.getIn(['intl', 'locale']),
+    messages: state.getIn(['intl', 'messages']),
+    formats: state.getIn(['intl', 'formats']),
   });
 
   const routes = getRoutes(store);
@@ -83,8 +83,8 @@ let render = async function render() {
   class Application extends React.Component {
     static childContextTypes = {
       snackbar: T.shape({
-        show    : T.func.isRequired,
-        dismiss : T.func.isRequired,
+        show: T.func.isRequired,
+        dismiss: T.func.isRequired,
       }).isRequired,
     };
     getChildContext() {
@@ -93,7 +93,9 @@ let render = async function render() {
       };
     }
     componentWillMount() {
-      this._connectionStateListener = doSetupConnectionStateChangeObserver(store);
+      this._connectionStateListener = doSetupConnectionStateChangeObserver(
+        store,
+      );
       // this._appStateListener = doSetupAppStateChangeListener(store);
     }
     componentWillUnmount() {
@@ -105,7 +107,7 @@ let render = async function render() {
       return (
         <ApolloProvider store={store} client={apolloClient} immutable>
           <IntlProvider intlSelector={intlSelector}>
-            <Router {...routerProps}/>
+            <Router {...routerProps} />
           </IntlProvider>
         </ApolloProvider>
       );
@@ -116,21 +118,20 @@ let render = async function render() {
     match({ history, routes }, (error, redirectLocation, renderProps) => {
       ReactDOM.render(
         <MuiThemeProvider muiTheme={muiTheme}>
-          <Application routerProps={renderProps}/>
+          <Application routerProps={renderProps} />
         </MuiThemeProvider>,
         APP_MOUNT_NODE,
-        () => store.dispatch(ready())
+        () => store.dispatch(ready()),
       );
     });
   } else {
     ReactDOM.render(
       <MuiThemeProvider muiTheme={muiTheme}>
-        <Application routerProps={{ history, routes }}/>
+        <Application routerProps={{ history, routes }} />
       </MuiThemeProvider>,
       APP_MOUNT_NODE,
-      () => store.dispatch(ready())
+      () => store.dispatch(ready()),
     );
-
   }
 
   // Did you enter business details?
@@ -147,7 +148,7 @@ let render = async function render() {
         </IntlProvider>
       </Provider>
     </MuiThemeProvider>,
-    SNACKBAR_MOUNT_NODE
+    SNACKBAR_MOUNT_NODE,
   );
 
   ReactDOM.render(
@@ -156,7 +157,7 @@ let render = async function render() {
         <Toastr />
       </IntlProvider>
     </Provider>,
-    TOASTR_MOUNT_NODE
+    TOASTR_MOUNT_NODE,
   );
 };
 
@@ -164,7 +165,7 @@ if (__DEV__) {
   if (module.hot) {
     // Development render functions
     const renderApp = render;
-    const renderError = (error) => {
+    const renderError = error => {
       const RedBox = require('redbox-react').default;
 
       ReactDOM.render(<RedBox error={error} />, APP_MOUNT_NODE);
@@ -186,53 +187,49 @@ if (__DEV__) {
         ReactDOM.unmountComponentAtNode(SNACKBAR_MOUNT_NODE);
         ReactDOM.unmountComponentAtNode(TOASTR_MOUNT_NODE);
         render();
-      })
+      }),
     );
   }
 
-  window.reduxStore   = store;
-  window.Parse        = require('parse');
-  window.Perf         = require('react-addons-perf');
+  window.reduxStore = store;
+  window.Parse = require('parse');
+  window.Perf = require('react-addons-perf');
   window.reduxHistory = history;
-  window.cookie       = require('react-cookie');
+  window.cookie = require('react-cookie');
 } else {
   require('offline-plugin/runtime').install({
-    onInstalled: function () {
+    onInstalled: function() {
       log('[SW]: App is ready for offline usage');
     },
-    onUpdating: function () {
-
-    },
-    onUpdateReady: function () {
+    onUpdating: function() {},
+    onUpdateReady: function() {
       require('offline-plugin/runtime').applyUpdate();
     },
-    onUpdateFailed: function () {
+    onUpdateFailed: function() {
       alert(`
-        Erreur pending la mise à jour de l'application.
+        Erreur pendant la mise à jour de l'application.
         Veuillez réfraîchir la page et informer votre administrateur si le problème persist.
       `);
-
     },
-    onUpdated: function () {
-      setTimeout(function () {
+    onUpdated: function() {
+      setTimeout(function() {
         try {
-          alert(`Votre application a été mise à jour. Nous allons réfraîchir la page.`);
+          alert(
+            `Votre application a été mise à jour. Nous allons réfraîchir la page.`,
+          );
           window.location.reload();
         } catch (e) {}
       }, 0);
     },
-
   });
 }
 
 if (__DEV__ || DEBUG) {
   // Show all debug messages.
   localStorage.debug = DEBUG || '*';
-
 }
 
 // ========================================================
 // Go!
 // ========================================================
 render();
-

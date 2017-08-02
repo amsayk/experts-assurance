@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -30,29 +31,24 @@ const TOP = NAVBAR_HEIGHT + TOOLBAR_HEIGHT + 20;
 const NOTIFICATION_HEIGHT = 45;
 
 const styles = {
-  notificationOpen : {
-    top : TOP + NOTIFICATION_HEIGHT,
+  notificationOpen: {
+    top: TOP + NOTIFICATION_HEIGHT,
   },
 };
 
 class Files extends React.PureComponent {
   static defaultProps = {
-    loading : false,
-    files  : [],
+    loading: false,
+    files: [],
   };
 
   constructor(props) {
     super(props);
 
-
-    this.state = {
-    };
+    this.state = {};
   }
 
-
-  componentWillReceiveProps(nextProps) {
-
-  }
+  componentWillReceiveProps(nextProps) {}
   render() {
     const {
       doc,
@@ -61,21 +57,19 @@ class Files extends React.PureComponent {
       notificationOpen,
       loading,
       cursor,
-      files : items,
+      files: items,
     } = this.props;
 
     // if (loading) {
     //   return null;
     // }
 
-    const categories = CATEGORIES.map(({ slug, displayName : title }) => {
-      const files = items.filter((f) => slug === f.category).map((entry, index) => (
-        <FileEntry
-          key={index}
-          intl={intl}
-          entry={entry}
-        />
-      ));
+    const categories = CATEGORIES.map(({ slug, displayName: title }) => {
+      const files = items
+        .filter(f => slug === f.category)
+        .map((entry, index) =>
+          <FileEntry key={index} intl={intl} entry={entry} />,
+        );
 
       files.sort((a, b) => b.date - a.date);
 
@@ -88,13 +82,18 @@ class Files extends React.PureComponent {
           id={id}
           category={slug}
           height={height}
-        />
+        />,
       );
 
       return (
         <div className={style.feedGroup} key={slug}>
-          <h5 className={style.feedGroupTitle}>{title}</h5>
-          <section style={{ minHeight: Math.max(height, 50) }} className={style.filesFeedGroupItems}>
+          <h5 className={style.feedGroupTitle}>
+            {title}
+          </h5>
+          <section
+            style={{ minHeight: Math.max(height, 50) }}
+            className={style.filesFeedGroupItems}
+          >
             {files}
           </section>
         </div>
@@ -102,7 +101,10 @@ class Files extends React.PureComponent {
     });
 
     return (
-      <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
+      <div
+        className={style.timeline}
+        style={notificationOpen ? styles.notificationOpen : emptyObject}
+      >
         <Nav
           intl={intl}
           onChange={this.props.onNav}
@@ -114,11 +116,9 @@ class Files extends React.PureComponent {
       </div>
     );
   }
-
 }
 
-Files.propTypes = {
-};
+Files.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -126,10 +126,6 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-  DataLoader.doc,
-  DataLoader.docFiles,
-)(Files);
-
+export default compose(injectIntl, Connect, DataLoader.doc, DataLoader.docFiles)(
+  Files,
+);

@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { withApollo } from 'react-apollo';
 import { Link } from 'react-router';
 import { compose } from 'redux';
@@ -26,16 +27,17 @@ import MUTATION from './delFile.mutation.graphql';
 
 const ICON_SIZE = 18;
 
-const CONFIRM_MSG = <div style={style.confirmToastr}>
-  <h5>Êtes-vous sûr?</h5>
-</div>;
+const CONFIRM_MSG = (
+  <div style={style.confirmToastr}>
+    <h5>Êtes-vous sûr?</h5>
+  </div>
+);
 
 class FileEntry extends React.PureComponent {
   static contextTypes = {
-    snackbar          : T.shape({
+    snackbar: T.shape({
       show: T.func.isRequired,
     }),
-
   };
 
   constructor(props) {
@@ -45,7 +47,7 @@ class FileEntry extends React.PureComponent {
     this.onSelect = this.onSelect.bind(this);
 
     this.state = {
-      open : false,
+      open: false,
     };
   }
   onToggle() {
@@ -53,22 +55,21 @@ class FileEntry extends React.PureComponent {
       return;
     }
     this.setState(({ open }, { entry }) => {
-
-      return ({
-        open : entry.isNew ? false : !open,
-      })
+      return {
+        open: entry.isNew ? false : !open,
+      };
     });
   }
   async delFile() {
     const self = this;
     try {
       const { data: { delFile: { error } } } = await this.props.client.mutate({
-        refetchQueries : ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
-        mutation       : MUTATION,
-        variables      : {
-          id    : this.props.entry.id,
+        refetchQueries: ['getDoc', 'invalidDocs', 'getTimeline', 'getDocFiles'],
+        mutation: MUTATION,
+        variables: {
+          id: this.props.entry.id,
         },
-        updateQueries : {
+        updateQueries: {
           // getTimeline(prev, { mutationResult, queryVariables }) {
           //   const newFile = mutationResult.data.delFile.file;
           //   const newActivities = mutationResult.data.delFile.activities;
@@ -116,66 +117,71 @@ class FileEntry extends React.PureComponent {
         switch (error.code) {
           case codes.ERROR_ACCOUNT_NOT_VERIFIED:
           case codes.ERROR_NOT_AUTHORIZED:
-            throw new Error(
-              `Vous n'êtes pas authorisé`,
-            );
+            throw new Error(`Vous n'êtes pas authorisé`);
           default:
-            throw new Error(
-              'Erreur inconnu, veuillez réessayer à nouveau.',
-            );
+            throw new Error('Erreur inconnu, veuillez réessayer à nouveau.');
         }
       }
 
       this.context.snackbar.show({
-        message : 'Succès',
+        message: 'Succès',
       });
-
     } catch (e) {
       this.context.snackbar.show({
-        message : e.message,
+        message: e.message,
       });
     }
-
   }
   onSelect(key) {
     this._closing = true;
-    this.setState({
-      open : false,
-    }, () => {
-      this._closing = false
+    this.setState(
+      {
+        open: false,
+      },
+      () => {
+        this._closing = false;
 
-      switch (key) {
-        case 'download' : {
-          const a = document.createElement('a');
-          // a.download = this.props.entry.name;
-          a.target = '_blank';
-          a.href = this.props.entry.url;
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(() => {
-            document.body.removeChild(a);
-          }, 500);
-          break;
-        }
-        case 'delete': {
-          toastr.confirm(CONFIRM_MSG, {
-            cancelText : 'Non',
-            okText     : 'Oui',
-            onOk       : () => {
-              this.delFile();
-            },
-          });
+        switch (key) {
+          case 'download': {
+            const a = document.createElement('a');
+            // a.download = this.props.entry.name;
+            a.target = '_blank';
+            a.href = this.props.entry.url;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+              document.body.removeChild(a);
+            }, 500);
+            break;
+          }
+          case 'delete': {
+            toastr.confirm(CONFIRM_MSG, {
+              cancelText: 'Non',
+              okText: 'Oui',
+              onOk: () => {
+                this.delFile();
+              },
+            });
 
-          return;
+            return;
+          }
         }
-      }
-    });
+      },
+    );
   }
   render() {
     const { intl, entry } = this.props;
     return (
-      <Dropdown onSelect={this.onSelect} open={this.state.open} onToggle={this.onToggle} className={cx(style.fileEntryDropdown, this.state.open && style.fileEntryOpen)}>
-        <Dropdown.Toggle componentClass={File} entry={entry}/>
+      <Dropdown
+        onSelect={this.onSelect}
+        open={this.state.open}
+        onToggle={this.onToggle}
+        className={cx(
+          style.fileEntryDropdown,
+          this.state.open && style.fileEntryOpen,
+        )}
+      >
+        <Dropdown.Toggle componentClass={File} entry={entry} />
         <Dropdown.Menu className={style.fileEntryMenu}>
           <MenuItem
             eventKey='info'
@@ -183,7 +189,7 @@ class FileEntry extends React.PureComponent {
             entry={entry}
             intl={intl}
           />
-          <MenuItem divider/>
+          <MenuItem divider />
           <MenuItem eventKey='download' className={style.fileEntryMenuItem}>
             Télécharger
           </MenuItem>
@@ -192,7 +198,7 @@ class FileEntry extends React.PureComponent {
           </MenuItem>
         </Dropdown.Menu>
       </Dropdown>
-    )
+    );
   }
 }
 
@@ -209,12 +215,23 @@ function Info({ intl, entry }) {
           {entry.name}
         </strong>
         <div className={style.fileEntryInfoDate}>
-          <time title={intl.formatDate(date)} dateTime={new Date(date).toISOString()}>
+          <time
+            title={intl.formatDate(date)}
+            dateTime={new Date(date).toISOString()}
+          >
             {intl.formatRelative(date)}
           </time>
         </div>
         <div className={style.fileEntryInfoUser}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+          <Link
+            to={
+              PATH_SETTINGS_BASE +
+              '/' +
+              PATH_SETTINGS_BUSINESS_USER +
+              '/' +
+              user.id
+            }
+          >
             {user.displayName}
           </Link>
         </div>
@@ -237,7 +254,7 @@ function File({ entry, onClick }) {
 }
 
 const getFileIcon = memoizeStringOnly(function getFileIcon(info) {
-  const [ type, size = ICON_SIZE ] = info.split(/\|/);
+  const [type, size = ICON_SIZE] = info.split(/\|/);
 
   if (type.startsWith('image/')) {
     return <FileIcon.Image size={size} />;
@@ -274,8 +291,4 @@ const getFileIcon = memoizeStringOnly(function getFileIcon(info) {
   return <FileIcon.Unknown size={size} />;
 });
 
-export default compose(
-  injectIntl,
-  withApollo,
-)(FileEntry);
-
+export default compose(injectIntl, withApollo)(FileEntry);

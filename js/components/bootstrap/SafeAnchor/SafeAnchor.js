@@ -1,14 +1,13 @@
 import React from 'react';
+import T from 'prop-types';
 import elementType from 'react-prop-types/lib/elementType';
 
 const propTypes = {
-  href: React.PropTypes.string,
-  onClick: React.PropTypes.func,
-  disabled: React.PropTypes.bool,
-  role: React.PropTypes.string,
-  tabIndex: React.PropTypes.oneOfType([
-    React.PropTypes.number, React.PropTypes.string,
-  ]),
+  href: T.string,
+  onClick: T.func,
+  disabled: T.bool,
+  role: T.string,
+  tabIndex: T.oneOfType([T.number, T.string]),
   /**
    * this is sort of silly but needed for Button
    */
@@ -69,12 +68,7 @@ class SafeAnchor extends React.Component {
       props.style = { pointerEvents: 'none', ...props.style };
     }
 
-    return (
-      <Component
-        {...props}
-        onClick={this.handleClick}
-      />
-    );
+    return <Component {...props} onClick={this.handleClick} />;
   }
 }
 
@@ -82,4 +76,3 @@ SafeAnchor.propTypes = propTypes;
 SafeAnchor.defaultProps = defaultProps;
 
 export default SafeAnchor;
-

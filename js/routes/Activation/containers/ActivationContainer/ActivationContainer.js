@@ -1,5 +1,6 @@
-import React, { PropTypes as T } from 'react';
-import {compose, bindActionCreators} from 'redux';
+import React from 'react';
+import T from 'prop-types';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -30,8 +31,10 @@ export class ActivationContainer extends React.PureComponent {
     this.onResendEmailVerification = this.onResendEmailVerification.bind(this);
   }
   async onResendEmailVerification() {
-    const { data: { resendEmailVerification: { errors } } } = await this.props.client.mutate({
-      mutation : MUTATION,
+    const {
+      data: { resendEmailVerification: { errors } },
+    } = await this.props.client.mutate({
+      mutation: MUTATION,
     });
 
     if (!isEmpty(errors)) {
@@ -50,14 +53,18 @@ export class ActivationContainer extends React.PureComponent {
     const { intl, user, className, actions } = this.props;
     return (
       <div className={style.root}>
-        <Header user={user} onLogOut={actions.logOut}/>
+        <Header user={user} onLogOut={actions.logOut} />
         <div className={style.center}>
           <div className={style.infoLine}>
             <h3>
               <FormattedMessage
                 {...messages.Thanks}
                 values={{
-                  appName: <strong>{APP_NAME}</strong>,
+                  appName: (
+                    <strong>
+                      {APP_NAME}
+                    </strong>
+                  ),
                 }}
               />
             </h3>
@@ -66,7 +73,11 @@ export class ActivationContainer extends React.PureComponent {
             <FormattedMessage
               {...messages.EmailVerificationPending}
               values={{
-                email: <strong className={''}>{user.email}</strong>,
+                email: (
+                  <strong className={''}>
+                    {user.email}
+                  </strong>
+                ),
               }}
             />
           </p>
@@ -75,12 +86,18 @@ export class ActivationContainer extends React.PureComponent {
               {...messages.Actions}
               values={{
                 resendEmailVerificationLink: (
-                  <a onClick={this.onResendEmailVerification} className={style.resendLink}>
+                  <a
+                    onClick={this.onResendEmailVerification}
+                    className={style.resendLink}
+                  >
                     {intl.formatMessage(messages.ResendVerification)}
                   </a>
                 ),
                 changeEmail: (
-                  <Link className={style.changeEmailLink} to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}>
+                  <Link
+                    className={style.changeEmailLink}
+                    to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_CHANGE_EMAIL}
+                  >
                     {intl.formatMessage(messages.ChangeEmail)}
                   </Link>
                 ),
@@ -105,14 +122,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  withApollo,
-  Connect,
-)(ActivationContainer);
-
+export default compose(injectIntl, withApollo, Connect)(ActivationContainer);

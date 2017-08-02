@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
@@ -55,44 +56,48 @@ class Actions extends React.PureComponent {
 
     return (
       // <RootCloseWrapper event='mousedown' onRootClose={this.onClose}>
-        <div className={style.actions}>
-          <div key='refresh' className={style.refresh}>
-            <Tooltip align={tooltipAlign} placement='bottom' overlay={'Rafraîchir'}>
-              <Button className={style.refreshButton} onClick={null} role='button'>
-                <RefreshIcon size={24}/>
-              </Button>
-            </Tooltip>
-          </div>
-          {/* <div key='delete' className={style.delete}> */}
-          {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
-          {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
-          {/*       <TrashIcon size={24}/> */}
-          {/*     </Button> */}
-          {/*   </Tooltip> */}
-          {/* </div> */}
-          {/* <div key='more' className={style.more}> */}
-          {/*   <Dropdown> */}
-          {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}
-          {/*     <Dropdown.Menu className={style.moreMenu}> */}
-          {/*       <MenuItem>Changer le role</MenuItem> */}
-          {/*       <MenuItem>Désactiver le compte</MenuItem> */}
-          {/*       <MenuItem>Activer le compte</MenuItem> */}
-          {/*     </Dropdown.Menu> */}
-          {/*   </Dropdown> */}
-          {/* </div> */}
-          <div key='divider' className={style.divider}></div>
+      <div className={style.actions}>
+        <div key='refresh' className={style.refresh}>
+          <Tooltip
+            align={tooltipAlign}
+            placement='bottom'
+            overlay={'Rafraîchir'}
+          >
+            <Button className={style.refreshButton} onClick={null} role='button'>
+              <RefreshIcon size={24} />
+            </Button>
+          </Tooltip>
         </div>
+        {/* <div key='delete' className={style.delete}> */}
+        {/*   <Tooltip align={tooltipAlign} placement='bottom' overlay={'Supprimer'}> */}
+        {/*     <Button className={style.deleteButton} onClick={null} role='button'> */}
+        {/*       <TrashIcon size={24}/> */}
+        {/*     </Button> */}
+        {/*   </Tooltip> */}
+        {/* </div> */}
+        {/* <div key='more' className={style.more}> */}
+        {/*   <Dropdown> */}
+        {/*     <Dropdown.Toggle componentClass={MoreActions} className={style.moreActionsButton} role='button'/> */}
+        {/*     <Dropdown.Menu className={style.moreMenu}> */}
+        {/*       <MenuItem>Changer le role</MenuItem> */}
+        {/*       <MenuItem>Désactiver le compte</MenuItem> */}
+        {/*       <MenuItem>Activer le compte</MenuItem> */}
+        {/*     </Dropdown.Menu> */}
+        {/*   </Dropdown> */}
+        {/* </div> */}
+        <div key='divider' className={style.divider} />
+      </div>
       // </RootCloseWrapper>
     );
   }
 }
 
 Actions.propTypes = {
-  actions       : T.shape({
-    clearAllSelections : T.func.isRequired,
+  actions: T.shape({
+    clearAllSelections: T.func.isRequired,
   }),
-  intl          : intlShape.isRequired,
-  hasSelection  : T.number.isRequired,
+  intl: intlShape.isRequired,
+  hasSelection: T.number.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -101,16 +106,15 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions : bindActionCreators({
-      clearAllSelections: () => setSelection([]),
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        clearAllSelections: () => setSelection([]),
+      },
+      dispatch,
+    ),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(Actions);
-
+export default compose(injectIntl, Connect)(Actions);

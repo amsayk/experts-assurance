@@ -7,9 +7,7 @@ import intl from './intl/reducer';
 
 import { USER_LOGGED_OUT } from './user/constants';
 
-import {
-  combineReducers,
-} from 'redux-immutable';
+import { combineReducers } from 'redux-immutable';
 
 import { INIT } from 'vars';
 
@@ -28,15 +26,19 @@ const reducers = {
     login: (state, action) => {
       switch (action.type) {
         case USER_LOGGED_OUT:
-          return state ? state.mergeDeep({
-            values: {
-              password: undefined,
-            },
-          }) : state;
+          return state
+            ? state.mergeDeep({
+                values: {
+                  password: undefined,
+                },
+              })
+            : state;
         case actionTypes.SUBMIT_START: // Clear errors
-          return state ? state.merge({
-            error: null,
-          }) : state;
+          return state
+            ? state.merge({
+                error: null,
+              })
+            : state;
         default:
           return state;
       }
@@ -44,9 +46,11 @@ const reducers = {
     changePassword: (state, action) => {
       switch (action.type) {
         case actionTypes.SET_SUBMIT_SUCCEEDED: // Clear passwords on success
-          return state ? state.merge({
-            values: {},
-          }) : state;
+          return state
+            ? state.merge({
+                values: {},
+              })
+            : state;
         default:
           return state;
       }
@@ -54,9 +58,11 @@ const reducers = {
     changeEmail: (state, action) => {
       switch (action.type) {
         case actionTypes.SET_SUBMIT_SUCCEEDED: // Clear email on success
-          return state ? state.merge({
-            values: {},
-          }) : state;
+          return state
+            ? state.merge({
+                values: {},
+              })
+            : state;
         default:
           return state;
       }
@@ -64,7 +70,7 @@ const reducers = {
   }),
 };
 
-const makeRootReducer = (asyncReducers) => {
+const makeRootReducer = asyncReducers => {
   return combineReducers({
     routing: routerReducer,
     ...reducers,
@@ -75,16 +81,15 @@ const makeRootReducer = (asyncReducers) => {
 export const injectReducers = (store, reducers) => {
   let changed = false;
   reducers.forEach(({ key, reducer }) => {
-    if (Object.hasOwnProperty.call(store.asyncReducers, key)) {return;}
-    changed = true;
-    store.asyncReducers[key] = reducer;
+    if (!Object.hasOwnProperty.call(store.asyncReducers, key)) {
+      changed = true;
+      store.asyncReducers[key] = reducer;
+    }
   });
   if (changed) {
     store.replaceReducer(makeRootReducer(store.asyncReducers));
-    // Reinitialize
     store.dispatch({ type: INIT });
   }
 };
 
 export default makeRootReducer;
-

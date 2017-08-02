@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose } from 'redux';
 
 import style from 'routes/Settings/styles';
@@ -10,17 +11,20 @@ class PageInfo extends React.PureComponent {
     super(props);
 
     this.state = {
-      cursor : props.cursor,
-      length : props.length,
+      cursor: props.cursor,
+      length: props.length,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.cursor !== nextProps.cursor || this.state.length !== nextProps.length) {
+    if (
+      this.state.cursor !== nextProps.cursor ||
+      this.state.length !== nextProps.length
+    ) {
       this.setState({
-        length : nextProps.length,
-        cursor : nextProps.cursor,
-      })
+        length: nextProps.length,
+        cursor: nextProps.cursor,
+      });
     }
   }
 
@@ -40,14 +44,10 @@ class PageInfo extends React.PureComponent {
 }
 
 PageInfo.propTypes = {
-  actions : T.shape({
-  }),
-  intl    : intlShape.isRequired,
-  cursor  : T.number.isRequired,
-  length  : T.number.isRequired,
+  actions: T.shape({}),
+  intl: intlShape.isRequired,
+  cursor: T.number.isRequired,
+  length: T.number.isRequired,
 };
 
-export default compose(
-  injectIntl,
-)(PageInfo);
-
+export default compose(injectIntl)(PageInfo);

@@ -1,8 +1,9 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router';
 
-import {compose, bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import selector from './selector';
 
@@ -14,12 +15,14 @@ import Title from 'components/Title';
 
 import AppLogo from 'components/AppLogo';
 
-import { SubmissionError, Field, reduxForm, propTypes as formPropTypes } from 'redux-form/immutable';
-
 import {
-  intlShape,
-  injectIntl,
-} from 'react-intl';
+  SubmissionError,
+  Field,
+  reduxForm,
+  propTypes as formPropTypes,
+} from 'redux-form/immutable';
+
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
   APP_NAME,
@@ -35,18 +38,18 @@ import PasswordField from '../../components/PasswordField';
 export class ChoosePasswordContainer extends React.Component {
   static propTypes = {
     ...formPropTypes,
-    token           : T.string.isRequired,
-    action          : T.string.isRequired,
-    username        : T.string.isRequired,
-    intl            : intlShape.isRequired,
+    token: T.string.isRequired,
+    action: T.string.isRequired,
+    username: T.string.isRequired,
+    intl: intlShape.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.onSubmit     = this.onSubmit.bind(this);
-    this.onKeyDown    = this._onKeyDown.bind(this);
-    this._setFormRef  = this._setFormRef.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onKeyDown = this._onKeyDown.bind(this);
+    this._setFormRef = this._setFormRef.bind(this);
   }
 
   _onKeyDown(e) {
@@ -67,23 +70,28 @@ export class ChoosePasswordContainer extends React.Component {
   }
 
   _renderForm() {
-    const {
-      intl, handleSubmit, submitting, invalid,
-    } = this.props;
+    const { intl, handleSubmit, submitting, invalid } = this.props;
 
     return [
-      <h1 className={style.heading}>{intl.formatMessage(messages.title)}</h1>,
+      <h1 className={style.heading}>
+        {intl.formatMessage(messages.title)}
+      </h1>,
 
       <Field
         name='new_password'
         component={PasswordField}
         placeholder={intl.formatMessage(messages.password)}
-        onKeyDown={this.onKeyDown} />,
+        onKeyDown={this.onKeyDown}
+      />,
 
-      <button onClick={handleSubmit(this.onSubmit)} disabled={submitting || invalid} className={style.changePasswordButton} role='button'>
+      <button
+        onClick={handleSubmit(this.onSubmit)}
+        disabled={submitting || invalid}
+        className={style.changePasswordButton}
+        role='button'
+      >
         {intl.formatMessage(messages.choosePassword)}
       </button>,
-
     ];
   }
   _setFormRef(form) {
@@ -94,12 +102,19 @@ export class ChoosePasswordContainer extends React.Component {
     const { intl, action, username, token } = this.props;
     return (
       <div className={style.root}>
-        <Title title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}/>
+        <Title
+          title={intl.formatMessage(messages.pageTitle, { appName: APP_NAME })}
+        />
         <div className={style.center}>
           <Link className={style.logo} to={'/'}>
-            <AppLogo width={52} height={52}/>
+            <AppLogo width={52} height={52} />
           </Link>
-          <form ref={this._setFormRef} action={action} className={style.form} method={'POST'}>
+          <form
+            ref={this._setFormRef}
+            action={action}
+            className={style.form}
+            method={'POST'}
+          >
             <input name='utf-8' type='hidden' value='✓' />
             <input name='username' value={username} type='hidden' />
             <input name='token' value={token} type='hidden' />
@@ -109,13 +124,19 @@ export class ChoosePasswordContainer extends React.Component {
         <footer>
           <ul>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>{intl.formatMessage(messages.termsOfService)}</a>
+              <a target='_blank' href={LINK_TERMS_OF_SERVICE}>
+                {intl.formatMessage(messages.termsOfService)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_SUPPORT}>{intl.formatMessage(messages.support)}</a>
+              <a target='_blank' href={LINK_SUPPORT}>
+                {intl.formatMessage(messages.support)}
+              </a>
             </li>
             <li className={style.footerLink}>
-              <a target='_blank' href={LINK_PRIVACY_POLICY}>{intl.formatMessage(messages.privacyPolicy)}</a>
+              <a target='_blank' href={LINK_PRIVACY_POLICY}>
+                {intl.formatMessage(messages.privacyPolicy)}
+              </a>
             </li>
           </ul>
         </footer>
@@ -129,7 +150,7 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({}, dispatch)};
+  return { actions: bindActionCreators({}, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
@@ -138,9 +159,4 @@ const WithForm = reduxForm({
   form: 'choosePassword',
 });
 
-export default compose(
-  injectIntl,
-  Connect,
-  WithForm,
-)(ChoosePasswordContainer);
-
+export default compose(injectIntl, Connect, WithForm)(ChoosePasswordContainer);

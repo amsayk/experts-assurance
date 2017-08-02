@@ -1,8 +1,9 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 import { withApollo } from 'react-apollo';
 import { Link } from 'react-router';
 
-import {compose, bindActionCreators} from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Loading from '../Loading';
@@ -26,8 +27,8 @@ const LABEL = 'Paiement';
 
 class Payment extends React.Component {
   static contextTypes = {
-    snackbar : T.shape({
-      show : T.func.isRequired,
+    snackbar: T.shape({
+      show: T.func.isRequired,
     }),
   };
 
@@ -38,16 +39,18 @@ class Payment extends React.Component {
     this.onDeletePayment = this.onDeletePayment.bind(this);
 
     this.state = {
-      busy : false,
+      busy: false,
     };
   }
   render() {
     const { intl, currentUser, docLoading, doc, user, loading } = this.props;
 
-    if (docLoading === true || (typeof loading === 'undefined') || loading === true) {
-      return (
-        <Loading width={LABEL.length}/>
-      );
+    if (
+      docLoading === true ||
+      typeof loading === 'undefined' ||
+      loading === true
+    ) {
+      return <Loading width={LABEL.length} />;
     }
 
     return (
@@ -73,105 +76,100 @@ class Payment extends React.Component {
     const { doc } = self.props;
     if (doc) {
       const oldDoc = { ...doc };
-      self.setState({
-        busy : true,
-      }, async () => {
+      self.setState(
+        {
+          busy: true,
+        },
+        async () => {
+          async function undoDeleteManager() {}
 
-        async function undoDeleteManager() {
+          function retry() {}
 
-        }
-
-        function retry() {
-
-        }
-
-        function onError(errorText) {
-          self.context.snackbar.show({
-            message   : errorText,
-            persist   : true,
-            closeable : true,
-            action    : {
-              title : 'Réessayer',
-              click : function () {
-                this.dismiss();
-                setTimeout(() => {
-                  raf(() => {
-                    retry();
-                  });
-                }, 0);
+          function onError(errorText) {
+            self.context.snackbar.show({
+              message: errorText,
+              persist: true,
+              closeable: true,
+              action: {
+                title: 'Réessayer',
+                click: function() {
+                  this.dismiss();
+                  setTimeout(() => {
+                    raf(() => {
+                      retry();
+                    });
+                  }, 0);
+                },
               },
-            },
-          });
-        }
-
-        const { data: { delPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
-          mutation           : DEL_MUTATION,
-          variables          : { id : doc.id },
-          updateQueries : {
-            recentDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.delPay.doc;
-
-              if (prev && newDoc) {
-                const recentDocs = [
-                  newDoc,
-                  ...prev.recentDocs
-                ];
-                return {
-                  recentDocs,
-                };
-              }
-
-              return prev;
-            },
-            // getTimeline(prev, { mutationResult, queryVariables }) {
-            //   const newDoc = mutationResult.data.delPay.doc;
-            //   const newActivities = mutationResult.data.delPay.activities;
-            //
-            //   if (prev && newActivities && newActivities.length) {
-            //
-            //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-            //       return prev;
-            //     }
-            //
-            //     return {
-            //       timeline : {
-            //         cursor : prev.timeline.cursor,
-            //         result : [
-            //           ...newActivities,
-            //           ...prev.timeline.result,
-            //         ],
-            //       },
-            //     };
-            //   }
-            //
-            //   return prev;
-            // },
-          },
-
-        });
-
-        if (error) {
-          switch (error.code) {
-            case codes.ERROR_ACCOUNT_NOT_VERIFIED:
-            case codes.ERROR_NOT_AUTHORIZED:
-              onError(`Vous n'êtes pas authorisé.`);
-              break;
-            case codes.ERROR_ILLEGAL_OPERATION:
-              onError(`Cette opération est illégale.`);
-              break;
-            default:
-              onError(`Erreur inconnu, veuillez réessayer à nouveau.`);
+            });
           }
-        } else {
-          self.setState({ busy : false });
-          self.context.snackbar.show({
-            message  : 'Succès',
-            // duration : 7 * 1000,
-          });
-        }
-      });
 
+          const {
+            data: { delPay: { error } },
+          } = await self.props.client.mutate({
+            refetchQueries: ['getDoc', 'unpaidDocs', 'getTimeline'],
+            mutation: DEL_MUTATION,
+            variables: { id: doc.id },
+            updateQueries: {
+              recentDocs(prev, { mutationResult, queryVariables }) {
+                const newDoc = mutationResult.data.delPay.doc;
+
+                if (prev && newDoc) {
+                  const recentDocs = [newDoc, ...prev.recentDocs];
+                  return {
+                    recentDocs,
+                  };
+                }
+
+                return prev;
+              },
+              // getTimeline(prev, { mutationResult, queryVariables }) {
+              //   const newDoc = mutationResult.data.delPay.doc;
+              //   const newActivities = mutationResult.data.delPay.activities;
+              //
+              //   if (prev && newActivities && newActivities.length) {
+              //
+              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+              //       return prev;
+              //     }
+              //
+              //     return {
+              //       timeline : {
+              //         cursor : prev.timeline.cursor,
+              //         result : [
+              //           ...newActivities,
+              //           ...prev.timeline.result,
+              //         ],
+              //       },
+              //     };
+              //   }
+              //
+              //   return prev;
+              // },
+            },
+          });
+
+          if (error) {
+            switch (error.code) {
+              case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+              case codes.ERROR_NOT_AUTHORIZED:
+                onError(`Vous n'êtes pas authorisé.`);
+                break;
+              case codes.ERROR_ILLEGAL_OPERATION:
+                onError(`Cette opération est illégale.`);
+                break;
+              default:
+                onError(`Erreur inconnu, veuillez réessayer à nouveau.`);
+            }
+          } else {
+            self.setState({ busy: false });
+            self.context.snackbar.show({
+              message: 'Succès',
+              // duration : 7 * 1000,
+            });
+          }
+        },
+      );
     }
   }
   onSetPayment(info) {
@@ -179,105 +177,100 @@ class Payment extends React.Component {
     const { doc } = self.props;
     if (doc) {
       const oldDoc = { ...doc };
-      self.setState({
-        busy : true,
-      }, async () => {
+      self.setState(
+        {
+          busy: true,
+        },
+        async () => {
+          async function undoSetManager() {}
 
-        async function undoSetManager() {
+          function retry() {}
 
-        }
-
-        function retry() {
-
-        }
-
-        function onError(errorText) {
-          self.context.snackbar.show({
-            message   : errorText,
-            persist   : true,
-            closeable : true,
-            action    : {
-              title : 'Réessayer',
-              click : function () {
-                this.dismiss();
-                setTimeout(() => {
-                  raf(() => {
-                    retry();
-                  });
-                }, 0);
+          function onError(errorText) {
+            self.context.snackbar.show({
+              message: errorText,
+              persist: true,
+              closeable: true,
+              action: {
+                title: 'Réessayer',
+                click: function() {
+                  this.dismiss();
+                  setTimeout(() => {
+                    raf(() => {
+                      retry();
+                    });
+                  }, 0);
+                },
               },
-            },
-          });
-        }
-
-        const { data: { setPay: { error } } } = await self.props.client.mutate({
-          refetchQueries     : ['getDoc', 'unpaidDocs', 'getTimeline'],
-          mutation           : SET_MUTATION,
-          variables          : { id : doc.id, info },
-          updateQueries : {
-            recentDocs(prev, { mutationResult, queryVariables }) {
-              const newDoc = mutationResult.data.setPay.doc;
-
-              if (prev && newDoc) {
-                const recentDocs = [
-                  newDoc,
-                  ...prev.recentDocs
-                ];
-                return {
-                  recentDocs,
-                };
-              }
-
-              return prev;
-            },
-            // getTimeline(prev, { mutationResult, queryVariables }) {
-            //   const newDoc = mutationResult.data.setPay.doc;
-            //   const newActivities = mutationResult.data.setPay.activities;
-            //
-            //   if (prev && newActivities && newActivities.length) {
-            //
-            //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
-            //       return prev;
-            //     }
-            //
-            //     return {
-            //       timeline : {
-            //         cursor : prev.timeline.cursor,
-            //         result : [
-            //           ...newActivities,
-            //           ...prev.timeline.result,
-            //         ],
-            //       },
-            //     };
-            //   }
-            //
-            //   return prev;
-            // },
-          },
-
-        });
-
-        if (error) {
-          switch (error.code) {
-            case codes.ERROR_ACCOUNT_NOT_VERIFIED:
-            case codes.ERROR_NOT_AUTHORIZED:
-              onError(`Vous n'êtes pas authorisé.`);
-              break;
-            case codes.ERROR_ILLEGAL_OPERATION:
-              onError(`Cette opération est illégale.`);
-              break;
-            default:
-              onError(`Erreur inconnu, veuillez réessayer à nouveau.`);
+            });
           }
-        } else {
-          self.setState({ busy : false });
-          self.context.snackbar.show({
-            message  : 'Succès',
-            // duration : 7 * 1000,
-          });
-        }
-      });
 
+          const {
+            data: { setPay: { error } },
+          } = await self.props.client.mutate({
+            refetchQueries: ['getDoc', 'unpaidDocs', 'getTimeline'],
+            mutation: SET_MUTATION,
+            variables: { id: doc.id, info },
+            updateQueries: {
+              recentDocs(prev, { mutationResult, queryVariables }) {
+                const newDoc = mutationResult.data.setPay.doc;
+
+                if (prev && newDoc) {
+                  const recentDocs = [newDoc, ...prev.recentDocs];
+                  return {
+                    recentDocs,
+                  };
+                }
+
+                return prev;
+              },
+              // getTimeline(prev, { mutationResult, queryVariables }) {
+              //   const newDoc = mutationResult.data.setPay.doc;
+              //   const newActivities = mutationResult.data.setPay.activities;
+              //
+              //   if (prev && newActivities && newActivities.length) {
+              //
+              //     if (queryVariables && queryVariables.query && queryVariables.query.doc && queryVariables.query.doc !== newDoc.id ) {
+              //       return prev;
+              //     }
+              //
+              //     return {
+              //       timeline : {
+              //         cursor : prev.timeline.cursor,
+              //         result : [
+              //           ...newActivities,
+              //           ...prev.timeline.result,
+              //         ],
+              //       },
+              //     };
+              //   }
+              //
+              //   return prev;
+              // },
+            },
+          });
+
+          if (error) {
+            switch (error.code) {
+              case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+              case codes.ERROR_NOT_AUTHORIZED:
+                onError(`Vous n'êtes pas authorisé.`);
+                break;
+              case codes.ERROR_ILLEGAL_OPERATION:
+                onError(`Cette opération est illégale.`);
+                break;
+              default:
+                onError(`Erreur inconnu, veuillez réessayer à nouveau.`);
+            }
+          } else {
+            self.setState({ busy: false });
+            self.context.snackbar.show({
+              message: 'Succès',
+              // duration : 7 * 1000,
+            });
+          }
+        },
+      );
     }
   }
 }
@@ -287,15 +280,11 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({}, dispatch)};
+  return { actions: bindActionCreators({}, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  withApollo,
-  Connect,
-  DataLoader.user,
-)(Payment);
-
+export default compose(injectIntl, withApollo, Connect, DataLoader.user)(
+  Payment,
+);

@@ -1,5 +1,5 @@
 import invariant from 'invariant';
-import { PropTypes } from 'react';
+import T from 'prop-types';
 
 import { SIZE_MAP } from './StyleConfig';
 
@@ -18,7 +18,7 @@ function curry(fn) {
 export function prefix(props, variant) {
   invariant(
     props.bsClass != null,
-    'A `bsClass` prop is required for this component'
+    'A `bsClass` prop is required for this component',
   );
   return props.bsClass + (variant ? `-${variant}` : '');
 }
@@ -27,7 +27,7 @@ export const bsClass = curry((defaultClass, Component) => {
   let propTypes = Component.propTypes || (Component.propTypes = {});
   let defaultProps = Component.defaultProps || (Component.defaultProps = {});
 
-  propTypes.bsClass = PropTypes.string;
+  propTypes.bsClass = T.string;
   defaultProps.bsClass = defaultClass;
 
   return Component;
@@ -48,7 +48,7 @@ export const bsStyles = curry((styles, defaultStyle, Component) => {
     }
   });
 
-  let propType = PropTypes.oneOf(existing);
+  let propType = T.oneOf(existing);
 
   // expose the values on the propType function for documentation
   Component.STYLES = propType._values = existing;
@@ -91,7 +91,7 @@ export const bsSizes = curry((sizes, defaultSize, Component) => {
     values.push(size);
   });
 
-  const propType = PropTypes.oneOf(values);
+  const propType = T.oneOf(values);
   propType._values = values;
 
   // expose the values on the propType function for documentation
@@ -160,7 +160,9 @@ export function splitBsProps(props) {
 
 export function splitBsPropsAndOmit(props, omittedPropNames) {
   const isOmittedProp = {};
-  omittedPropNames.forEach(propName => { isOmittedProp[propName] = true; });
+  omittedPropNames.forEach(propName => {
+    isOmittedProp[propName] = true;
+  });
 
   const elementProps = {};
   Object.entries(props).forEach(([propName, propValue]) => {
@@ -171,4 +173,3 @@ export function splitBsPropsAndOmit(props, omittedPropNames) {
 
   return [getBsProps(props), elementProps];
 }
-

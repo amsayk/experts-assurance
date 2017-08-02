@@ -71,13 +71,6 @@ const rootSchema = [`
 
     dashboard: Dashboard!
 
-    # Docs dashboard
-    # pendingDashboard(
-    #   durationInDays: Float!,
-    #   cursor: Int = 0,
-    #   sortConfig: ESSortConfig!
-    # ): DocsFetchResponse!
-
     openDashboard(
       durationInDays: Float!,
       cursor: Int = 0,

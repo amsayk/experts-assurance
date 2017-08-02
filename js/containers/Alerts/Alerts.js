@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -32,8 +33,11 @@ function AlertsPopup({ onClose }) {
       <div>
         <div className={style.popupAlertsHeader}>
           <span className={style.popupAlertsHeaderTitle}>Notifications</span>
-          <Button onClick={onClose} className={style.popupAlertsHeaderCloseButton}>
-            <CloseIcon size={18}/>
+          <Button
+            onClick={onClose}
+            className={style.popupAlertsHeaderCloseButton}
+          >
+            <CloseIcon size={18} />
           </Button>
         </div>
         <div>
@@ -51,10 +55,10 @@ function AlertsPopup({ onClose }) {
 class Alerts extends React.Component {
   state = {
     open: false,
-  }
+  };
   componentDidMount() {
     const self = this;
-    setImmediate(function () {
+    setImmediate(function() {
       self.setState({
         open: self.props.alertsOpen,
       });
@@ -64,7 +68,6 @@ class Alerts extends React.Component {
     this.setState({
       open: nextProps.alertsOpen,
     });
-
   }
   render() {
     const { number, isReady, scrolling, toggleAlerts } = this.props;
@@ -76,9 +79,8 @@ class Alerts extends React.Component {
     // );
 
     let count = (
-      <span className={cx(style.mailStatus, number > 0 && style.unread)}></span>
-    )
-
+      <span className={cx(style.mailStatus, number > 0 && style.unread)} />
+    );
     if (isReady) {
       // count = (
       //   <Zoom transitionAppear in>
@@ -100,19 +102,23 @@ class Alerts extends React.Component {
             points: ['tc', 'bc'],
             offset: [-66, 20],
           }}
-          popup={() => <AlertsPopup onClose={toggleAlerts}/>}
+          popup={() => <AlertsPopup onClose={toggleAlerts} />}
         >
           <div className={style.alertsWrapper}>
-            <BellIcon.Empty size={36}/>
+            <BellIcon.Empty size={36} />
             {count}
           </div>
         </Trigger>
       );
     } else {
       content = (
-        <Tooltip align={tooltipAlign} placement='bottom' overlay={'Notifications'}>
+        <Tooltip
+          align={tooltipAlign}
+          placement='bottom'
+          overlay={'Notifications'}
+        >
           <div className={style.alertsWrapper}>
-            <BellIcon.Empty size={36}/>
+            <BellIcon.Empty size={36} />
             {count}
           </div>
         </Tooltip>
@@ -125,20 +131,18 @@ class Alerts extends React.Component {
         </Button>
       </div>
     );
-
   }
-
 }
 
 Alerts.defaultProps = {
-  number : '+99',
+  number: '+99',
 };
 
 Alerts.propTypes = {
-  intl         : intlShape.isRequired,
-  toggleAlerts : T.func.isRequired,
-  alertsOpen   : T.bool.isRequired,
-  number       : T.number.isRequired,
+  intl: intlShape.isRequired,
+  toggleAlerts: T.func.isRequired,
+  alertsOpen: T.bool.isRequired,
+  number: T.number.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -147,14 +151,10 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({
-    }, dispatch),
+    actions: bindActionCreators({}, dispatch),
   };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  Connect,
-)(Alerts);
-
+export default compose(Connect)(Alerts);

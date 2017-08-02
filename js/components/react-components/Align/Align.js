@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import ReactDOM from 'react-dom';
 import align from 'dom-align';
 import addEventListener from 'utils/lib/DOM/addEventListener';
@@ -28,22 +29,21 @@ function buffer(fn, ms) {
 
 export default class Align extends React.Component {
   static propTypes = {
-    childrenProps       : T.object,
-    align               : T.object.isRequired,
-    target              : T.func,
-    onAlign             : T.func,
-    monitorBufferTime   : T.number,
-    monitorWindowResize : T.bool,
-    disabled            : T.bool,
-    children            : T.any,
+    childrenProps: T.object,
+    align: T.object.isRequired,
+    target: T.func,
+    onAlign: T.func,
+    monitorBufferTime: T.number,
+    monitorWindowResize: T.bool,
+    disabled: T.bool,
+    children: T.any,
   };
 
   static defaultProps = {
     target() {
       return window;
     },
-    onAlign() {
-    },
+    onAlign() {},
     monitorBufferTime: 50,
     monitorWindowResize: false,
     disabled: false,
@@ -87,7 +87,6 @@ export default class Align extends React.Component {
     }
   }
 
-
   componentWillUnmount() {
     this.stopMonitorWindowResize();
   }
@@ -95,7 +94,11 @@ export default class Align extends React.Component {
   startMonitorWindowResize = () => {
     if (!this.resizeHandler) {
       this.bufferMonitor = buffer(this.forceAlign, this.props.monitorBufferTime);
-      this.resizeHandler = addEventListener(window, 'resize', this.bufferMonitor);
+      this.resizeHandler = addEventListener(
+        window,
+        'resize',
+        this.bufferMonitor,
+      );
     }
   };
 
@@ -115,7 +118,6 @@ export default class Align extends React.Component {
     }
   };
 
-
   render() {
     const { childrenProps, children } = this.props;
     const child = React.Children.only(children);
@@ -123,9 +125,13 @@ export default class Align extends React.Component {
       const newProps = {};
       for (const prop in childrenProps) {
         if (childrenProps.hasOwnProperty(prop)) {
-          newProps[prop] = prop === 'className'
-            ? cx(this.props[childrenProps[prop]], child.props[childrenProps[prop]])
-            : this.props[childrenProps[prop]];
+          newProps[prop] =
+            prop === 'className'
+              ? cx(
+                  this.props[childrenProps[prop]],
+                  child.props[childrenProps[prop]],
+                )
+              : this.props[childrenProps[prop]];
         }
       }
       return React.cloneElement(child, newProps);
@@ -133,4 +139,3 @@ export default class Align extends React.Component {
     return child;
   }
 }
-

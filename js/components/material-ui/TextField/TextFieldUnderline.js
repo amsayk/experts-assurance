@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import T from 'prop-types';
 import objectAssign from 'object-assign';
 import transitions from '../styles/transitions';
 
@@ -6,36 +7,36 @@ const propTypes = {
   /**
    * True if the parent `TextField` is disabled.
    */
-  disabled: PropTypes.bool,
+  disabled: T.bool,
   /**
    * Override the inline-styles of the underline when parent `TextField` is disabled.
    */
-  disabledStyle: PropTypes.object,
+  disabledStyle: T.object,
   /**
    * True if the parent `TextField` has an error.
    */
-  error: PropTypes.bool,
+  error: T.bool,
   /**
    * Override the inline-styles of the underline when parent `TextField` has an error.
    */
-  errorStyle: PropTypes.object,
+  errorStyle: T.object,
   /**
    * True if the parent `TextField` is focused.
    */
-  focus: PropTypes.bool,
+  focus: T.bool,
   /**
    * Override the inline-styles of the underline when parent `TextField` is focused.
    */
-  focusStyle: PropTypes.object,
+  focusStyle: T.object,
   /**
    * @ignore
    * The material-ui theme applied to this component.
    */
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: T.object.isRequired,
   /**
    * Override the inline-styles of the root element.
    */
-  style: PropTypes.object,
+  style: T.object,
 };
 
 const defaultProps = {
@@ -48,7 +49,7 @@ const defaultProps = {
   style: {},
 };
 
-const TextFieldUnderline = (props) => {
+const TextFieldUnderline = props => {
   const {
     disabled,
     disabledStyle,
@@ -60,18 +61,11 @@ const TextFieldUnderline = (props) => {
     style,
   } = props;
 
-  const {
-    color: errorStyleColor,
-  } = errorStyle;
+  const { color: errorStyleColor } = errorStyle;
 
   const {
     prepareStyles,
-    textField: {
-      borderColor,
-      disabledTextColor,
-      errorColor,
-      focusColor,
-    },
+    textField: { borderColor, disabledTextColor, errorColor, focusColor },
   } = muiTheme;
 
   const styles = {
@@ -106,8 +100,12 @@ const TextFieldUnderline = (props) => {
   let underline = objectAssign({}, styles.root, style);
   let focusedUnderline = objectAssign({}, underline, styles.focus, focusStyle);
 
-  if (disabled) underline = objectAssign({}, underline, styles.disabled, disabledStyle);
-  if (focus) focusedUnderline = objectAssign({}, focusedUnderline, {transform: 'scaleX(1)'});
+  if (disabled)
+    underline = objectAssign({}, underline, styles.disabled, disabledStyle);
+  if (focus)
+    focusedUnderline = objectAssign({}, focusedUnderline, {
+      transform: 'scaleX(1)',
+    });
   if (error) focusedUnderline = objectAssign({}, focusedUnderline, styles.error);
 
   return (

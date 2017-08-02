@@ -16,45 +16,63 @@ export default function createWorker(opts, name, methods) {
   log('Creating worker for', name, Object.keys(methods));
   const queue = kue.createQueue(opts);
 
-  queue.process(name, opts.concurrency || 1, function (job, done) {
+  queue.process(name, opts.concurrency || 1, function(job, done) {
     log(`${name}.${job.data.__serverMethod}(...)`);
     const serverMethod = job.data.__serverMethod;
     if (!methods.hasOwnProperty(serverMethod)) {
       done('This method does not support by this server');
-    }
-    try {
-      const request = job.data.req;
+    } else {
+      try {
+        const request = job.data.req;
 
-      request.user = deserializeParseObject(request.user);
-      request.log = (...args) => log(serverMethod, ...args);
+        request.user = deserializeParseObject(request.user);
+        request.log = (...args) => log(serverMethod, ...args);
 
-      methods[serverMethod](request, done);
-    } catch (e) {
-      log.error(`Error while executing ${serverMethod}:`, e);
-      done(new Error(e));
+        methods[serverMethod](request, done);
+      } catch (e) {
+        log.error(`Error while executing ${serverMethod}:`, e);
+        done(new Error(e));
+      }
     }
   });
 
-  queue.on('job complete', function (id) {
-    kue.Job.get(id, function (err, job){
-      if (err) { return; }
-      job.remove(function (err){
-        if (err) { throw err; }
-        log('removed completed job %s:%s:#%d', name, job.data.__serverMethod, job.id);
+  queue.on('job complete', function(id) {
+    kue.Job.get(id, function(err, job) {
+      if (err) {
+        return;
+      }
+      job.remove(function(err) {
+        if (err) {
+          throw err;
+        }
+        log(
+          'removed completed job %s:%s:#%d',
+          name,
+          job.data.__serverMethod,
+          job.id,
+        );
       });
     });
   });
 
-  queue.on('job failed', function (id) {
-    kue.Job.get(id, function (err, job){
-      if (err) { return; }
-      job.remove(function (err){
-        if (err) { throw err; }
-        log('removed failed job %s:%s:#%d', name, job.data.__serverMethod, job.id);
+  queue.on('job failed', function(id) {
+    kue.Job.get(id, function(err, job) {
+      if (err) {
+        return;
+      }
+      job.remove(function(err) {
+        if (err) {
+          throw err;
+        }
+        log(
+          'removed failed job %s:%s:#%d',
+          name,
+          job.data.__serverMethod,
+          job.id,
+        );
       });
     });
   });
 
   return queue;
 }
-

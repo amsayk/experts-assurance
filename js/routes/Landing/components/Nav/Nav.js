@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
 import cx from 'classnames';
 
@@ -8,7 +9,7 @@ export default class Nav extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.onFiles  = props.onChange.bind(this, 'timeline.files');
+    this.onFiles = props.onChange.bind(this, 'timeline.files');
     this.onEvents = props.onChange.bind(this, 'timeline.events');
     this.onObservations = props.onChange.bind(this, 'timeline.comments');
   }
@@ -17,41 +18,41 @@ export default class Nav extends React.PureComponent {
     return (
       <nav className={style.navgroup}>
         <ul className={style.nav}>
-
-          <li className={cx(selectedNavItem === 'timeline.files' && style.navSelected)}>
+          <li
+            className={cx(
+              selectedNavItem === 'timeline.files' && style.navSelected,
+            )}
+          >
             <a onClick={this.onFiles}>
-              <h2>
-                Fichiers
-              </h2>
+              <h2>Fichiers</h2>
             </a>
           </li>
 
-          <li className={cx(selectedNavItem === 'timeline.events' && style.navSelected)}>
+          <li
+            className={cx(
+              selectedNavItem === 'timeline.events' && style.navSelected,
+            )}
+          >
             <a onClick={this.onEvents}>
-              <h2>
-                Événements
-              </h2>
+              <h2>Événements</h2>
             </a>
           </li>
 
-          <li className={cx(selectedNavItem === 'timeline.comments' && style.navSelected)}>
+          <li
+            className={cx(
+              selectedNavItem === 'timeline.comments' && style.navSelected,
+            )}
+          >
             <a onClick={this.onObservations}>
-              <h2>
-               Observations
-              </h2>
+              <h2>Observations</h2>
             </a>
           </li>
-
         </ul>
-
       </nav>
     );
-
   }
 }
 
 Nav.propTypes = {
-  selectedNavItem : T.oneOf([
-  ]).isRequired,
+  selectedNavItem: T.oneOf([]).isRequired,
 };
-

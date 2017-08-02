@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 
 import { Link } from 'react-router';
 
@@ -40,10 +41,12 @@ const ICON_WRAPPER_STYLE = {
   width: 24,
 };
 
-export default function DocumentManagerChanged({ intl, doc, user, now : timestamp, metadata }, { currentUser }) {
+export default function DocumentManagerChanged(
+  { intl, doc, user, now: timestamp, metadata },
+  { currentUser },
+) {
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
-
       <div style={ICON_WRAPPER_STYLE} className={style.profilePic}>
         {/* <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}> */}
         {/*   <ProfilePic */}
@@ -51,7 +54,7 @@ export default function DocumentManagerChanged({ intl, doc, user, now : timestam
         {/*     size={24} */}
         {/*   /> */}
         {/* </Link> */}
-        <PersonIcon size={18}/>
+        <PersonIcon size={18} />
       </div>
 
       <div className={style.entry}>
@@ -61,21 +64,35 @@ export default function DocumentManagerChanged({ intl, doc, user, now : timestam
           </Link>
         </div>
         <div className={style.desc}>
-          {metadata.fromManager ? [
-            <span style={{ marginRight: 5 }}>
-              <UserLink id={metadata.fromManager} docLoading={false}/>
-            </span>,
-            <span style={{ marginRight: 5 }}> → </span>
-          ] : null}
+          {metadata.fromManager
+            ? [
+                <span style={{ marginRight: 5 }}>
+                  <UserLink id={metadata.fromManager} docLoading={false} />
+                </span>,
+                <span style={{ marginRight: 5 }}> → </span>,
+              ]
+            : null}
           <span>
-            <UserLink id={metadata.toManager} docLoading={false}/>
+            <UserLink id={metadata.toManager} docLoading={false} />
           </span>
         </div>
         <div className={style.info}>
-          <Link to={PATH_SETTINGS_BASE + '/' + PATH_SETTINGS_BUSINESS_USER + '/' + user.id}>
+          <Link
+            to={
+              PATH_SETTINGS_BASE +
+              '/' +
+              PATH_SETTINGS_BUSINESS_USER +
+              '/' +
+              user.id
+            }
+          >
             {user.displayName}
-          </Link> ·{' '}
-          <time title={intl.formatDate(timestamp)} dateTime={new Date(timestamp).toISOString()}>
+          </Link>{' '}
+          ·{' '}
+          <time
+            title={intl.formatDate(timestamp)}
+            dateTime={new Date(timestamp).toISOString()}
+          >
             {intl.formatRelative(timestamp)}
           </time>
         </div>
@@ -85,6 +102,5 @@ export default function DocumentManagerChanged({ intl, doc, user, now : timestam
 }
 
 DocumentManagerChanged.contextTypes = {
-  currentUser : T.object.isRequired,
+  currentUser: T.object.isRequired,
 };
-

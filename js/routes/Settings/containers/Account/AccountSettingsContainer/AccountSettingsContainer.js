@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react';
+import React from 'react';
+import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -24,14 +25,17 @@ import AccountSettingsForm from './AccountSettingsForm';
 function AccountSettingsContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
-      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
-      <Header onLogOut={actions.logOut}/>
+      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })} />
+      <Header onLogOut={actions.logOut} />
       {/* <div className={style.body}> */}
-        <Sidebar user={user} selectedMenuItem={'account.settings'}/>
-        <AccountSettingsForm intl={intl} initialValues={{
+      <Sidebar user={user} selectedMenuItem={'account.settings'} />
+      <AccountSettingsForm
+        intl={intl}
+        initialValues={{
           email: user.email,
           displayName: user.displayName,
-        }}/>
+        }}
+      />
       {/* </div> */}
     </div>
   );
@@ -39,7 +43,6 @@ function AccountSettingsContainer({ intl, user, actions }) {
 
 AccountSettingsContainer.propTypes = {
   intl: intlShape.isRequired,
-
 };
 
 function mapStateToProps(state, props) {
@@ -47,13 +50,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(AccountSettingsContainer);
-
+export default compose(injectIntl, Connect)(AccountSettingsContainer);

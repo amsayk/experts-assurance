@@ -1,4 +1,5 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react';
+import T from 'prop-types';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -28,29 +29,24 @@ const TOP = NAVBAR_HEIGHT + TOOLBAR_HEIGHT + 20;
 const NOTIFICATION_HEIGHT = 45;
 
 const styles = {
-  notificationOpen : {
-    top : TOP + NOTIFICATION_HEIGHT,
+  notificationOpen: {
+    top: TOP + NOTIFICATION_HEIGHT,
   },
 };
 
 class Observations extends React.PureComponent {
   static defaultProps = {
-    loading : false,
-    observations  : [],
+    loading: false,
+    observations: [],
   };
 
   constructor(props) {
     super(props);
 
-
-    this.state = {
-    };
+    this.state = {};
   }
 
-
-  componentWillReceiveProps(nextProps) {
-
-  }
+  componentWillReceiveProps(nextProps) {}
   render() {
     const {
       intl,
@@ -58,7 +54,7 @@ class Observations extends React.PureComponent {
       notificationOpen,
       loading,
       cursor,
-      observations : items,
+      observations: items,
     } = this.props;
 
     // if (loading) {
@@ -66,23 +62,22 @@ class Observations extends React.PureComponent {
     // }
 
     return (
-      <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
+      <div
+        className={style.timeline}
+        style={notificationOpen ? styles.notificationOpen : emptyObject}
+      >
         <Nav
           intl={intl}
           onChange={this.props.onNav}
           selectedNavItem='timeline.comments'
         />
-        <div className={style.feed}>
-          TODO
-        </div>
+        <div className={style.feed}>TODO</div>
       </div>
     );
   }
-
 }
 
-Observations.propTypes = {
-};
+Observations.propTypes = {};
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -90,9 +85,6 @@ function mapStateToProps(state, props) {
 
 const Connect = connect(mapStateToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-  DataLoader.docObserations,
-)(Observations);
-
+export default compose(injectIntl, Connect, DataLoader.docObserations)(
+  Observations,
+);
