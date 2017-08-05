@@ -38,8 +38,8 @@ import DTMissionLine from './DTMission';
 import DeletionLine from './DeletionLine';
 import MTRapportsLine from './MTRapports';
 
-import NatureLine from './Nature';
-import PoliceLine from './Police';
+import NatureLine from './Nature2';
+import PoliceLine from './Police2';
 
 import DocMenu from './DocMenu';
 

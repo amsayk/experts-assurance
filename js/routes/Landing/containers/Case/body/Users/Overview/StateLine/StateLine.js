@@ -35,7 +35,7 @@ const DASHBOARD_KEY_TO_DOC_STATE = {
 function StateUser({ doc }) {
   let user = doc.user;
 
-  if (doc.state === 'OPEN' && doc.validation) {
+  if (doc.state === 'OPEN' && doc.validation && doc.validation.user) {
     user = doc.validation.user;
   }
 
@@ -69,7 +69,7 @@ function StateUser({ doc }) {
 function StateDate({ intl, doc }) {
   let date = doc.date;
 
-  if (doc.validation) {
+  if (doc.validation && doc.validation && doc.validation.date) {
     date = doc.validation.date;
   }
 

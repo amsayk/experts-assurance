@@ -24,7 +24,7 @@ import fs from 'fs';
 
 import createApolloClient from './apollo-client';
 
-import { DOC_ID_KEY } from 'backend/constants';
+import { DOC_FOREIGN_KEY, DOC_ID_KEY } from 'backend/constants';
 
 import * as loaders from './loaders';
 
@@ -174,7 +174,10 @@ process_RS(fStream, async function(err, docs) {
         await sleep(250);
         {
           const activities = await new Parse.Query(ActivityType)
-            .containedIn('document', importedDocs)
+            .containedIn(
+              DOC_FOREIGN_KEY,
+              importedDocs.map(doc => doc.get(DOC_ID_KEY)),
+            )
             .find({ useMasterKey: true });
           log(`Found ${activities.length} activities...`);
           await Promise.all(
@@ -186,7 +189,10 @@ process_RS(fStream, async function(err, docs) {
         await sleep(250);
         {
           const files = await new Parse.Query(FileType)
-            .containedIn('document', importedDocs)
+            .containedIn(
+              DOC_FOREIGN_KEY,
+              importedDocs.map(doc => doc.get(DOC_ID_KEY)),
+            )
             .find({ useMasterKey: true });
           log(`Found ${files.length} files...`);
           await Promise.all(files.map(o => o.destroy({ useMasterKey: true })));
@@ -320,6 +326,7 @@ process_RS(fStream, async function(err, docs) {
               mutation: CLOSE,
               variables: {
                 id: doc[DOC_ID_KEY],
+                meta: { importing: true },
                 info: {
                   dateClosure: +moment(dateValidation, 'DD/MM/YY'),
                   paymentDate: +moment(paymentDate, 'DD/MM/YY'),

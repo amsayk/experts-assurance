@@ -24,10 +24,13 @@ import graphqlFields from 'graphql-fields';
 import getDocValidations from './docValidations';
 
 import payValidations from 'routes/Landing/containers/Case/body/Users/Overview/Payment/PaymentSetter/PaymentForm/validations';
-import closureValidations from 'routes/Landing/containers/Case/body/Users/Overview/CloseDoc/CloseDocForm/validations';
+import getClosureValidations from 'routes/Landing/containers/Case/body/Users/Overview/CloseDoc/CloseDocForm/validations';
 
 import validationValidations from 'routes/Landing/containers/Case/body/Users/Overview/DTValidation/DTValidationSetter/DTValidationForm/validations';
 import mtRapportsValidations from 'routes/Landing/containers/Case/body/Users/Overview/MTRapports/MTRapportsSetter/MTRapportsForm/validations';
+
+import natureValidations from 'routes/Landing/containers/Case/body/Users/Overview/Nature2/NatureSetter/NatureForm/validations';
+import policeValidations from 'routes/Landing/containers/Case/body/Users/Overview/Police2/PoliceSetter/PoliceForm/validations';
 
 import { fromJS } from 'immutable';
 
@@ -120,6 +123,10 @@ export const schema = [
     imported: Boolean!
   }
 
+  input CloseDocMeta {
+    importing: Boolean!
+  }
+
   input AddDocPayload {
     vehicleManufacturer : String
     vehicleModel : String
@@ -168,6 +175,18 @@ export const schema = [
   }
 
   type SetOrDelPayResponse {
+    error: Error
+    doc: Doc
+    activities : [Activity!]!
+  }
+
+  type SetOrDelNatureResponse {
+    error: Error
+    doc: Doc
+    activities : [Activity!]!
+  }
+
+  type SetOrDelPoliceResponse {
     error: Error
     doc: Doc
     activities : [Activity!]!
@@ -386,7 +405,7 @@ export const schema = [
   type DocValidationState {
     date: Date
     amount: Float
-    user: User!
+    user: User
   }
 
   # ------------------------------------
@@ -515,13 +534,13 @@ export const resolvers = {
         const validation_user =
           doc.validation_user || doc.get('validation_user');
 
-        if (validation_user) {
-          return {
-            amount: validation_amount || null,
-            date: validation_date || null,
-            user: validation_user,
-          };
-        }
+        // if (validation_user) {
+        return {
+          amount: validation_amount || null,
+          date: validation_date || null,
+          user: validation_user || null,
+          // };
+        };
 
         return null;
       },
@@ -623,13 +642,13 @@ export const resolvers = {
         const validation_amount = doc.validation_amount;
         const validation_user = doc.validation_user;
 
-        if (validation_user) {
-          return {
-            date: validation_date || null,
-            amount: validation_amount || null,
-            user: validation_user,
-          };
-        }
+        // if (validation_user) {
+        return {
+          date: validation_date || null,
+          amount: validation_amount || null,
+          user: validation_user || null,
+          // };
+        };
         return null;
       },
       paymentInfo: doc => {
@@ -725,6 +744,18 @@ export const resolvers = {
     parseGraphqlScalarFields(['activities', 'error']),
   ),
 
+  SetOrDelNatureResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
+  ),
+
+  SetOrDelPoliceResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
+  ),
+
   SetOrDelDTValidationResponse: objectAssign(
     {},
     parseGraphqlObjectFields(['doc']),
@@ -784,7 +815,7 @@ export const resolvers = {
         const docValidations = getDocValidations(context);
         await docValidations.asyncValidate(fromJS({ ...payload }));
       } catch (errors) {
-        return { errors };
+        return { errors, activities: [] };
       }
 
       if (!userVerified(context.user)) {
@@ -918,6 +949,146 @@ export const resolvers = {
 
       return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
+    async setNature(_, { id, value }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await natureValidations.asyncValidate(fromJS({ nature: value }));
+      } catch (errors) {
+        return { errors, activities: [] };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && doc.get('manager').id === user.id;
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
+      }
+
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
+        const { doc, activities } = await context.Docs.setNature(id, { value });
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delNature(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && doc.get('manager').id === user.id;
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
+      }
+
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
+        const { doc, activities } = await context.Docs.delNature(id);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async setPolice(_, { id, value }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      try {
+        await policeValidations.asyncValidate(fromJS({ police: value }));
+      } catch (errors) {
+        return { errors, activities: [] };
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && doc.get('manager').id === user.id;
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
+      }
+
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
+        const { doc, activities } = await context.Docs.setPolice(id, { value });
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
+    async delPolice(_, { id }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      async function isDocManager(user, id) {
+        const doc = await context.Docs.get(id);
+        if (doc) {
+          return doc.has('manager') && doc.get('manager').id === user.id;
+        }
+        return false;
+      }
+
+      if (!userVerified(context.user)) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
+      }
+
+      if (
+        userHasRoleAll(context.user, Role_ADMINISTRATORS) ||
+        (await isDocManager(request.user, id))
+      ) {
+        const { doc, activities } = await context.Docs.delPolice(id);
+        // publish subscription notification
+        // pubsub.publish('docChangeChannel', id);
+        return { doc, activities };
+      }
+
+      return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    },
     async setDTValidation(_, { id, info }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
@@ -926,7 +1097,7 @@ export const resolvers = {
       try {
         await validationValidations.asyncValidate(fromJS({ ...info }));
       } catch (errors) {
-        return { errors };
+        return { errors, activities: [] };
       }
 
       async function isDocManager(user, id) {
@@ -996,7 +1167,7 @@ export const resolvers = {
       try {
         await mtRapportsValidations.asyncValidate(fromJS({ ...info }));
       } catch (errors) {
-        return { errors };
+        return { errors, activities: [] };
       }
 
       async function isDocManager(user, id) {
@@ -1066,7 +1237,7 @@ export const resolvers = {
       try {
         await payValidations.asyncValidate(fromJS({ ...info }));
       } catch (errors) {
-        return { errors };
+        return { errors, activities: [] };
       }
 
       async function isDocManager(user, id) {
@@ -1160,15 +1331,16 @@ export const resolvers = {
 
       return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
     },
-    async closeDoc(_, { id, info }, context) {
+    async closeDoc(_, { id, info, meta }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
       }
 
       try {
-        await closureValidations.asyncValidate(fromJS({ ...info }));
+        const validations = getClosureValidations(meta ? meta.importing : false);
+        await validations.asyncValidate(fromJS({ ...info }));
       } catch (errors) {
-        return { errors };
+        return { errors, activities: [] };
       }
 
       async function isDocManager(user, id) {
@@ -1205,7 +1377,9 @@ export const resolvers = {
           };
         }
 
-        const { doc, activities } = await context.Docs.closeDoc(id, info);
+        const { doc, activities } = await context.Docs.closeDoc(id, info, {
+          ...meta,
+        });
         // publish subscription notification
         // pubsub.publish('docChangeChannel', id);
         return { doc, activities };

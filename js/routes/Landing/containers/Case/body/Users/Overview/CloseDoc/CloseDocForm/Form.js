@@ -13,7 +13,7 @@ import moment from 'moment';
 import focusNode from 'focusNode';
 import raf from 'utils/requestAnimationFrame';
 
-import validations from './validations';
+import getValidations from './validations';
 
 import { ErrorIcon } from 'components/icons/MaterialIcons';
 
@@ -31,6 +31,8 @@ import TextField from 'components/material-ui/TextField';
 
 import DT from './DT';
 import Payment from './Payment';
+
+const validations = getValidations();
 
 function parseDate(s) {
   return +moment.utc(s);

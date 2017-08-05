@@ -6,20 +6,20 @@ import { DOC_ID_KEY, DOC_FOREIGN_KEY } from 'backend/constants';
 
 import * as codes from 'result-codes';
 
-import { formatError, getOrCreateBusiness, serializeParseObject } from 'backend/utils';
+import {
+  formatError,
+  getOrCreateBusiness,
+  serializeParseObject,
+} from 'backend/utils';
 import { BusinessType, ActivityType, DocType, FileType } from 'data/types';
 
-export default async function uploadFile(request, done) {
+export default (async function uploadFile(request, done) {
   if (!request.user) {
     done(new Error('A user is required.'));
     return;
   }
 
-  const { payload: {
-    docId,
-    category,
-    metadata,
-  } } = request.params;
+  const { payload: { docId, category, metadata } } = request.params;
 
   const date = new Date(request.now);
 
@@ -27,7 +27,7 @@ export default async function uploadFile(request, done) {
   ACL.setPublicReadAccess(false);
   ACL.setPublicWriteAccess(false);
 
-  async function add(business,  doc) {
+  async function add(business, doc) {
     const { name, type, path, size } = metadata;
 
     const fileData = await new Promise((resolve, reject) => {
@@ -40,8 +40,11 @@ export default async function uploadFile(request, done) {
       });
     });
 
-    const fileObj = await new Parse.File(name, { base64 : fileData }, type)
-      .save(null, { useMasterKey: true });
+    const fileObj = await new Parse.File(
+      name,
+      { base64: fileData },
+      type,
+    ).save(null, { useMasterKey: true });
 
     const props = {
       [DOC_FOREIGN_KEY]: doc.get(DOC_ID_KEY),
@@ -62,7 +65,7 @@ export default async function uploadFile(request, done) {
 
     doc.addUnique('files', file.id);
 
-    await doc.save(null, { useMasterKey : true });
+    await doc.save(null, { useMasterKey: true });
 
     return file;
   }
@@ -78,9 +81,7 @@ export default async function uploadFile(request, done) {
       throw new Parse.Error(codes.ERROR_ENTITY_NOT_FOUND);
     }
 
-    const activities = [
-      { type : 'FILE_UPLOADED', user: request.user, date },
-    ];
+    const activities = [{ type: 'FILE_UPLOADED', user: request.user, date }];
 
     let file;
     if (business) {
@@ -90,63 +91,53 @@ export default async function uploadFile(request, done) {
     }
 
     const objects = activities.map(({ type, date, user, ...metadata }) => {
-      return new ActivityType()
-        .setACL(ACL)
-        .set({
-          ns                : 'DOCUMENTS',
-          type              : type,
-          metadata          : { ...metadata },
-          timestamp         : date,
-          now               : new Date(request.now),
-          [DOC_FOREIGN_KEY] : file.get(DOC_FOREIGN_KEY),
-          file              : file,
-          user,
-          business,
-        });
+      return new ActivityType().setACL(ACL).set({
+        ns: 'DOCUMENTS',
+        type: type,
+        metadata: { ...metadata },
+        timestamp: date,
+        now: new Date(request.now),
+        [DOC_FOREIGN_KEY]: file.get(DOC_FOREIGN_KEY),
+        file: file,
+        user,
+        business,
+      });
     });
 
-    await Promise.all(objects.map((o) => o.save(null, { useMasterKey : true })));
+    await Promise.all(objects.map(o => o.save(null, { useMasterKey: true })));
 
-    const [ newDoc, newFile, newActivities ] = await Promise.all([
+    const [newDoc, newFile, newActivities] = await Promise.all([
       // new doc
       new Parse.Query(DocType)
-      .include([
-        'manager',
-        'client',
-        'agent',
-        'user',
-        'payment_user',
-        'validation_user',
-        'closure_user',
-      ])
-      .get(doc.id, { useMasterKey : true }),
+        .include([
+          'manager',
+          'client',
+          'agent',
+          'user',
+          'payment_user',
+          'validation_user',
+          'closure_user',
+        ])
+        .get(doc.id, { useMasterKey: true }),
 
       // new file
       new Parse.Query(FileType)
-      .include([
-        'user',
-        'fileObj',
-      ])
-      .get(file.id, { useMasterKey : true }),
+        .include(['user', 'fileObj'])
+        .get(file.id, { useMasterKey: true }),
 
       // activities
       new Parse.Query(ActivityType)
-      .equalTo('file', file)
-      .include([
-        'file',
-        'user',
-      ])
-      .find({ useMasterKey : true })
+        .equalTo('file', file)
+        .include(['file', 'user'])
+        .find({ useMasterKey: true }),
     ]);
 
     done(null, {
-      doc        : serializeParseObject(newDoc),
-      file       : serializeParseObject(newFile),
-      activities : newActivities.map(serializeParseObject),
+      doc: serializeParseObject(newDoc),
+      file: serializeParseObject(newFile),
+      activities: newActivities.map(serializeParseObject),
     });
-
   } catch (e) {
     done(formatError(e));
   }
-}
-
+});

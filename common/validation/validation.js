@@ -52,11 +52,8 @@ export function generateSyncValidation(validationConfig) {
             values.toJS(),
             validation,
           ); // eslint-disable-line max-len
-          invariant(
-            !isPromise(hasError),
-            'Returning promise is not allowed in sync validation.',
-          );
-          if (hasError) {
+          if (isPromise(hasError)) {
+          } else if (hasError) {
             addError(fieldName, validationType, hasError);
           }
         });

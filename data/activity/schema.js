@@ -5,13 +5,24 @@ import objectAssign from 'object-assign';
 
 import invariant from 'invariant';
 
-export const schema = [`
+import { DOC_FOREIGN_KEY } from 'backend/constants';
+
+export const schema = [
+  `
 
   enum ActivityNS {
     DOCUMENTS
   }
 
   enum ActivityType {
+    IMPORTATION
+
+    PAYMENT_CHANGED
+    DT_VALIDATION_CHANGED
+    MT_RAPPORTS_CHANGED
+    NATURE_CHANGED
+    POLICE_CHANGED
+
     FILE_UPLOADED
     FILE_DELETED
     FILE_RESTORED
@@ -61,28 +72,24 @@ export const schema = [`
     user: User
   }
 
-`];
+`,
+];
 
 export const resolvers = {
-
   Activity: objectAssign(
-    {
-    },
+    {},
     {
       document: (activity, {}, context) => {
-        const ref = activity.get('ref');
+        const ref = activity.get(DOC_FOREIGN_KEY);
 
-        invariant(ref, 'Activity.document resolver: ref is required.');
+        invariant(
+          ref,
+          `Activity.document resolver: ${DOC_FOREIGN_KEY} is required.`,
+        );
         return context.Docs.get(ref);
       },
-
     },
-    parseGraphqlObjectFields([
-      'business',
-      'file',
-      'metadata',
-      'user',
-    ]),
+    parseGraphqlObjectFields(['business', 'file', 'metadata', 'user']),
     parseGraphqlScalarFields([
       'id',
       'ns',
@@ -91,18 +98,14 @@ export const resolvers = {
       'now',
       'createdAt',
       'updatedAt',
-    ])
+    ]),
   ),
 
-  Mutation: {
-
-  },
+  Mutation: {},
 
   Query: {
     timeline(obj, { cursor, query }, context) {
       return context.Activities.getTimeline(cursor, query);
     },
   },
-
 };
-

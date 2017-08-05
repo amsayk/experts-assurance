@@ -2,7 +2,6 @@ import Parse from 'parse/node';
 
 import {
   PURGE_DOC,
-
   ADD_DOC,
   DELETE_DOC,
   RESTORE_DOC,
@@ -14,11 +13,14 @@ import {
   // Payments
   SET_PAY,
   DEL_PAY,
+  SET_NATURE,
+  DEL_NATURE,
+  SET_POLICE,
+  DEL_POLICE,
 
   // Validation
   SET_DT_VALIDATION,
   DEL_DT_VALIDATION,
-
   DEL_MT_RAPPORTS,
   SET_MT_RAPPORTS,
 
@@ -54,7 +56,7 @@ export class Docs {
   }
 
   getDocObservations({ cursor, id }) {
-    return this.connector.getDocObservations({ cursor, id, user : this.user });
+    return this.connector.getDocObservations({ cursor, id, user: this.user });
   }
 
   getDocFiles(id) {
@@ -70,14 +72,14 @@ export class Docs {
     cursor,
     sortConfig,
     selectionSet,
-    now
+    now,
   }) {
     return this.connector.getInvalidDocs({
       category,
       // durationInDays,
       cursor,
       sortConfig,
-      user : this.user,
+      user: this.user,
       now,
       selectionSet,
     });
@@ -87,14 +89,26 @@ export class Docs {
       durationInDays,
       cursor,
       sortConfig,
-      user : this.user,
+      user: this.user,
       now,
       selectionSet,
     });
   }
 
-  getDocs({ queryString, cursor = 0, sortConfig, client, manager, state }, topLevelFields) {
-    return this.connector.getDocs(queryString, cursor, sortConfig, client, manager, state, this.user, topLevelFields);
+  getDocs(
+    { queryString, cursor = 0, sortConfig, client, manager, state },
+    topLevelFields,
+  ) {
+    return this.connector.getDocs(
+      queryString,
+      cursor,
+      sortConfig,
+      client,
+      manager,
+      state,
+      this.user,
+      topLevelFields,
+    );
   }
 
   // searchUsersByRoles(queryString, roles) {
@@ -117,7 +131,14 @@ export class Docs {
     return this.connector.queryCompanies(q);
   }
 
-  openDashboard(durationInDays, cursor, sortConfig, selectionSet, validOnly, now) {
+  openDashboard(
+    durationInDays,
+    cursor,
+    sortConfig,
+    selectionSet,
+    validOnly,
+    now,
+  ) {
     return this.connector.openDashboard(
       durationInDays,
       cursor,
@@ -154,7 +175,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: PURGE_DOC, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -162,7 +183,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: ADD_DOC, args: { payload, ...meta } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -170,7 +191,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DELETE_DOC, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -178,7 +199,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: RESTORE_DOC, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -186,7 +207,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_MANAGER, args: { id, manager } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -194,21 +215,21 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_STATE, args: { id, state } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
-  closeDoc(id, info) {
+  closeDoc(id, info, meta) {
     return Parse.Cloud.run(
       'routeOp',
-      { __operationKey: CLOSE_DOC, args: { id, info } },
-      { sessionToken: this.user.getSessionToken() }
+      { __operationKey: CLOSE_DOC, args: { id, info, meta } },
+      { sessionToken: this.user.getSessionToken() },
     );
   }
   cancelDoc(id) {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: CANCEL_DOC, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -217,14 +238,49 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_PAY, args: { id, info } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
   delPay(id) {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DEL_PAY, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+
+  // Nature
+  setNature(id, info) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: SET_NATURE, args: { id, info } },
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+  delNature(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DEL_NATURE, args: { id } },
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+
+  // Police
+  setPolice(id, info) {
+    return Parse.Cloud.run(
+      'routeOp',
+      {
+        __operationKey: SET_POLICE,
+        args: { id, info },
+      },
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+  delPolice(id) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: DEL_POLICE, args: { id } },
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -233,14 +289,14 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_DT_VALIDATION, args: { id, info } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
   delDTValidation(id) {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DEL_DT_VALIDATION, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -248,14 +304,14 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: SET_MT_RAPPORTS, args: { id, info } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
   delMTRapports(id) {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DEL_MT_RAPPORTS, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -265,7 +321,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: UPLOAD_FILE, args: { payload } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
 
     // const request = {
@@ -293,7 +349,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: DELETE_FILE, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 
@@ -301,8 +357,7 @@ export class Docs {
     return Parse.Cloud.run(
       'routeOp',
       { __operationKey: RESTORE_FILE, args: { id } },
-      { sessionToken: this.user.getSessionToken() }
+      { sessionToken: this.user.getSessionToken() },
     );
   }
 }
-

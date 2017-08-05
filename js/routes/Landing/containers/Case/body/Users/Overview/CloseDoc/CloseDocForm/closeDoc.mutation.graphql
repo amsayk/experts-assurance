@@ -1,6 +1,5 @@
-mutation closeDoc($id: ID!, $info: DocClosureInfo!) {
-
-  closeDoc(id: $id, info: $info) {
+mutation closeDoc($id: ID!, $info: DocClosureInfo!, $meta: CloseDocMeta) {
+  closeDoc(id: $id, info: $info, meta: $meta) {
 
     activities {
       id,

@@ -27,6 +27,12 @@ import {
   SET_PAY,
   DEL_PAY,
 
+  SET_NATURE,
+  DEL_NATURE,
+
+  SET_POLICE,
+  DEL_POLICE,
+
   // Validation
   SET_DT_VALIDATION,
   DEL_DT_VALIDATION,
@@ -87,6 +93,14 @@ createWorker(opts, 'MAIN', {
   // Payments
   [SET_PAY]  : docOps.setPay,
   [DEL_PAY]  : docOps.delPay,
+
+  // Nature
+  [SET_NATURE]  : docOps.setNature,
+  [DEL_NATURE]  : docOps.delNature,
+
+  // Nature
+  [SET_POLICE]  : docOps.setPolice,
+  [DEL_POLICE]  : docOps.delPolice,
 
   // Validation
   [SET_DT_VALIDATION]  : docOps.setDTValidation,

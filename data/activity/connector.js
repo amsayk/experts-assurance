@@ -6,12 +6,13 @@ import { businessQuery } from 'data/utils';
 
 import { ActivityType, DocType } from 'data/types';
 
+import { DOC_FOREIGN_KEY } from 'backend/constants';
+
 const LIMIT_PER_PAGE = 15;
 
 export class ActivityConnector {
   constructor() {
-    this.loader = new DataLoader(this.fetch.bind(this), {
-    });
+    this.loader = new DataLoader(this.fetch.bind(this), {});
   }
   async fetch(ids) {
     const activities = await new Parse.Query(ActivityType)
@@ -19,10 +20,12 @@ export class ActivityConnector {
       .containedIn('objectId', ids)
       .find({ useMasterKey: true });
 
-    return ids.map((id) => {
-      const index = activities.findIndex((activity) => activity.id === id);
-      return index !== -1 ? activities[index] : new Error(`Activity ${id} not found`);
-    })
+    return ids.map(id => {
+      const index = activities.findIndex(activity => activity.id === id);
+      return index !== -1
+        ? activities[index]
+        : new Error(`Activity ${id} not found`);
+    });
   }
 
   get(id) {
@@ -32,16 +35,16 @@ export class ActivityConnector {
   getTimeline(cursor, query, user) {
     if (!user) {
       return Promise.resolve({
-        prevCursor : 0,
-        cursor     : 0,
-        result     : [],
+        prevCursor: 0,
+        cursor: 0,
+        result: [],
       });
     }
 
-    return doFetch().then((activities) => ({
+    return doFetch().then(rs => ({
       prevCursor: cursor,
-      cursor: activities.length > 0 ? activities[activities.length - 1].get('timestamp') : 0,
-      result: activities,
+      cursor: rs.length > 0 ? rs[rs.length - 1].get('now') : 0,
+      result: rs,
     }));
 
     function getQuery() {
@@ -52,11 +55,11 @@ export class ActivityConnector {
     function doFetch() {
       const q = getQuery()
         .matchesQuery('business', businessQuery())
-        .descending('timestamp')
+        .descending('now')
         .limit(LIMIT_PER_PAGE);
 
       if (query.doc) {
-        q.equalTo('ref', query.doc);
+        q.equalTo(DOC_FOREIGN_KEY, query.doc);
       }
 
       if (query.ns) {
@@ -68,17 +71,12 @@ export class ActivityConnector {
       }
 
       if (cursor) {
-        q.lessThan('timestamp', cursor);
+        q.lessThan('now', cursor);
       }
 
-      q.include([
-        'file',
-        'user',
-      ]);
+      q.include(['file', 'user']);
 
       return q.find({ useMasterKey: true });
     }
-
   }
 }
-

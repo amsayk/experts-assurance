@@ -1,0 +1,106 @@
+mutation delNature($id: ID!) {
+
+  delNature(id: $id) {
+
+    activities {
+      id,
+      document {
+        id
+        refNo
+        state
+        # validation {
+        #   date
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # closure {
+        #   date
+        #   state
+        #   user {
+        #     id
+        #     displayName
+        #   }
+        # }
+        # user {
+        #   id
+        #   displayName
+        # }
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+
+    doc {
+      id
+      key
+      refNo
+      dateMission
+      date
+      state
+      nature
+      police
+
+      deletion {
+        date
+        user {
+          id
+          displayName
+        }
+      }
+
+      payment : paymentInfo {
+        user {
+          id
+          displayName
+        }
+        amount
+        date
+      }
+
+      validation {
+        user { id }
+        date
+      }
+
+      vehicle {
+        model
+        plateNumber
+      }
+      client {
+        id
+        displayName
+      }
+      manager {
+        id
+        displayName
+      }
+      agent {
+        id
+        displayName
+      }
+
+      user {
+        id
+        displayName
+      }
+
+      createdAt
+      updatedAt
+      lastModified
+    }
+
+    error {
+      code
+    }
+
+  }
+}
+

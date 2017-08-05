@@ -12,6 +12,14 @@ export { default as cancelDoc } from './cancelDoc';
 export { default as setPay } from './setPay';
 export { default as delPay } from './delPay';
 
+// Nature
+export { default as setNature } from './setNature';
+export { default as delNature } from './delNature';
+
+// Police
+export { default as setPolice } from './setPolice';
+export { default as delPolice } from './delPolice';
+
 // Validation
 export { default as setDTValidation } from './setDTValidation';
 export { default as delDTValidation } from './delDTValidation';
@@ -23,4 +31,3 @@ export { default as delMTRapports } from './delMTRapports';
 export { default as uploadFile } from './uploadFile';
 export { default as delFile } from './delFile';
 export { default as restoreFile } from './restoreFile';
-
