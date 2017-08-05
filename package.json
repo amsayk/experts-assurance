@@ -165,6 +165,7 @@
     "date-is-valid": "^1.0.6",
     "debounce": "^1.0.2",
     "debug": "^2.6.8",
+    "diff": "^3.3.0",
     "dom-align": "^1.6.2",
     "elasticsearch": "^13.2.0",
     "error-formatter": "^1.0.5",

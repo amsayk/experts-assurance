@@ -23,7 +23,7 @@ import PoliceSetter from './PoliceSetter';
 import SET_MUTATION from './setPolice.mutation.graphql';
 import DEL_MUTATION from './delPolice.mutation.graphql';
 
-const LABEL = 'N° Sinistre ou N° de Police';
+const LABEL = 'N° Sinistre ou N° Police';
 
 class Police extends React.Component {
   static contextTypes = {

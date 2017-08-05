@@ -61,11 +61,11 @@
     line-height: 36px;
     border-bottom: 1px solid #d6dadc;
     margin: 0 10px;
-    overflow: hidden;
-    padding: 0 2pc;
+    padding: 0 2px;
     position: relative;
     text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: hidden;
     z-index: 1;
   }
 
