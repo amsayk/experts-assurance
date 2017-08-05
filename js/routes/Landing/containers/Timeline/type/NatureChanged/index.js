@@ -110,7 +110,7 @@ export default function NatureChanged(
                     borderRadius: 3,
                     padding: '0 6px',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    whiteSpace: 'pre-wrap',
                     overflow: 'hidden',
                     maxWidth: 250,
                   }}

@@ -2,8 +2,6 @@ import React from 'react';
 import T from 'prop-types';
 import { Link } from 'react-router';
 
-import { diffChars } from 'diff';
-
 import {
   PATH_CASES_CASE,
   PATH_SETTINGS_BASE,
@@ -91,19 +89,9 @@ export default function PoliceChanged(
           const render = [];
 
           if (hasOldValue) {
-            const changes = hasNewValue
-              ? diffChars(toValue, fromValue)
-              : [
-                  {
-                    value: fromValue,
-                    removed: false,
-                    added: true,
-                  },
-                ];
             render.push(
               <div className={style.desc}>
                 <span
-                  title={fromValue}
                   style={{
                     backgroundColor: '#fee8e9',
                     userSelect: 'none',
@@ -112,38 +100,19 @@ export default function PoliceChanged(
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
-                    maxWidth: 250,
+                    maxWidth: 150,
                   }}
                 >
-                  -{changes.map(({ value, added, removed }) => {
-                    if (removed) {
-                      return null;
-                    }
-                    const color = added ? 'rgb(255, 182, 186)' : 'transparent';
-                    return (
-                      <span style={{ backgroundColor: color }}>
-                        {value}
-                      </span>
-                    );
-                  })}
+                  -{fromValue}
                 </span>
               </div>,
             );
           }
 
           if (hasNewValue) {
-            const changes = hasOldValue
-              ? diffChars(fromValue, toValue)
-              : [
-                  {
-                    value: toValue,
-                    added: true,
-                  },
-                ];
             render.push(
               <div className={style.desc}>
                 <span
-                  title={toValue}
                   style={{
                     backgroundColor: '#dfd',
                     userSelect: 'none',
@@ -152,20 +121,10 @@ export default function PoliceChanged(
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
-                    maxWidth: 250,
+                    maxWidth: 150,
                   }}
                 >
-                  +{changes.map(({ value, removed, added }) => {
-                    if (removed) {
-                      return null;
-                    }
-                    const color = added ? '#97f295' : 'transparent';
-                    return (
-                      <span style={{ backgroundColor: color }}>
-                        {value}
-                      </span>
-                    );
-                  })}
+                  +{toValue}
                 </span>
               </div>,
             );
