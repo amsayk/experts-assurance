@@ -3,7 +3,12 @@ import { createSelector } from 'utils/reselect';
 import { extrapolate } from 'routes/Landing/utils';
 
 const extrapolationSelector = state =>
-  extrapolate(/*locale = */ state.getIn(['intl', 'locale']));
+  extrapolate(
+    /*locale = */ state.getIn(
+      ['intl', 'locale'],
+      state.getIn(['intl', 'defaultLocale']),
+    ),
+  );
 const appSelector = state => state.get('app');
 const notificationOpenSelector = state =>
   state.getIn(['notification', 'options']).active;
