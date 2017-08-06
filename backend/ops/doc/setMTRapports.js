@@ -29,6 +29,9 @@ export default (async function setMTRapports(request, done) {
       await doc
         .set({
           validation_amount: amount,
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

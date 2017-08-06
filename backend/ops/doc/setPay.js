@@ -35,6 +35,9 @@ export default (async function setPay(request, done) {
           payment_date: new Date(date),
           payment_at: new Date(request.now),
           payment_amount: amount,
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

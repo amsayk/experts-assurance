@@ -35,6 +35,9 @@ export default (async function delPay(request, done) {
           payment_date: null,
           payment_at: null,
           payment_amount: null,
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

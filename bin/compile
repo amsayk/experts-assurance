@@ -38,7 +38,7 @@ const compile = () => Promise.resolve()
   .then(() => logger.info('Target application environment: ' + chalk.bold(config.env)))
   .then(() => runWebpackCompiler(webpackConfig))
   .then(stats => {
-    logger.info(`Copying static assets from ./public to ./${paths.dist()}.`)
+    logger.info(`Copying static assets from ./public to ${paths.dist()}.`)
     fs.copySync(paths.public(), paths.dist())
     return stats
   })

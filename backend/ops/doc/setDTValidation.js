@@ -30,6 +30,9 @@ export default (async function setDTValidation(request, done) {
         .set({
           validation_user: request.user,
           validation_date: new Date(date),
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

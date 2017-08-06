@@ -27,6 +27,9 @@ export default (async function delPolice(request, done) {
       await doc
         .set({
           police: null,
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

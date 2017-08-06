@@ -30,6 +30,9 @@ export default (async function delDTValidation(request, done) {
         .set({
           // validation_user: null,
           validation_date: null,
+
+          [`lastModified_${request.user.id}`]: new Date(request.now),
+          lastModified: new Date(request.now),
         })
         .save(null, { useMasterKey: true });
 

@@ -64,6 +64,10 @@ export default (async function uploadFile(request, done) {
       .save(null, { useMasterKey: true });
 
     doc.addUnique('files', file.id);
+    doc.set({
+      [`lastModified_${request.user.id}`]: new Date(request.now),
+      lastModified: new Date(request.now),
+    });
 
     await doc.save(null, { useMasterKey: true });
 
