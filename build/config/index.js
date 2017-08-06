@@ -127,7 +127,7 @@ const config = {
   parse_public_server_url:
     process.env.PUBLIC_SERVER_URL || process.env.SERVER_URL,
   get parse_database_uri() {
-    if (typeof this._databaseUri === 'undefined') {
+    if (!this._databaseUri) {
       this._databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
       if (!this._databaseUri) {
         log('DATABASE_URI not specified, falling back to localhost.');

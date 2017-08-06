@@ -1,5 +1,5 @@
 import { MongoClient, GridFSBucket, Db } from 'mongodb';
-import { FilesAdapter }                  from 'parse-server/lib/Adapters/Files/FilesAdapter';
+import { FilesAdapter } from 'parse-server/lib/Adapters/Files/FilesAdapter';
 
 import config from 'build/config';
 
@@ -11,7 +11,10 @@ export class GridFSAdapter extends FilesAdapter {
   _databaseURI: string;
   _connectionPromise: Promise<Db>;
 
-  constructor(mongoDatabaseURI = config.parse_database_uri || 'mongodb://localhost:27017/Experts-Assurance') {
+  constructor(
+    mongoDatabaseURI = config.parse_database_uri ||
+      `mongodb://localhost:27017/${config.appName}`,
+  ) {
     super();
     this._databaseURI = mongoDatabaseURI;
 
@@ -30,9 +33,8 @@ export class GridFSAdapter extends FilesAdapter {
   // Returns a promise
   createFile(filename: string, data) {
     log('createFile', filename, data.length / 1024 / 1024);
-    return this._connect().then((db) => {
-      const bucket = new GridFSBucket(db, {
-      });
+    return this._connect().then(db => {
+      const bucket = new GridFSBucket(db, {});
 
       const Readable = require('stream').Readable;
       const dataStream = new Readable();
@@ -43,14 +45,14 @@ export class GridFSAdapter extends FilesAdapter {
       return new Promise((resolve, reject) => {
         dataStream
           .pipe(bucket.openUploadStream(filename))
-          .on('error', function (err) {
+          .on('error', function(err) {
             log.error('createFile', err);
             reject(err);
           })
-          .on('end', function () {
+          .on('end', function() {
             log.error('createFile success');
             resolve();
-          })
+          });
       });
     });
   }
@@ -61,7 +63,7 @@ export class GridFSAdapter extends FilesAdapter {
 
   getFileData(filename: string) {
     log('getFileData', filename);
-    return this._connect().then((db) => {
+    return this._connect().then(db => {
       const bucket = new GridFSBucket(db);
       const readable = bucket.openDownloadStreamByName(filename);
 
@@ -69,7 +71,7 @@ export class GridFSAdapter extends FilesAdapter {
         const chunks = [];
 
         readable.setEncoding('utf8');
-        readable.on('data', (chunk) => {
+        readable.on('data', chunk => {
           log('getFileData onData', chunk.length);
           chunks.push(chunk);
         });
@@ -77,7 +79,7 @@ export class GridFSAdapter extends FilesAdapter {
           log('getFileData onEnd', chunks.length);
           resolve(chunks.join(''));
         });
-        readable.on('error', (err) => {
+        readable.on('error', err => {
           log.error('getFileData onError', err);
           reject(err);
         });
@@ -86,12 +88,18 @@ export class GridFSAdapter extends FilesAdapter {
   }
 
   getFileLocation(config, filename) {
-    return (config.mount + '/files/' + config.applicationId + '/' + encodeURIComponent(filename));
+    return (
+      config.mount +
+      '/files/' +
+      config.applicationId +
+      '/' +
+      encodeURIComponent(filename)
+    );
   }
 
   getFileStream(filename: string) {
     log('getFileStream', filename);
-    return this._connect().then((db) => {
+    return this._connect().then(db => {
       const bucket = new GridFSBucket(db);
       return bucket.openDownloadStreamByName(filename);
     });
@@ -99,4 +107,3 @@ export class GridFSAdapter extends FilesAdapter {
 }
 
 export default GridFSAdapter;
-

@@ -253,7 +253,7 @@ export const schema = [
   type ESDocValidationState {
     date: Date
     amount: Float
-    user: ESUserSource!
+    user: ESUserSource
   }
 
   type ESDocClosureState {

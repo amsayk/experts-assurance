@@ -13,8 +13,6 @@ import users from 'data/_User';
 
 import path from 'path';
 import express from 'express';
-import webpack from 'webpack';
-import webpackConfig from 'build/webpack.config';
 import config from 'build/config';
 import compress from 'compression';
 
@@ -64,12 +62,24 @@ app.use(compress());
 app.use(cors());
 
 // Setup locale
-app.use(createLocaleMiddleware({
-  default : `${config.lang}-${config.country}`,
-}));
+app.use(
+  createLocaleMiddleware({
+    default: `${config.lang}-${config.country}`,
+  }),
+);
+
+function getCompiler() {
+  if (__DEV__) {
+    const webpack = require('webpack');
+    const webpackConfig = require('build/webpack.config');
+
+    return { webpackConfig, compiler: webpack(webpackConfig) };
+  }
+  return {};
+}
 
 // webpack compiler in devMode
-const compiler = __DEV__ && webpack(webpackConfig);
+const { webpackConfig, compiler } = getCompiler();
 
 // These are the current endpoints
 // New endpoints must be added here in order for them to work.
@@ -113,10 +123,13 @@ if (config.ssrEnabled) {
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
   // rendering, you'll want to remove this middleware.
-  app.get(APP_PATHS, require('connect-history-api-fallback')({
-    verbose : __DEV__,
-    logger  : require('log')('app:server:history'),
-  }));
+  app.get(
+    APP_PATHS,
+    require('connect-history-api-fallback')({
+      verbose: __DEV__,
+      logger: require('log')('app:server:history'),
+    }),
+  );
 }
 
 // ------------------------------------
@@ -124,18 +137,22 @@ if (config.ssrEnabled) {
 // ------------------------------------
 if (__DEV__) {
   log('Enable webpack dev and HMR middleware');
-  app.use(require('webpack-dev-middleware')(compiler, {
-    publicPath  : webpackConfig.output.publicPath,
-    contentBase : paths.client(),
-    hot         : true,
-    quiet       : config.compiler_quiet,
-    noInfo      : config.compiler_quiet,
-    lazy        : false,
-    stats       : config.compiler_stats,
-  }));
-  app.use(require('webpack-hot-middleware')(compiler, {
-    path: '/__webpack_hmr',
-  }));
+  app.use(
+    require('webpack-dev-middleware')(compiler, {
+      publicPath: webpackConfig.output.publicPath,
+      contentBase: paths.client(),
+      hot: true,
+      quiet: config.compiler_quiet,
+      noInfo: config.compiler_quiet,
+      lazy: false,
+      stats: config.compiler_stats,
+    }),
+  );
+  app.use(
+    require('webpack-hot-middleware')(compiler, {
+      path: '/__webpack_hmr',
+    }),
+  );
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
@@ -144,11 +161,11 @@ if (__DEV__) {
   app.use(express.static(paths.public()));
 } else {
   log(
-    'Server is being run outside of live development mode, meaning it will ' +
-    'only serve the compiled application bundle in ~/dist. Generally you ' +
-    'do not need an application server for this and can instead use a web ' +
-    'server such as nginx to serve your static files. See the "deployment" ' +
-    'section in the README for more information on deployment strategies.'
+    `Server is being run outside of live development mode, meaning it will ` +
+      `only serve the compiled application bundle in ~/dist. Generally you ` +
+      `do not need an application server for this and can instead use a web ` +
+      `server such as nginx to serve your static files. See the 'deployment' ` +
+      `section in the README for more information on deployment strategies.`,
   );
 
   // Serving ~/dist by default. Ideally these files should be served by
@@ -171,49 +188,67 @@ if (!config.parse_database_uri) {
   log('DATABASE_URI not specified, falling back to localhost.');
 }
 const api = new ParseServer({
-  appName                  : config.appName,
-  databaseURI              : config.parse_database_uri || `mongodb://localhost:27017/${config.appName}`,
-  cloud                    : path.resolve(process.cwd(), 'backend', 'main.js'),
-  appId                    : process.env.APPLICATION_ID,
-  javascriptKey            : process.env.JAVASCRIPT_KEY,
-  masterKey                : process.env.MASTER_KEY,
-  serverURL                : config.parse_server_url || `http://localhost:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
-  publicServerURL          : config.parse_public_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
-  enableAnonymousUsers     : process.env.ANON_USERS === 'yes',
-  allowClientClassCreation : true,
-  maxUploadSize            : '100mb',
+  appName: config.appName,
+  databaseURI:
+    config.parse_database_uri || `mongodb://localhost:27017/${config.appName}`,
+  cloud: path.resolve(process.cwd(), 'backend', 'main.js'),
+  appId: process.env.APPLICATION_ID,
+  javascriptKey: process.env.JAVASCRIPT_KEY,
+  masterKey: process.env.MASTER_KEY,
+  serverURL:
+    config.parse_server_url ||
+    `http://localhost:${config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  publicServerURL:
+    config.parse_public_server_url ||
+    `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure
+      ? ''
+      : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+  enableAnonymousUsers: process.env.ANON_USERS === 'yes',
+  allowClientClassCreation: true,
+  maxUploadSize: '100mb',
 
   // Retricts sesssions to 15 days
-  sessionLength            : 15 * 24 * 60 * 60,
+  sessionLength: 15 * 24 * 60 * 60,
 
   // Email
-  verifyUserEmails                 : config.verifyUserEmails,
-  revokeSessionOnPasswordReset     : true,
-  emailVerifyTokenValidityDuration : 2 * 24 * 60 * 60, // 2 days
-  emailAdapter                     : config.mailAdapterConfig,
+  verifyUserEmails: config.verifyUserEmails,
+  revokeSessionOnPasswordReset: true,
+  emailVerifyTokenValidityDuration: 2 * 24 * 60 * 60, // 2 days
+  emailAdapter: config.mailAdapterConfig,
 
   // File uploads
-  filesAdapter : config.filesAdapterConfig,
+  filesAdapter: config.filesAdapterConfig,
 
-  passwordPolicy : {
-    doNotAllowUsername         : true,
-    resetTokenValidityDuration : 2 * 60 * 60, // 2 hours
+  passwordPolicy: {
+    doNotAllowUsername: true,
+    resetTokenValidityDuration: 2 * 60 * 60, // 2 hours
   },
 
-  userSensitiveFields: [
-  ],
+  userSensitiveFields: [],
 
   customPages: {
-    invalidLink          : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_invalid_link,
-    verifyEmailSuccess   : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_email_verification_success,
-    choosePassword       : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_choose_password,
-    passwordResetSuccess : `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}` + config.path_password_reset_success,
+    invalidLink:
+      `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure
+        ? ''
+        : ':' + config.server_port}` + config.path_invalid_link,
+    verifyEmailSuccess:
+      `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure
+        ? ''
+        : ':' + config.server_port}` + config.path_email_verification_success,
+    choosePassword:
+      `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure
+        ? ''
+        : ':' + config.server_port}` + config.path_choose_password,
+    passwordResetSuccess:
+      `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure
+        ? ''
+        : ':' + config.server_port}` + config.path_password_reset_success,
   },
 
   // Only log errors during production
-  logLevel : __DEV__ ? 'info' : 'error',
-  verbose  : false,
-  silent   : __DEV__,
+  logLevel: __DEV__ ? 'info' : 'error',
+  verbose: false,
+  silent: __DEV__,
 });
 
 // Serve the Parse API on the /parse URL prefix
@@ -222,26 +257,35 @@ app.use(config.parse_server_mount_point, api);
 // ------------------------------------
 // Parse dashboard entrypoint
 // ------------------------------------
-const dashboard = new ParseDashboard({
-  'apps': [
-    {
-      'appId'         : process.env.APPLICATION_ID,
-      'javascriptKey' : process.env.JAVASCRIPT_KEY,
-      'masterKey'     : process.env.MASTER_KEY,
-      'serverURL'     : config.parse_server_url || `${config.secure ? 'https' : 'http'}://${config.server_host}${config.secure ? '' : ':' + config.server_port}${config.parse_server_mount_point}`,  // eslint-disable-line max-len
-      'appName'       : config.appName,
-      'production'    : !__DEV__,
-    },
-  ],
-  'trustProxy': 1,
-  'useEncryptedPasswords': true,
-  'users': users.map(function (user) {
-    return {
-      'user' : user.username,
-      'pass' : user.bcryptPassword,
-    };
-  }),
-}, /* allowInsecureHTTP = */ __DEV__);
+const dashboard = new ParseDashboard(
+  {
+    apps: [
+      {
+        appId: process.env.APPLICATION_ID,
+        javascriptKey: process.env.JAVASCRIPT_KEY,
+        masterKey: process.env.MASTER_KEY,
+        serverURL:
+          config.parse_server_url ||
+          `${config.secure
+            ? 'https'
+            : 'http'}://${config.server_host}${config.secure
+            ? ''
+            : ':' + config.server_port}${config.parse_server_mount_point}`, // eslint-disable-line max-len
+        appName: config.appName,
+        production: !__DEV__,
+      },
+    ],
+    trustProxy: 1,
+    useEncryptedPasswords: true,
+    users: users.map(function(user) {
+      return {
+        user: user.username,
+        pass: user.bcryptPassword,
+      };
+    }),
+  },
+  /* allowInsecureHTTP = */ __DEV__,
+);
 
 // Serve dashboard
 app.use(config.parse_dashboard_mount_point, dashboard);
@@ -253,7 +297,10 @@ app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
   if (config.persistedQueries) {
     if (Array.isArray(req.body)) {
       // eslint-disable-next-line no-param-reassign
-      req.body = req.body.map(({ id, ...otherParams }) => ({ query: config.queryMap[id], ...otherParams }));
+      req.body = req.body.map(({ id, ...otherParams }) => ({
+        query: config.queryMap[id],
+        ...otherParams,
+      }));
     } else {
       req.body.query = config.queryMap[req.body.id]; // eslint-disable-line no-param-reassign
     }
@@ -262,46 +309,53 @@ app.use(config.graphql_endpoint, bodyParser.json(), (req, resp, next) => {
 });
 
 // json is already parsed in previous middleware
-app.use(config.graphql_endpoint, apolloUploadExpress(config.uploadOptions), graphqlExpress((req, res) => {
-  // Reload user everytime
-  Parse.User._clearCache();
+app.use(
+  config.graphql_endpoint,
+  apolloUploadExpress(config.uploadOptions),
+  graphqlExpress((req, res) => {
+    // Reload user everytime
+    Parse.User._clearCache();
 
-  const unplug = cookie.plugToRequest(req, res);
-  res.once('finish', function () {
-    unplug();
-  });
+    const unplug = cookie.plugToRequest(req, res);
+    res.once('finish', function() {
+      unplug();
+    });
 
-  // Get the query, the same way express-graphql does it
-  // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
-  const query = req.query.query || req.body.query;
-  if (query && query.length > 2000) {
-    // None of our app's queries are this long
-    // Probably indicates someone trying to send an overly expensive query
-    throw new Error('Query too large.');
-  }
+    // Get the query, the same way express-graphql does it
+    // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
+    const query = req.query.query || req.body.query;
+    if (query && query.length > 2000) {
+      // None of our app's queries are this long
+      // Probably indicates someone trying to send an overly expensive query
+      throw new Error('Query too large.');
+    }
 
-  const user = getCurrentUser();
+    const user = getCurrentUser();
 
-  return {
-    schema,
-    context: {
-      user,
-      locale     : req.locale,
-      Users      : new Users({ user, connector: new UserConnector() }),
-      Business   : new Business({ user, connector: new BusinessConnector() }),
-      Docs       : new Docs({ user, connector: new DocConnector() }),
-      Activities : new Activities({ user, connector: new ActivityConnector() }),
-      Now        : new Date().getTime(),
-    },
-    logFunction: require('log')('app:server:graphql'),
-    debug: __DEV__,
-  };
-}));
+    return {
+      schema,
+      context: {
+        user,
+        locale: req.locale,
+        Users: new Users({ user, connector: new UserConnector() }),
+        Business: new Business({ user, connector: new BusinessConnector() }),
+        Docs: new Docs({ user, connector: new DocConnector() }),
+        Activities: new Activities({ user, connector: new ActivityConnector() }),
+        Now: new Date().getTime(),
+      },
+      logFunction: require('log')('app:server:graphql'),
+      debug: __DEV__,
+    };
+  }),
+);
 
-app.use(config.graphiql_endpoint, graphiqlExpress({
-  endpointURL           : config.graphql_endpoint,
-  subscriptionsEndpoint : config.graphql_subscriptions_endpoint,
-}));
+app.use(
+  config.graphiql_endpoint,
+  graphiqlExpress({
+    endpointURL: config.graphql_endpoint,
+    subscriptionsEndpoint: config.graphql_subscriptions_endpoint,
+  }),
+);
 
 // ------------------------------------
 // Kue ui
@@ -325,7 +379,7 @@ SubscriptionServer.create(
     schema,
     execute,
     subscribe,
-    onConnect: async (connectionParams) => {
+    onConnect: async connectionParams => {
       // Implement if you need to handle and manage connection
     },
 
@@ -334,7 +388,7 @@ SubscriptionServer.create(
     onOperation: (msg, params) => {
       return objectAssign({}, params, {
         context: {
-          Business : new Business({ connector: new BusinessConnector() }),
+          Business: new Business({ connector: new BusinessConnector() }),
         },
       });
     },
@@ -346,4 +400,3 @@ SubscriptionServer.create(
 );
 
 module.exports = { app, server };
-

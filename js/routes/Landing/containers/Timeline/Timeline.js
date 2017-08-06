@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+
+import sortBy from 'lodash.orderby';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -31,16 +33,16 @@ const TOP = NAVBAR_HEIGHT + TOOLBAR_HEIGHT + 20;
 const NOTIFICATION_HEIGHT = 45;
 
 const styles = {
-  notificationOpen : {
-    top : TOP + NOTIFICATION_HEIGHT,
+  notificationOpen: {
+    top: TOP + NOTIFICATION_HEIGHT,
   },
 };
 
 class Timeline extends React.Component {
   static defaultProps = {
-    cursor  : 0,
-    loading : false,
-    result  : [],
+    cursor: 0,
+    loading: false,
+    result: [],
   };
 
   constructor(props) {
@@ -49,28 +51,33 @@ class Timeline extends React.Component {
     this.onSpy = this.onSpy.bind(this);
 
     this.state = {
-      spy : !props.loading,
+      spy: !props.loading,
     };
   }
 
   onSpy() {
-    this.setState({
-      spy : false,
-    }, () => {
-      this.props.loadMore();
+    this.setState(
+      {
+        spy: false,
+      },
+      () => {
+        this.props.loadMore();
 
-      setTimeout(() => {
-        this.setState({
-          spy: true,
-        });
-      }, 7 * 1000);
-    });
+        setTimeout(() => {
+          this.setState({
+            spy: true,
+          });
+        }, 7 * 1000);
+      },
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    if (/*this.props.cursor !== nextProps.cursor && */nextProps.loading === false) {
+    if (
+      /*this.props.cursor !== nextProps.cursor && */ nextProps.loading === false
+    ) {
       this.setState({
-        spy : true,
+        spy: true,
       });
     }
   }
@@ -83,60 +90,61 @@ class Timeline extends React.Component {
       currentUser,
       loading,
       cursor,
-      result : items,
-      extrapolation : periods,
+      result: items,
+      extrapolation: periods,
       id,
     } = this.props;
 
-    if (/*loading || */(!timelineDisplayMatches && !id)) {
+    if (/*loading || */ !timelineDisplayMatches && !id) {
       return null;
     }
 
     let scrollSpy = null;
     if (isReady && !SERVER) {
       const { spy } = this.state;
-      scrollSpy = (
-        spy ? <ScrollSpy.Spying
-          bubbles
-          manual
-          offset={NAVBAR_HEIGHT}
-          onSpy={this.onSpy}
-        /> : <ScrollSpy.Idle/>
-      );
+      scrollSpy = spy
+        ? <ScrollSpy.Spying
+            bubbles
+            manual
+            offset={NAVBAR_HEIGHT}
+            onSpy={this.onSpy}
+          />
+        : <ScrollSpy.Idle />;
     }
 
     const groups = periods.map(({ id, title, to, from }) => {
-      const acts = items.filter(({ now }) => to
-        ? to > now && now >= from
-        : now >= from
+      let acts = items.filter(
+        ({ now }) => (to ? to > now && now >= from : now >= from),
       );
 
-      acts.sort((a, b) => b.timestamp - a.timestamp);
+      acts = sortBy(acts, ['now'], ['desc']);
 
-      return acts.length ? (
-        <div className={style.feedGroup} key={id}>
-          <h5 className={style.feedGroupTitle}>{title}</h5>
-          <section className={style.feedGroupItems}>
-            {acts.map((entry) => (
-              <TimelineEntry
-                key={entry.id}
-                intl={intl}
-                {...entry}
-              />
-            ))}
-          </section>
-        </div>
-      ) : <div className={style.feedGroup} key={id}></div>;
+      return acts.length
+        ? <div className={style.feedGroup} key={id}>
+            <h5 className={style.feedGroupTitle}>
+              {title}
+            </h5>
+            <section className={style.feedGroupItems}>
+              {acts.map(entry =>
+                <TimelineEntry key={entry.id} intl={intl} {...entry} />,
+              )}
+            </section>
+          </div>
+        : <div className={style.feedGroup} key={id} />;
     });
 
     return (
-      <div className={style.timeline} style={notificationOpen ? styles.notificationOpen : emptyObject}>
-        {this.props.onNav ? <Nav
-          intl={intl}
-          onChange={this.props.onNav}
-          selectedNavItem='timeline.events'
-        /> : <h2>Événements
-        </h2>}
+      <div
+        className={style.timeline}
+        style={notificationOpen ? styles.notificationOpen : emptyObject}
+      >
+        {this.props.onNav
+          ? <Nav
+              intl={intl}
+              onChange={this.props.onNav}
+              selectedNavItem='timeline.events'
+            />
+          : <h2>Événements</h2>}
         <div className={style.feed}>
           {groups}
           {scrollSpy}
@@ -158,4 +166,3 @@ export default compose(
   Connect,
   DataLoader.timeline,
 )(Timeline);
-

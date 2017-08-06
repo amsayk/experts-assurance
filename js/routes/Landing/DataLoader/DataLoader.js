@@ -44,19 +44,20 @@ const currentUser = graphql(CURRENT_USER_QUERY, {
   skip: ({ user }) => user.isEmpty,
 });
 
-const esUsersByRoles = (...roles) => graphql(ES_USERS_BY_ROLES_QUERY, {
-  skip: ({ open }) => !open,
-  options: ({ queryString }) => ({
-    variables: {
-      queryString,
-      roles,
-    },
-  }),
-  props: ({ data: { loading, esUsersByRoles = { hits: [] } } }) => ({
-    loading,
-    result : esUsersByRoles,
-  }),
-});
+const esUsersByRoles = (...roles) =>
+  graphql(ES_USERS_BY_ROLES_QUERY, {
+    skip: ({ open }) => !open,
+    options: ({ queryString }) => ({
+      variables: {
+        queryString,
+        roles,
+      },
+    }),
+    props: ({ data: { loading, esUsersByRoles = { hits: [] } } }) => ({
+      loading,
+      result: esUsersByRoles,
+    }),
+  });
 
 // const usersByRoles = (...roles) => graphql(USERS_BY_ROLES_QUERY, {
 //   skip: ({ open }) => !open,
@@ -81,7 +82,7 @@ const user = graphql(GET_USER_QUERY, {
   }),
   props: ({ data: { loading, getUser } }) => ({
     loading,
-    user : getUser,
+    user: getUser,
   }),
 });
 
@@ -93,23 +94,30 @@ const doc = graphql(GET_DOC_QUERY, {
   }),
   props: ({ data: { loading, getDoc } }) => ({
     loading,
-    doc : getDoc,
+    doc: getDoc,
   }),
 });
 
 const docs = graphql(GET_DOCS_QUERY, {
-  options: (ownProps) => ({
+  options: ownProps => ({
     variables: {
-      query : {
-        client      : ownProps.client,
-        manager     : ownProps.manager,
-        state       : ownProps.state,
-        queryString : ownProps.queryString,
-        sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
+      query: {
+        client: ownProps.client,
+        manager: ownProps.manager,
+        state: ownProps.state,
+        queryString: ownProps.queryString,
+        sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
       },
     },
   }),
-  props: ({ ownProps, data: { loading, getDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+  props: ({
+    ownProps,
+    data: {
+      loading,
+      getDocs: { cursor = 0, length = 0, docs = [] } = {},
+      fetchMore,
+    },
+  }) => ({
     loading,
     docs,
     cursor,
@@ -118,21 +126,21 @@ const docs = graphql(GET_DOCS_QUERY, {
       return fetchMore({
         query: GET_MORE_DOCS_QUERY,
         variables: {
-          query : {
+          query: {
             cursor,
-            client      : ownProps.client,
-            manager     : ownProps.manager,
-            state       : ownProps.state,
-            queryString : ownProps.queryString,
-            sortConfig  : pick(ownProps.sortConfig, ['key', 'direction']),
+            client: ownProps.client,
+            manager: ownProps.manager,
+            state: ownProps.state,
+            queryString: ownProps.queryString,
+            sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newDocs = fetchMoreResult.getDocs.docs;
 
           return {
-            getDocs    : {
-              __typename : 'DocsFetchResponse',
+            getDocs: {
+              __typename: 'DocsFetchResponse',
 
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
@@ -141,10 +149,7 @@ const docs = graphql(GET_DOCS_QUERY, {
               length: previousResult.getDocs.length,
 
               // Put the new docs at the end of the list
-              docs: [
-                ...previousResult.getDocs.docs,
-                ...newDocs,
-              ],
+              docs: [...previousResult.getDocs.docs, ...newDocs],
             },
           };
         },
@@ -157,11 +162,14 @@ const searchDocs = graphql(ES_SEARCH_DOCS_QUERY, {
   skip: ({ search }) => !search.q || search.q.length < 2,
   options: ({ search }) => ({
     variables: {
-      queryString : search.q,
-      state       : search.state,
+      queryString: search.q,
+      state: search.state,
     },
   }),
-  props: ({ ownProps, data: { loading, esSearchDocs: { length = 0, hits = [] } = {} } }) => ({
+  props: ({
+    ownProps,
+    data: { loading, esSearchDocs: { length = 0, hits = [] } = {} },
+  }) => ({
     loading,
     hits,
     length,
@@ -170,15 +178,18 @@ const searchDocs = graphql(ES_SEARCH_DOCS_QUERY, {
 
 const timeline = graphql(GET_TIMELINE_QUERY, {
   skip: ({ timelineDisplayMatches, id }) => !timelineDisplayMatches && !id,
-  options: (ownProps) => ({
+  options: ownProps => ({
     variables: {
-      query : {
-        doc : ownProps.id ? ownProps.id : null,
-        ns : 'DOCUMENTS',
+      query: {
+        doc: ownProps.id ? ownProps.id : null,
+        ns: 'DOCUMENTS',
       },
     },
   }),
-  props: ({ ownProps, data: { loading, timeline: { cursor = 0, result = [] } = {}, fetchMore } }) => ({
+  props: ({
+    ownProps,
+    data: { loading, timeline: { cursor = 0, result = [] } = {}, fetchMore },
+  }) => ({
     loading,
     result,
     cursor,
@@ -186,27 +197,24 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
       return fetchMore({
         variables: {
           cursor,
-          query : {
-            doc : ownProps.id ? ownProps.id : null,
-            ns : 'DOCUMENTS',
+          query: {
+            doc: ownProps.id ? ownProps.id : null,
+            ns: 'DOCUMENTS',
           },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newActivities = fetchMoreResult.timeline.result;
 
           return {
-            timeline   : {
-              __typename : 'TimelineResponse',
+            timeline: {
+              __typename: 'TimelineResponse',
 
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
               cursor: fetchMoreResult.timeline.cursor,
 
               // Put the new activies at the end of the list
-              result: [
-                ...previousResult.timeline.result,
-                ...newActivities,
-              ],
+              result: [...previousResult.timeline.result, ...newActivities],
             },
           };
         },
@@ -215,22 +223,28 @@ const timeline = graphql(GET_TIMELINE_QUERY, {
   }),
 });
 
-
 const recentDocs = graphql(GET_RECENT_DOCS_QUERY, {
   props: ({ data: { loading, recentDocs = [] } }) => ({
     loading,
-    docs : recentDocs,
+    docs: recentDocs,
   }),
 });
 
 const openDocs = graphql(GET_OPEN_DOCS, {
-  options: (ownProps) => ({
+  options: ownProps => ({
     variables: {
-      durationInDays : ownProps.durationInDays,
-      sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+      durationInDays: ownProps.durationInDays,
+      sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
     },
   }),
-  props: ({ ownProps, data: { loading, openDashboard: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+  props: ({
+    ownProps,
+    data: {
+      loading,
+      openDashboard: { cursor = 0, length = 0, docs = [] } = {},
+      fetchMore,
+    },
+  }) => ({
     data: {
       loading,
       docs,
@@ -242,15 +256,15 @@ const openDocs = graphql(GET_OPEN_DOCS, {
         query: GET_MORE_OPEN_DOCS,
         variables: {
           cursor,
-          durationInDays : ownProps.durationInDays,
-          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+          durationInDays: ownProps.durationInDays,
+          sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newDocs = fetchMoreResult.openDashboard.docs;
 
           return {
-            openDashboard : {
-              __typename : 'DocsFetchResponse',
+            openDashboard: {
+              __typename: 'DocsFetchResponse',
 
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
@@ -259,10 +273,7 @@ const openDocs = graphql(GET_OPEN_DOCS, {
               length: previousResult.openDashboard.length,
 
               // Put the new docs at the end of the list
-              docs: [
-                ...previousResult.openDashboard.docs,
-                ...newDocs,
-              ],
+              docs: [...previousResult.openDashboard.docs, ...newDocs],
             },
           };
         },
@@ -272,13 +283,20 @@ const openDocs = graphql(GET_OPEN_DOCS, {
 });
 
 const unpaidDocs = graphql(GET_UNPAID_DOCS, {
-  options: (ownProps) => ({
+  options: ownProps => ({
     variables: {
-      durationInDays : ownProps.durationInDays,
-      sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+      durationInDays: ownProps.durationInDays,
+      sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
     },
   }),
-  props: ({ ownProps, data: { loading, getUnpaidDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+  props: ({
+    ownProps,
+    data: {
+      loading,
+      getUnpaidDocs: { cursor = 0, length = 0, docs = [] } = {},
+      fetchMore,
+    },
+  }) => ({
     data: {
       loading,
       docs,
@@ -290,15 +308,15 @@ const unpaidDocs = graphql(GET_UNPAID_DOCS, {
         query: GET_MORE_UNPAID_DOCS,
         variables: {
           cursor,
-          durationInDays : ownProps.durationInDays,
-          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+          durationInDays: ownProps.durationInDays,
+          sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newDocs = fetchMoreResult.getUnpaidDocs.docs;
 
           return {
-            getUnpaidDocs : {
-              __typename : 'DocsFetchResponse',
+            getUnpaidDocs: {
+              __typename: 'DocsFetchResponse',
 
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
@@ -307,10 +325,7 @@ const unpaidDocs = graphql(GET_UNPAID_DOCS, {
               length: previousResult.getUnpaidDocs.length,
 
               // Put the new docs at the end of the list
-              docs: [
-                ...previousResult.getUnpaidDocs.docs,
-                ...newDocs,
-              ],
+              docs: [...previousResult.getUnpaidDocs.docs, ...newDocs],
             },
           };
         },
@@ -320,15 +335,22 @@ const unpaidDocs = graphql(GET_UNPAID_DOCS, {
 });
 
 const invalidDocs = graphql(GET_INVALID_DOCS, {
-  options: (ownProps) => ({
-    fetchPolicy : 'network-only',
-    variables   : {
-      durationInDays : -1,
-      category       : ownProps.category,
-      sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+  options: ownProps => ({
+    fetchPolicy: 'network-only',
+    variables: {
+      durationInDays: -1,
+      category: ownProps.category,
+      sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
     },
   }),
-  props: ({ ownProps, data: { loading, getInvalidDocs: { cursor = 0, length = 0, docs = [] } = {}, fetchMore } }) => ({
+  props: ({
+    ownProps,
+    data: {
+      loading,
+      getInvalidDocs: { cursor = 0, length = 0, docs = [] } = {},
+      fetchMore,
+    },
+  }) => ({
     data: {
       loading,
       docs,
@@ -340,16 +362,16 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
         query: GET_MORE_INVALID_DOCS,
         variables: {
           cursor,
-          durationInDays : -1,
-          category       : ownProps.category,
-          sortConfig     : pick(ownProps.sortConfig, ['key', 'direction']),
+          durationInDays: -1,
+          category: ownProps.category,
+          sortConfig: pick(ownProps.sortConfig, ['key', 'direction']),
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newDocs = fetchMoreResult.getInvalidDocs.docs;
 
           return {
-            getInvalidDocs : {
-              __typename : 'DocsFetchResponse',
+            getInvalidDocs: {
+              __typename: 'DocsFetchResponse',
 
               // By returning `cursor` here, we update the `loadMore` function
               // to the new cursor.
@@ -358,10 +380,7 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
               length: previousResult.getInvalidDocs.length,
 
               // Put the new docs at the end of the list
-              docs: [
-                ...previousResult.getInvalidDocs.docs,
-                ...newDocs,
-              ],
+              docs: [...previousResult.getInvalidDocs.docs, ...newDocs],
             },
           };
         },
@@ -418,13 +437,14 @@ const invalidDocs = graphql(GET_INVALID_DOCS, {
 //   }),
 // });
 
-
 const dashboard = graphql(DASHBOARD_QUERY, {
   options: ({}) => ({
-    variables: {
-    },
+    variables: {},
   }),
-  props: ({ ownProps, data: { loading, dashboard: { open = {}, closed = {}, canceled = {} } = {} } }) => ({
+  props: ({
+    ownProps,
+    data: { loading, dashboard: { open = {}, closed = {}, canceled = {} } = {} },
+  }) => ({
     loading,
     info: {
       open,
@@ -434,30 +454,30 @@ const dashboard = graphql(DASHBOARD_QUERY, {
   }),
 });
 
-
 const lastRefNo = graphql(LAST_REFNO_QUERY, {
   skip: ({ dateMission }) => !dateMission,
   options: ({ dateMission }) => ({
-    fetchPolicy : 'network-only',
+    fetchPolicy: 'network-only',
     variables: {
-      now : dateMission,
+      now: dateMission,
     },
   }),
   props: ({ data: { loading, getLastRefNo = { value: 0 } } }) => ({
     loading,
-    lastRefNo : getLastRefNo.value,
+    lastRefNo: getLastRefNo.value,
   }),
 });
 
 const searchMatchingUsers = graphql(SEARCH_MATCHING_USERS_QUERY, {
-  options: (ownProps) => ({
-    variables : {
-      type        : ownProps.type,
-      displayName : ownProps.displayName || '',
-      email       : ownProps.email       || '',
+  options: ownProps => ({
+    variables: {
+      type: ownProps.type,
+      displayName: ownProps.displayName || '',
+      email: ownProps.email || '',
     },
   }),
-  skip: ({ userKey, displayName, email }) => userKey === 'id' || (!displayName && !email),
+  skip: ({ userKey, displayName, email }) =>
+    userKey === 'id' || (!displayName && !email),
   props: ({ data: { loading, users = [] } }) => ({
     loading,
     users,
@@ -465,43 +485,48 @@ const searchMatchingUsers = graphql(SEARCH_MATCHING_USERS_QUERY, {
 });
 
 const docFiles = graphql(GET_DOC_FILES_QUERY, {
-  options: (ownProps) => ({
-    variables : {
-      id : ownProps.id,
+  options: ownProps => ({
+    variables: {
+      id: ownProps.id,
     },
   }),
   props: ({ data: { loading, getDocFiles = [] } }) => ({
     loading,
-    files : getDocFiles,
+    files: getDocFiles,
   }),
 });
 
 const docObserations = graphql(GET_DOC_OBSERVATIONS_QUERY, {
-  options: (ownProps) => ({
-    variables : {
-      id : ownProps.id,
+  options: ownProps => ({
+    variables: {
+      id: ownProps.id,
     },
   }),
-  props: ({ data: { loading, getDocObservations = { items : [], cursor : 0, prevCursor : 0 } } }) => ({
+  props: ({
+    data: {
+      loading,
+      getDocObservations = { items: [], cursor: 0, prevCursor: 0 },
+    },
+  }) => ({
     loading,
-    observations : getDocObservations,
+    observations: getDocObservations,
   }),
 });
 
 const queryCompanies = graphql(QUERY_COMPANIES, {
-  options: (ownProps) => ({
-    variables : {
-      queryString : ownProps.queryString,
+  options: ownProps => ({
+    variables: {
+      queryString: ownProps.queryString,
     },
   }),
   props: ({ data: { loading, queryCompanies = [] } }) => ({
     loading,
-    companies : queryCompanies,
+    companies: queryCompanies,
   }),
 });
 
 export default {
-  currentUser/*, usersByRoles*/,
+  currentUser /*, usersByRoles*/,
   esUsersByRoles,
   searchDocs,
   user,
@@ -520,4 +545,3 @@ export default {
   invalidDocs,
   queryCompanies,
 };
-

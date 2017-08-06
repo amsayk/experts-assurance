@@ -196,6 +196,7 @@ if (__DEV__) {
   window.Perf = require('react-addons-perf');
   window.reduxHistory = history;
   window.cookie = require('react-cookie');
+  window.moment = require('moment');
 } else {
   require('offline-plugin/runtime').install({
     onInstalled: function() {

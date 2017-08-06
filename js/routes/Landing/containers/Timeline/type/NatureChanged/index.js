@@ -2,7 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 import { Link } from 'react-router';
 
-import { diffChars } from 'diff';
+import * as D from 'diff';
 
 import {
   PATH_CASES_CASE,
@@ -92,7 +92,7 @@ export default function NatureChanged(
 
           if (hasOldValue) {
             const changes = hasNewValue
-              ? diffChars(toValue, fromValue)
+              ? D.diffChars(toValue, fromValue)
               : [
                   {
                     value: fromValue,
@@ -133,7 +133,7 @@ export default function NatureChanged(
 
           if (hasNewValue) {
             const changes = hasOldValue
-              ? diffChars(fromValue, toValue)
+              ? D.diffChars(fromValue, toValue)
               : [
                   {
                     value: toValue,

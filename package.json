@@ -151,7 +151,7 @@
     "url": "https://bitbucket.org/amsayk/b2b-trading-platform/issues"
   },
   "dependencies": {
-    "apollo-client": "1.9.0-1",
+    "apollo-client": "^1.9.0",
     "apollo-local-query": "^0.3.0",
     "apollo-upload-server": "^2.0.4",
     "array-find-index": "^1.0.2",
