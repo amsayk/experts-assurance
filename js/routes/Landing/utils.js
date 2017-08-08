@@ -74,18 +74,18 @@ export const extrapolate = function(locale) {
 
   // Add all weeks of this month
   [-1, -2, -3].forEach(function(index) {
-    const startOfWeek = moment
+    const endOfWeek = moment
       .utc(today)
       .add(index, 'weeks')
-      .startOf('week')
-      .startOf('day');
+      .endOf('week')
+      .endOf('day');
 
-    if (startOfWeek.isAfter(end) && !isLastMonth(startOfWeek)) {
+    if (endOfWeek.isAfter(end) && !isLastMonth(endOfWeek)) {
       periods.push({
-        id: `week-${startOfWeek.week()}`,
+        id: `week-${endOfWeek.week()}`,
         title: getWeekOfMonthTitle(index),
-        to: +dateFn(startOfWeek).endOf('week').endOf('day'),
-        from: +startOfWeek,
+        to: +endOfWeek,
+        from: +dateFn(endOfWeek).startOf('week').startOf('day'),
       });
     }
   });
