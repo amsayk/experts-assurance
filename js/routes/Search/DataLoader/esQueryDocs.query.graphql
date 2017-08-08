@@ -20,12 +20,23 @@ query esQueryDocs($query: ESDocsQueryPayload!) {
           manufacturer
           model
           plateNumber
+          series
         }
         validation {
           user { id name }
           amount
           date
         }
+
+        payment : paymentInfo {
+          user {
+            id
+            displayName
+          }
+          amount
+          date
+        }
+
         closure {
           state
           user { id name }

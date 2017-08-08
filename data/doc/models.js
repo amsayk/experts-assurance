@@ -1,5 +1,9 @@
 import Parse from 'parse/node';
 
+import * as helpers from './helpers';
+
+import moment from 'moment';
+
 import {
   PURGE_DOC,
   ADD_DOC,
@@ -73,6 +77,7 @@ export class Docs {
     sortConfig,
     selectionSet,
     now,
+    returnAll = false,
   }) {
     return this.connector.getInvalidDocs({
       category,
@@ -82,9 +87,17 @@ export class Docs {
       user: this.user,
       now,
       selectionSet,
+      returnAll,
     });
   }
-  getUnpaidDocs({ durationInDays, cursor, sortConfig, selectionSet, now }) {
+  getUnpaidDocs({
+    durationInDays,
+    cursor,
+    sortConfig,
+    selectionSet,
+    now,
+    returnAll = false,
+  }) {
     return this.connector.getUnpaidDocs({
       durationInDays,
       cursor,
@@ -92,6 +105,7 @@ export class Docs {
       user: this.user,
       now,
       selectionSet,
+      returnAll,
     });
   }
 
@@ -126,6 +140,42 @@ export class Docs {
   esQueryDocs(query) {
     return this.connector.esQueryDocs(query);
   }
+  async esQueryDocsToExcel(query) {
+    const { hits } = await this.esQueryDocs({ ...query, returnAll: true });
+    return await helpers.docsToExcel({
+      docs: hits.map(
+        ({
+          _source: {
+            id,
+            refNo,
+            company,
+            date,
+            dateMission,
+            vehicle,
+            client,
+            agent,
+            police,
+            nature,
+            validation_date,
+            payment_date,
+          },
+        }) => ({
+          id,
+          refNo,
+          company,
+          date,
+          dateMission,
+          vehicle,
+          client,
+          agent,
+          police,
+          nature,
+          validation_date,
+          payment_date,
+        }),
+      ),
+    });
+  }
 
   queryCompanies(q) {
     return this.connector.queryCompanies(q);
@@ -138,6 +188,7 @@ export class Docs {
     selectionSet,
     validOnly,
     now,
+    returnAll = false,
   ) {
     return this.connector.openDashboard(
       durationInDays,
@@ -147,6 +198,7 @@ export class Docs {
       now,
       selectionSet,
       validOnly,
+      returnAll,
     );
   }
   // closedDashboard(durationInDays, cursor, sortConfig, selectionSet, includeCanceled, now) {

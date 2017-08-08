@@ -1,0 +1,9 @@
+query esQueryDocsToExcel($query: ESDocsQueryPayload!) {
+  esQueryDocsToExcel(query: $query) {
+    data
+    error {
+      code
+    }
+  }
+}
+

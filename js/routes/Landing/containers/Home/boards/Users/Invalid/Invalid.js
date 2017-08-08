@@ -18,19 +18,101 @@ import selector from './selector';
 
 import ActivityIndicator from 'components/ActivityIndicator';
 
-import // WatchIcon,
-// DownloadIcon,
-'components/icons/MaterialIcons';
+import { DownloadIcon } from 'components/icons/MaterialIcons';
 
 import CategorySelector from './CategorySelector';
 
 import List from './Invalid_List';
 
+import DATA_QUERY from './getInvalidDocsToExcel.query.graphql';
+
+import FileSaver from 'file-saver';
+
+import pick from 'lodash.pick';
+
 class Invalid extends React.Component {
+  static contextTypes = {
+    client: T.object.isRequired,
+    snackbar: T.shape({
+      show: T.func.isRequired,
+    }).isRequired,
+  };
+
   constructor() {
     super();
 
+    this.onDownload = this.onDownload.bind(this);
     this._handleToggle = this._handleToggle.bind(this);
+
+    this.state = {
+      downloading: false,
+    };
+  }
+  onDownload() {
+    if (this.state.downloading) {
+      return;
+    }
+    this.setState(
+      {
+        downloading: true,
+      },
+      async () => {
+        const { category, sortConfig } = this.props;
+        const { client, snackbar } = this.context;
+
+        const variables = {
+          durationInDays: -1,
+          category: category,
+          sortConfig: pick(sortConfig, ['key', 'direction']),
+        };
+
+        const {
+          data: { getInvalidDocsToExcel: { data, error } },
+        } = await client.query({
+          query: DATA_QUERY,
+          fetchPolicy: 'network-only',
+          variables,
+        });
+
+        if (error) {
+          snackbar.show({
+            type: 'error',
+            message: 'Erreur de téléchargement.',
+          });
+        } else {
+          function base64ToBlob(data, callback) {
+            // convert base64 to raw binary data held in a string
+            // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+            const byteString = atob(data);
+
+            // separate out the mime component
+            const mimeString =
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+            // write the bytes of the string to an ArrayBuffer
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+            }
+
+            // write the ArrayBuffer to a blob, and you're done
+            const bb = new Blob([ab], { type: mimeString });
+            return bb;
+          }
+
+          const title = `Dossiers avec pièces manquantes - ${moment
+            .utc()
+            .format('DD-MM-YY')}.xlsx`;
+
+          FileSaver.saveAs(base64ToBlob(data), title);
+        }
+
+        this.setState({
+          downloading: false,
+        });
+      },
+    );
   }
 
   _handleToggle(e) {
@@ -71,7 +153,6 @@ class Invalid extends React.Component {
             }}
             className={cx(style['OPEN'], style.boardIcon)}
           >
-            {/* <WatchIcon size={18}/> */}
             #
           </div>
           <h5 className={style.boardTitle}>
@@ -81,13 +162,16 @@ class Invalid extends React.Component {
             <div className={style.icon}>
               {data.loading ? <ActivityIndicator size='small' /> : null}
             </div>
-            {/* <div className={cx(style.icon, style.download)}> */}
-            {/*   <Button className={style.downloadButton} role='button'> */}
-            {/*     <DownloadIcon */}
-            {/*       size={18} */}
-            {/*     /> */}
-            {/*   </Button> */}
-            {/* </div> */}
+            <div className={cx(style.icon, style.download)}>
+              <Button
+                disabled={this.state.downloading}
+                onClick={this.onDownload}
+                className={style.downloadButton}
+                role='button'
+              >
+                <DownloadIcon size={18} />
+              </Button>
+            </div>
             <div className={style.icon}>
               <CategorySelector
                 category={category}

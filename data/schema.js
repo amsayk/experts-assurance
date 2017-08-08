@@ -1,3 +1,8 @@
+import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
+import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
+
+import objectAssign from 'object-assign';
+
 import { GraphQLError } from 'graphql/error';
 import { Kind } from 'graphql/language';
 
@@ -26,6 +31,11 @@ const log = require('log')('app:server:graphql');
 
 const rootSchema = [
   `
+
+  type Download {
+    data: String
+    error: Error
+  }
 
   type Error {
     code: Int
@@ -65,6 +75,7 @@ const rootSchema = [
     getDocs(query: DocsFetchQuery!): DocsFetchResponse!
     esSearchDocs(queryString: String, state: DocState): ESDocsQueryResponse!
     esQueryDocs(query: ESDocsQueryPayload!): ESDocsQueryResponse!
+    esQueryDocsToExcel(query: ESDocsQueryPayload!): Download!
 
     queryCompanies(queryString: String): [String!]!
 
@@ -83,6 +94,13 @@ const rootSchema = [
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
 
+    openDashboardToExcel(
+      durationInDays: Float!,
+      cursor: Int = 0,
+      validOnly: Boolean = false,
+      sortConfig: ESSortConfig!
+    ): Download!
+
     # closedDashboard(
     #   durationInDays: Float!,
     #   cursor: Int = 0,
@@ -97,11 +115,22 @@ const rootSchema = [
       cursor: Int = 0,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
+    getInvalidDocsToExcel(
+      category: String
+      durationInDays: Float!
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
+    ): Download!
     getUnpaidDocs(
       durationInDays: Float!
       cursor: Int = 0,
       sortConfig: ESSortConfig!
     ): DocsFetchResponse!
+    getUnpaidDocsToExcel(
+      durationInDays: Float!
+      cursor: Int = 0,
+      sortConfig: ESSortConfig!
+    ): Download!
 
     getLastRefNo(now: Date!): RefNo!
 
@@ -217,6 +246,12 @@ const rootResolvers = {
     __serialize: value => value,
     __parseValue: value => value,
   },
+
+  Download: objectAssign(
+    {},
+    parseGraphqlScalarFields(['data']),
+    parseGraphqlObjectFields(['error']),
+  ),
 };
 
 const schema = [

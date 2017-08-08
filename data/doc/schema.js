@@ -15,6 +15,8 @@ import objectAssign from 'object-assign';
 
 import config from 'build/config';
 
+import * as helpers from './helpers';
+
 // import { pubsub } from 'data/subscriptions';
 
 import { DOC_ID_KEY } from 'backend/constants';
@@ -657,7 +659,7 @@ export const resolvers = {
         const payment_user = doc.payment_user;
         const payment_meta = doc.payment_meta;
 
-        if (payment_date && payment_amount && payment_user) {
+        if (payment_date && payment_user) {
           return {
             date: payment_date,
             amount: payment_amount || null,
@@ -1585,6 +1587,14 @@ export const resolvers = {
     esQueryDocs(obj, { query }, context) {
       return context.Docs.esQueryDocs(query);
     },
+    async esQueryDocsToExcel(obj, { query }, context) {
+      try {
+        const data = await context.Docs.esQueryDocsToExcel(query);
+        return { data };
+      } catch (e) {
+        return { error: { code: e.code || codes.ERROR_UNKNOWN } };
+      }
+    },
 
     openDashboard(
       _,
@@ -1601,6 +1611,61 @@ export const resolvers = {
         validOnly,
         context.Now,
       );
+    },
+    async openDashboardToExcel(
+      _,
+      { durationInDays, cursor = 0, sortConfig, validOnly },
+      context,
+      info,
+    ) {
+      const selectionSet = ['cursor', 'docs'];
+      try {
+        const { docs } = await context.Docs.openDashboard(
+          durationInDays,
+          cursor,
+          sortConfig,
+          selectionSet,
+          validOnly,
+          context.Now,
+          /* returnAll = */ true,
+        );
+
+        return {
+          data: await helpers.docsToExcel({
+            docs: docs.map(doc => ({
+              id: doc.id,
+              refNo: doc.get('refNo'),
+              company: doc.get('company'),
+              date: doc.get('date'),
+              dateMission: doc.get('dateMission'),
+              vehicle: doc.has('vehicle')
+                ? {
+                    manufacturer: doc.get('vehicle').manufacturer,
+                    model: doc.get('vehicle').model,
+                    plateNumber: doc.get('vehicle').plateNumber,
+                    series: doc.get('vehicle').series,
+                  }
+                : {},
+              client: {
+                name: doc.has('client')
+                  ? doc.get('client').get('displayName')
+                  : null,
+              },
+              agent: {
+                name: doc.has('agent')
+                  ? doc.get('agent').get('displayName')
+                  : null,
+              },
+              police: doc.get('police'),
+              nature: doc.get('nature'),
+              validation_date: doc.get('validation_date'),
+              payment_date: doc.get('payment_date'),
+            })),
+          }),
+        };
+      } catch (e) {
+        return { error: { code: codes.ERROR_UNKNOWN } };
+      }
     },
     // closedDashboard(_, { durationInDays, cursor = 0, sortConfig, includeCanceled }, context, info) {
     //   const selectionSet = Object.keys(graphqlFields(info));
@@ -1650,6 +1715,61 @@ export const resolvers = {
         now: context.Now,
       });
     },
+    async getInvalidDocsToExcel(
+      _,
+      { category, durationInDays, cursor = 0, sortConfig },
+      context,
+      info,
+    ) {
+      const selectionSet = ['cursor', 'docs'];
+      try {
+        const { docs } = await context.Docs.getInvalidDocs({
+          category,
+          durationInDays,
+          cursor,
+          sortConfig,
+          selectionSet,
+          now: context.Now,
+          returnAll: true,
+        });
+
+        return {
+          data: await helpers.docsToExcel({
+            docs: docs.map(doc => ({
+              id: doc.id,
+              refNo: doc.get('refNo'),
+              company: doc.get('company'),
+              date: doc.get('date'),
+              dateMission: doc.get('dateMission'),
+              vehicle: doc.has('vehicle')
+                ? {
+                    manufacturer: doc.get('vehicle').manufacturer,
+                    model: doc.get('vehicle').model,
+                    plateNumber: doc.get('vehicle').plateNumber,
+                    series: doc.get('vehicle').series,
+                  }
+                : {},
+              client: {
+                name: doc.has('client')
+                  ? doc.get('client').get('displayName')
+                  : null,
+              },
+              agent: {
+                name: doc.has('agent')
+                  ? doc.get('agent').get('displayName')
+                  : null,
+              },
+              police: doc.get('police'),
+              nature: doc.get('nature'),
+              validation_date: doc.get('validation_date'),
+              payment_date: doc.get('payment_date'),
+            })),
+          }),
+        };
+      } catch (e) {
+        return { error: { code: codes.ERROR_UNKNOWN } };
+      }
+    },
     getUnpaidDocs(_, { durationInDays, cursor = 0, sortConfig }, context, info) {
       const selectionSet = Object.keys(graphqlFields(info));
       return context.Docs.getUnpaidDocs({
@@ -1659,6 +1779,60 @@ export const resolvers = {
         selectionSet,
         now: context.Now,
       });
+    },
+    async getUnpaidDocsToExcel(
+      _,
+      { durationInDays, cursor = 0, sortConfig },
+      context,
+      info,
+    ) {
+      const selectionSet = ['cursor', 'docs'];
+      try {
+        const { docs } = await context.Docs.getUnpaidDocs({
+          durationInDays,
+          cursor,
+          sortConfig,
+          selectionSet,
+          now: context.Now,
+          returnAll: true,
+        });
+
+        return {
+          data: await helpers.docsToExcel({
+            docs: docs.map(doc => ({
+              id: doc.id,
+              refNo: doc.get('refNo'),
+              company: doc.get('company'),
+              date: doc.get('date'),
+              dateMission: doc.get('dateMission'),
+              vehicle: doc.has('vehicle')
+                ? {
+                    manufacturer: doc.get('vehicle').manufacturer,
+                    model: doc.get('vehicle').model,
+                    plateNumber: doc.get('vehicle').plateNumber,
+                    series: doc.get('vehicle').series,
+                  }
+                : {},
+              client: {
+                name: doc.has('client')
+                  ? doc.get('client').get('displayName')
+                  : null,
+              },
+              agent: {
+                name: doc.has('agent')
+                  ? doc.get('agent').get('displayName')
+                  : null,
+              },
+              police: doc.get('police'),
+              nature: doc.get('nature'),
+              validation_date: doc.get('validation_date'),
+              payment_date: doc.get('payment_date'),
+            })),
+          }),
+        };
+      } catch (e) {
+        return { error: { code: codes.ERROR_UNKNOWN } };
+      }
     },
 
     getDocObservations(_, { id, cursor }, context) {

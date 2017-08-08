@@ -1,0 +1,9 @@
+query getUnpaidDocsToExcel($durationInDays: Float!, $sortConfig: ESSortConfig!) {
+  getUnpaidDocsToExcel(durationInDays: $durationInDays, sortConfig: $sortConfig) {
+    data
+    error {
+      code
+    }
+  }
+}
+

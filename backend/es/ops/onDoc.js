@@ -19,47 +19,53 @@ const log = require('log')('app:backend:es:onDoc');
 export default function onDoc(id) {
   return new Promise(async (resolve, reject) => {
     try {
-      const doc = await new Parse.Query(DocType).get(id, { useMasterKey : true });
+      const doc = await new Parse.Query(DocType).get(id, { useMasterKey: true });
 
       const lastModifiedFields = Object.keys(doc.attributes)
-        .filter((key) => key.startsWith('lastModified_'))
+        .filter(key => key.startsWith('lastModified_'))
         .reduce((memo, key) => {
           memo[key] = doc.get(key);
           return memo;
         }, {});
 
-      client.index({
-        index: config.esIndex,
-        type: 'doc',
-        id: doc.get('refNo'),
-        body: {
-          id           : doc.id,
-          refNo        : doc.get('refNo'),
-          vehicle      : doc.get('vehicle'),
-          state        : doc.get('state'),
-          company      : doc.get('company'),
-          dateMission  : doc.get('dateMission'),
-          date         : doc.get('date'),
-          manager      : doc.has('manager') ? (await indexedUser(doc.get('manager'), /* isEmployee = */true)) : null,
-          client       : (await indexedUser(doc.get('client'))),
-          agent        : (await indexedUser(doc.get('agent'))),
-          user         : (await indexedUser(doc.get('user'), /* isEmployee = */true)),
-          lastModified : doc.get('lastModified') || doc.get('updatedAt'),
-          police       : doc.get('police'),
-          nature       : doc.get('nature'),
-          ...lastModifiedFields,
-          ...(await getValidation(doc)),
-          ...(await getClosure(doc)),
-        }
-      }, function (error, response) {
-        if (error) {
-          log.error(`Error indexing doc ${id}`, error);
-          return reject(error);
-        }
+      client.index(
+        {
+          index: config.esIndex,
+          type: 'doc',
+          id: doc.get('refNo'),
+          body: {
+            id: doc.id,
+            refNo: doc.get('refNo'),
+            vehicle: doc.get('vehicle'),
+            state: doc.get('state'),
+            company: doc.get('company'),
+            dateMission: doc.get('dateMission'),
+            date: doc.get('date'),
+            manager: doc.has('manager')
+              ? await indexedUser(doc.get('manager'), /* isEmployee = */ true)
+              : null,
+            client: await indexedUser(doc.get('client')),
+            agent: await indexedUser(doc.get('agent')),
+            user: await indexedUser(doc.get('user'), /* isEmployee = */ true),
+            lastModified: doc.get('lastModified') || doc.get('updatedAt'),
+            police: doc.get('police'),
+            nature: doc.get('nature'),
+            ...lastModifiedFields,
+            ...(await getValidation(doc)),
+            ...(await getPayment(doc)),
+            ...(await getClosure(doc)),
+          },
+        },
+        function(error, response) {
+          if (error) {
+            log.error(`Error indexing doc ${id}`, error);
+            return reject(error);
+          }
 
-        log(`Successfully indexed doc ${id}`);
-        return resolve(response);
-      });
+          log(`Successfully indexed doc ${id}`);
+          return resolve(response);
+        },
+      );
     } catch (e) {
       log.error(`Doc not found: ${id}`, e);
       reject(e);
@@ -70,16 +76,15 @@ export default function onDoc(id) {
 async function indexedUser(user, isEmployee = false) {
   if (user) {
     try {
-      return await user.fetch({ useMasterKey: true }).then((user) => ({
-        id           : user.id,
-        name         : user.get('displayName'),
-        email        : user.get('email') || user.get('mail'),
-        type         : getType(user),
-        isAdmin      : (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1,
-        date         : user.get('createdAt'),
-        lastModified : user.get('updatedAt'),
+      return await user.fetch({ useMasterKey: true }).then(user => ({
+        id: user.id,
+        name: user.get('displayName'),
+        email: user.get('email') || user.get('mail'),
+        type: getType(user),
+        isAdmin: (user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1,
+        date: user.get('createdAt'),
+        lastModified: user.get('updatedAt'),
       }));
-
     } catch (e) {
       log.error(`Error getting user ${user.id}`, e);
       return null;
@@ -94,18 +99,44 @@ async function getValidation(doc) {
   const validation_amount = doc.get('validation_amount');
   const validation_user = doc.get('validation_user');
 
-  if (validation_user) {
-    const isEmployee = (validation_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (validation_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
+  // if (validation_user) {
+  const isEmployee =
+    (validation_user ? validation_user.get('roles') || [] : []).indexOf(
+      Role_ADMINISTRATORS,
+    ) !== -1 ||
+    (validation_user ? validation_user.get('roles') || [] : []).indexOf(
+      Role_MANAGERS,
+    ) !== -1;
+  return {
+    validation_amount,
+    validation_date,
+    validation_user: await indexedUser(validation_user, isEmployee),
+  };
+  // }
+
+  return null;
+}
+
+async function getPayment(doc) {
+  const payment_date = doc.get('payment_date');
+  const payment_amount = doc.get('payment_amount');
+  const payment_user = doc.get('payment_user');
+  const payment_meta = doc.get('payment_meta') || {};
+
+  if (payment_date && payment_user) {
+    const isEmployee =
+      (payment_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 ||
+      (payment_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
     return {
-      validation_amount,
-      validation_date,
-      validation_user : (await indexedUser(validation_user, isEmployee)),
+      payment_amount,
+      payment_date,
+      payment_meta,
+      payment_user: await indexedUser(payment_user, isEmployee),
     };
   }
 
   return null;
 }
-
 
 async function getClosure(doc) {
   const closure_date = doc.get('closure_date');
@@ -113,11 +144,13 @@ async function getClosure(doc) {
   const closure_user = doc.get('closure_user');
 
   if (closure_date && closure_state && closure_user) {
-    const isEmployee = (closure_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 || (closure_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
+    const isEmployee =
+      (closure_user.get('roles') || []).indexOf(Role_ADMINISTRATORS) !== -1 ||
+      (closure_user.get('roles') || []).indexOf(Role_MANAGERS) !== -1;
     return {
       closure_state,
       closure_date,
-      closure_user : (await indexedUser(closure_user, isEmployee)),
+      closure_user: await indexedUser(closure_user, isEmployee),
     };
   }
 
@@ -141,4 +174,3 @@ function getType(user) {
 
   return 'CLIENT';
 }
-

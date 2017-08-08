@@ -8,6 +8,7 @@ const WebpackMd5Hash = require('webpack-md5-hash');
 const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const sassyImport = require('postcss-sassy-import');
 
 // Show a nice little progress bar
@@ -288,26 +289,7 @@ if (__DEV__) {
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     // new PrepackWebpackPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: !__DEV__ && config.debug,
-      minimize: true,
-      comments: false,
-      compress: {
-        unused: true,
-        dead_code: true,
-        warnings: false,
-        drop_debugger: true,
-        drop_console: true,
-        hoist_vars: true,
-        screw_ie8: true,
-        conditionals: true,
-        comparisons: true,
-        sequences: true,
-        evaluate: true,
-        if_return: true,
-        join_vars: true,
-      },
-    }),
+    new UglifyJSPlugin(),
   );
 }
 

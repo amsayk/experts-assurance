@@ -1,14 +1,14 @@
 import ApolloClient, { toIdValue } from 'apollo-client';
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+import {
+  SubscriptionClient,
+  addGraphQLSubscriptions,
+} from 'subscriptions-transport-ws';
 import getNetworkInterface from './transport';
 import debug from 'log';
 
 import dataIdFromObject from 'dataIdFromObject';
 
-import {
-  GRAPHQL_ENDPOINT,
-  GRAPHQL_SUBSCRIPTIONS_ENDPOINT,
-} from 'vars';
+import { DEBUG, GRAPHQL_ENDPOINT, GRAPHQL_SUBSCRIPTIONS_ENDPOINT } from 'vars';
 
 const log = debug('app:client');
 
@@ -18,17 +18,19 @@ const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTIONS_ENDPOINT, {
   },
   reconnect: true,
   reconnectionAttempts: 5,
-  connectionCallback: (error) => {},
+  connectionCallback: error => {},
 });
 
-const responseMiddlewareNetworkInterface = getNetworkInterface(GRAPHQL_ENDPOINT, {
-});
+const responseMiddlewareNetworkInterface = getNetworkInterface(
+  GRAPHQL_ENDPOINT,
+  {},
+);
 
 // Sample error handling middleware
 responseMiddlewareNetworkInterface.use({
   applyBatchMiddleware(req, next) {
     if (!req.options.headers) {
-      req.options.headers = {};  // Create the header object if needed.
+      req.options.headers = {}; // Create the header object if needed.
     }
     next();
   },
@@ -36,7 +38,10 @@ responseMiddlewareNetworkInterface.use({
     if (response.errors) {
       if (typeof window !== 'undefined') {
         log.error(JSON.stringify(response.errors));
-        alert(`There was an error in your GraphQL request: ${response.errors[0].message}`);
+        alert(
+          `There was an error in your GraphQL request: ${response.errors[0]
+            .message}`,
+        );
       }
     }
     next();
@@ -49,17 +54,19 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 );
 
 export const client = new ApolloClient({
-  connectToDevTools : __DEV__,
+  connectToDevTools: __DEV__ || DEBUG,
   networkInterface: networkInterfaceWithSubscriptions,
   customResolvers: {
     Query: {
-      getUser : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
-      getDoc  : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
-      getFile : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'File', id })),
+      getUser: (_, { id }) =>
+        toIdValue(dataIdFromObject({ __typename: 'User', id })),
+      getDoc: (_, { id }) =>
+        toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+      getFile: (_, { id }) =>
+        toIdValue(dataIdFromObject({ __typename: 'File', id })),
     },
   },
   dataIdFromObject,
   initialState: window.__APOLLO_STATE__ || {},
   batchMax: 4,
 });
-

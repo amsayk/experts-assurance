@@ -40,8 +40,7 @@ const graphql = require('graphql');
 
 const log = require('log')('app:backend:ssr');
 
-const muiTheme = getMuiTheme({
-});
+const muiTheme = getMuiTheme({});
 
 export default function createRenderEngine(app) {
   return async ({ renderProps, req, res, store }) => {
@@ -49,43 +48,44 @@ export default function createRenderEngine(app) {
     const networkInterface = createLocalInterface(graphql, schema, {
       context: {
         user,
-        Users      : new Users({ user, connector: new UserConnector() }),
-        Business   : new Business({ user, connector: new BusinessConnector() }),
-        Docs       : new Docs({ user, connector: new DocConnector() }),
-        Activities : new Activities({ user, connector: new ActivityConnector() }),
-        Now        : Date.now(),
+        Users: new Users({ user, connector: new UserConnector() }),
+        Business: new Business({ user, connector: new BusinessConnector() }),
+        Docs: new Docs({ user, connector: new DocConnector() }),
+        Activities: new Activities({ user, connector: new ActivityConnector() }),
+        Now: Date.now(),
       },
     });
     const client = new ApolloClient({
-      connectToDevTools : __DEV__,
       ssrMode: true,
       // Remember that this is the interface the SSR server will use to connect to the
       // API server, so we need to ensure it isn't firewalled, etc
       networkInterface,
       customResolvers: {
         Query: {
-          getUser : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'User', id })),
-          getDoc  : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
-          getFile : (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'File', id })),
-
+          getUser: (_, { id }) =>
+            toIdValue(dataIdFromObject({ __typename: 'User', id })),
+          getDoc: (_, { id }) =>
+            toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+          getFile: (_, { id }) =>
+            toIdValue(dataIdFromObject({ __typename: 'File', id })),
         },
       },
       dataIdFromObject,
       batchMax: 4,
     });
 
-    const intlSelector = (state) => ({
-      defaultLocale : state.getIn(['intl', 'defaultLocale']),
-      locale        : state.getIn(['intl', 'locale']),
-      messages      : state.getIn(['intl', 'messages']),
-      formats       : state.getIn(['intl', 'formats']),
+    const intlSelector = state => ({
+      defaultLocale: state.getIn(['intl', 'defaultLocale']),
+      locale: state.getIn(['intl', 'locale']),
+      messages: state.getIn(['intl', 'messages']),
+      formats: state.getIn(['intl', 'formats']),
     });
 
     const app = (
       <MuiThemeProvider muiTheme={muiTheme}>
         <ApolloProvider client={client} store={store} immutable>
           <IntlProvider intlSelector={intlSelector}>
-            <RouterContext {...renderProps}/>
+            <RouterContext {...renderProps} />
           </IntlProvider>
         </ApolloProvider>
       </MuiThemeProvider>
@@ -101,10 +101,12 @@ export default function createRenderEngine(app) {
         : { data: emptyObject };
 
       return {
-        title       : title.toString(),
-        html        : content,
-        appState    : JSON.stringify(store.getState().toJS()),
-        apolloState : JSON.stringify({ [APOLLO_DEFAULT_REDUX_ROOT_KEY]: { data: apolloState.data } }),
+        title: title.toString(),
+        html: content,
+        appState: JSON.stringify(store.getState().toJS()),
+        apolloState: JSON.stringify({
+          [APOLLO_DEFAULT_REDUX_ROOT_KEY]: { data: apolloState.data },
+        }),
       };
     } catch (e) {
       log.error('RENDERING ERROR:', e);
@@ -112,4 +114,3 @@ export default function createRenderEngine(app) {
     }
   };
 }
-

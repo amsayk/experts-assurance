@@ -1,0 +1,9 @@
+query getInvalidDocsToExcel($category: String, $durationInDays: Float!, $sortConfig: ESSortConfig!) {
+  getInvalidDocsToExcel(category: $category, durationInDays: $durationInDays, sortConfig: $sortConfig) {
+    data
+    error {
+      code
+    }
+  }
+}
+

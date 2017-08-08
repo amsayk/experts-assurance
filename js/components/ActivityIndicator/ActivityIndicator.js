@@ -26,7 +26,7 @@ export default function ActivityIndicator({
     >
       <div
         style={objectAssign(
-          indicatorSizes[size],
+          indicatorSizes[size] || { width: size, height: size },
           styles.animation,
           !animating && styles.animationPause,
           !animating && hidesWhenStopped && styles.hidesWhenStopped,

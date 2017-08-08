@@ -1,6 +1,10 @@
 import { createWorker } from 'redux-worker';
 import { XLSX_TO_DOCS } from 'redux/reducers/importation/constants';
 
+import { APP_NAME } from 'vars';
+
+import moment from 'moment';
+
 import X from 'xlsx';
 
 let worker = createWorker();
@@ -31,8 +35,4 @@ worker.registerTask(XLSX_TO_DOCS, function({ data, isBinary }) {
       }, {});
     }
   }
-});
-
-worker.registerTask('EXPORT_TO_XLSX', function({ docs }) {
-  return null;
 });

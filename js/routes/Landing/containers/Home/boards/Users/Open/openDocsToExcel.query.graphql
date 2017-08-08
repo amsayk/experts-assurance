@@ -1,0 +1,9 @@
+query openDocsToExcel($durationInDays:  Float!, $sortConfig: ESSortConfig!) {
+  openDashboardToExcel(durationInDays: $durationInDays, sortConfig: $sortConfig) {
+    data
+    error {
+      code
+    }
+  }
+}
+

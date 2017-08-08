@@ -256,6 +256,7 @@ export class DocConnector {
     selectionSet,
     user,
     now,
+    returnAll,
   }) {
     if (!user) {
       return Promise.resolve({
@@ -330,19 +331,21 @@ export class DocConnector {
     }
 
     function doFetch() {
-      const q = getQuery()
-        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
-        .include([
-          'user',
-          'payment_user',
-          'validation_user',
-          'manager',
-          'client',
-          'agent',
-        ]);
+      const q = getQuery().include([
+        'user',
+        'payment_user',
+        'validation_user',
+        'manager',
+        'client',
+        'agent',
+      ]);
 
-      if (cursor) {
+      if (cursor && returnAll === false) {
         q.skip(cursor);
+      }
+
+      if (returnAll === false) {
+        q.limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
       }
 
       q[
@@ -371,6 +374,7 @@ export class DocConnector {
     selectionSet,
     user,
     now,
+    returnAll,
   }) {
     if (!user) {
       return Promise.resolve({
@@ -419,19 +423,21 @@ export class DocConnector {
     }
 
     function doFetch() {
-      const q = getQuery()
-        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
-        .include([
-          'payment_user',
-          'validation_user',
-          'user',
-          'manager',
-          'client',
-          'agent',
-        ]);
+      const q = getQuery().include([
+        'payment_user',
+        'validation_user',
+        'user',
+        'manager',
+        'client',
+        'agent',
+      ]);
 
-      if (cursor) {
+      if (cursor && returnAll === false) {
         q.skip(cursor);
+      }
+
+      if (returnAll === false) {
+        q.limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
       }
 
       q[
@@ -491,7 +497,7 @@ export class DocConnector {
   //   }
   // }
 
-  esQueryDocs({
+  async esQueryDocs({
     cursor = 0,
 
     q = null,
@@ -518,6 +524,8 @@ export class DocConnector {
     user = null,
 
     sortConfig = null,
+
+    returnAll = false,
   }) {
     const must = [];
 
@@ -731,11 +739,27 @@ export class DocConnector {
       },
     });
 
+    let size = cursor === 0 ? LIMIT_PER_PAGE : LIMIT_PER_NEXT_PAGE;
+
+    if (returnAll) {
+      const { hits } = await es.search({
+        index: config.esIndex,
+        type: 'doc',
+        body: {
+          query: {
+            match_all: {},
+          },
+        },
+      });
+
+      size = hits.total;
+    }
+
     const searchParams = {
       index: config.esIndex,
       type: 'doc',
-      from: cursor,
-      size: cursor === 0 ? LIMIT_PER_PAGE : LIMIT_PER_NEXT_PAGE,
+      from: returnAll ? 0 : cursor,
+      size,
       body: {
         sort,
         query,
@@ -769,7 +793,7 @@ export class DocConnector {
       },
     };
 
-    return es.search(searchParams).then(({ took, hits }) => ({
+    return await es.search(searchParams).then(({ took, hits }) => ({
       took: took,
       length: hits.total,
       max_score: hits.max_score,
@@ -1097,6 +1121,7 @@ export class DocConnector {
     now,
     selectionSet,
     validOnly,
+    returnAll,
   ) {
     if (!user) {
       return Promise.resolve({
@@ -1138,18 +1163,20 @@ export class DocConnector {
     }
 
     function doFetch() {
-      const q = getQuery()
-        .limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE)
-        .include([
-          'user',
-          'payment_user',
-          'validation_user',
-          'manager',
-          'client',
-          'agent',
-        ]);
+      const q = getQuery().include([
+        'user',
+        'payment_user',
+        'validation_user',
+        'manager',
+        'client',
+        'agent',
+      ]);
 
-      if (cursor) {
+      if (returnAll === false) {
+        q.limit(cursor > 0 ? LIMIT_PER_NEXT_PAGE : LIMIT_PER_PAGE);
+      }
+
+      if (cursor && returnAll === false) {
         q.skip(cursor);
       }
 
