@@ -2,6 +2,8 @@ import React from 'react';
 import T from 'prop-types';
 import { compose, bindActionCreators } from 'redux';
 
+import moment from 'moment';
+
 import { connect } from 'react-redux';
 
 import DataLoader from 'routes/Landing/DataLoader';
