@@ -449,21 +449,29 @@ const Utils = {
     }
 
     let activities = openActivity
-      ? [{ type: 'DOCUMENT_CREATED', user: request.user, state: 'OPEN', date }]
+      ? [
+          {
+            type: 'DOCUMENT_CREATED',
+            user: request.user,
+            state: 'OPEN',
+            date,
+            now: new Date(request.now),
+          },
+        ]
       : [];
 
     if (dateValidation || paymentDate) {
       if (dateValidation) {
         doc.set({
           validation_user: request.user,
-          validation_date: new Date(dateValidation),
+          validation_date: dateValidation,
         });
       }
 
       if (paymentDate) {
         doc.set({
           payment_user: request.user,
-          payment_date: new Date(paymentDate),
+          payment_date: paymentDate,
           payment_at: new Date(request.now),
           payment_amount: 0,
         });
@@ -478,6 +486,7 @@ const Utils = {
             fromState: 'OPEN',
             toState: 'CLOSED',
           },
+          now: new Date(+moment(request.now).add(1, 'second')),
           date: new Date(dateClosureMS),
           user: request.user,
         });
@@ -488,13 +497,13 @@ const Utils = {
       });
     }
 
-    const objects = activities.map(({ type, user, date, metadata }) => {
+    const objects = activities.map(({ type, user, date, now, metadata }) => {
       return new ActivityType().setACL(ACL).set({
         ns: 'DOCUMENTS',
         type: type,
         metadata: { ...metadata },
         timestamp: date,
-        now: new Date(request.now),
+        now,
         [DOC_FOREIGN_KEY]: refNo,
         user,
         business: BusinessType.createWithoutData(business.id),
