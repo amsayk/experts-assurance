@@ -13,6 +13,7 @@ const babelOptions = require('scripts/getBabelOptions')({
     libphonenumber: 'common/libphonenumber',
     slug: 'common/slug',
     getMoment: 'common/getMoment',
+    delay: 'common/delay',
 
     // TODO: remove when subscriptions-transport-ws gets updated
     'graphql-tag/printer': 'graphql/language/printer',
