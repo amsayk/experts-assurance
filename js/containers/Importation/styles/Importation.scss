@@ -229,6 +229,22 @@
   }
 }
 
+.importButtonWrapper_importing {
+  .importButton {
+    color: $brand-danger;
+  }
+
+
+  .importButton svg {
+    opacity: 1;
+
+    &:focus,
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
 .titleWrapper {
 
   .title {

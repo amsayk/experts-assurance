@@ -1,6 +1,17 @@
 import delay from 'delay';
 
+import getMoment from 'getMoment';
+
 import {
+  ONGOING_IMPORTATION,
+  BUSY,
+
+  // uploads
+  BEGIN_UPLOAD,
+  UPLOAD_ERROR,
+  UPLOAD_SUCCESS,
+
+  // Actions
   START_VALIDATION,
   VALIDATION_ERROR,
   VALIDATION_SUCCESS,
@@ -10,8 +21,8 @@ import {
   EXTRACTION_ERROR,
   XLSX_TO_DOCS,
   DOCS_TO_XLSX,
-  START_IMPORTING,
-  FINISH_IMPORTING,
+  SHOW,
+  HIDE,
   START_EXTRACTION,
   ADD_FILES,
   REMOVE_FILE,
@@ -21,15 +32,97 @@ import {
 
 import { Doc } from './reducer';
 
-export function startImporting() {
+import pick from 'lodash.pick';
+
+import ONGOING_IMPORTATION_QUERY from './ongoingImportation.query.graphql';
+import GET_IMPORTATION_QUERY from './getImportation.query.graphql';
+
+import IMPORTATION_MUTATION from './importation.mutation.graphql';
+
+export function loadImportation(importation) {
   return {
-    type: START_IMPORTING,
+    type: ONGOING_IMPORTATION,
+    payload: {
+      ...pick(importation, [
+        'id',
+        'docs',
+        'date',
+        'endDate',
+        'files',
+        'progress',
+        'total',
+      ]),
+      user: importation.user.id,
+    },
   };
 }
 
-export function finishImporting() {
+export function boot() {
+  return (dispatch, getState, { client }) => {
+    // dispatch([
+    //   {
+    //     type: BUSY,
+    //     busy: true,
+    //   },
+    // ]);
+
+    // get ongoing importation
+    const obs = client.watchQuery({
+      query: ONGOING_IMPORTATION_QUERY,
+      variables: {},
+    });
+
+    let sub = obs.subscribe({
+      next: function fn({ data: { ongoingImportation } }) {
+        if (ongoingImportation) {
+          // Don't listen for ongoing importation anymore
+          try {
+            sub.unsubscribe();
+          } catch (e) {}
+
+          dispatch([
+            loadImportation(ongoingImportation),
+            // {
+            //   type: BUSY,
+            //   busy: false,
+            // },
+          ]);
+
+          const importationQuery = client.watchQuery({
+            query: GET_IMPORTATION_QUERY,
+            variables: { id: ongoingImportation.id },
+          });
+
+          importationQuery._sub = importationQuery.subscribe({
+            async next({ data: { getImportation: importation } }) {
+              if (importation.endDate) {
+                try {
+                  importationQuery._sub.unsubscribe();
+                } catch (e) {}
+
+                await obs.refetch();
+                sub = obs.subscribe({ next: fn });
+              }
+
+              dispatch(loadImportation(importation));
+            },
+          });
+        }
+      },
+      error() {},
+    });
+  };
+}
+
+export function show() {
   return {
-    type: FINISH_IMPORTING,
+    type: SHOW,
+  };
+}
+
+export function hide() {
+  return {
+    type: HIDE,
   };
 }
 
@@ -192,18 +285,120 @@ export function validateDocs() {
 }
 
 export function uploadDocs() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, { client, snackbar }) => {
+    const moment = getMoment(
+      getState().getIn(['intl']).localeWithFallback,
+      moment => moment.utc,
+    );
+
     dispatch({
-      type: START_UPLOAD,
+      type: BEGIN_UPLOAD,
+      date: +moment(),
     });
 
-    const docs = getState().getIn(['importation', 'docs']);
+    const getDocs = () => getState().getIn(['importation', 'docs']).toArray();
 
-    for (const doc of docs) {
+    // 1. refresh ongoing importation
+    // Update will happen in boot
+    await client.query({
+      query: ONGOING_IMPORTATION_QUERY,
+      fetchPolicy: 'network-only',
+      variables: {},
+    });
+
+    const id = getState().getIn(['importation', 'id']);
+
+    if (id) {
+      return;
     }
 
-    dispatch({
-      type: UPLOAD_SUCCESS,
-    });
+    try {
+      // 2. Importation
+
+      await doImportation();
+
+      if (!getState().getIn(['importation', 'visible'])) {
+        snackbar.show({
+          message: 'Importation avec succès',
+          persist: true,
+          action: {
+            title: 'FERMER',
+            // Must not be an arrow function
+            click: function() {
+              this.dismiss();
+            },
+          },
+        });
+      }
+
+      // 3. finish importation
+      dispatch({
+        type: UPLOAD_SUCCESS,
+      });
+    } catch (e) {
+      dispatch({
+        type: UPLOAD_ERROR,
+        error: e,
+      });
+
+      if (!getState().getIn(['importation', 'visible'])) {
+        snackbar.show({
+          type: 'error',
+          message: `Erreur d'importation`,
+          persist: true,
+          action: {
+            title: 'FERMER',
+            // Must not be an arrow function
+            click: function() {
+              this.dismiss();
+            },
+          },
+        });
+      }
+    }
+
+    async function doImportation() {
+      const info = {
+        date: getState().getIn(['importation', 'date']),
+        docs: getDocs().map((doc, index) => ({
+          progress: index + 1,
+          ...pick(doc, [
+            'id',
+            'clientId',
+            'clientKey',
+            'clientDisplayName',
+            'agentId',
+            'agentKey',
+            'agentDisplayName',
+            'company',
+            'date',
+            'dateMission',
+            'dateValidation',
+            'paymentDate',
+            'police',
+            'nature',
+            'vehicleManufacturer',
+            'vehicleModel',
+            'vehiclePlateNumber',
+            'vehicleSeries',
+            'vehicleMileage',
+            'vehicledMC',
+            'vehicleEnergy',
+            'vehiclePower',
+          ]),
+        })),
+        files: getState().getIn(['importation', 'files']).toJS(),
+      };
+
+      const { data: { Importation: { error } } } = await client.mutate({
+        mutation: IMPORTATION_MUTATION,
+        variables: { info },
+      });
+
+      if (error) {
+        throw error;
+      } else {
+      }
+    }
   };
 }

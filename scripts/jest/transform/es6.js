@@ -16,6 +16,7 @@ const babelOptions = require('../getBabelOptions')({
     countries: 'common/countries',
     delay: 'common/delay',
     getDataTransferItems: 'common/getDataTransferItems',
+    getMoment: 'common/getMoment',
 
     // cookie storage
     'StorageController.cookie': 'common/utils/StorageController.cookie',

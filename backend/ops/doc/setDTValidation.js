@@ -83,6 +83,7 @@ export default (async function setDTValidation(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

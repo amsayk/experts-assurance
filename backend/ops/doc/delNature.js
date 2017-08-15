@@ -26,11 +26,12 @@ export default (async function delNature(request, done) {
 
       await doc
         .set({
-          nature: null,
+          // nature: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('nature')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -79,6 +80,7 @@ export default (async function delNature(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

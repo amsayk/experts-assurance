@@ -11,8 +11,10 @@ import LOG_OUT_MUTATION from './logOut.mutation.graphql';
 
 const log = debug('app:client:auth');
 
+import SUBSCRIPTION from 'redux/reducers/app/app.subscription.graphql';
+
 export function logIn(username, password) {
-  return async (dispatch, _, { client }) => {
+  return async (dispatch, getState, { client }) => {
     const { data: { logIn: { user, error } } } = await client.mutate({
       mutation: LOG_IN_MUTATION,
       variables: {
@@ -30,11 +32,50 @@ export function logIn(username, password) {
       try {
         // Clear cache is required!
         Parse.User._clearCache();
-      } finally {}
+      } finally {
+      }
+
+      const obs = client.subscribe({
+        query: SUBSCRIPTION,
+        variables: { sessionToken: user.sessionToken },
+      });
+
+      obs.subscribe({
+        next({ onActivityEvent: { activity } }) {
+          // Refresh relevants queries
+          try {
+            const QUERIES = [
+              'getTimeline',
+              // 'recentDocs',
+              'getDocs',
+              'esQueryDocs',
+              'dashboard',
+              'openDocs',
+              'invalidDocs',
+              'unpaidDocs',
+              'getOngoingImportation',
+              'getImportation',
+              'getDoc',
+            ];
+
+            if (
+              getState().getIn(['importation', 'user']) ===
+              getState().getIn(['user']).id
+            ) {
+              QUERIES.push('recentDocs');
+            }
+
+            QUERIES.forEach(async q => {
+              client.queryManager.refetchQueryByName(q);
+            });
+          } catch (e) {}
+        },
+        error(error) {},
+      });
 
       dispatch({
-        type    : USER_LOGGED_IN,
-        payload : user,
+        type: USER_LOGGED_IN,
+        payload: user,
       });
     }
   };
@@ -48,14 +89,13 @@ export function logOut(manual = true) {
       });
 
       if (error) {
-        log.error(error);
+        throw error;
       }
     } catch (e) {
       log.error(e);
     } finally {
       dispatch({ type: USER_LOGGED_OUT, manual });
-      manual && await client.resetStore();
+      manual && (await client.resetStore());
     }
   };
 }
-

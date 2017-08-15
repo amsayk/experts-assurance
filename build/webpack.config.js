@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
@@ -9,7 +8,6 @@ const OfflinePlugin = require('offline-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const sassyImport = require('postcss-sassy-import');
 
 // Show a nice little progress bar
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
@@ -48,6 +46,9 @@ const webpackConfig = {
   },
   module: {},
   recordsOutputPath: path.join(process.cwd(), 'tmp', 'records.json'),
+  performance: {
+    hints: __DEV__ ? false : 'warning',
+  },
 };
 // ------------------------------------
 // Entry Points
@@ -105,7 +106,24 @@ const SASS_LOADERS = [
       url: false,
       modules: true,
       sourceMap: __DEV__,
-      minimize: false,
+      minimize: __DEV__
+        ? false
+        : {
+            zindex: false,
+            discardComments: {
+              removeAll: true,
+            },
+            autoprefixer: {
+              add: true,
+              remove: true,
+              browsers: ['last 2 versions'],
+            },
+            discardUnused: false,
+            mergeIdents: false,
+            reduceIdents: false,
+            safe: true,
+            sourceMap: __DEV__,
+          },
       discardDuplicates: !__DEV__,
       importLoaders: 2,
       localIdentName: __DEV__
@@ -118,6 +136,15 @@ const SASS_LOADERS = [
   },
   {
     loader: 'sass-loader',
+    query: {
+      data: '$env: ' + config.env + ';',
+      outputStyle: 'expanded',
+      includePaths: [
+        paths.client(),
+        paths.base('node_modules'),
+        paths.client('styles'),
+      ],
+    },
   },
 ];
 
@@ -150,33 +177,6 @@ webpackConfig.plugins = [
     minimize: !__DEV__,
     options: {
       context: process.cwd(),
-      postcss: [
-        sassyImport(),
-        cssnano({
-          autoprefixer: {
-            add: true,
-            remove: true,
-            browsers: ['last 2 versions'],
-          },
-          discardComments: {
-            removeAll: true,
-          },
-          discardUnused: false,
-          mergeIdents: false,
-          reduceIdents: false,
-          safe: true,
-          sourcemap: __DEV__,
-        }),
-      ],
-      sassLoader: {
-        data: '$env: ' + config.env + ';',
-        outputStyle: 'expanded',
-        includePaths: [
-          paths.client(),
-          paths.base('node_modules'),
-          paths.client('styles'),
-        ],
-      },
     },
   }),
   new webpack.DefinePlugin(
@@ -251,17 +251,8 @@ if (__DEV__) {
   );
 } else {
   log(
-    'Enable plugins for production (Offline, AggressiveMergingPlugin & UglifyJS).',
+    'Enable plugins for production (Offline, CompressionPlugin, AggressiveMergingPlugin & UglifyJS).',
   );
-
-  if (process.env.HTTP2) {
-    webpackConfig.plugins.push(
-      new webpack.optimize.AggressiveSplittingPlugin({
-        minSize: 30000,
-        maxSize: 50000,
-      }),
-    );
-  }
 
   webpackConfig.plugins.push(
     new CompressionPlugin({

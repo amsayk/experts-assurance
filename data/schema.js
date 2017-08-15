@@ -79,6 +79,10 @@ const rootSchema = [
 
     queryCompanies(queryString: String): [String!]!
 
+    # Importations
+    getImportation(id: ID!): Importation
+    ongoingImportation: Importation
+
     # Files
     getDocFiles(id: ID!): [File!]!
     getFile(id: ID!): File
@@ -141,7 +145,6 @@ const rootSchema = [
 
   type Mutation {
     # mutations
-    purgeDoc(id: ID!): PurgeDocResponse!
     addDoc(payload: AddDocPayload!, meta: AddDocMeta!): AddDocResponse!
     delDoc(id: ID!): DelOrRestoreDocResponse!
     restoreDoc(id: ID!): DelOrRestoreDocResponse!
@@ -172,6 +175,12 @@ const rootSchema = [
     delFile(id: ID!): DelOrRestoreFileResponse!
     restoreFile(id: ID!): DelOrRestoreFileResponse!
 
+    # Importations
+    Importation(info: ImportationPayload!): ImportationResponse!
+    # startImportation(info: ImportationPayload!): ImportationResponse!
+    # Import(id: ID!, doc: JSON!): ImportResponse!
+    # finishImportation(id: ID!, endDate: Date!): ImportationResponse!
+
     # Business
     updateUserBusiness(payload: UpdateUserBusinessPayload!): UpdateUserBusinessResponse!
 
@@ -193,8 +202,8 @@ const rootSchema = [
   }
 
   type Subscription {
-    # Subscription fires every time a business changes
-    businessChange(id: ID!): Business
+    # Subscription fires every time an event occurs
+    onActivityEvent(sessionToken: String!): ActivityEventResponse!
   }
 
   schema {

@@ -1,6 +1,12 @@
 import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
 import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
 
+import getMoment from 'getMoment';
+
+import orderBy from 'lodash.orderby';
+
+import delay from 'delay';
+
 import {
   Role_ADMINISTRATORS,
   Role_MANAGERS,
@@ -8,6 +14,8 @@ import {
   userHasRoleAny,
   userVerified,
 } from 'roles';
+
+import async from 'async';
 
 import * as codes from 'result-codes';
 
@@ -17,7 +25,7 @@ import config from 'build/config';
 
 import * as helpers from './helpers';
 
-// import { pubsub } from 'data/subscriptions';
+import { pubsub } from 'data/subscriptions';
 
 import { DOC_ID_KEY } from 'backend/constants';
 
@@ -36,10 +44,38 @@ import policeValidations from 'routes/Landing/containers/Case/body/Users/Overvie
 
 import { fromJS } from 'immutable';
 
+import { Topics } from 'backend/constants';
+
 const log = require('log')('app:backend:docs');
 
 export const schema = [
   `
+
+  type Importation {
+    id: ID!
+    user: User!
+    date: Date!
+    endDate: Date
+    docs: [JSON!]!
+    files: [File!]!
+    progress: Int!
+    total: Int!
+  }
+
+  input ImportationPayload {
+    date: Date
+    files: [FileInput!]!
+    docs: [JSON!]!
+  }
+  type ImportationResponse {
+    error: Error
+  }
+
+  type ImportResponse {
+    error: Error
+    doc: Doc
+    activities: [Activity!]!
+  }
 
   type Observation {
     id: ID!
@@ -162,11 +198,6 @@ export const schema = [
     doc: Doc
     activities : [Activity!]!
     errors: JSON!
-    error: Error
-  }
-
-  type PurgeDocResponse {
-    doc: Doc
     error: Error
   }
 
@@ -466,6 +497,26 @@ export const schema = [
 ];
 
 export const resolvers = {
+  Importation: objectAssign(
+    {},
+    {
+      files(importation, {}, context) {
+        return Promise.all(
+          importation.get('files').map(id => context.Docs.getFile(id)),
+        );
+      },
+    },
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields([
+      'id',
+      'date',
+      'endDate',
+      'docs',
+      'progress',
+      'total',
+    ]),
+  ),
+
   Vehicle: objectAssign(
     {},
     parseGraphqlObjectFields([]),
@@ -728,12 +779,6 @@ export const resolvers = {
     parseGraphqlScalarFields(['activities', 'errors', 'error']),
   ),
 
-  PurgeDocResponse: objectAssign(
-    {},
-    parseGraphqlObjectFields(['doc']),
-    parseGraphqlScalarFields(['error']),
-  ),
-
   DelOrRestoreDocResponse: objectAssign(
     {},
     parseGraphqlObjectFields(['doc']),
@@ -800,14 +845,19 @@ export const resolvers = {
     parseGraphqlScalarFields(['activities', 'error']),
   ),
 
+  ImportResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['doc']),
+    parseGraphqlScalarFields(['activities', 'error']),
+  ),
+
+  ImportationResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields([]),
+    parseGraphqlScalarFields(['error']),
+  ),
+
   Mutation: {
-    purgeDoc(_, { id }, context) {
-      try {
-        return context.Docs.purgeDoc(id);
-      } catch (e) {
-        return { error: { code: codes.ERROR_ILLEGAL_OPERATION } };
-      }
-    },
     async addDoc(_, { payload, meta }, context) {
       if (!context.user) {
         throw new Error('A user is required.');
@@ -875,7 +925,12 @@ export const resolvers = {
 
         const { doc, activities } = await context.Docs.addDoc(data, meta);
         // publish subscription notification
-        // pubsub.publish('addDocChannel', doc);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities, errors: {} };
       }
 
@@ -903,7 +958,12 @@ export const resolvers = {
 
       const { doc, activities } = await context.Docs.delDoc(id);
       // publish subscription notification
-      // pubsub.publish('delDocChannel', id);
+      try {
+        pubsub.publish(Topics.ACTIVITY, {
+          id: activities[activities.length - 1].id,
+        });
+      } catch (e) {}
+
       return { activities, doc };
     },
     async restoreDoc(_, { id }, context) {
@@ -924,7 +984,12 @@ export const resolvers = {
 
       const { doc, activities } = await context.Docs.restoreDoc(id);
       // publish subscription notification
-      // pubsub.publish('restoreDocChannel', id);
+      try {
+        pubsub.publish(Topics.ACTIVITY, {
+          id: activities[activities.length - 1].id,
+        });
+      } catch (e) {}
+
       return { activities, doc };
     },
     async setManager(_, { id, manager }, context) {
@@ -945,7 +1010,12 @@ export const resolvers = {
           manager,
         );
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, manager: user, activities };
       }
 
@@ -983,7 +1053,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setNature(id, { value });
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1015,7 +1090,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.delNature(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1053,7 +1133,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setPolice(id, { value });
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1085,7 +1170,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.delPolice(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1123,7 +1213,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setDTValidation(id, info);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1155,7 +1250,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.delDTValidation(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1193,7 +1293,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setMTRapports(id, info);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1225,7 +1330,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.delMTRapports(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1263,7 +1373,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setPay(id, info);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1295,7 +1410,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.delPay(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1327,7 +1447,12 @@ export const resolvers = {
       ) {
         const { doc, activities } = await context.Docs.setState(id, state);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1383,7 +1508,12 @@ export const resolvers = {
           ...meta,
         });
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1430,7 +1560,12 @@ export const resolvers = {
 
         const { doc, activities } = await context.Docs.cancelDoc(id);
         // publish subscription notification
-        // pubsub.publish('docChangeChannel', id);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { doc, activities };
       }
 
@@ -1466,7 +1601,12 @@ export const resolvers = {
           metadata,
         });
         // publish subscription notification
-        // pubsub.publish('uploadFileChannel', file);
+        try {
+          pubsub.publish(Topics.ACTIVITY, {
+            id: activities[activities.length - 1].id,
+          });
+        } catch (e) {}
+
         return { file, activities, errors: {} };
       }
 
@@ -1521,7 +1661,12 @@ export const resolvers = {
 
       const { file, activities } = await context.Docs.delFile(id);
       // publish subscription notification
-      // pubsub.publish('delFileChannel', id);
+      try {
+        pubsub.publish(Topics.ACTIVITY, {
+          id: activities[activities.length - 1].id,
+        });
+      } catch (e) {}
+
       return { activities, file };
     },
     async restoreFile(_, { id }, context) {
@@ -1558,14 +1703,318 @@ export const resolvers = {
 
       const { file, activities } = await context.Docs.restoreFile(id);
       // publish subscription notification
-      // pubsub.publish('restoreFileChannel', id);
+      try {
+        pubsub.publish(Topics.ACTIVITY, {
+          id: activities[activities.length - 1].id,
+        });
+      } catch (e) {}
+
       return { activities, file };
     },
+
+    // Importations
+    Importation(_, { info: { date, files, docs } }, context) {
+      if (!context.user) {
+        throw new Error('A user is required.');
+      }
+
+      if (!userVerified(context.user)) {
+        return {
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
+      }
+
+      if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+        return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+      }
+
+      return new Promise(async (resolve, reject) => {
+        let importation = await context.Docs.ongoingImportation();
+
+        if (importation) {
+          reject({ error: { code: codes.ERROR_ILLEGAL_OPERATION } });
+          return;
+        }
+
+        try {
+          const { activity } = await context.Docs.startImportation(
+            {
+              date,
+              files,
+              docs,
+            },
+            context,
+          );
+
+          process.nextTick(() => {
+            // publish subscription notification
+            pubsub.publish(Topics.ACTIVITY, {
+              id: activity.id,
+              broadcast: true,
+            });
+          });
+
+          importation = activity.get('importation');
+        } catch (e) {
+          reject({ error: { code: codes.ERROR_UNKNOWN } });
+          return;
+        }
+
+        const insertions = orderBy(docs, ['progress'], ['asc']);
+
+        const fns = insertions.map(doc => getInsertFn(doc));
+
+        async.series(fns, async function(err) {
+          if (err) {
+            reject({ error: { code: codes.ERROR_UNKNOWN } });
+            return;
+          }
+
+          try {
+            const moment = getMoment(context.locale, moment => moment.utc);
+
+            const { activity } = await context.Docs.finishImportation({
+              id: importation.id,
+              endDate: +moment(),
+            });
+
+            process.nextTick(() => {
+              // publish subscription notification
+              pubsub.publish(Topics.ACTIVITY, {
+                id: activity.id,
+                broadcast: true,
+              });
+            });
+            resolve({});
+          } catch (e) {
+            reject({ error: { code: codes.ERROR_UNKNOWN } });
+          }
+        });
+
+        function getInsertFn(payload) {
+          return async function(done) {
+            const startTime = Date.now();
+            try {
+              const data = {
+                id: payload.id,
+
+                progress: payload.progress,
+
+                dateMission: payload.dateMission,
+                date: payload.date,
+
+                dateValidation: payload.dateValidation,
+
+                paymentDate: payload.paymentDate,
+
+                company: payload.company,
+
+                vehicle: {
+                  manufacturer: payload.vehicleManufacturer,
+                  model: payload.vehicleModel,
+                  plateNumber: payload.vehiclePlateNumber,
+                  series: payload.vehicleSeries,
+                  mileage: payload.vehicleMileage,
+                  DMC: payload.vehicleDMC,
+                  energy: payload.vehicleEnergy,
+                  power: payload.vehiclePower,
+                },
+
+                client: getUser({
+                  key: payload.clientKey,
+                  id: payload.clientId,
+                  displayName: payload.clientDisplayName,
+                }),
+
+                agent: getUser({
+                  key: payload.agentKey,
+                  id: payload.agentId,
+                  displayName: payload.agentDisplayName,
+                }),
+              };
+
+              const { activities, doc } = await context.Docs.Import({
+                id: importation.id,
+                doc: data,
+              });
+
+              // Ops should take at least 3secs
+              await delay(Math.max(0, 3000 - (Date.now() - startTime)));
+
+              // publish subscription notification
+              process.nextTick(() => {
+                try {
+                  pubsub.publish(Topics.ACTIVITY, {
+                    id: activities[activities.length - 1].id,
+                    broadcast: true,
+                  });
+                } catch (e) {}
+              });
+
+              return {};
+            } catch (e) {
+              throw e;
+            }
+
+            function getUser({ key, id, displayName }) {
+              if (key === 'id') {
+                return { key, id };
+              }
+
+              // if (key === 'userData') {
+              return { key: 'userData', userData: { displayName } };
+              // }
+
+              // throw new Error(`addDoc: Invalid user entry`);
+            }
+          };
+        }
+      });
+    },
+    // async startImportation(_, { info: { date, files, docs } }, context) {
+    //   if (!context.user) {
+    //     throw new Error('A user is required.');
+    //   }
+    //
+    //   if (!userVerified(context.user)) {
+    //     return {
+    //       error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+    //     };
+    //   }
+    //
+    //   if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+    //     return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    //   }
+    //
+    //   const { activity } = await context.Docs.startImportation(
+    //     {
+    //       date,
+    //       files,
+    //       docs,
+    //     },
+    //     context,
+    //   );
+    //   // publish subscription notification
+    //   pubsub.publish(Topics.ACTIVITY, {
+    //     id: activity.id,
+    //   });
+    //   return { activity };
+    // },
+    // async Import(_, { id, doc: payload }, context) {
+    //   if (!context.user) {
+    //     throw new Error('A user is required.');
+    //   }
+    //
+    //   if (!userVerified(context.user)) {
+    //     return {
+    //       activities: [],
+    //       error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+    //     };
+    //   }
+    //
+    //   if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+    //     return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    //   }
+    //
+    //   function getUser({ key, id, displayName }) {
+    //     if (key === 'id') {
+    //       return { key, id };
+    //     }
+    //
+    //     // if (key === 'userData') {
+    //     return { key: 'userData', userData: { displayName } };
+    //     // }
+    //
+    //     // throw new Error(`addDoc: Invalid user entry`);
+    //   }
+    //
+    //   const info = {
+    //     id: payload.id,
+    //
+    //     progress: payload.progress,
+    //
+    //     dateMission: payload.dateMission,
+    //     date: payload.date,
+    //
+    //     dateValidation: payload.dateValidation,
+    //
+    //     paymentDate: payload.paymentDate,
+    //
+    //     company: payload.company,
+    //
+    //     vehicle: {
+    //       manufacturer: payload.vehicleManufacturer,
+    //       model: payload.vehicleModel,
+    //       plateNumber: payload.vehiclePlateNumber,
+    //       series: payload.vehicleSeries,
+    //       mileage: payload.vehicleMileage,
+    //       DMC: payload.vehicleDMC,
+    //       energy: payload.vehicleEnergy,
+    //       power: payload.vehiclePower,
+    //     },
+    //
+    //     client: getUser({
+    //       key: payload.clientKey,
+    //       id: payload.clientId,
+    //       displayName: payload.clientDisplayName,
+    //     }),
+    //
+    //     agent: getUser({
+    //       key: payload.agentKey,
+    //       id: payload.agentId,
+    //       displayName: payload.agentDisplayName,
+    //     }),
+    //   };
+    //
+    //   const { activities, doc } = await context.Docs.Import({
+    //     id,
+    //     doc: data,
+    //   });
+    //   // publish subscription notification
+    //   try {
+    //     pubsub.publish(Topics.ACTIVITY, {
+    //       id: activities[activities.length - 1].id,
+    //     });
+    //   } catch (e) {}
+    //
+    //   return { activities, doc };
+    // },
+    // async finishImportation(_, { id, endDate }, context) {
+    //   if (!context.user) {
+    //     throw new Error('A user is required.');
+    //   }
+    //
+    //   if (!userVerified(context.user)) {
+    //     return {
+    //       error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+    //     };
+    //   }
+    //
+    //   if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
+    //     return { error: { code: codes.ERROR_NOT_AUTHORIZED } };
+    //   }
+    //
+    //   const { activity } = await context.Docs.finishImportation({
+    //     id,
+    //     endDate,
+    //   });
+    //   // publish subscription notification
+    //   pubsub.publish(Topics.ACTIVITY, {
+    //     id: activity.id,
+    //   });
+    //   return { activity };
+    // },
   },
 
   Query: {
     getDoc(obj, { id }, context) {
       return context.Docs.get(id);
+    },
+    getImportation(obj, { id }, context) {
+      return context.Docs.getImportation(id);
+    },
+    ongoingImportation(obj, {}, context) {
+      return context.Docs.ongoingImportation();
     },
     getFile(obj, { id }, context) {
       return context.Docs.getFile(id);

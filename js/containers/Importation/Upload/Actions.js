@@ -14,49 +14,58 @@ import style from 'containers/Importation/styles';
 
 import cx from 'classnames';
 
-import { uploadDocs, startImporting } from 'redux/reducers/importation/actions';
+import { show } from 'redux/reducers/importation/actions';
+
+import { UploadStatus } from 'redux/reducers/importation/constants';
 
 class Actions extends React.Component {
   static displayName = 'Importation:Upload:Actions';
 
   static contextTypes = {};
 
-  onSubmit() {
-    this.props.actions.uploadDocs();
-  }
-  render() {
-    const { hasError, uploading, actions } = this.props;
+  constructor(props) {
+    super(props);
 
-    if (hasError) {
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit() {}
+  render() {
+    const { uploadStatus, progress, total, actions } = this.props;
+
+    if (uploadStatus === UploadStatus.ERROR) {
       return (
         <div
           style={styles.error}
           className={cx(style.dialogActions, style.error)}
         >
-          Erreur d'importation.
-          <Button
-            bsStyle='danger'
-            onClick={actions.startImporting}
-            role='button'
-          >
+          <span style={{ marginRight: 12 }}>Erreur d'importation.</span>
+          <Button bsStyle='danger' onClick={actions.show} role='button'>
             Récommencer
           </Button>
         </div>
       );
     }
 
+    if (uploadStatus === UploadStatus.IN_PROGRESS) {
+      return (
+        <div className={style.dialogActions}>
+          <span style={{ ...styles.progress }}>Importation en cours</span>
+          <BlinkingDots />
+          {total
+            ? <span style={{ ...styles.progress }}>
+                {progress}/{total}
+              </span>
+            : null}
+        </div>
+      );
+    }
+
     return (
       <div className={style.dialogActions}>
-        {uploading
-          ? ['Importation en cours', <BlinkingDots />]
-          : <Button
-              bsStyle='primary'
-              className={style.dialogActions_saveButton}
-              onClick={this.onSubmit}
-              role='button'
-            >
-              Commencer l'importation
-            </Button>}
+        {uploadStatus === UploadStatus.SUCCESS
+          ? <span style={{ marginRight: 12, ...styles.success }}>Succès.</span>
+          : null}
       </div>
     );
   }
@@ -78,18 +87,28 @@ const styles = {
     fontWeight: 700,
   },
 };
-const hasErrorSelector = state => {
-  return state.getIn(['importation', 'uploadError']);
+
+const uploadStatusSelector = state => {
+  return state.getIn(['importation', 'uploadStatus']);
 };
 
-const uploadingSelector = state => {
-  return state.getIn(['importation', 'uploading']);
+const progressSelector = state => {
+  return state.getIn(['importation', 'progress']);
+};
+
+const totalSelector = state => {
+  return state.getIn(['importation', 'total']);
 };
 
 const selector = createSelector(
-  hasErrorSelector,
-  uploadingSelector,
-  (hasError, uploading) => ({ hasError, uploading }),
+  uploadStatusSelector,
+  progressSelector,
+  totalSelector,
+  (uploadStatus, progress, total) => ({
+    uploadStatus,
+    progress,
+    total,
+  }),
 );
 
 function mapStateToProps(state, props) {
@@ -100,8 +119,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(
       {
-        uploadDocs,
-        startImporting,
+        show,
       },
       dispatch,
     ),

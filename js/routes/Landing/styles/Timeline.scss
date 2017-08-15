@@ -56,6 +56,18 @@
   .feedItem {
     margin-top: 18px;
   }
+
+  .importationLink {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+
+  .importationLink:hover,
+  .importationLink:focus,
+  .importationLink:active {
+    box-shadow: none;
+  }
 }
 
 .filesFeedGroupItems {

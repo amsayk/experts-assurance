@@ -1,7 +1,13 @@
 import keyOf from 'keyOf';
 
-export const START_IMPORTING = keyOf({ 'importation/START_IMPORTING': null });
-export const FINISH_IMPORTING = keyOf({ 'importation/FINISH_IMPORTING': null });
+export const ONGOING_IMPORTATION = keyOf({
+  'importation/ONGOING_IMPORTATION': null,
+});
+
+export const BUSY = keyOf({ 'importation/BUSY': null });
+
+export const SHOW = keyOf({ 'importation/SHOW': null });
+export const HIDE = keyOf({ 'importation/HIDE': null });
 
 export const START_EXTRACTION = keyOf({ 'importation/START_EXTRACTION': null });
 export const ADD_FILES = keyOf({ 'importation/ADD_FILES': null });
@@ -23,9 +29,27 @@ export const FINISH_VALIDATION = keyOf({
   'importation/FINISH_VALIDATION': null,
 });
 
-export const Stage_FILES = keyOf({ 'importation/Stage_FILES': null });
-export const Stage_VALIDATION = keyOf({ 'importation/Stage_VALIDATION': null });
-export const Stage_UPLOAD = keyOf({ 'importation/Stage_UPLOAD': null });
+export class ValidationStatus {
+  static PENDING = 0;
+  static IN_PROGRESS = 1;
+  static SUCCESS = 2;
+  static ERROR = 3;
+}
+
+export class UploadStatus {
+  static PENDING = 10;
+  static IN_PROGRESS = 11;
+  static SUCCESS = 12;
+  static ERROR = 13;
+}
+
+export const BEGIN_UPLOAD = keyOf({ 'importation/BEGIN_UPLOAD': null });
+export const UPLOAD_ERROR = keyOf({ 'importation/UPLOAD_ERROR': null });
+export const UPLOAD_SUCCESS = keyOf({ 'importation/UPLOAD_SUCCESS': null });
+
+export const Stage_FILES = 1;
+export const Stage_VALIDATION = 2;
+export const Stage_UPLOAD = 3;
 
 export const MIN_DURATION = (__DEV__ ? 1 : 5) * 1000; // 5 seconds
 

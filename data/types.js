@@ -10,3 +10,4 @@ export const FileType = Parse.Object.extend('Attachment');
 
 export const ObservationType = Parse.Object.extend('Observation');
 
+export const ImportationType = Parse.Object.extend('Importation');

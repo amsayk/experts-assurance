@@ -1,0 +1,84 @@
+subscription onActivityEvent($sessionToken: String!) {
+  onActivityEvent(sessionToken: $sessionToken) {
+    activity {
+      id,
+      now,
+      document {
+        id
+        refNo
+        state
+        company
+        dateMission
+        validation {
+          date
+          user {
+            id
+            displayName
+          }
+        }
+        closure {
+          date
+          state
+          user {
+            id
+            displayName
+          }
+        }
+        payment: paymentInfo {
+          date
+          amount
+          user {
+            id
+            displayName
+          }
+        }
+        user {
+          id
+          displayName
+        }
+      }
+      file {
+        id
+        name
+        category
+        type
+        url
+
+        user {
+          id
+          displayName
+        }
+
+        date
+      }
+      importation {
+        id
+        date
+        endDate
+        files {
+          id
+          name
+        }
+        docs
+
+        progress
+        total
+
+        user {
+          id
+          displayName
+        }
+
+      }
+      ns
+      type
+      metadata
+      timestamp
+      user {
+        id
+        displayName
+      }
+    }
+  }
+}
+

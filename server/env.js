@@ -14,6 +14,7 @@ const babelOptions = require('scripts/getBabelOptions')({
     slug: 'common/slug',
     delay: 'common/delay',
     getDataTransferItems: 'common/getDataTransferItems',
+    getMoment: 'common/getMoment',
 
     // For SSR use
     loadScript: 'utils/loadScript',
@@ -79,6 +80,7 @@ cssRequireHook({
   prepend: [
     // adding CSS Next plugin
   ],
+  append: [],
   preprocessCss: data =>
     sass.renderSync({
       data: '$env: ' + config.env + ';\n' + data,

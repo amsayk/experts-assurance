@@ -116,7 +116,6 @@ class Actions extends React.PureComponent {
         });
 
         if (error) {
-          console.error(error);
           snackbar.show({
             type: 'error',
             message: 'Erreur de téléchargement.',

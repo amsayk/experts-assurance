@@ -28,11 +28,12 @@ export default (async function delMTRapports(request, done) {
 
       await doc
         .set({
-          validation_amount: null,
+          // validation_amount: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('validation_amount')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -83,6 +84,7 @@ export default (async function delMTRapports(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

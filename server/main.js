@@ -16,6 +16,8 @@ import express from 'express';
 import config from 'build/config';
 import compress from 'compression';
 
+import helmet from 'helmet';
+
 import cookie from 'react-cookie';
 import createLocaleMiddleware from 'express-locale';
 import cors from 'cors';
@@ -45,12 +47,41 @@ import { Business } from 'data/business/models';
 import { Docs } from 'data/doc/models';
 import { Activities } from 'data/activity/models';
 
+import { DEFAULT_LANG } from 'vars';
+
 import bodyParser from 'body-parser';
 
 const log = require('log')('app:server');
 
 const app = express();
 const paths = config.utils_paths;
+
+app.use(helmet());
+app.use(
+  helmet.hsts({
+    maxAge: 31536000,
+    force: !__DEV__,
+  }),
+);
+
+if (process.env.ENABLE_REVERSE_PROXY) {
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: [`'self'`],
+        connectSrc: [`'self'`],
+        imgSrc: [`'self'`, 'https://www.google-analytics.com'],
+        scriptSrc: [`'self'`],
+        styleSrc: [`'self'`],
+        fontSrc: [`'self'`],
+        formAction: [`'none'`],
+        frameAncestors: [`'none'`],
+        objectSrc: [`'none'`],
+        reportUri: '/__cspreport__',
+      },
+    }),
+  );
+}
 
 // Don't rate limit heroku
 app.enable('trust proxy');
@@ -313,6 +344,17 @@ app.use(
   config.graphql_endpoint,
   apolloUploadExpress(config.uploadOptions),
   graphqlExpress((req, res) => {
+    if (!config.persistedQueries) {
+      // Get the query, the same way express-graphql does it
+      // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
+      const query = req.query.query || req.body.query;
+      if (query && query.length > 2000) {
+        // None of our app's queries are this long
+        // Probably indicates someone trying to send an overly expensive query
+        throw new Error('Query too large.');
+      }
+    }
+
     // Reload user everytime
     Parse.User._clearCache();
 
@@ -321,27 +363,26 @@ app.use(
       unplug();
     });
 
-    // Get the query, the same way express-graphql does it
-    // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
-    const query = req.query.query || req.body.query;
-    if (query && query.length > 2000) {
-      // None of our app's queries are this long
-      // Probably indicates someone trying to send an overly expensive query
-      throw new Error('Query too large.');
-    }
-
     const user = getCurrentUser();
+
+    const lang =
+      config.supportedLangs.indexOf(req.locale.language) !== -1
+        ? req.locale.language
+        : config.lang;
 
     return {
       schema,
       context: {
         user,
-        locale: req.locale,
+        locale: lang,
         Users: new Users({ user, connector: new UserConnector() }),
         Business: new Business({ user, connector: new BusinessConnector() }),
         Docs: new Docs({ user, connector: new DocConnector() }),
-        Activities: new Activities({ user, connector: new ActivityConnector() }),
-        Now: new Date().getTime(),
+        Activities: new Activities({
+          user,
+          connector: new ActivityConnector(),
+        }),
+        Now: Date.now(),
       },
       logFunction: require('log')('app:server:graphql'),
       debug: __DEV__,
@@ -385,11 +426,58 @@ SubscriptionServer.create(
 
     // the obSubscribe function is called for every new subscription
     // and we use it to set the GraphQL context for this subscription
-    onOperation: (msg, params) => {
-      return objectAssign({}, params, {
-        context: {
-          Business: new Business({ connector: new BusinessConnector() }),
-        },
+    onOperation: (msg, params, socket) => {
+      return new Promise(async resolve => {
+        if (config.persistedQueries) {
+          // eslint-disable-next-line no-param-reassign
+          params.query = invertedMap[msg.payload.id];
+        } else {
+          // Get the query, the same way express-graphql does it
+          // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
+          const query = params.query;
+          if (query && query.length > 2000) {
+            // None of our app's queries are this long
+            // Probably indicates someone trying to send an overly expensive query
+            throw new Error('Query too large.');
+          }
+        }
+
+        if (socket.upgradeReq) {
+          const session = await getCurrentUser.sessionByToken(
+            /* token = */ params.variables.sessionToken,
+          );
+
+          const locale = DEFAULT_LANG; // TODO: get locale using locale middleware
+
+          const baseContext = {
+            context: {
+              locale,
+              session,
+
+              Users: new Users({ user: null, connector: new UserConnector() }),
+              Business: new Business({
+                user: null,
+                connector: new BusinessConnector(),
+              }),
+              Docs: new Docs({ user: null, connector: new DocConnector() }),
+              Activities: new Activities({
+                user: null,
+                connector: new ActivityConnector(),
+              }),
+
+              Now: Date.now(),
+            },
+          };
+
+          const paramsWithFulfilledBaseContext = objectAssign(
+            {},
+            params,
+            baseContext,
+          );
+
+          // get the session object
+          resolve(paramsWithFulfilledBaseContext);
+        }
       });
     },
   },

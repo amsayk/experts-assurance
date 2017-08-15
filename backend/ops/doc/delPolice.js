@@ -26,11 +26,12 @@ export default (async function delPolice(request, done) {
 
       await doc
         .set({
-          police: null,
+          // police: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('police')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -79,6 +80,7 @@ export default (async function delPolice(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

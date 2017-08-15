@@ -16,47 +16,63 @@ import cx from 'classnames';
 
 import {
   validateDocs,
-  startImporting,
+  uploadDocs,
+  show,
 } from 'redux/reducers/importation/actions';
+
+import { ValidationStatus } from 'redux/reducers/importation/constants';
 
 class Actions extends React.Component {
   static displayName = 'Importation:Docs:Actions';
 
   static contextTypes = {};
 
+  constructor(props) {
+    super(props);
+
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit() {
+    this.props.actions.uploadDocs();
+  }
   componentDidMount() {
     setTimeout(this.props.actions.validateDocs, (__DEV__ ? 0 : 2) * 1000);
   }
   render() {
-    const { scrollTop = 0, hasError, validating, success, actions } = this.props;
+    const { scrollTop = 0, validationStatus, actions } = this.props;
 
-    if (hasError) {
+    if (validationStatus === ValidationStatus.ERROR) {
       return (
         <div
           style={styles.error}
           className={cx(style.dialogActions, style.error)}
         >
           Certaines dossiers sont invalides.<span style={{ marginRight: 6 }} />
-          <Button
-            bsStyle='danger'
-            onClick={actions.startImporting}
-            role='button'
-          >
+          <Button bsStyle='danger' onClick={actions.show} role='button'>
             Récommencer l'importation
           </Button>
         </div>
       );
     }
 
-    if (success) {
+    if (validationStatus === ValidationStatus.SUCCESS) {
       return (
         <div style={styles.success} className={style.dialogActions}>
-          Dossiers valides.
+          <span style={{ marginRight: 12 }}>Dossiers valides.</span>
+          <Button
+            bsStyle='primary'
+            className={style.dialogActions_saveButton}
+            onClick={this.onSubmit}
+            role='button'
+          >
+            Commencer l'importation
+          </Button>
         </div>
       );
     }
 
-    if (validating) {
+    if (validationStatus > ValidationStatus.PENDING) {
       return (
         <div style={styles.progress} className={style.dialogActions}>
           Validation en cours
@@ -86,27 +102,13 @@ const styles = {
   },
 };
 
-const hasErrorSelector = state => {
-  return !state.getIn(['importation', 'validationErrors']).isEmpty();
+const validationStatusSelector = state => {
+  return state.getIn(['importation', 'validationStatus']);
 };
 
-const validatingSelector = state => {
-  return state.getIn(['importation', 'validating']);
-};
-
-const successSelector = state => {
-  return (
-    state.getIn(['importation', 'validations']).size ===
-    state.getIn(['importation', 'docs']).size
-  );
-};
-
-const selector = createSelector(
-  hasErrorSelector,
-  validatingSelector,
-  successSelector,
-  (hasError, validating, success) => ({ hasError, validating, success }),
-);
+const selector = createSelector(validationStatusSelector, validationStatus => ({
+  validationStatus,
+}));
 
 function mapStateToProps(state, props) {
   return selector(state, props);
@@ -116,8 +118,9 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(
       {
+        uploadDocs,
         validateDocs,
-        startImporting,
+        show,
       },
       dispatch,
     ),

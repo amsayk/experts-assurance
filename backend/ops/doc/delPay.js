@@ -31,14 +31,18 @@ export default (async function delPay(request, done) {
 
       await doc
         .set({
-          payment_user: null,
-          payment_date: null,
-          payment_at: null,
-          payment_amount: null,
+          // payment_user: null,
+          // payment_date: null,
+          // payment_at: null,
+          // payment_amount: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('payment_user')
+        .unset('payment_date')
+        .unset('payment_at')
+        .unset('payment_amount')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -92,6 +96,7 @@ export default (async function delPay(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

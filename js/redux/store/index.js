@@ -44,6 +44,8 @@ import { createHistory, useBeforeUnload, useQueries } from 'history';
 
 import { useRouterHistory } from 'react-router';
 
+import { createSnackbarController } from 'components/Snackbar';
+
 import thunk from 'redux-thunk';
 
 import ReduxWorker from 'worker-loader?inline!../worker.js';
@@ -69,7 +71,15 @@ const worker = new ReduxWorker();
 const middlewares = [
   bufferActions(),
   array,
-  thunk.withExtraArgument({ client: apolloClient, history }),
+  thunk.withExtraArgument({
+    client: apolloClient,
+    history,
+    get snackbar() {
+      return (
+        store.snackbar || (store.snackbar = createSnackbarController(store))
+      );
+    },
+  }),
   reduxCookieMiddleware({
     // Users
     [VIEW_TYPE_GRID]: {
@@ -217,6 +227,9 @@ export const store = createStore(
   }),
   enhancer,
 );
+
+// Snackbar
+store.snackbar = createSnackbarController(store);
 
 store.asyncReducers = {};
 store.injectReducers = reducers => injectReducers(store, reducers);

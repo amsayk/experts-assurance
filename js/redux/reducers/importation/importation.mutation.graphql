@@ -1,0 +1,9 @@
+mutation Importation($info: ImportationPayload!) {
+  Importation(info: $info) {
+
+    error {
+      code
+    }
+  }
+}
+

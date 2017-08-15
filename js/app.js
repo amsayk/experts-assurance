@@ -21,9 +21,9 @@ import doSetupConnectionStateChangeObserver from 'utils/connectionStateChangeObs
 
 import getRoutes from './routes';
 
-import { createSnackbarController } from 'components/Snackbar';
-
 import { ApolloProvider } from 'react-apollo';
+
+// import * as ReactGA from 'react-ga';
 
 import { Provider } from 'react-redux';
 
@@ -78,7 +78,14 @@ let render = async function render() {
   });
 
   const routes = getRoutes(store);
-  const snackbar = createSnackbarController(store);
+
+  // Initialize Analytics
+  // ReactGA.initialize(???);
+
+  function logPageView() {
+    // ReactGA.set({ page: window.location.pathname });
+    // ReactGA.pageview(window.location.pathname);
+  }
 
   class Application extends React.Component {
     static childContextTypes = {
@@ -89,7 +96,7 @@ let render = async function render() {
     };
     getChildContext() {
       return {
-        snackbar,
+        snackbar: store.snackbar,
       };
     }
     componentWillMount() {
@@ -107,7 +114,7 @@ let render = async function render() {
       return (
         <ApolloProvider store={store} client={apolloClient} immutable>
           <IntlProvider intlSelector={intlSelector}>
-            <Router {...routerProps} />
+            <Router {...routerProps} onUpdate={logPageView} />
           </IntlProvider>
         </ApolloProvider>
       );
@@ -144,7 +151,7 @@ let render = async function render() {
     <MuiThemeProvider muiTheme={muiTheme}>
       <Provider store={store}>
         <IntlProvider intlSelector={intlSelector}>
-          {snackbar.render()}
+          {store.snackbar.render()}
         </IntlProvider>
       </Provider>
     </MuiThemeProvider>,

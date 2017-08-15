@@ -13,20 +13,13 @@ import cx from 'classnames';
 
 import Button from 'components/bootstrap/Button';
 
-const Item = connect(
-  createSelector((state, { doc }) => ({}), ({}) => ({ progress: {} })),
-)(function({ doc, progress: { isDone, isError } }) {
+function Item({ doc, progress }) {
+  const isDone = doc.progress <= progress;
   return (
     <li>
       <div style={styles.doc}>
-        <div
-          className={cx(isDone && style.valid, isError && style.errorDoc)}
-          style={styles.icon}
-        >
+        <div className={cx(isDone && style.valid)} style={styles.icon}>
           {(function() {
-            if (isError) {
-              return <CloseIcon size={18} />;
-            }
             if (isDone) {
               return <DoneIcon size={18} />;
             }
@@ -39,18 +32,18 @@ const Item = connect(
       </div>
     </li>
   );
-});
+}
 
 class DocsList extends React.Component {
   render() {
-    const { docs, actions } = this.props;
+    const { docs, progress, actions } = this.props;
 
     return (
-      <div style={styles.wrapper}>
+      <div style={styles.wrapper} style={{ marginTop: 25 }}>
         <ul style={styles.body}>
           {docs.isEmpty()
             ? <li style={{ marginBottom: 12 }}>Aucuns dossiers à importés.</li>
-            : docs.map(f => <Item key={f.id} doc={f} />)}
+            : docs.map(f => <Item progress={progress} key={f.id} doc={f} />)}
         </ul>
       </div>
     );
@@ -89,7 +82,15 @@ const docsSelector = state => {
   return state.getIn(['importation', 'docs']);
 };
 
-const selector = createSelector(docsSelector, docs => ({ docs }));
+const progressSelector = state => {
+  return state.getIn(['importation', 'progress']);
+};
+
+const selector = createSelector(
+  docsSelector,
+  progressSelector,
+  (docs, progress) => ({ docs, progress }),
+);
 
 function mapStateToProps(state, props) {
   return selector(state, props);

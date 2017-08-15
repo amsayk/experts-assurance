@@ -44,6 +44,23 @@ query getTimeline($cursor: Date, $query: TimelineQuery!) {
 
         date
       }
+      importation {
+        id
+        docs
+        files {
+          name
+        }
+        date
+        endDate
+
+        progress
+        total
+
+        user {
+          id
+        }
+
+      }
       ns
       type
       metadata

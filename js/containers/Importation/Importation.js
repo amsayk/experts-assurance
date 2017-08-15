@@ -14,10 +14,7 @@ import accepts from 'attr-accept';
 
 import Button from 'components/bootstrap/Button';
 
-import {
-  startImporting,
-  finishImporting,
-} from 'redux/reducers/importation/actions';
+import { boot, show, hide } from 'redux/reducers/importation/actions';
 
 import { ACCEPT } from 'redux/reducers/importation/constants';
 
@@ -28,6 +25,8 @@ import raf from 'utils/requestAnimationFrame';
 import Controller from './Controller';
 
 import style from 'containers/Importation/styles';
+
+import cx from 'classnames';
 
 import selector from './selector';
 
@@ -49,11 +48,15 @@ class Importation extends React.Component {
     this.onDocumentDragEnter = this.onDocumentDragEnter.bind(this);
   }
 
+  componentWillMount() {
+    this.props.actions.boot();
+  }
+
   onDocumentDragEnter(e) {
     e.preventDefault();
     const files = getDataTransferItems(e);
     if (files.length && files.every(f => fileAccepted(f, ACCEPT))) {
-      this.props.actions.startImporting();
+      this.props.actions.show();
     }
   }
 
@@ -61,21 +64,22 @@ class Importation extends React.Component {
     this.controller = ref;
   }
   get ImportButton() {
-    const { importing } = this.props;
+    const { visible, importing } = this.props;
 
     return (
-      <div className={style.importButtonWrapper}>
-        {SERVER || importing
+      <div
+        className={cx(
+          style.importButtonWrapper,
+          importing && style.importButtonWrapper_importing,
+        )}
+      >
+        {SERVER || visible
           ? null
           : <EventListener
               target={document}
               onDragEnter={this.onDocumentDragEnter}
             />}
-        <Button
-          disabled={importing}
-          className={style.importButton}
-          role='button'
-        >
+        <Button disabled={visible} className={style.importButton} role='button'>
           <div>
             <ImportIcon size={36} />
           </div>
@@ -87,7 +91,7 @@ class Importation extends React.Component {
   onOpen() {
     try {
       document.body.style.overflowY = 'hidden';
-      this.props.actions.startImporting();
+      this.props.actions.show();
       setTimeout(() => {
         raf(() => {
           this.controller && this.controller.onOpen();
@@ -96,20 +100,20 @@ class Importation extends React.Component {
     } catch (e) {}
   }
   onClose() {
-    this.props.actions.finishImporting();
+    this.props.actions.hide();
     try {
       document.body.style.overflowY = 'visible';
     } catch (e) {}
   }
   render() {
-    const { importing, actions } = this.props;
+    const { visible, actions } = this.props;
 
     return (
       <Portal
         openByClickOn={this.ImportButton}
         onClose={this.onClose}
         onOpen={this.onOpen}
-        isOpened={importing}
+        isOpened={visible}
       >
         <Controller onRef={this.onControllerLoaded} />
       </Portal>
@@ -127,8 +131,9 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(
       {
-        startImporting,
-        finishImporting,
+        boot,
+        show,
+        hide,
       },
       dispatch,
     ),

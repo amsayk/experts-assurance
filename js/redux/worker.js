@@ -3,8 +3,6 @@ import { XLSX_TO_DOCS } from 'redux/reducers/importation/constants';
 
 import { APP_NAME } from 'vars';
 
-import moment from 'moment';
-
 import X from 'xlsx';
 
 let worker = createWorker();
@@ -22,7 +20,7 @@ worker.registerTask(XLSX_TO_DOCS, function({ data, isBinary }) {
     workbook.SheetNames.forEach(function(sheetName) {
       const roa = X.utils.sheet_to_json(workbook.Sheets[sheetName]);
       if (roa.length > 0) {
-        roa.forEach(o => o['Réf'] && result.push(cleanDoc(o)));
+        roa.forEach(o => result.push(cleanDoc(o)));
       }
     });
     return result;

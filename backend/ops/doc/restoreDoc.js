@@ -30,12 +30,14 @@ export default (async function restoreDoc(request, done) {
     if (doc) {
       await doc
         .set({
-          deletion_user: null,
-          deletion_date: null,
+          // deletion_user: null,
+          // deletion_date: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('deletion_user')
+        .unset('deletion_date')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -90,6 +92,7 @@ export default (async function restoreDoc(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

@@ -18,6 +18,7 @@ export class ActivityConnector {
     const activities = await new Parse.Query(ActivityType)
       .matchesQuery('business', businessQuery())
       .containedIn('objectId', ids)
+      .include(['document', 'user', 'file', 'importation'])
       .find({ useMasterKey: true });
 
     return ids.map(id => {
@@ -32,7 +33,7 @@ export class ActivityConnector {
     return this.loader.load(id);
   }
 
-  getTimeline(cursor, query, user) {
+  getTimeline({ cursor, query, user }) {
     if (!user) {
       return Promise.resolve({
         prevCursor: 0,
@@ -74,7 +75,7 @@ export class ActivityConnector {
         q.lessThan('now', cursor);
       }
 
-      q.include(['file', 'user']);
+      q.include(['file', 'user', 'document', 'importation']);
 
       return q.find({ useMasterKey: true });
     }

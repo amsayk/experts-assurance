@@ -2,10 +2,7 @@ import Parse from 'parse/node';
 
 import * as helpers from './helpers';
 
-import moment from 'moment';
-
 import {
-  PURGE_DOC,
   ADD_DOC,
   DELETE_DOC,
   RESTORE_DOC,
@@ -28,6 +25,11 @@ import {
   DEL_MT_RAPPORTS,
   SET_MT_RAPPORTS,
 
+  // Importation
+  START_IMPORTATION,
+  IMPORT_DOC,
+  FINISH_IMPORTATION,
+
   // Files
   UPLOAD_FILE,
   DELETE_FILE,
@@ -49,6 +51,36 @@ export class Docs {
   }
   vehicleByPlateNumber(plateNumber) {
     return this.connector.vehicleByPlateNumber(plateNumber);
+  }
+
+  getImportation(id) {
+    return this.connector.getImportation(id);
+  }
+
+  ongoingImportation(id) {
+    return this.connector.ongoingImportation(id);
+  }
+
+  startImportation({ date, files, docs }, context) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: START_IMPORTATION, args: { date, files, docs } },
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+  Import({ id, doc }, context) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: IMPORT_DOC, args: { id, doc } },
+      { sessionToken: this.user.getSessionToken() },
+    );
+  }
+  finishImportation({ id, endDate }, context) {
+    return Parse.Cloud.run(
+      'routeOp',
+      { __operationKey: FINISH_IMPORTATION, args: { id, endDate } },
+      { sessionToken: this.user.getSessionToken() },
+    );
   }
 
   get(id) {
@@ -222,14 +254,6 @@ export class Docs {
   }
 
   // Mutations
-
-  purgeDoc(id) {
-    return Parse.Cloud.run(
-      'routeOp',
-      { __operationKey: PURGE_DOC, args: { id } },
-      { sessionToken: this.user.getSessionToken() },
-    );
-  }
 
   addDoc(payload, meta) {
     return Parse.Cloud.run(

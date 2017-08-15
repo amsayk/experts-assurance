@@ -22,7 +22,7 @@ import { businessQuery } from 'data/utils';
 
 import categories from 'file-categories';
 
-import { DocType, FileType, ObservationType } from 'data/types';
+import { DocType, FileType, ObservationType, ImportationType } from 'data/types';
 
 import { SORT_DIRECTION_ASC } from 'redux/reducers/sorting/constants';
 
@@ -33,64 +33,78 @@ const RECENT_DOCS_LIMIT = 5;
 
 export class DocConnector {
   constructor() {
-    this.loader = new DataLoader(this.fetch.bind(this), {});
-    this.files = new DataLoader(this.fetchFile.bind(this), {});
-    this.countByStateLoader = new DataLoader(this.countByState.bind(this), {});
-  }
-  async fetch(ids) {
-    const docs = await new Parse.Query(DocType)
-      .containedIn(DOC_ID_KEY, ids)
-      .matchesQuery('business', businessQuery())
-      .include([
-        'manager',
-        'client',
-        'agent',
-        'user',
-        'payment_user',
-        'validation_user',
-        'closure_user',
-      ])
-      .find({ useMasterKey: true });
+    this.docs = new DataLoader(async function(ids) {
+      const docs = await new Parse.Query(DocType)
+        .containedIn(DOC_ID_KEY, ids)
+        .matchesQuery('business', businessQuery())
+        .include([
+          'manager',
+          'client',
+          'agent',
+          'user',
+          'payment_user',
+          'validation_user',
+          'closure_user',
+        ])
+        .find({ useMasterKey: true });
 
-    return ids.map(id => {
-      const index = docs.findIndex(doc => doc.get(DOC_ID_KEY) === id);
-      return index !== -1 ? docs[index] : new Error(`Doc ${id} not found`);
-    });
-  }
-  async fetchFile(ids) {
-    const files = await new Parse.Query(FileType)
-      .containedIn('objectId', ids)
-      .matchesQuery('business', businessQuery())
-      .include(['fileObj', 'user'])
-      .find({ useMasterKey: true });
+      return ids.map(id => {
+        const index = docs.findIndex(doc => doc.get(DOC_ID_KEY) === id);
+        return index !== -1 ? docs[index] : new Error(`Doc ${id} not found`);
+      });
+    }, {});
 
-    return ids.map(id => {
-      const index = files.findIndex(file => file.id === id);
-      return index !== -1 ? files[index] : new Error(`File ${id} not found`);
-    });
-  }
-  async countByState(states) {
-    const counts = await Promise.all(
-      states.map(async s => {
-        try {
-          return await new Parse.Query(DocType)
-            .doesNotExist('deletion_date')
-            .doesNotExist('deletion_user')
-            .equalTo('state', s.toUpperCase())
-            .matchesQuery('business', businessQuery())
-            .count({ useMasterKey: true });
-        } catch (e) {
-          return e;
-        }
-      }),
-    );
+    this.files = new DataLoader(async function(ids) {
+      const files = await new Parse.Query(FileType)
+        .containedIn('objectId', ids)
+        .matchesQuery('business', businessQuery())
+        .include(['fileObj', 'user'])
+        .find({ useMasterKey: true });
 
-    return states.map((s, index) => {
-      const count = counts[index];
-      return typeof count !== 'undefined' && Number.isFinite(count)
-        ? count
-        : new Error(`Docs count for state \`${s}\` failed`);
-    });
+      return ids.map(id => {
+        const index = files.findIndex(file => file.id === id);
+        return index !== -1 ? files[index] : new Error(`File ${id} not found`);
+      });
+    }, {});
+
+    this.counts = new DataLoader(async function(states) {
+      const counts = await Promise.all(
+        states.map(async s => {
+          try {
+            return await new Parse.Query(DocType)
+              .doesNotExist('deletion_date')
+              .doesNotExist('deletion_user')
+              .equalTo('state', s.toUpperCase())
+              .matchesQuery('business', businessQuery())
+              .count({ useMasterKey: true });
+          } catch (e) {
+            return e;
+          }
+        }),
+      );
+
+      return states.map((s, index) => {
+        const count = counts[index];
+        return typeof count !== 'undefined' && Number.isFinite(count)
+          ? count
+          : new Error(`Docs count for state '${s}' failed`);
+      });
+    }, {});
+
+    this.importations = new DataLoader(async function(ids) {
+      const objects = await new Parse.Query(ImportationType)
+        .containedIn('objectId', ids)
+        .matchesQuery('business', businessQuery())
+        .include(['user'])
+        .find({ useMasterKey: true });
+
+      return ids.map(id => {
+        const index = objects.findIndex(object => object.id === id);
+        return index !== -1
+          ? objects[index]
+          : new Error(`Importation ${id} not found`);
+      });
+    }, {});
   }
 
   async searchVehicles(q) {
@@ -149,11 +163,19 @@ export class DocConnector {
     return doc.get('vehicle');
   }
 
-  get(id) {
-    return this.loader.load(id);
+  getImportation(id) {
+    return this.importations.load(id);
   }
-  getByRef(ref) {
-    return this.refs.load(ref);
+  ongoingImportation() {
+    return new Parse.Query(ImportationType)
+      .matchesQuery('business', businessQuery())
+      .doesNotExist('endDate')
+      .include(['user'])
+      .first({ useMasterKey: true });
+  }
+
+  get(id) {
+    return this.docs.load(id);
   }
   getFile(id) {
     return this.files.load(id);
@@ -1302,7 +1324,7 @@ export class DocConnector {
     }
 
     const results = await Promise.all(
-      selectionSet.map(state => this.countByStateLoader.load(state)),
+      selectionSet.map(state => this.counts.load(state)),
     );
 
     return selectionSet.reduce((memo, state, index) => {

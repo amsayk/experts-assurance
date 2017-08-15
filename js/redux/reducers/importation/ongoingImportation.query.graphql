@@ -1,0 +1,21 @@
+query getOngoingImportation {
+  ongoingImportation {
+    id
+    docs
+    files {
+      name
+    }
+    date
+    endDate
+
+    progress
+    total
+
+    user {
+      id
+      displayName
+    }
+
+  }
+}
+

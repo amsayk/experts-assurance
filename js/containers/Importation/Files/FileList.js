@@ -56,7 +56,7 @@ class FileList extends React.Component {
   }
 
   render() {
-    const { files, extracting, actions } = this.props;
+    const { mutations = true, files, extracting, actions } = this.props;
 
     if (files.isEmpty()) {
       return null;
@@ -73,7 +73,7 @@ class FileList extends React.Component {
               <div style={styles.name}>
                 {f.name}
               </div>
-              {extracting
+              {extracting || mutations === false
                 ? null
                 : <div className={style.removeLink} style={styles.action}>
                     <Button

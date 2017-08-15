@@ -1,11 +1,17 @@
 import parseGraphqlScalarFields from 'data/parseGraphqlScalarFields';
 import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
 
+import { withFilter } from 'graphql-subscriptions';
+
 import objectAssign from 'object-assign';
 
 import invariant from 'invariant';
 
 import { DOC_FOREIGN_KEY } from 'backend/constants';
+
+import { pubsub } from 'data/subscriptions';
+
+import { Topics } from 'backend/constants';
 
 export const schema = [
   `
@@ -60,6 +66,8 @@ export const schema = [
 
     ns: ActivityNS!
 
+    importation: Importation
+
     type: ActivityType!
     timestamp: Date!
     metadata: JSON!
@@ -70,6 +78,11 @@ export const schema = [
     business: Business
 
     user: User
+  }
+
+  type ActivityEventResponse {
+    sessionToken: String!
+    activity: Activity!
   }
 
 `,
@@ -83,13 +96,19 @@ export const resolvers = {
         const ref = activity.get(DOC_FOREIGN_KEY);
 
         invariant(
-          ref,
+          ref || activity.get('type') === 'IMPORTATION',
           `Activity.document resolver: ${DOC_FOREIGN_KEY} is required.`,
         );
-        return context.Docs.get(ref);
+        return ref ? context.Docs.get(ref) : null;
       },
     },
-    parseGraphqlObjectFields(['business', 'file', 'metadata', 'user']),
+    parseGraphqlObjectFields([
+      'business',
+      'file',
+      'importation',
+      'metadata',
+      'user',
+    ]),
     parseGraphqlScalarFields([
       'id',
       'ns',
@@ -105,7 +124,22 @@ export const resolvers = {
 
   Query: {
     timeline(obj, { cursor, query }, context) {
-      return context.Activities.getTimeline(cursor, query);
+      return context.Activities.getTimeline({ cursor, query });
+    },
+  },
+  Subscription: {
+    onActivityEvent: {
+      async resolve({ id }, {}, context, info) {
+        return {
+          sessionToken: context.session.getSessionToken(),
+          activity: await context.Activities.get(id),
+        };
+      },
+      subscribe: withFilter(
+        () => pubsub.asyncIterator([Topics.ACTIVITY]),
+        ({ broadcast = false }, { sessionToken }, context) =>
+          broadcast || sessionToken !== context.session.getSessionToken(),
+      ),
     },
   },
 };

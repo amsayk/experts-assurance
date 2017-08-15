@@ -29,11 +29,12 @@ export default (async function delDTValidation(request, done) {
       await doc
         .set({
           // validation_user: null,
-          validation_date: null,
+          // validation_date: null,
 
           [`lastModified_${request.user.id}`]: new Date(request.now),
           lastModified: new Date(request.now),
         })
+        .unset('validation_date')
         .save(null, { useMasterKey: true });
 
       const activities = [
@@ -84,6 +85,7 @@ export default (async function delDTValidation(request, done) {
         new Parse.Query(ActivityType)
           .equalTo(DOC_FOREIGN_KEY, doc.get(DOC_ID_KEY))
           .include(['user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

@@ -1,0 +1,22 @@
+query getImportation($id: ID!) {
+  getImportation(id: $id) {
+    id
+    docs
+    files {
+      name
+    }
+    date
+    endDate
+
+    progress
+    total
+
+    user {
+      id
+      displayName
+    }
+
+  }
+}
+
+

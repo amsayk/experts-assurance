@@ -1,5 +1,3 @@
-export { default as purgeDoc } from './purgeDoc';
-
 export { default as addDoc } from './addDoc';
 export { default as delDoc } from './delDoc';
 export { default as restoreDoc } from './restoreDoc';
@@ -31,3 +29,5 @@ export { default as delMTRapports } from './delMTRapports';
 export { default as uploadFile } from './uploadFile';
 export { default as delFile } from './delFile';
 export { default as restoreFile } from './restoreFile';
+
+export { default as Importation } from './Importation';

@@ -15,31 +15,26 @@ import Dialog from '../Dialog';
 import Files from '../Files';
 import Docs from '../Docs';
 import Upload from '../Upload';
-import Report from '../ImportReport';
 
 class Controller extends React.Component {
   constructor(props) {
     super(props);
 
-    const { id, stage, onRef } = props;
+    const { stage, onRef } = props;
 
-    let rendered = null;
+    let rendered;
 
-    if (id) {
-      rendered = <Report ref={onRef} id={id} />;
-    } else {
-      switch (stage) {
-        case Stage_UPLOAD:
-          rendered = <Upload ref={onRef} />;
-          break;
+    switch (stage) {
+      case Stage_UPLOAD:
+        rendered = <Upload ref={onRef} />;
+        break;
 
-        case Stage_VALIDATION:
-          rendered = <Docs ref={onRef} />;
-          break;
+      case Stage_VALIDATION:
+        rendered = <Docs ref={onRef} />;
+        break;
 
-        default:
-          rendered = <Files ref={onRef} />;
-      }
+      default:
+        rendered = <Files ref={onRef} />;
     }
 
     this.state = {
@@ -48,39 +43,31 @@ class Controller extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { id, stage } = nextProps;
-    if (id) {
-      if (id !== this.props.id) {
-        this.setState({
-          rendered: <Report ref={this.props.onRef} id={id} />,
-        });
-      }
-    } else if (stage !== this.props.stage) {
-      let rendered = null;
+    const { stage } = nextProps;
+    let rendered;
 
-      switch (stage) {
-        case Stage_UPLOAD:
-          rendered = <Upload ref={this.props.onRef} />;
-          break;
+    switch (stage) {
+      case Stage_UPLOAD:
+        rendered = <Upload ref={this.props.onRef} />;
+        break;
 
-        case Stage_VALIDATION:
-          rendered = <Docs ref={this.props.onRef} />;
-          break;
+      case Stage_VALIDATION:
+        rendered = <Docs ref={this.props.onRef} />;
+        break;
 
-        default:
-          rendered = <Files ref={this.props.onRef} />;
-      }
-
-      this.setState({
-        rendered,
-      });
+      default:
+        rendered = <Files ref={this.props.onRef} />;
     }
+
+    this.setState({
+      rendered,
+    });
   }
   render() {
-    const { importing, ...props } = this.props;
+    const { visible, ...props } = this.props;
 
     return (
-      <Dialog {...props} show={importing}>
+      <Dialog {...props} show={visible}>
         {this.state.rendered}
       </Dialog>
     );

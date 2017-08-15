@@ -2,20 +2,26 @@ import getCurrentUser from 'getCurrentUser';
 
 import { Record, List } from 'immutable';
 
-import { Role_ADMINISTRATORS, Role_MANAGERS, Role_CLIENTS, Role_AGENTS, userHasRoleAll } from 'roles';
+import {
+  Role_ADMINISTRATORS,
+  Role_MANAGERS,
+  Role_CLIENTS,
+  Role_AGENTS,
+  userHasRoleAll,
+} from 'roles';
 
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
 import { INIT } from 'vars';
 
 export class User extends Record({
-  loading       : false,
-  id            : undefined,
-  displayName   : undefined,
-  email         : undefined,
-  emailVerified : true,
-  roles         : List.of(),
-  sessionToken  : undefined,
+  loading: false,
+  id: undefined,
+  displayName: undefined,
+  email: undefined,
+  emailVerified: true,
+  roles: List.of(),
+  sessionToken: null,
 }) {
   get isEmpty() {
     return typeof this.id === 'undefined';
@@ -26,7 +32,10 @@ export class User extends Record({
   }
 
   get isAdminOrManager() {
-    return userHasRoleAll(this, Role_ADMINISTRATORS) || userHasRoleAll(this, Role_MANAGERS);
+    return (
+      userHasRoleAll(this, Role_ADMINISTRATORS) ||
+      userHasRoleAll(this, Role_MANAGERS)
+    );
   }
 
   isManager(doc) {
@@ -37,23 +46,22 @@ export class User extends Record({
   }
 
   isSelf(user) {
-    return user
-      ? this.id === user.id
-      : false;
+    return user ? this.id === user.id : false;
   }
-
 }
 
 function maybeUser() {
   const user = getCurrentUser();
-  return user ? {
-    id            : user.id,
-    displayName   : user.get('displayName'),
-    email         : user.get('email'),
-    emailVerified : user.get('emailVerified'),
-    roles         : user.get('roles') || [],
-    sessionToken  : user.get('sessionToken'),
-  } : {};
+  return user
+    ? {
+        id: user.id,
+        displayName: user.get('displayName'),
+        email: user.get('email'),
+        emailVerified: user.get('emailVerified'),
+        roles: user.get('roles') || [],
+        sessionToken: user.get('sessionToken'),
+      }
+    : {};
 }
 
 const initialState = new User();
@@ -70,4 +78,3 @@ export default function userReducer(state = initialState, { type, payload }) {
   }
   return state;
 }
-

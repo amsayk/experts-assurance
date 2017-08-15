@@ -66,12 +66,16 @@ export default function createRenderEngine(app) {
             toIdValue(dataIdFromObject({ __typename: 'User', id })),
           getDoc: (_, { id }) =>
             toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+          getImportation: (_, { id }) =>
+            toIdValue(dataIdFromObject({ __typename: 'Importation', id })),
+          getActivity: (_, { id }) =>
+            toIdValue(dataIdFromObject({ __typename: 'Activity', id })),
           getFile: (_, { id }) =>
             toIdValue(dataIdFromObject({ __typename: 'File', id })),
         },
       },
       dataIdFromObject,
-      batchMax: 4,
+      batchMax: 10,
     });
 
     const intlSelector = state => ({

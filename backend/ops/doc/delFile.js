@@ -92,6 +92,7 @@ export default (async function delFile(request, done) {
         new Parse.Query(ActivityType)
           .equalTo('file', file)
           .include(['file', 'user'])
+          .ascending('now')
           .find({ useMasterKey: true }),
       ]);
 

@@ -2,19 +2,15 @@
 
 import {
   UPDATE_USER_BUSINESS,
-
   SET_PASSWORD,
   UPDATE_ACCOUNT_SETTINGS,
   RESEND_EMAIL_VERIFICATION,
   PASSWORD_RESET,
   SIGN_UP,
   CHANGE_EMAIL,
-
   AUTHORIZE_MANAGER,
   REVOKE_MANAGER_AUTHORIZATION,
-
   PURGE_DOC,
-
   ADD_DOC,
   DELETE_DOC,
   RESTORE_DOC,
@@ -23,20 +19,22 @@ import {
   CLOSE_DOC,
   CANCEL_DOC,
 
+  // Importation
+  START_IMPORTATION,
+  IMPORT_DOC,
+  FINISH_IMPORTATION,
+
   // Payments
   SET_PAY,
   DEL_PAY,
-
   SET_NATURE,
   DEL_NATURE,
-
   SET_POLICE,
   DEL_POLICE,
 
   // Validation
   SET_DT_VALIDATION,
   DEL_DT_VALIDATION,
-
   SET_MT_RAPPORTS,
   DEL_MT_RAPPORTS,
 
@@ -60,58 +58,59 @@ process.title = 'main: master';
 
 const opts = {
   ...config.kue_opts,
-  concurrency : 1,
+  concurrency: 1,
 };
 
-createWorker({ ...opts, concurrency : require('os').cpus().length }, 'AUTH', {
+createWorker({ ...opts, concurrency: require('os').cpus().length }, 'AUTH', {
   // auth
-  [SET_PASSWORD]              : authOps.setPassword,
-  [UPDATE_ACCOUNT_SETTINGS]   : authOps.updateAccountSettings,
-  [RESEND_EMAIL_VERIFICATION] : authOps.resendEmailVerification,
-  [PASSWORD_RESET]            : authOps.passwordReset,
-  [SIGN_UP]                   : authOps.signUp,
-  [CHANGE_EMAIL]              : authOps.changeEmail,
-
+  [SET_PASSWORD]: authOps.setPassword,
+  [UPDATE_ACCOUNT_SETTINGS]: authOps.updateAccountSettings,
+  [RESEND_EMAIL_VERIFICATION]: authOps.resendEmailVerification,
+  [PASSWORD_RESET]: authOps.passwordReset,
+  [SIGN_UP]: authOps.signUp,
+  [CHANGE_EMAIL]: authOps.changeEmail,
 });
 
 createWorker(opts, 'MAIN', {
-  [UPDATE_USER_BUSINESS] : businessOps.updateUserBusiness,
+  [UPDATE_USER_BUSINESS]: businessOps.updateUserBusiness,
 
-  [AUTHORIZE_MANAGER]            : authOps.authorizeManager,
-  [REVOKE_MANAGER_AUTHORIZATION] : authOps.revokeManagerAuthorization,
+  [AUTHORIZE_MANAGER]: authOps.authorizeManager,
+  [REVOKE_MANAGER_AUTHORIZATION]: authOps.revokeManagerAuthorization,
 
   // Docs
-  [PURGE_DOC]   : docOps.purgeDoc,
-  [ADD_DOC]     : docOps.addDoc,
-  [DELETE_DOC]  : docOps.delDoc,
-  [RESTORE_DOC] : docOps.restoreDoc,
-  [SET_MANAGER] : docOps.setManager,
-  [SET_STATE]   : docOps.setState,
-  [CLOSE_DOC]   : docOps.closeDoc,
-  [CANCEL_DOC]  : docOps.cancelDoc,
+  [ADD_DOC]: docOps.addDoc,
+  [DELETE_DOC]: docOps.delDoc,
+  [RESTORE_DOC]: docOps.restoreDoc,
+  [SET_MANAGER]: docOps.setManager,
+  [SET_STATE]: docOps.setState,
+  [CLOSE_DOC]: docOps.closeDoc,
+  [CANCEL_DOC]: docOps.cancelDoc,
 
   // Payments
-  [SET_PAY]  : docOps.setPay,
-  [DEL_PAY]  : docOps.delPay,
+  [SET_PAY]: docOps.setPay,
+  [DEL_PAY]: docOps.delPay,
 
   // Nature
-  [SET_NATURE]  : docOps.setNature,
-  [DEL_NATURE]  : docOps.delNature,
+  [SET_NATURE]: docOps.setNature,
+  [DEL_NATURE]: docOps.delNature,
 
   // Nature
-  [SET_POLICE]  : docOps.setPolice,
-  [DEL_POLICE]  : docOps.delPolice,
+  [SET_POLICE]: docOps.setPolice,
+  [DEL_POLICE]: docOps.delPolice,
 
   // Validation
-  [SET_DT_VALIDATION]  : docOps.setDTValidation,
-  [DEL_DT_VALIDATION]  : docOps.delDTValidation,
+  [SET_DT_VALIDATION]: docOps.setDTValidation,
+  [DEL_DT_VALIDATION]: docOps.delDTValidation,
 
-  [DEL_MT_RAPPORTS]  : docOps.delMTRapports,
-  [SET_MT_RAPPORTS]  : docOps.setMTRapports,
+  [DEL_MT_RAPPORTS]: docOps.delMTRapports,
+  [SET_MT_RAPPORTS]: docOps.setMTRapports,
 
   // Files
-  [UPLOAD_FILE]  : docOps.uploadFile,
-  [DELETE_FILE]  : docOps.delFile,
-  [RESTORE_FILE] : docOps.restoreFile,
-});
+  [UPLOAD_FILE]: docOps.uploadFile,
+  [DELETE_FILE]: docOps.delFile,
+  [RESTORE_FILE]: docOps.restoreFile,
 
+  [START_IMPORTATION]: docOps.Importation.startImportation,
+  [IMPORT_DOC]: docOps.Importation.Import,
+  [FINISH_IMPORTATION]: docOps.Importation.finishImportation,
+});

@@ -62,11 +62,15 @@ export const client = new ApolloClient({
         toIdValue(dataIdFromObject({ __typename: 'User', id })),
       getDoc: (_, { id }) =>
         toIdValue(dataIdFromObject({ __typename: 'Doc', id })),
+      getImportation: (_, { id }) =>
+        toIdValue(dataIdFromObject({ __typename: 'Importation', id })),
+      getActivity: (_, { id }) =>
+        toIdValue(dataIdFromObject({ __typename: 'Activity', id })),
       getFile: (_, { id }) =>
         toIdValue(dataIdFromObject({ __typename: 'File', id })),
     },
   },
   dataIdFromObject,
   initialState: window.__APOLLO_STATE__ || {},
-  batchMax: 4,
+  batchMax: 10,
 });

@@ -1,8 +1,6 @@
 import Parse from 'parse/node';
 
-import {
-
-} from 'backend/constants';
+import {} from 'backend/constants';
 
 export class Activities {
   constructor({ user, connector }) {
@@ -14,9 +12,7 @@ export class Activities {
     return this.connector.get(id);
   }
 
-  getTimeline(cursor, query) {
-    return this.connector.getTimeline(cursor, query, this.user);
+  getTimeline({ cursor, query }) {
+    return this.connector.getTimeline({ cursor, query, user: this.user });
   }
-
 }
-

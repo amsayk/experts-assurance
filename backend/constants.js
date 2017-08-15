@@ -15,8 +15,6 @@ export const REVOKE_MANAGER_AUTHORIZATION = keyOf({
   REVOKE_MANAGER_AUTHORIZATION: null,
 });
 
-export const PURGE_DOC = keyOf({ PURGE_DOC: null });
-
 export const ADD_DOC = keyOf({ ADD_DOC: null });
 export const DELETE_DOC = keyOf({ DELETE_DOC: null });
 export const RESTORE_DOC = keyOf({ RESTORE_DOC: null });
@@ -50,3 +48,12 @@ export const SET_MT_RAPPORTS = keyOf({ SET_MT_RAPPORTS: null });
 
 export const DOC_ID_KEY = 'refNo';
 export const DOC_FOREIGN_KEY = 'ref';
+
+// Importations
+export const START_IMPORTATION = keyOf({ START_IMPORTATION: null });
+export const IMPORT_DOC = keyOf({ IMPORT_DOC: null });
+export const FINISH_IMPORTATION = keyOf({ FINISH_IMPORTATION: null });
+
+export const Topics = {
+  ACTIVITY: keyOf({ 'pubsub/ACTIVITY': null }),
+};

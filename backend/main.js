@@ -29,6 +29,11 @@ import {
   CLOSE_DOC,
   CANCEL_DOC,
 
+  // Importation
+  START_IMPORTATION,
+  IMPORT_DOC,
+  FINISH_IMPORTATION,
+
   // Payments
   SET_PAY,
   DEL_PAY,
@@ -389,6 +394,44 @@ Parse.Cloud.define('routeOp', async function(request, response) {
         response.success({
           doc: deserializeParseObject(doc),
           activities: activities.map(deserializeParseObject),
+        });
+      } catch (e) {
+        response.error(e);
+      }
+      break;
+    }
+    case START_IMPORTATION: {
+      try {
+        const { data: { activity } } = await publish('MAIN', operationKey, req);
+        response.success({
+          activity: deserializeParseObject(activity),
+        });
+      } catch (e) {
+        response.error(e);
+      }
+      break;
+    }
+    case IMPORT_DOC: {
+      try {
+        const { data: { doc, activities } } = await publish(
+          'MAIN',
+          operationKey,
+          req,
+        );
+        response.success({
+          doc: deserializeParseObject(doc),
+          activities: activities.map(deserializeParseObject),
+        });
+      } catch (e) {
+        response.error(e);
+      }
+      break;
+    }
+    case FINISH_IMPORTATION: {
+      try {
+        const { data: { activity } } = await publish('MAIN', operationKey, req);
+        response.success({
+          activity: deserializeParseObject(activity),
         });
       } catch (e) {
         response.error(e);

@@ -1,25 +1,18 @@
-import moment from 'moment';
+import getMoment from 'getMoment';
 
 import invariant from 'invariant';
 
 const END = new Date(2000, 0, 1);
 
-function getMoment(locale, createFn = moment => moment) {
-  invariant(locale, 'Must provide a valid locale to getMoment');
-  const fn = createFn(moment);
-  invariant(fn, 'Must provide a valid create function to getMoment');
-  return (...args) => fn(...args).locale(locale);
-}
-
 export const extrapolate = function(locale) {
-  const dateFn = getMoment(locale, /* createFn = */ moment => moment.utc);
+  const moment = getMoment(locale, /* createFn = */ moment => moment.utc);
 
-  const end = dateFn(END).startOf('day');
+  const end = moment(END).startOf('day');
 
-  const today = dateFn().startOf('day');
-  const startOfThisWeek = dateFn(today).startOf('week').startOf('day');
-  const startOfThisMonth = dateFn(today).startOf('month').startOf('day');
-  const startOfThisYear = dateFn(today).startOf('year').startOf('day');
+  const today = moment().startOf('day');
+  const startOfThisWeek = moment(today).startOf('week').startOf('day');
+  const startOfThisMonth = moment(today).startOf('month').startOf('day');
+  const startOfThisYear = moment(today).startOf('year').startOf('day');
 
   const periods = [
     {
@@ -38,24 +31,24 @@ export const extrapolate = function(locale) {
       );
     }
 
-    const endOfFirstWeekOfThisMonth = dateFn(startOfThisMonth).add(1, 'week');
+    const endOfFirstWeekOfThisMonth = moment(startOfThisMonth).add(1, 'week');
 
-    let d = dateFn(today).add(-1, 'day').startOf('day');
+    let d = moment(today).add(-1, 'day').startOf('day');
     let yesterday = true;
     while (d.isAfter(end) && isInFirstWeekOfThisMonth(d)) {
       periods.push({
         id: `day-${d.day()}`,
         title: yesterday ? 'hier' : d.format('dddd'),
-        to: +dateFn(d).endOf('day'),
+        to: +moment(d).endOf('day'),
         from: +d,
       });
-      d = dateFn(d).add(-1, 'day').startOf('day');
+      d = moment(d).add(-1, 'day').startOf('day');
       yesterday = false;
     }
   } else {
     // Add all days of this week
     [-1, -2, -3, -4, -5, -6].forEach(function(index) {
-      const startOfDay = dateFn(today).add(index, 'days').startOf('day');
+      const startOfDay = moment(today).add(index, 'days').startOf('day');
 
       if (
         startOfDay.isAfter(end) &&
@@ -65,7 +58,7 @@ export const extrapolate = function(locale) {
         periods.push({
           id: `day-${startOfDay.day()}`,
           title: getDayOfWeekTitle(index),
-          to: +dateFn(startOfDay).endOf('day'),
+          to: +moment(startOfDay).endOf('day'),
           from: +startOfDay,
         });
       }
@@ -74,8 +67,7 @@ export const extrapolate = function(locale) {
 
   // Add all weeks of this month
   [-1, -2, -3].forEach(function(index) {
-    const endOfWeek = moment
-      .utc(today)
+    const endOfWeek = moment(today)
       .add(index, 'weeks')
       .endOf('week')
       .endOf('day');
@@ -85,15 +77,14 @@ export const extrapolate = function(locale) {
         id: `week-${endOfWeek.week()}`,
         title: getWeekOfMonthTitle(index),
         to: +endOfWeek,
-        from: +dateFn(endOfWeek).startOf('week').startOf('day'),
+        from: +moment(endOfWeek).startOf('week').startOf('day'),
       });
     }
   });
 
   // Add all months of this year
   [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11].forEach(function(index) {
-    const startOfMonth = moment
-      .utc(today)
+    const startOfMonth = moment(today)
       .add(index, 'months')
       .startOf('month')
       .startOf('day');
@@ -102,7 +93,7 @@ export const extrapolate = function(locale) {
       periods.push({
         id: `month-${startOfMonth.month()}`,
         title: getMonthOfYearTitle(index),
-        to: +dateFn(startOfMonth).endOf('month').endOf('day'),
+        to: +moment(startOfMonth).endOf('month').endOf('day'),
         from: +startOfMonth,
       });
     }
@@ -114,7 +105,7 @@ export const extrapolate = function(locale) {
     periods.push({
       id: `year-${curYear.year()}`,
       title: String(curYear.year()),
-      to: +dateFn(curYear).endOf('year').endOf('day'),
+      to: +moment(curYear).endOf('year').endOf('day'),
       from: +curYear,
     });
 
@@ -124,25 +115,25 @@ export const extrapolate = function(locale) {
   return periods;
 
   function isLastWeek(date) {
-    return dateFn(date).isBefore(startOfThisWeek);
+    return moment(date).isBefore(startOfThisWeek);
   }
 
   function isLastMonth(date) {
-    return dateFn(date).isBefore(startOfThisMonth);
+    return moment(date).isBefore(startOfThisMonth);
   }
 
   function isLastYear(date) {
-    return dateFn(date).isBefore(startOfThisYear);
+    return moment(date).isBefore(startOfThisYear);
   }
 
   function getDayOfWeekTitle(index) {
     switch (index) {
       case 0:
-        return `aujourd\'hui`;
+        return `aujourd'hui`;
       case -1:
         return 'hier';
     }
-    return dateFn().day(today.day() + index).format('dddd');
+    return moment().day(today.day() + index).format('dddd');
   }
 
   function getWeekOfMonthTitle(index) {
@@ -154,7 +145,7 @@ export const extrapolate = function(locale) {
   }
 
   function getMonthOfYearTitle(index) {
-    return dateFn().month(today.month() + index).format('MMMM YYYY');
+    return moment().month(today.month() + index).format('MMMM YYYY');
   }
 };
 
