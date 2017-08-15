@@ -56,6 +56,7 @@ export function logIn(username, password) {
               'getOngoingImportation',
               'getImportation',
               'getDoc',
+              'settings_users__getUsers',
             ];
 
             if (

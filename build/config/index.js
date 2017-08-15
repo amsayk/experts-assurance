@@ -68,6 +68,12 @@ log('Creating default configuration.');
 const config = {
   verbose: false,
 
+  // Sentry DSN
+  sentryDSN: nullthrows(process.env.SENTRY_DSN),
+
+  // CSP endpoint
+  reportUri: nullthrows(process.env.CSP_ENDPOINT),
+
   // Allow debugging in prodiction mode
   debug: typeof process.env.DEBUG !== 'undefined' ? process.env.DEBUG : null,
 

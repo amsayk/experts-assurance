@@ -69,6 +69,7 @@ export function boot() {
     // get ongoing importation
     const obs = client.watchQuery({
       query: ONGOING_IMPORTATION_QUERY,
+      fetchPolicy: 'network-only',
       variables: {},
     });
 
@@ -90,11 +91,12 @@ export function boot() {
 
           const importationQuery = client.watchQuery({
             query: GET_IMPORTATION_QUERY,
+            fetchPolicy: 'network-only',
             variables: { id: ongoingImportation.id },
           });
 
           importationQuery._sub = importationQuery.subscribe({
-            async next({ data: { getImportation: importation } }) {
+            async next({ data: { getImportation: importation }, stale }) {
               if (importation.endDate) {
                 try {
                   importationQuery._sub.unsubscribe();
@@ -104,7 +106,7 @@ export function boot() {
                 sub = obs.subscribe({ next: fn });
               }
 
-              dispatch(loadImportation(importation));
+              importation.progress && dispatch(loadImportation(importation));
             },
           });
         }
@@ -255,30 +257,22 @@ export function validateDocs() {
       getState().getIn(['importation', 'stage']) === Stage_VALIDATION;
 
     docs.forEach(doc => {
-      validationJob = validationJob.then(() => {
+      validationJob = validationJob.then(async () => {
         if (isValidating()) {
+          await delay(__DEV__ ? 0 : 100);
           dispatch({
             type: doc.isValid() ? VALIDATION_SUCCESS : VALIDATION_ERROR,
             doc,
           });
-          return delay(__DEV__ ? 0 : 100);
         }
       });
     });
 
     if (isValidating()) {
       validationJob.then(() => {
-        const cb = () =>
-          dispatch({
-            type: FINISH_VALIDATION,
-          });
-
-        const duration = Date.now() - startTime;
-        if (duration >= MIN_DURATION) {
-          cb();
-        } else {
-          setTimeout(cb, MIN_DURATION - duration);
-        }
+        dispatch({
+          type: FINISH_VALIDATION,
+        });
       });
     }
   };

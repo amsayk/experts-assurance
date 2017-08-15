@@ -38,6 +38,7 @@ export function ready() {
               'getOngoingImportation',
               'getImportation',
               'getDoc',
+              'settings_users__getUsers',
             ];
 
             if (

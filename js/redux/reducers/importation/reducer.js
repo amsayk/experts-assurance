@@ -274,7 +274,7 @@ export default function reducer(state = initialState, action) {
         visible: true,
       });
     case HIDE:
-      return state.uploadStatus === UploadStatus.SUCCESS
+      return state.uploadStatus !== UploadStatus.IN_PROGRESS
         ? initialState
         : state.merge({ visible: false });
     case START_EXTRACTION:

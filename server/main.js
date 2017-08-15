@@ -64,7 +64,7 @@ app.use(
   }),
 );
 
-if (process.env.ENABLE_REVERSE_PROXY) {
+if (process.env.ENABLE_REVERSE_PROXY === 'yes') {
   app.use(
     helmet.contentSecurityPolicy({
       directives: {
@@ -77,7 +77,7 @@ if (process.env.ENABLE_REVERSE_PROXY) {
         formAction: [`'none'`],
         frameAncestors: [`'none'`],
         objectSrc: [`'none'`],
-        reportUri: '/__cspreport__',
+        reportUri: config.reportUri,
       },
     }),
   );
@@ -364,6 +364,10 @@ app.use(
     });
 
     const user = getCurrentUser();
+
+    try {
+      req.user = user;
+    } catch (e) {}
 
     const lang =
       config.supportedLangs.indexOf(req.locale.language) !== -1

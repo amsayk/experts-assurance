@@ -3,6 +3,8 @@ import parseGraphqlObjectFields from 'data/parseGraphqlObjectFields';
 
 import objectAssign from 'object-assign';
 
+import R from 'R';
+
 import { GraphQLError } from 'graphql/error';
 import { Kind } from 'graphql/language';
 
@@ -284,5 +286,16 @@ export default makeExecutableSchema({
   typeDefs: schema,
   resolvers: resolvers,
   allowUndefinedInResolve: false,
-  logger: { log: e => log.error('[GRAPHQL ERROR]', require('util').inspect(e)) },
+  logger: {
+    log: e => {
+      log.error('[GRAPHQL ERROR]', require('util').inspect(e));
+      if (!__DEV__) {
+        R.captureException(e, {});
+      }
+    },
+  },
+  resolverValidationOptions: {
+    requireResolversForArgs: true,
+    requireResolversForNonScalar: __DEV__,
+  },
 });

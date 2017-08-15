@@ -16,6 +16,9 @@ const babelOptions = require('scripts/getBabelOptions')({
     getDataTransferItems: 'common/getDataTransferItems',
     getMoment: 'common/getMoment',
 
+    // Error handling
+    R: 'common/raven',
+
     // For SSR use
     loadScript: 'utils/loadScript',
     'validation-messages': 'common/messages/validation-messages',

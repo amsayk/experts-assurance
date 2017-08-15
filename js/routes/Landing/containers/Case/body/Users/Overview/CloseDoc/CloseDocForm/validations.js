@@ -30,8 +30,6 @@ export default function getValidations(importing = false) {
   if (SERVER) {
     mtRapports.required = !importing;
     mtRapports.number = !importing;
-    // mtRapports.required = process.env._IMPORTING !== 'yes';
-    // mtRapports.number = process.env._IMPORTING !== 'yes';
   }
 
   const validations = {
