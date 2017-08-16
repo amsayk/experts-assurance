@@ -15,6 +15,9 @@ const babelOptions = require('scripts/getBabelOptions')({
     getMoment: 'common/getMoment',
     delay: 'common/delay',
 
+    // Error handling
+    R: 'common/raven',
+
     // TODO: remove when subscriptions-transport-ws gets updated
     'graphql-tag/printer': 'graphql/language/printer',
 
