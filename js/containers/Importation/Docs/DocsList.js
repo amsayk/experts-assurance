@@ -92,7 +92,7 @@ const styles = {
 };
 
 const docsSelector = state => {
-  return state.getIn(['importation', 'docs']);
+  return state.getIn(['importation', 'docs']).sortBy(doc => doc.progress);
 };
 
 const selector = createSelector(docsSelector, docs => ({ docs }));

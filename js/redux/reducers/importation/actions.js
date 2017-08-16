@@ -309,7 +309,7 @@ export function uploadDocs() {
     try {
       // 2. Importation
 
-      await doImportation();
+      const importation = await doImportation();
 
       if (!getState().getIn(['importation', 'visible'])) {
         snackbar.show({
@@ -324,6 +324,13 @@ export function uploadDocs() {
           },
         });
       }
+
+      // One last refresh just in case.
+      client.query({
+        query: GET_IMPORTATION_QUERY,
+        fetchPolicy: 'network-only',
+        variables: { id: importation.id },
+      });
 
       // 3. finish importation
       dispatch({
@@ -384,7 +391,9 @@ export function uploadDocs() {
         files: getState().getIn(['importation', 'files']).toJS(),
       };
 
-      const { data: { Importation: { error } } } = await client.mutate({
+      const {
+        data: { Importation: { error, importation } },
+      } = await client.mutate({
         mutation: IMPORTATION_MUTATION,
         variables: { info },
       });
@@ -392,6 +401,7 @@ export function uploadDocs() {
       if (error) {
         throw error;
       } else {
+        return importation;
       }
     }
   };

@@ -1,5 +1,8 @@
 mutation Importation($info: ImportationPayload!) {
   Importation(info: $info) {
+    importation {
+      id
+    }
 
     error {
       code

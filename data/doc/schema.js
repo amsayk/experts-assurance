@@ -68,6 +68,7 @@ export const schema = [
     docs: [JSON!]!
   }
   type ImportationResponse {
+    importation: Importation
     error: Error
   }
 
@@ -853,7 +854,7 @@ export const resolvers = {
 
   ImportationResponse: objectAssign(
     {},
-    parseGraphqlObjectFields([]),
+    parseGraphqlObjectFields(['importation']),
     parseGraphqlScalarFields(['error']),
   ),
 
@@ -1785,7 +1786,7 @@ export const resolvers = {
                 broadcast: true,
               });
             });
-            resolve({});
+            resolve({ importation: activity.get('importation') });
           } catch (e) {
             reject({ error: { code: codes.ERROR_UNKNOWN } });
           }

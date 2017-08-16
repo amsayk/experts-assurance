@@ -14,7 +14,7 @@ import cx from 'classnames';
 import Button from 'components/bootstrap/Button';
 
 function Item({ doc, progress }) {
-  const isDone = doc.progress <= progress;
+  const isDone = progress && doc.progress <= progress;
   return (
     <li>
       <div style={styles.doc}>
@@ -39,7 +39,7 @@ class DocsList extends React.Component {
     const { docs, progress, actions } = this.props;
 
     return (
-      <div style={styles.wrapper} style={{ marginTop: 25 }}>
+      <div style={styles.wrapper}>
         <ul style={styles.body}>
           {docs.isEmpty()
             ? <li style={{ marginBottom: 12 }}>Aucuns dossiers à importés.</li>
@@ -79,7 +79,7 @@ const styles = {
 };
 
 const docsSelector = state => {
-  return state.getIn(['importation', 'docs']);
+  return state.getIn(['importation', 'docs']).sortBy(doc => doc.progress);
 };
 
 const progressSelector = state => {

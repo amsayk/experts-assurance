@@ -250,9 +250,11 @@ export default function reducer(state = initialState, action) {
 
         // Upload
         uploadStatus:
-          action.payload.id && action.payload.endDate
+          action.payload.id &&
+          (action.payload.endDate ||
+            action.payload.progress === action.payload.total)
             ? UploadStatus.SUCCESS
-            : state.uploadStatus,
+            : UploadStatus.IN_PROGRESS,
         uploadError: state.uploadError,
 
         // Keep open

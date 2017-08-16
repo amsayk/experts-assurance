@@ -69,10 +69,10 @@ if (process.env.ENABLE_REVERSE_PROXY === 'yes') {
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: [`'self'`],
-        connectSrc: [`'self'`],
+        connectSrc: [`'self'`, config.graphql_subscriptions_endpoint],
         imgSrc: [`'self'`, 'https://www.google-analytics.com'],
-        scriptSrc: [`'self'`],
-        styleSrc: [`'self'`],
+        scriptSrc: [`'self'`, `'unsafe-inline'`, `'unsafe-eval'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
         fontSrc: [`'self'`],
         formAction: [`'none'`],
         frameAncestors: [`'none'`],

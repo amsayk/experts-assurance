@@ -21,6 +21,7 @@ const styles = {
     flexDirection: 'column',
     listStyle: 'none',
     width: '45%',
+    marginTop: 25,
   },
 
   icon: {
