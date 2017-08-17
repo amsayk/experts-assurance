@@ -444,8 +444,13 @@ const Utils = {
     let closedActivity = true;
 
     if (oldDoc) {
-      openActivity = !moment(date).isSame(oldDoc.date);
-      closedActivity = !moment(dateMission).isSame(oldDoc.dateMission);
+      openActivity = !moment(date)
+        .startOf('day')
+        .isSame(moment(oldDoc.date).startOf('day'));
+
+      closedActivity = !moment(dateMission)
+        .startOf('day')
+        .isSame(moment(oldDoc.dateMission).startOf('day'));
     }
 
     let activities = openActivity

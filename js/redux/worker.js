@@ -20,7 +20,7 @@ worker.registerTask(XLSX_TO_DOCS, function({ data, isBinary }) {
     workbook.SheetNames.forEach(function(sheetName) {
       const roa = X.utils.sheet_to_json(workbook.Sheets[sheetName]);
       if (roa.length > 0) {
-        roa.forEach(o => result.push(cleanDoc(o)));
+        roa.forEach(o => o['Réf'] && result.push(cleanDoc(o)));
       }
     });
     return result;

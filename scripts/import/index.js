@@ -1,5 +1,7 @@
 import Parse from 'parse/node';
 
+import delay from 'delay';
+
 import nullthrows from 'nullthrows';
 
 import isEmpty from 'isEmpty';
@@ -49,7 +51,10 @@ if (!filePath || !password) {
   process.exit(1);
 }
 
-function process_RS(stream: ReadStream, cb: (wb: Workbook) => void): void {
+function process_RS(
+  stream: ReadStream,
+  cb: (err: Error, wb: Workbook) => void,
+): void {
   let buffers = [];
   stream.on('error', function(error) {
     cb(error);
@@ -90,10 +95,6 @@ process_RS(fStream, async function(err, docs) {
   if (err) {
     log.error(`Error reading file ${filePath}.`, err);
     process.exit(1);
-  }
-
-  function sleep(n) {
-    return new Promise(resolve => setTimeout(resolve, n));
   }
 
   function getRef(doc) {
@@ -163,7 +164,7 @@ process_RS(fStream, async function(err, docs) {
         }
 
         // Delete all docs
-        await sleep(250);
+        await delay(250);
         const importedDocs = await new Parse.Query(DocType)
           .matchesQuery('business', businessQuery())
           .equalTo('imported', true)
@@ -171,7 +172,7 @@ process_RS(fStream, async function(err, docs) {
         log(`Found ${importedDocs.length} imported docs...`);
 
         // Delete all activities of imported docs
-        await sleep(250);
+        await delay(250);
         {
           const activities = await new Parse.Query(ActivityType)
             .containedIn(
@@ -186,7 +187,7 @@ process_RS(fStream, async function(err, docs) {
         }
 
         // Delete all files of imported docs
-        await sleep(250);
+        await delay(250);
         {
           const files = await new Parse.Query(FileType)
             .containedIn(
@@ -204,7 +205,7 @@ process_RS(fStream, async function(err, docs) {
         );
 
         // Index non-imported docs
-        await sleep(250);
+        await delay(250);
         {
           const docs = await new Parse.Query(DocType)
             .matchesQuery('business', businessQuery())
@@ -274,7 +275,7 @@ process_RS(fStream, async function(err, docs) {
           loaders.displayNames.clear(payload.clientDisplayName);
         }
 
-        await sleep(300);
+        await delay(300);
 
         try {
           const agent = await loaders.displayNames.load(
@@ -293,7 +294,7 @@ process_RS(fStream, async function(err, docs) {
           imported: true,
         };
 
-        await sleep(300);
+        await delay(300);
 
         log(
           `Adding doc: \ndata=${JSON.stringify(payload)}\nmeta=${JSON.stringify(
@@ -347,7 +348,7 @@ process_RS(fStream, async function(err, docs) {
           return Promise.reject(e);
         }
 
-        return sleep(700);
+        return delay(700);
       });
     }, Promise.resolve());
 
@@ -358,4 +359,7 @@ process_RS(fStream, async function(err, docs) {
 
   loaders.displayNames.clearAll();
   user.logOut();
+
+  // Exit Success
+  process.exit(0);
 });
