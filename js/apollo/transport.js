@@ -1,6 +1,4 @@
-import {
-  HTTPBatchedNetworkInterface,
-} from 'apollo-client/transport/batchedNetworkInterface';
+import { HTTPBatchedNetworkInterface } from 'apollo-client/transport/batchedNetworkInterface';
 
 import { addUploads } from './uploads';
 
@@ -8,23 +6,19 @@ import { addPersistedQueries } from 'persistgraphql';
 
 import queryMap from 'persisted_queries';
 
-import {
-  PERSISTED_QUERIES,
-  APOLLO_QUERY_BATCH_INTERVAL,
-} from 'vars';
+import { PERSISTED_QUERIES, APOLLO_QUERY_BATCH_INTERVAL } from 'vars';
 
 class NetworkInterface extends HTTPBatchedNetworkInterface {
   constructor({ uri, batchInterval, opts }) {
     super({ uri, batchInterval, opts });
-
-  };
+  }
 
   use(responseMiddleware) {
     let responseMiddlewares = responseMiddleware;
     if (!Array.isArray(responseMiddlewares)) {
       responseMiddlewares = [responseMiddlewares];
     }
-    responseMiddlewares.forEach((middleware) => {
+    responseMiddlewares.forEach(middleware => {
       if (typeof middleware.applyMiddleware === 'function') {
         super.use([middleware]);
       }
@@ -34,7 +28,6 @@ class NetworkInterface extends HTTPBatchedNetworkInterface {
       }
     });
   }
-
 }
 
 export default function getNetworkInterface(apiUrl = '/graphql', headers = {}) {
@@ -51,9 +44,8 @@ export default function getNetworkInterface(apiUrl = '/graphql', headers = {}) {
   });
 
   if (PERSISTED_QUERIES) {
-    return addPersistedQueries(iface, queryMap);
+    addPersistedQueries(iface, queryMap);
   }
 
   return addUploads(iface);
 }
-
