@@ -1,21 +1,5 @@
 mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
-
   uploadFile(docId: $docId, category: $category, metadata: $metadata) {
-    file {
-      id
-      name
-      category
-      type
-      url
-
-      user {
-        id
-        displayName
-      }
-
-      date
-    }
-
     doc {
       id
       key
@@ -31,7 +15,6 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
           displayName
         }
       }
-
       payment : paymentInfo {
         user {
           id
@@ -67,6 +50,20 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
       updatedAt
       lastModified
     }
+    file {
+      id
+      name
+      category
+      type
+      url
+
+      user {
+        id
+        displayName
+      }
+
+      date
+    }
 
     activities {
       id,
@@ -74,25 +71,6 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
         id
         refNo
         state
-        # validation {
-        #   date
-        #   user {
-        #     id
-        #     displayName
-        #   }
-        # }
-        # closure {
-        #   date
-        #   state
-        #   user {
-        #     id
-        #     displayName
-        #   }
-        # }
-        # user {
-        #   id
-        #   displayName
-        # }
       }
       file {
         id
@@ -101,10 +79,6 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
         type
         date
         url
-        # user {
-        #   id
-        #   displayName
-        # }
       }
       ns
       type
@@ -115,10 +89,8 @@ mutation uploadFile($docId: ID!, $category: String!, $metadata: FileInput!) {
         displayName
       }
     }
-
     error {
       code
     }
-
   }
 }
