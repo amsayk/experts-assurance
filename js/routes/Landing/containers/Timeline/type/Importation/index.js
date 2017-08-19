@@ -50,7 +50,7 @@ function Importation(
   return (
     <article className={cx(style.feedItem, style[TYPE])}>
       <div style={ICON_WRAPPER_STYLE} className={style.profilePic}>
-        <ImportIcon size={24} />
+        <ImportIcon size={18} />
       </div>
 
       <div className={style.entry}>
