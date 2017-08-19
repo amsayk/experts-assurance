@@ -1,5 +1,9 @@
 import React from 'react';
 
+import DocumentTitle from 'components/Title';
+
+import { APP_NAME } from 'vars';
+
 import style from 'containers/Importation/styles';
 
 import cx from 'classnames';
@@ -97,6 +101,7 @@ export default class Dialog extends React.Component {
         transitionAppear
       >
         <div className={style.dialogWrapper}>
+          <DocumentTitle title={`Importation · ${APP_NAME}`} />
           <div className={style.dialogMask} />
           <div style={styles.wrapper}>
             <div className={cx(style.dialogInner, props.className)}>

@@ -4,6 +4,10 @@ import { withRouter } from 'react-router';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import DocumentTitle from 'components/Title';
+
+import { APP_NAME } from 'vars';
+
 import { withApollo } from 'react-apollo';
 
 import isEmpty from 'isEmpty';
@@ -327,6 +331,7 @@ class FormWrapper extends React.Component {
         transitionAppear
       >
         <div className={style.addDocFormWrapper}>
+          <DocumentTitle title={`Nouveau dossier · ${APP_NAME}`} />
           <div className={style.addDocFormMask} />
           <div style={styles.wrapper}>
             <div className={style.addDocFormInner}>

@@ -182,6 +182,7 @@ webpackConfig.plugins = [
   new webpack.DefinePlugin(
     merge(config.globals, {
       'process.env': {
+        GA_TRACKING_ID: JSON.stringify(process.env.GA_TRACKING_ID),
         PARSE_MODULE_PATH: JSON.stringify('parse'),
         SSR: JSON.stringify(config.ssrEnabled),
         PERSISTED_QUERIES: JSON.stringify(config.persistedQueries),

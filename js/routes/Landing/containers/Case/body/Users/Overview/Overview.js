@@ -2,6 +2,8 @@ import React from 'react';
 import T from 'prop-types';
 import { withApollo } from 'react-apollo';
 
+import DocumentTitle from 'components/Title';
+
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -14,6 +16,8 @@ import ActivityIndicator from 'components/ActivityIndicator';
 import Clipboard from 'Clipboard';
 
 import { injectIntl } from 'react-intl';
+
+import { APP_NAME } from 'vars';
 
 import raf from 'utils/requestAnimationFrame';
 
@@ -1060,6 +1064,9 @@ class Overview extends React.Component {
         )}
       >
         <div className={cx(style.overviewContent, style.card)}>
+          {loading
+            ? null
+            : <DocumentTitle title={`Dossier ${doc.refNo} · ${APP_NAME}`} />}
           <div className={style.docTitle}>
             <h6 style={{ display: 'flex' }} className={style.h6}>
               {loading
@@ -1122,7 +1129,6 @@ class Overview extends React.Component {
               })()}
             </div>
           </div>
-
           <div className={style.docContent}>
             {/* <RefLine */}
             {/*   loading={loading} */}

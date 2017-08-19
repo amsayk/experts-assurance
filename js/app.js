@@ -23,7 +23,7 @@ import getRoutes from './routes';
 
 import { ApolloProvider } from 'react-apollo';
 
-// import * as ReactGA from 'react-ga';
+import * as ReactGA from 'react-ga';
 
 import { Provider } from 'react-redux';
 
@@ -45,7 +45,7 @@ import formats from 'intl-formats';
 
 import { updateIntl } from 'redux/reducers/intl/actions';
 
-import { DEBUG, SSR, DEFAULT_LANG } from 'vars';
+import { DEBUG, SSR, DEFAULT_LANG, GA_TRACKING_ID } from 'vars';
 
 const log = debug('app:client');
 
@@ -79,13 +79,7 @@ let render = async function render() {
 
   const routes = getRoutes(store);
 
-  // Initialize Analytics
-  // ReactGA.initialize(???);
-
-  function logPageView() {
-    // ReactGA.set({ page: window.location.pathname });
-    // ReactGA.pageview(window.location.pathname);
-  }
+  global.logPageView = function logPageView() {};
 
   class Application extends React.Component {
     static childContextTypes = {
@@ -205,6 +199,14 @@ if (__DEV__) {
   window.cookie = require('react-cookie');
   window.moment = require('moment');
 } else {
+  // Initialize Analytics
+  ReactGA.initialize(GA_TRACKING_ID, {});
+
+  global.logPageView = function logPageView() {
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname);
+  };
+
   require('offline-plugin/runtime').install({
     onInstalled: function() {
       log('[SW]: App is ready for offline usage');

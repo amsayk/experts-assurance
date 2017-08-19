@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import DocumentTitle from 'components/Title';
+
 import { withApollo } from 'react-apollo';
 
 import isEmpty from 'isEmpty';
@@ -25,7 +27,7 @@ import { CloseIcon } from 'components/icons/MaterialIcons';
 
 import validations from './validations';
 
-import { PATH_CASES_CASE } from 'vars';
+import { PATH_CASES_CASE, APP_NAME } from 'vars';
 
 import { SubmissionError, isDirty } from 'redux-form/immutable';
 
@@ -461,6 +463,7 @@ class FormWrapper extends React.Component {
         transitionAppear
       >
         <div className={style.closeDocFormWrapper}>
+          <DocumentTitle title={`Clôturer · ${APP_NAME}`} />
           <div className={style.closeDocFormMask} />
           <div style={styles.wrapper}>
             <div className={style.closeDocFormInner}>
