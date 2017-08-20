@@ -45,6 +45,7 @@ export function logIn(username, password) {
           // Refresh relevants queries
           try {
             const QUERIES = [
+              'getLastRefNo',
               'getTimeline',
               // 'recentDocs',
               'getDocs',

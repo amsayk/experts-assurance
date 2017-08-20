@@ -27,6 +27,7 @@ export function ready() {
           // Refresh relevants queries
           try {
             const QUERIES = [
+              'getLastRefNo',
               'getTimeline',
               // 'recentDocs',
               'getDocs',
