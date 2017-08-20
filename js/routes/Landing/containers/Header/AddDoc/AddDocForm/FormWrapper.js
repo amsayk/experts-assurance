@@ -38,7 +38,6 @@ import MUTATION from './addDoc.mutation.graphql';
 
 import Form from './Form';
 
-import Title from './Title';
 import Actions from './Actions';
 
 const validations = getValidations(/* imported = */ false);
@@ -321,7 +320,7 @@ class FormWrapper extends React.Component {
     }
   }
   render() {
-    const { addingDoc, ...props } = this.props;
+    const { addingDoc, Title, ...props } = this.props;
 
     return (
       <Zoom
@@ -336,7 +335,7 @@ class FormWrapper extends React.Component {
           <div style={styles.wrapper}>
             <div className={style.addDocFormInner}>
               <div className={style.addDocForm}>
-                <Title />
+                {Title}
                 {addingDoc ? <Form {...props} onSubmit={this.onSubmit} /> : null}
               </div>
             </div>

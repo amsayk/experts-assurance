@@ -17,6 +17,7 @@ import raf from 'utils/requestAnimationFrame';
 
 import style from 'routes/Landing/styles';
 
+import Title from './AddDocForm/Title';
 import AddDocForm from './AddDocForm';
 
 import selector from './selector';
@@ -63,6 +64,12 @@ class AddDoc extends React.Component {
       document.body.style.overflowY = 'visible';
     } catch (e) {}
   }
+  get Title() {
+    if (!this._Title) {
+      this._Title = <Title />;
+    }
+    return this._Title;
+  }
   render() {
     const { addingDoc, actions } = this.props;
 
@@ -74,6 +81,7 @@ class AddDoc extends React.Component {
         isOpened={addingDoc}
       >
         <AddDocForm
+          Title={this.Title}
           addingDoc={addingDoc}
           initialValues={{
             dateMission: Date.now(),

@@ -56,6 +56,7 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 export const client = new ApolloClient({
   connectToDevTools: __DEV__ || DEBUG,
   networkInterface: networkInterfaceWithSubscriptions,
+  queryDeduplication: true,
   customResolvers: {
     Query: {
       getUser: (_, { id }) =>
