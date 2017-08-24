@@ -503,7 +503,6 @@ const Utils = {
     }
 
     const objects = activities.map(({ type, user, date, now, metadata }) => {
-      // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this.
       return new ActivityType().setACL(ACL).set({
         ns: 'DOCUMENTS',
         type: type,

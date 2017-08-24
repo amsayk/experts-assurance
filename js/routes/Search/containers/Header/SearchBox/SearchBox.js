@@ -305,8 +305,6 @@ class SearchBox extends React.Component {
     const { search: { state, q } } = this.state;
     const isPure = this.state.search.isPure;
 
-    console.log('search', this.state.search);
-
     let menu = null;
 
     // advanced menu
