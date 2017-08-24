@@ -14,7 +14,7 @@ import style from 'containers/Importation/styles';
 
 import cx from 'classnames';
 
-import { show } from 'redux/reducers/importation/actions';
+import { backToStart } from 'redux/reducers/importation/actions';
 
 import { UploadStatus } from 'redux/reducers/importation/constants';
 
@@ -40,7 +40,7 @@ class Actions extends React.Component {
           className={cx(style.dialogActions, style.error)}
         >
           <span style={{ marginRight: 12 }}>Erreur d'importation.</span>
-          <Button bsStyle='danger' onClick={actions.show} role='button'>
+          <Button bsStyle='danger' onClick={actions.backToStart} role='button'>
             Récommencer
           </Button>
         </div>
@@ -119,7 +119,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(
       {
-        show,
+        backToStart,
       },
       dispatch,
     ),

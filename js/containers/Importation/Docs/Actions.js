@@ -17,7 +17,7 @@ import cx from 'classnames';
 import {
   validateDocs,
   uploadDocs,
-  show,
+  backToStart,
 } from 'redux/reducers/importation/actions';
 
 import { ValidationStatus } from 'redux/reducers/importation/constants';
@@ -49,7 +49,7 @@ class Actions extends React.Component {
           className={cx(style.dialogActions, style.error)}
         >
           Certaines dossiers sont invalides.<span style={{ marginRight: 6 }} />
-          <Button bsStyle='danger' onClick={actions.show} role='button'>
+          <Button bsStyle='danger' onClick={actions.backToStart} role='button'>
             Récommencer l'importation
           </Button>
         </div>
@@ -120,7 +120,7 @@ function mapDispatchToProps(dispatch) {
       {
         uploadDocs,
         validateDocs,
-        show,
+        backToStart,
       },
       dispatch,
     ),

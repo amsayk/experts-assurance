@@ -9,6 +9,8 @@ export const BUSY = keyOf({ 'importation/BUSY': null });
 export const SHOW = keyOf({ 'importation/SHOW': null });
 export const HIDE = keyOf({ 'importation/HIDE': null });
 
+export const RESTART = keyOf({ 'importation/RESTART': null });
+
 export const START_EXTRACTION = keyOf({ 'importation/START_EXTRACTION': null });
 export const ADD_FILES = keyOf({ 'importation/ADD_FILES': null });
 export const REMOVE_FILE = keyOf({ 'importation/REMOVE_FILE': null });

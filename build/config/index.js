@@ -443,6 +443,8 @@ config.globals = {
 
     PUBLIC: JSON.stringify(config.public),
 
+    MATCH_REF: JSON.stringify(process.env.MATCH_REF === 'yes'),
+
     APPLICATION_ID: JSON.stringify(process.env.APPLICATION_ID),
     JAVASCRIPT_KEY: JSON.stringify(process.env.JAVASCRIPT_KEY),
 

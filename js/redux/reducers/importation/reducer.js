@@ -5,6 +5,9 @@ import moment from 'moment';
 import isEmpty from 'isEmpty';
 
 import {
+  RESTART,
+
+  // Actions
   ONGOING_IMPORTATION,
   BUSY,
 
@@ -81,11 +84,11 @@ export class Doc extends Record({
   vehiclePower: null,
 }) {
   isValid() {
-    if (!this._validationResult) {
-      this._validationResult = validations.validate(this);
+    if (!this.__cachedIsValid) {
+      this.__cachedIsValid = isEmpty(validations.validate(this));
     }
 
-    return this._validationResult;
+    return this.__cachedIsValid;
   }
 
   equals(other) {
@@ -320,7 +323,7 @@ export default function reducer(state = initialState, action) {
         files: state.files,
         stage: Stage_VALIDATION,
         docs: state.docs,
-        validationStatus: ValidationStatus.ERROR,
+        validationStatus: ValidationStatus.IN_PROGRESS,
         validations: state.validations,
         validationErrors: state.validationErrors.add(action.doc.id),
       });
@@ -333,6 +336,7 @@ export default function reducer(state = initialState, action) {
         docs: state.docs,
         validationStatus: ValidationStatus.IN_PROGRESS,
         validations: state.validations.add(action.doc.id),
+        validationErrors: state.validationErrors,
       });
     case FINISH_VALIDATION:
       return initialState.merge({
@@ -366,6 +370,10 @@ export default function reducer(state = initialState, action) {
             uploadStatus: UploadStatus.SUCCESS,
           })
         : initialState;
+    case RESTART:
+      return initialState.merge({
+        visible: true,
+      });
     default:
       return state;
   }

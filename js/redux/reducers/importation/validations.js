@@ -1,4 +1,29 @@
-import { generateValidation } from 'validation';
+import { generateValidation, addValidation } from 'validation';
+
+import { MATCH_REF } from 'vars';
+
+import moment from 'moment';
+
+import isEmpty from 'isEmpty';
+
+addValidation('matchRef', (_, id, matchRef, { dateMission }) => {
+  if (matchRef) {
+    function ToDTMission(key) {
+      if (isEmpty(key)) {
+        return false;
+      }
+
+      return key.substring(0, 6);
+    }
+
+    const key = ToDTMission(id);
+
+    return dateMission && key
+      ? !(moment(dateMission).format('YYMMDD') === key)
+      : false;
+  }
+  return false;
+});
 
 const dateMission = {
   required: true,
@@ -23,6 +48,7 @@ datePayment.date = true;
 const validations = {
   id: {
     required: true,
+    matchRef: MATCH_REF,
   },
 
   dateMission,

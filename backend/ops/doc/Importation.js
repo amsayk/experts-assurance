@@ -498,11 +498,12 @@ const Utils = {
       }
 
       doc.set({
-        state: 'CLOSED',
+        state: 'CLOSED', // TODO: fix this.
       });
     }
 
     const objects = activities.map(({ type, user, date, now, metadata }) => {
+      // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this. // TODO: fix this.
       return new ActivityType().setACL(ACL).set({
         ns: 'DOCUMENTS',
         type: type,

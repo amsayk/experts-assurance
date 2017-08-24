@@ -154,6 +154,14 @@ $navbar-height: 70px;
 }
 
 .toggleAdvancedMode {
+  &.advancedModeNotEmpty,
+  &.advancedModeNotEmpty:active,
+  &.advancedModeNotEmpty:hover {
+    visibility: visible;
+    color: $brand-danger !important;
+    opacity: 1;
+  }
+
   visibility: hidden;
   padding-left: 0;
 

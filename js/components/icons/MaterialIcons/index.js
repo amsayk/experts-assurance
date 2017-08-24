@@ -14,6 +14,8 @@ export { default as FullscreenIcon } from './Fullscreen';
 
 export { default as PencilIcon } from './Pencil';
 
+export { default as AnnouncementIcon } from './Announcement';
+
 export { default as UpArrowIcon } from './UpArrow';
 
 export { default as DownArrowIcon } from './DownArrow';
@@ -83,4 +85,3 @@ export { default as AttachmentIcon } from './Attachment';
 export { default as CancelIcon } from './Cancel';
 
 export { default as ThumbsUpIcon } from './ThumbsUp';
-

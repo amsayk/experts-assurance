@@ -30,6 +30,7 @@ import {
 import {
   SearchIcon,
   ArrowDropdownIcon,
+  AnnouncementIcon,
   CloseIcon,
 } from 'components/icons/MaterialIcons';
 
@@ -839,6 +840,7 @@ class SearchBox extends React.Component {
       actions,
     } = this.props;
     const { search: { state: sState, q: sQ } } = this.state;
+    const isPure = this.state.search.isPure;
 
     let menu = null;
 
@@ -935,10 +937,15 @@ class SearchBox extends React.Component {
             <a
               onClick={this.onToggleAdvancedMode}
               bsStyle={'link'}
-              className={style.toggleAdvancedMode}
+              className={cx(
+                style.toggleAdvancedMode,
+                isPure || style.advancedModeNotEmpty,
+              )}
               role='button'
             >
-              <ArrowDropdownIcon size={22} />
+              {isPure
+                ? <ArrowDropdownIcon size={22} />
+                : <AnnouncementIcon size={22} />}
             </a>
           </Tooltip>
           {isValidQ(q)

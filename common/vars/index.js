@@ -18,6 +18,11 @@ export const PUBLIC =
     ? process.env.PUBLIC === 'true'
     : process.env.PUBLIC; // will be string on server-side
 
+export const MATCH_REF =
+  typeof process.env.MATCH_REF === 'string'
+    ? process.env.MATCH_REF === 'true'
+    : process.env.MATCH_REF;
+
 export const APP_NAME = process.env.APP_NAME;
 export const COUNTRY = process.env.COUNTRY;
 export const BUSINESS_KEY = process.env.BUSINESS_KEY;

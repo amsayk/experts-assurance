@@ -3,6 +3,9 @@ import delay from 'delay';
 import getMoment from 'getMoment';
 
 import {
+  RESTART,
+
+  // Actions
   ONGOING_IMPORTATION,
   BUSY,
 
@@ -119,6 +122,12 @@ export function boot() {
 export function show() {
   return {
     type: SHOW,
+  };
+}
+
+export function backToStart() {
+  return {
+    type: RESTART,
   };
 }
 
