@@ -34,6 +34,11 @@ const ACCEPT = [
   'video/*',
   'image/*',
 
+  // Apple stuff
+  'application/x-iwork-keynote-sffkey',
+  'application/x-iwork-pages-sffpages',
+  'application/x-iwork-keynote-sffnumbers',
+
   'application/pdf',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

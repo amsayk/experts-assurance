@@ -40,8 +40,19 @@ export default (async function uploadFile(request, done) {
       });
     });
 
+    const indexOfLastDot = name.lastIndexOf('.');
+    const nameWithoutExt =
+      indexOfLastDot !== -1 ? name.substring(0, indexOfLastDot) : name;
+    const ext =
+      indexOfLastDot !== -1 ? name.substring(indexOfLastDot + 1) : null;
+
     const fileObj = await new Parse.File(
-      name,
+      nameWithoutExt +
+        '@' +
+        doc.get('refNo') +
+        '~' +
+        category +
+        (ext ? '.' + ext : ''),
       { base64: fileData },
       type,
     ).save(null, { useMasterKey: true });

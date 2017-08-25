@@ -30,7 +30,6 @@ import {
 import {
   SearchIcon,
   ArrowDropdownIcon,
-  AnnouncementIcon,
   CloseIcon,
 } from 'components/icons/MaterialIcons';
 
@@ -542,12 +541,15 @@ class SearchBox extends React.Component {
     }));
   }
 
-  onState(state) {
-    this.setState(({ search }) => ({
-      search: search.merge({
-        state,
+  onState(state, callback) {
+    this.setState(
+      ({ search }) => ({
+        search: search.merge({
+          state,
+        }),
       }),
-    }));
+      callback,
+    );
   }
 
   onManager(id) {
@@ -702,7 +704,6 @@ class SearchBox extends React.Component {
   }
   onStateFilter(key) {
     const {
-      onState,
       onToggle,
       toggleAdvancedMode: onToggleAdvancedMode,
     } = this.props.actions;
@@ -712,13 +713,13 @@ class SearchBox extends React.Component {
           raf(() => onToggleAdvancedMode());
         }, 100);
       default:
-        onState(key);
+        this.onState(key, function() {});
         return setTimeout(() => {
           raf(() => {
             focusNode(this.input);
             setTimeout(() => {
               onToggle(true);
-            }, 75);
+            }, 7);
           });
         }, 0);
     }
@@ -937,22 +938,20 @@ class SearchBox extends React.Component {
             <a
               onClick={this.onToggleAdvancedMode}
               bsStyle={'link'}
-              className={cx(
-                style.toggleAdvancedMode,
-                isPure || style.advancedModeNotEmpty,
-              )}
+              className={cx(style.toggleAdvancedMode)}
               role='button'
             >
-              {isPure
-                ? <ArrowDropdownIcon size={22} />
-                : <AnnouncementIcon size={22} />}
+              <ArrowDropdownIcon size={22} />
             </a>
           </Tooltip>
-          {isValidQ(q)
+          {q || !isPure
             ? <a
                 onClick={this.onClearSearch}
                 bsStyle={'link'}
-                className={style.clearSearch}
+                className={cx(
+                  style.clearSearch,
+                  !isPure && style.advancedModeNotEmpty,
+                )}
                 role='button'
               >
                 <CloseIcon size={20} />

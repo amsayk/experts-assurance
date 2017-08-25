@@ -29,6 +29,8 @@ import {
   resolvers as activityResolvers,
 } from './activity/schema';
 
+import { DEBUG } from 'vars';
+
 const log = require('log')('app:server:graphql');
 
 const rootSchema = [
@@ -289,7 +291,7 @@ export default makeExecutableSchema({
   logger: {
     log: e => {
       log.error('[GRAPHQL ERROR]', require('util').inspect(e));
-      if (!__DEV__) {
+      if (!__DEV__ && !DEBUG) {
         R.captureException(e, {});
       }
     },

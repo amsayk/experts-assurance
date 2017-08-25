@@ -170,7 +170,7 @@ const config = {
 
   get filesAdapterConfig() {
     return {
-      module: require.resolve('parse-server-fs-adapter'),
+      module: require.resolve('backend/parse-server-fs-adapter'),
       options: {
         filesSubDirectory: this.businessKey,
       },

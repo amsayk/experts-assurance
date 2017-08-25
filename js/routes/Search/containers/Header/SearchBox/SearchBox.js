@@ -26,7 +26,6 @@ import {
 import {
   SearchIcon,
   ArrowDropdownIcon,
-  AnnouncementIcon,
   CloseIcon,
 } from 'components/icons/MaterialIcons';
 
@@ -375,22 +374,20 @@ class SearchBox extends React.Component {
             <Button
               onClick={this.onToggleAdvancedMode}
               bsStyle={'link'}
-              className={cx(
-                style.toggleAdvancedMode,
-                isPure || style.advancedModeNotEmpty,
-              )}
+              className={cx(style.toggleAdvancedMode)}
               role='button'
             >
-              {isPure
-                ? <ArrowDropdownIcon size={22} />
-                : <AnnouncementIcon size={22} />}
+              <ArrowDropdownIcon size={22} />
             </Button>
           </Tooltip>
-          {isValidQ(q)
+          {q || state || !isPure
             ? <Button
                 onClick={this.onClearSearch}
                 bsStyle={'link'}
-                className={style.clearSearch}
+                className={cx(
+                  style.clearSearch,
+                  (!isPure || state) && style.advancedModeNotEmpty,
+                )}
                 role='button'
               >
                 <CloseIcon size={20} />
