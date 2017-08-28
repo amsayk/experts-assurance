@@ -43,6 +43,8 @@ const rootSchema = [
 
   type Error {
     code: Int
+    message: String
+    stack: String
   }
 
   type Deletion {

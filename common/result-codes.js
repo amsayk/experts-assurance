@@ -6,4 +6,6 @@ export const ERROR_ACCOUNT_NOT_VERIFIED = 0xfff3;
 
 export const ERROR_ILLEGAL_OPERATION = 0xfff4;
 
-export const ERROR_UNKNOWN = 0xfff5;
+export const ERROR_IMPORTATION = 0xfff5;
+
+export const ERROR_UNKNOWN = 0xffff;

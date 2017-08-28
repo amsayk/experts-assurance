@@ -60,6 +60,7 @@ export const schema = [
     files: [File!]!
     progress: Int!
     total: Int!
+    error: Error
   }
 
   input ImportationPayload {
@@ -507,7 +508,7 @@ export const resolvers = {
         );
       },
     },
-    parseGraphqlObjectFields(['user']),
+    parseGraphqlObjectFields(['user', 'error']),
     parseGraphqlScalarFields([
       'id',
       'date',

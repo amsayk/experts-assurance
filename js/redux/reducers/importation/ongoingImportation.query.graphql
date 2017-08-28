@@ -11,6 +11,12 @@ query getOngoingImportation {
     progress
     total
 
+    error {
+      code
+      message
+      stack
+    }
+
     user {
       id
       displayName

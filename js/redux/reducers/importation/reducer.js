@@ -115,10 +115,10 @@ export class Doc extends Record({
 
       dateValidation:
         doc.validation && doc.validation.date
-          ? +moment(doc.validation.date)
+          ? +moment.utc(doc.validation.date)
           : null,
       paymentDate:
-        doc.payment && doc.payment.date ? +moment(doc.payment.date) : null,
+        doc.payment && doc.payment.date ? +moment.utc(doc.payment.date) : null,
 
       police: doc.police,
       nature: doc.nature,
@@ -154,19 +154,19 @@ export class Doc extends Record({
       id: ref,
 
       dateMission: data['DT Mission']
-        ? +moment(data['DT Mission'], 'DD/MM/YY')
+        ? +moment.utc(data['DT Mission'], 'DD/MM/YY')
         : null,
       date: data['DT Sinistre']
-        ? +moment(data['DT Sinistre'], 'DD/MM/YY')
+        ? +moment.utc(data['DT Sinistre'], 'DD/MM/YY')
         : null,
 
       company,
 
       dateValidation: data['DT VALIDATION']
-        ? +moment(data['DT VALIDATION'], 'DD/MM/YY')
+        ? +moment.utc(data['DT VALIDATION'], 'DD/MM/YY')
         : null,
       paymentDate: data['PAIEMENT']
-        ? +moment(data['PAIEMENT'], 'DD/MM/YY')
+        ? +moment.utc(data['PAIEMENT'], 'DD/MM/YY')
         : null,
 
       vehicleManufacturer: data['Véhicule'] || null,
@@ -252,13 +252,16 @@ export default function reducer(state = initialState, action) {
           : state.validationStatus,
 
         // Upload
-        uploadStatus:
-          action.payload.id &&
-          (action.payload.endDate ||
-            action.payload.progress === action.payload.total)
+        uploadStatus: action.payload.error
+          ? UploadStatus.ERROR
+          : action.payload.id &&
+            (action.payload.endDate ||
+              action.payload.progress === action.payload.total)
             ? UploadStatus.SUCCESS
             : UploadStatus.IN_PROGRESS,
-        uploadError: state.uploadError,
+        uploadError: action.payload.error
+          ? action.payload.error
+          : state.uploadError,
 
         // Keep open
         visible: state.visible,

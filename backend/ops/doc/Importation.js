@@ -234,6 +234,17 @@ export default class Importation {
 
           await Utils.purgeDoc(doc);
         } catch (e) {
+          // Importation error
+          await importation
+            .set({
+              error: {
+                code: e.code || codes.ERROR_IMPORTATION,
+                message: e.message,
+                stack: e.stack,
+              },
+            })
+            .save(null, { useMasterKey: true });
+
           done(new Error('Error purging doc.'));
           return;
         }
@@ -275,6 +286,17 @@ export default class Importation {
           oldDoc,
         );
       } catch (e) {
+        // Importation error
+        await importation
+          .set({
+            error: {
+              code: e.code || codes.ERROR_IMPORTATION,
+              message: e.message,
+              stack: e.stack,
+            },
+          })
+          .save(null, { useMasterKey: true });
+
         done(new Error('Error adding doc.'));
         return;
       }
@@ -485,7 +507,7 @@ const Utils = {
         // 1. dtValidation changed?
         {
           const oldDTValidation = oldDoc.validation_date
-            ? moment.utc(oldDoc.validation_date).startOf('day')
+            ? moment.utc(Utils._getDate(oldDoc.validation_date)).startOf('day')
             : null;
 
           if (oldDTValidation) {
@@ -505,7 +527,7 @@ const Utils = {
                   deletion: !dateValidation,
                   fromValue: { date: new Date(+oldDTValidation) },
                   toValue: {
-                    date: dateValidation,
+                    date: dateValidation ? new Date(+newDTValidation) : null,
                   },
                 },
               });
@@ -539,7 +561,7 @@ const Utils = {
         // 2. paymentDate changed?
         {
           const oldPaymentDate = oldDoc.payment_date
-            ? moment.utc(oldDoc.payment_date).startOf('day')
+            ? moment.utc(Utils._getDate(oldDoc.payment_date)).startOf('day')
             : null;
           const oldPaymentAmount = oldDoc.payment_amount
             ? oldDoc.payment_amount
@@ -807,6 +829,13 @@ const Utils = {
       });
     }
 
+    return null;
+  },
+
+  _getDate(value) {
+    if (value && value.__type === 'Date' && value.iso) {
+      return new Date(value.iso);
+    }
     return null;
   },
 

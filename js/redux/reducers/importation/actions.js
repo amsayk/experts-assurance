@@ -54,6 +54,7 @@ export function loadImportation(importation) {
         'files',
         'progress',
         'total',
+        'error',
       ]),
       user: importation.user.id,
     },
