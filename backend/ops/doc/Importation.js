@@ -234,7 +234,6 @@ export default class Importation {
 
           await Utils.purgeDoc(doc);
         } catch (e) {
-          console.error('Purge error', e);
           done(new Error('Error purging doc.'));
           return;
         }
@@ -763,8 +762,6 @@ const Utils = {
 
       return doc;
     } catch (e) {
-      console.error('Error');
-      console.error(e);
       throw e;
     }
   },
@@ -782,7 +779,6 @@ const Utils = {
       try {
         user = await Utils.loaders.displayNames.load(displayName);
       } catch (e) {
-        console.error('Find error', e);
         Utils.loaders.displayNames.clear(displayName);
       }
 
@@ -806,7 +802,6 @@ const Utils = {
           const { data: user } = await publish('AUTH', SIGN_UP, signUpRequest);
           resolve(deserializeParseObject(user));
         } catch (e) {
-          console.error('Signup error', e);
           reject(e);
         }
       });
@@ -834,6 +829,7 @@ const Utils = {
       },
       {
         batch: false,
+        cache: false,
       },
     ),
   },

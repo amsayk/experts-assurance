@@ -132,7 +132,7 @@ export const resolvers = {
       async resolve({ id }, {}, context, info) {
         return {
           sessionToken: context.session.getSessionToken(),
-          activity: await context.Activities.get(id),
+          activity: await context.Activities.get(id, /* cached = */ false),
         };
       },
       subscribe: withFilter(

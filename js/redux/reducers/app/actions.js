@@ -8,6 +8,8 @@ import {
   CLOSE_DOC,
 } from './constants';
 
+import debounce from 'debounce';
+
 import gql from 'graphql-tag';
 
 import SUBSCRIPTION from './app.subscription.graphql';
@@ -23,13 +25,12 @@ export function ready() {
       });
 
       obs.subscribe({
-        next({ onActivityEvent: { activity } }) {
+        next: debounce(function({ onActivityEvent: { activity } }) {
           // Refresh relevants queries
           try {
             const QUERIES = [
               'getLastRefNo',
               'getTimeline',
-              // 'recentDocs',
               'getDocs',
               'esQueryDocs',
               'dashboard',
@@ -53,7 +54,7 @@ export function ready() {
               client.queryManager.refetchQueryByName(q);
             });
           } catch (e) {}
-        },
+        }, 1000),
         error(error) {},
       });
     }

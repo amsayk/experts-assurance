@@ -100,7 +100,10 @@ export function boot() {
 
           importationQuery._sub = importationQuery.subscribe({
             async next({ data: { getImportation: importation }, stale }) {
-              if (importation.endDate) {
+              if (
+                importation.endDate ||
+                importation.progress === importation.docs.length
+              ) {
                 try {
                   importationQuery._sub.unsubscribe();
                 } catch (e) {}
@@ -268,7 +271,7 @@ export function validateDocs() {
     docs.forEach(doc => {
       validationJob = validationJob.then(async () => {
         if (isValidating()) {
-          await delay(__DEV__ ? 0 : 100);
+          await delay(__DEV__ ? 0 : 50);
           dispatch({
             type: doc.isValid() ? VALIDATION_SUCCESS : VALIDATION_ERROR,
             doc,

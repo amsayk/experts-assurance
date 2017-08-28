@@ -1,5 +1,7 @@
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from './constants';
 
+import debounce from 'debounce';
+
 import Parse from 'parse';
 
 import invariant from 'invariant';
@@ -41,13 +43,12 @@ export function logIn(username, password) {
       });
 
       obs.subscribe({
-        next({ onActivityEvent: { activity } }) {
+        next: debounce(function({ onActivityEvent: { activity } }) {
           // Refresh relevants queries
           try {
             const QUERIES = [
               'getLastRefNo',
               'getTimeline',
-              // 'recentDocs',
               'getDocs',
               'esQueryDocs',
               'dashboard',
@@ -71,7 +72,7 @@ export function logIn(username, password) {
               client.queryManager.refetchQueryByName(q);
             });
           } catch (e) {}
-        },
+        }, 1000),
         error(error) {},
       });
 

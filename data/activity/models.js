@@ -8,8 +8,8 @@ export class Activities {
     this.connector = connector;
   }
 
-  get(id) {
-    return this.connector.get(id);
+  get(id, cached = true) {
+    return this.connector.get(id, cached);
   }
 
   getTimeline({ cursor, query }) {

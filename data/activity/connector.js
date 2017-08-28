@@ -29,7 +29,13 @@ export class ActivityConnector {
     });
   }
 
-  get(id) {
+  get(id, cached) {
+    if (cached === false) {
+      return new Parse.Query(ActivityType)
+        .matchesQuery('business', businessQuery())
+        .include(['document', 'user', 'file', 'importation'])
+        .get(id, { useMasterKey: true });
+    }
     return this.loader.load(id);
   }
 
