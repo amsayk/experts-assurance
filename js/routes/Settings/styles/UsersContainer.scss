@@ -69,3 +69,19 @@
 
   height: $toolbar-height;
 }
+
+.center-horizontally {
+  composes: flex flex-row align-items-center justify-content-center from 'styles/_base.scss';
+}
+
+.messageInfo {
+  composes: center-horizontally;
+  color: $brand-info;
+  font-weight: 700;
+}
+
+.messageDanger {
+  composes: center-horizontally;
+  color: $brand-danger;
+  font-weight: 700;
+}

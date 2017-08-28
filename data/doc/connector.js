@@ -965,42 +965,40 @@ export class DocConnector {
 
   esSearchUsersByRoles(queryString, roles) {
     if (queryString) {
-      const must = [];
+      let type_match;
 
       const type = getType(roles);
 
       if (roles.indexOf(Role_ADMINISTRATORS) !== -1) {
-        must.push({
-          term: { isAdmin: true },
-        });
+        type_match = {
+          isAdmin: true,
+        };
+      } else {
+        if (type !== null) {
+          type_match = {
+            type,
+          };
+        }
       }
 
-      if (type !== null) {
-        must.push({
-          term: { type },
-        });
-      }
-
-      const filter = must.length
+      const filter = type_match
         ? {
             bool: {
-              must,
+              must: { match: type_match },
             },
           }
         : undefined;
 
-      const multi_match = queryString
+      const name_match = queryString
         ? {
-            operator: 'or',
-            fields: ['name', 'email'],
-            query: queryString,
+            name: queryString,
           }
         : undefined;
 
       const query = {
         bool: {
           must: {
-            multi_match,
+            match: name_match,
           },
           filter,
         },

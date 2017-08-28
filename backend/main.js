@@ -553,6 +553,10 @@ Parse.Cloud.define('onStart', async function(request, response) {
 
     p.set('displayName', obj.displayName);
 
+    if (obj.changePasswordAtNextLogin) {
+      p.set('changePasswordAtNextLogin', true);
+    }
+
     if (obj.role) {
       p.addUnique('roles', obj.role);
     }

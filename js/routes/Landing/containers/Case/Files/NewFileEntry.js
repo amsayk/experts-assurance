@@ -103,133 +103,135 @@ class NewFileEntry extends React.PureComponent {
   }
 
   onFiles(files) {
-    const self = this;
-    self.dragCount = 0;
-    self.setState(
-      {
-        error: null,
-        dropzoneEnter: false,
-        dragging: false,
-        status: STATUS.UPLOADING,
-        files,
-      },
-      async () => {
-        try {
-          await Promise.all(
-            self.state.files.map(async metadata => {
-              const {
-                data: { uploadFile: { error } },
-              } = await self.props.client.mutate({
-                mutation: MUTATION,
-                variables: {
-                  docId: self.props.id,
-                  category: self.props.category,
-                  metadata: metadata,
-                },
-                updateQueries: {
-                  getTimeline(prev, { mutationResult, queryVariables }) {
-                    const newFile = mutationResult.data.uploadFile.file;
-                    const newActivities =
-                      mutationResult.data.uploadFile.activities;
+    if (files.length) {
+      const self = this;
+      self.dragCount = 0;
+      self.setState(
+        {
+          error: null,
+          dropzoneEnter: false,
+          dragging: false,
+          status: STATUS.UPLOADING,
+          files,
+        },
+        async () => {
+          try {
+            await Promise.all(
+              self.state.files.map(async metadata => {
+                const {
+                  data: { uploadFile: { error } },
+                } = await self.props.client.mutate({
+                  mutation: MUTATION,
+                  variables: {
+                    docId: self.props.id,
+                    category: self.props.category,
+                    metadata: metadata,
+                  },
+                  updateQueries: {
+                    getTimeline(prev, { mutationResult, queryVariables }) {
+                      const newFile = mutationResult.data.uploadFile.file;
+                      const newActivities =
+                        mutationResult.data.uploadFile.activities;
 
-                    if (prev && newActivities && newActivities.length) {
-                      if (
-                        queryVariables &&
-                        queryVariables.query &&
-                        queryVariables.query.doc &&
-                        queryVariables.query.doc !== self.props.id
-                      ) {
-                        return prev;
+                      if (prev && newActivities && newActivities.length) {
+                        if (
+                          queryVariables &&
+                          queryVariables.query &&
+                          queryVariables.query.doc &&
+                          queryVariables.query.doc !== self.props.id
+                        ) {
+                          return prev;
+                        }
+
+                        return {
+                          timeline: {
+                            cursor: prev.timeline.cursor,
+                            result: [...newActivities, ...prev.timeline.result],
+                          },
+                        };
                       }
 
-                      return {
-                        timeline: {
-                          cursor: prev.timeline.cursor,
-                          result: [...newActivities, ...prev.timeline.result],
-                        },
-                      };
-                    }
+                      return prev;
+                    },
+                    getDocFiles(prev, { mutationResult, queryVariables }) {
+                      const newFile = mutationResult.data.uploadFile.file;
 
-                    return prev;
-                  },
-                  getDocFiles(prev, { mutationResult, queryVariables }) {
-                    const newFile = mutationResult.data.uploadFile.file;
+                      if (prev && newFile) {
+                        if (
+                          queryVariables &&
+                          queryVariables.query &&
+                          queryVariables.query.doc &&
+                          queryVariables.query.doc !== self.props.id
+                        ) {
+                          return prev;
+                        }
 
-                    if (prev && newFile) {
-                      if (
-                        queryVariables &&
-                        queryVariables.query &&
-                        queryVariables.query.doc &&
-                        queryVariables.query.doc !== self.props.id
-                      ) {
-                        return prev;
+                        const files = [newFile, ...prev.getDocFiles];
+                        return {
+                          getDocFiles: files,
+                        };
                       }
 
-                      const files = [newFile, ...prev.getDocFiles];
-                      return {
-                        getDocFiles: files,
-                      };
-                    }
-
-                    return prev;
+                      return prev;
+                    },
                   },
-                },
-              });
+                });
 
-              if (error) {
-                switch (error.code) {
-                  case codes.ERROR_ACCOUNT_NOT_VERIFIED:
-                  case codes.ERROR_NOT_AUTHORIZED:
-                    throw new Error(`Vous n'êtes pas authorisé`);
-                  default:
-                    throw new Error(
-                      'Erreur inconnu, veuillez réessayer à nouveau.',
-                    );
+                if (error) {
+                  switch (error.code) {
+                    case codes.ERROR_ACCOUNT_NOT_VERIFIED:
+                    case codes.ERROR_NOT_AUTHORIZED:
+                      throw new Error(`Vous n'êtes pas authorisé`);
+                    default:
+                      throw new Error(
+                        'Erreur inconnu, veuillez réessayer à nouveau.',
+                      );
+                  }
                 }
-              }
 
-              // self.setState(({ files }) => ({
-              //   files : files.filter((f) => f.name !== metadata.name),
-              // }));
-            }),
-          );
+                // self.setState(({ files }) => ({
+                //   files : files.filter((f) => f.name !== metadata.name),
+                // }));
+              }),
+            );
 
-          // Successfully saved!
-          self.setState(
-            {
-              status: STATUS.SUCCESS,
-              files: [],
-              error: null,
-            },
-            () => {
-              setTimeout(() => {
-                self.setState({
-                  status: null,
-                  files: [],
-                  error: null,
-                });
-              }, 2 * 1000);
-            },
-          );
-        } catch (e) {
-          self.setState(
-            {
-              status: STATUS.ERROR,
-              error: e.message,
-            },
-            () => {
-              setTimeout(() => {
-                self.setState({
-                  status: null,
-                  // files  : [],
-                  error: null,
-                });
-              }, 2 * 1000);
-            },
-          );
-        }
-      },
-    );
+            // Successfully saved!
+            self.setState(
+              {
+                status: STATUS.SUCCESS,
+                files: [],
+                error: null,
+              },
+              () => {
+                setTimeout(() => {
+                  self.setState({
+                    status: null,
+                    files: [],
+                    error: null,
+                  });
+                }, 2 * 1000);
+              },
+            );
+          } catch (e) {
+            self.setState(
+              {
+                status: STATUS.ERROR,
+                error: e.message,
+              },
+              () => {
+                setTimeout(() => {
+                  self.setState({
+                    status: null,
+                    // files  : [],
+                    error: null,
+                  });
+                }, 2 * 1000);
+              },
+            );
+          }
+        },
+      );
+    }
   }
 
   onDrag(e) {

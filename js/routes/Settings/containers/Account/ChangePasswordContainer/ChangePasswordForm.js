@@ -6,6 +6,8 @@ import { compose } from 'redux';
 
 import { withApollo } from 'react-apollo';
 
+import refreshCurrentUser from 'utils/refreshCurrentUser';
+
 import {
   reduxForm,
   Field,
@@ -24,7 +26,7 @@ import style from 'routes/Settings/styles';
 import CurrentPasswordField from '../../../components/CurrentPasswordField';
 import NewPasswordField from '../../../components/NewPasswordField';
 
-import { PATH_SETTINGS_BASE } from 'vars';
+import { PATH_SETTINGS_BASE, PATH_LOGIN } from 'vars';
 
 import MUTATION from './setPassword.mutation.graphql';
 
@@ -66,6 +68,8 @@ export class ChangePasswordForm extends React.Component {
         message: intl.formatMessage(messages.passwordChangeSuccessNotification),
       });
     }
+
+    await refreshCurrentUser();
   }
 
   render() {
@@ -82,7 +86,7 @@ export class ChangePasswordForm extends React.Component {
             label={intl.formatMessage(messages.labelCurrentPassword)}
             onKeyDown={this.onKeyDown}
           />
-          <div style={{ marginTop: 15 }} />,
+          <div style={{ marginTop: 15 }} />
           <Field
             name='newPassword'
             component={NewPasswordField}

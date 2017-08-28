@@ -45,7 +45,13 @@ import formats from 'intl-formats';
 
 import { updateIntl } from 'redux/reducers/intl/actions';
 
-import { DEBUG, SSR, DEFAULT_LANG, GA_TRACKING_ID } from 'vars';
+import {
+  DEBUG,
+  SSR,
+  DEFAULT_LANG,
+  GA_TRACKING_ID,
+  REFRESH_ACCOUNT_INTERVAL,
+} from 'vars';
 
 const log = debug('app:client');
 
@@ -60,6 +66,7 @@ let render = async function render() {
 
   // Watch for expired session
   refreshCurrentUser();
+  setInterval(refreshCurrentUser, REFRESH_ACCOUNT_INTERVAL || 5 * 60 * 1000); // refresh every 5 minutes to detect expired sessions
 
   const locale = store.getState().getIn(['intl', 'locale']);
 

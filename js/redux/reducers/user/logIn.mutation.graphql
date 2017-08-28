@@ -6,6 +6,7 @@ mutation LogIn($username: String, $password: String) {
 
     user {
       id
+      changePasswordAtNextLogin
       displayName
       username
       email

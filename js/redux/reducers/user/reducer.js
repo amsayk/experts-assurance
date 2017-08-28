@@ -16,6 +16,7 @@ import { INIT } from 'vars';
 
 export class User extends Record({
   loading: false,
+  changePasswordAtNextLogin: false,
   id: undefined,
   displayName: undefined,
   email: undefined,
@@ -55,6 +56,7 @@ function maybeUser() {
   return user
     ? {
         id: user.id,
+        changePasswordAtNextLogin: user.get('changePasswordAtNextLogin'),
         displayName: user.get('displayName'),
         email: user.get('email'),
         emailVerified: user.get('emailVerified'),

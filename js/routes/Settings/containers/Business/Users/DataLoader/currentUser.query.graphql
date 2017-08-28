@@ -2,6 +2,7 @@ query settings_users__getUser($id: ID!) {
 
   currentUser : getUser(id: $id) {
     id
+    changePasswordAtNextLogin
     roles
 
     authorization {

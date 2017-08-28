@@ -1,6 +1,7 @@
 query settings_user__getUser($id: ID!) {
   getUser(id: $id) {
     id
+    changePasswordAtNextLogin
     displayName
     email
     roles

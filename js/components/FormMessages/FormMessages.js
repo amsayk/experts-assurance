@@ -75,7 +75,11 @@ function mapStateToProps(state, { field }) {
 }
 
 const getIn = (obj, prop, notSetValue) => {
-  return obj ? obj.getIn(prop, notSetValue) : notSetValue;
+  try {
+    return obj ? obj.getIn(prop, notSetValue) : notSetValue;
+  } catch (e) {
+    return notSetValue;
+  }
 };
 
 const merge = (...args) =>

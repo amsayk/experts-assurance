@@ -1,11 +1,11 @@
 [
   {
-    "email":"cisse.amadou.9@gmail.com",
-    "username":"admin",
-    "displayName":"Admin",
-    "password":"passw0rd",
-    "bcryptPassword":"$2a$10$nWFC.i/7wl0HNabsOikfluI78m2EnTeFtBm1YWxrAu5n6Y5vm3yF.",
+    "email": "cisse.amadou.9@gmail.com",
+    "username": "admin",
+    "displayName": "Admin",
+    "password": "passw0rd",
+    "bcryptPassword": "$2a$10$nWFC.i/7wl0HNabsOikfluI78m2EnTeFtBm1YWxrAu5n6Y5vm3yF.",
     "role": "ADMINISTRATORS",
-    "emailVerified":false
+    "emailVerified": false
   }
 ]

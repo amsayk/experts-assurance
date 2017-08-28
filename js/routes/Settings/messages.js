@@ -186,7 +186,8 @@ export default defineMessages({
 
   emailChangeSuccessNotification: {
     id: 'settings-page.email-change-success-notification',
-    defaultMessage: 'Nous vous avons envoyé un courriel. Veuillez vérifier votre boite.',
+    defaultMessage:
+      'Nous vous avons envoyé un courriel. Veuillez vérifier votre boite.',
   },
   accountSettingsChangeSuccessNotification: {
     id: 'settings-page.account-settings-change-success-notification',
@@ -209,5 +210,9 @@ export default defineMessages({
     id: 'settings-page.sort-key-date',
     defaultMessage: 'Dernière activité',
   },
-});
 
+  changePasswordAtNextLogin: {
+    id: 'settings-page.change-password-at-next-login',
+    defaultMessage: 'Vous êtes obligé de changer votre mot de passe!',
+  },
+});

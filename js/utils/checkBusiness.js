@@ -10,11 +10,9 @@ import {
   remove as removeNotification,
 } from 'redux/reducers/notification/actions';
 
-import {
-  BUSINESS_KEY,
-} from 'vars';
+import { BUSINESS_KEY } from 'vars';
 
-export default async function checkBusiness() {
+export default (async function checkBusiness() {
   const user = store.getState().get('user');
 
   if (user && !user.isEmpty) {
@@ -22,13 +20,11 @@ export default async function checkBusiness() {
       .equalTo('key', BUSINESS_KEY)
       .first({ sessionToken: user.sessionToken });
     if (user.emailVerified) {
-      business
-        && business.has('displayName')
-        && business.get('displayName')
-        && store.dispatch(addNotification('BusinessRequired', { persist: true }));
+      business &&
+        business.get('displayName') &&
+        store.dispatch(addNotification('BusinessRequired', { persist: true }));
     } else {
       store.dispatch(removeNotification('BusinessRequired'));
     }
   }
-}
-
+});

@@ -24,11 +24,18 @@ import ChangePasswordForm from './ChangePasswordForm';
 function ChangePasswordContainer({ intl, user, actions }) {
   return (
     <div className={style.root}>
-      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })}/>
-      <Header onLogOut={actions.logOut}/>
+      <Title title={intl.formatMessage(messages.title, { appName: APP_NAME })} />
+      <Header
+        danger={
+          user && user.changePasswordAtNextLogin
+            ? intl.formatMessage(messages.changePasswordAtNextLogin)
+            : null
+        }
+        onLogOut={actions.logOut}
+      />
       {/* <div className={style.body}> */}
-        <Sidebar user={user} selectedMenuItem={'security.change_password'}/>
-        <ChangePasswordForm intl={intl}/>
+      <Sidebar user={user} selectedMenuItem={'security.change_password'} />
+      <ChangePasswordForm intl={intl} />
       {/* </div> */}
     </div>
   );
@@ -43,13 +50,9 @@ function mapStateToProps(state, props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators({ logOut }, dispatch)};
+  return { actions: bindActionCreators({ logOut }, dispatch) };
 }
 
 const Connect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  Connect,
-)(ChangePasswordContainer);
-
+export default compose(injectIntl, Connect)(ChangePasswordContainer);

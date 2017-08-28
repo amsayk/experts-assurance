@@ -172,7 +172,7 @@ $navbar-height: 70px;
   }
 
   .searchFieldWrapper:hover &,
-  .searchFieldWrapper .active &{
+  .searchFieldWrapper .active & {
     visibility: visible;
   }
 }
@@ -232,21 +232,21 @@ $navbar-height: 70px;
   composes: d-flex align-items-center from 'styles/_base.scss';
 }
 
-.OPEN:not(.selecting){
+.OPEN:not(.selecting) {
   margin: 0;
   padding: 0;
   svg {
     color: $brand-info;
   }
 }
-.CLOSED:not(.selecting){
+.CLOSED:not(.selecting) {
   margin: 0;
   padding: 0;
   svg {
     color: $brand-success;
   }
 }
-.CANCELED:not(.selecting){
+.CANCELED:not(.selecting) {
   margin: 0;
   padding: 0;
   svg {
@@ -260,7 +260,8 @@ $navbar-height: 70px;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  span, mark {
+  span,
+  mark {
     margin: 0;
     padding: 0;
   }
@@ -324,7 +325,6 @@ $navbar-height: 70px;
   flex: 1;
 }
 
-
 // Highlight
 
 .highlightGroup {
@@ -345,7 +345,6 @@ $navbar-height: 70px;
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-
 }
 
 // Hits
@@ -362,8 +361,7 @@ $navbar-height: 70px;
   max-height: 90vh;
 }
 
-@import  'routes/Search/styles/List';
-@import  'routes/Search/styles/Cases';
-@import  'routes/Search/styles/Actions';
-@import  'routes/Search/styles/AdvancedSearch';
-
+@import 'routes/Search/styles/List';
+@import 'routes/Search/styles/Cases';
+@import 'routes/Search/styles/Actions';
+@import 'routes/Search/styles/AdvancedSearch';

@@ -6,6 +6,8 @@ import publish from 'backend/kue-mq/publish';
 
 import moment from 'moment';
 
+import DataLoader from 'dataloader';
+
 import {
   formatError,
   getOrCreateBusiness,
@@ -228,13 +230,11 @@ export default class Importation {
       if (doc) {
         // Delete doc
         try {
-          oldDoc = {
-            date: doc.get('date'),
-            dateMission: doc.get('dateMission'),
-          };
+          oldDoc = doc.toJSON();
 
           await Utils.purgeDoc(doc);
         } catch (e) {
+          console.error('Purge error', e);
           done(new Error('Error purging doc.'));
           return;
         }
@@ -242,8 +242,10 @@ export default class Importation {
 
       const date = new Date(dateMS);
       const dateMission = new Date(dateMissionMS);
-      const dateValidation = new Date(dateValidationMS);
-      const paymentDate = new Date(paymentDateMS);
+      const dateValidation = dateValidationMS
+        ? new Date(dateValidationMS)
+        : null;
+      const paymentDate = paymentDateMS ? new Date(paymentDateMS) : null;
 
       let business = request.user.get('business');
 
@@ -253,6 +255,7 @@ export default class Importation {
 
       try {
         doc = await Utils.addDoc(
+          importation,
           request,
           business,
           {
@@ -376,6 +379,7 @@ const Utils = {
   },
 
   async addDoc(
+    importation,
     request,
     business,
     {
@@ -395,81 +399,70 @@ const Utils = {
     },
     oldDoc,
   ) {
-    const newKey = key || (await genDocKey());
+    try {
+      const newKey = key || (await genDocKey());
 
-    const props = {
-      imported: true,
+      const props = {
+        importation,
+        imported: true,
 
-      agent: await Utils.getUser(request, business, agent, Role_AGENTS),
-      client: await Utils.getUser(request, business, client, Role_CLIENTS),
+        agent: await Utils.getUser(request, business, agent, Role_AGENTS),
+        client: await Utils.getUser(request, business, client, Role_CLIENTS),
 
-      vehicle,
+        vehicle,
 
-      company,
+        company,
 
-      [DOC_ID_KEY]: refNo,
+        [DOC_ID_KEY]: refNo,
 
-      state: 'OPEN',
+        state: 'OPEN',
 
-      business: BusinessType.createWithoutData(business.id),
+        business: BusinessType.createWithoutData(business.id),
 
-      user: request.user,
+        user: request.user,
 
-      dateMission,
-      date,
+        dateMission,
+        date,
 
-      key: newKey,
+        key: newKey,
 
-      police,
-      nature,
+        police,
+        nature,
 
-      [`lastModified_${request.user.id}`]: new Date(request.now),
-      lastModified: new Date(request.now),
-    };
+        [`lastModified_${request.user.id}`]: new Date(request.now),
+        lastModified: new Date(request.now),
+      };
 
-    if (manager) {
-      props.manager = manager;
-    }
+      if (oldDoc) {
+        props.previous = oldDoc;
+      }
 
-    const ACL = new Parse.ACL();
-    ACL.setPublicReadAccess(false);
-    ACL.setPublicWriteAccess(false);
+      if (manager) {
+        props.manager = manager;
+      }
 
-    let doc = await new DocType()
-      .setACL(ACL)
-      .set(props)
-      .save(null, { useMasterKey: true });
+      const ACL = new Parse.ACL();
+      ACL.setPublicReadAccess(false);
+      ACL.setPublicWriteAccess(false);
 
-    let openActivity = true;
-    let closedActivity = true;
+      const activities = [];
 
-    if (oldDoc) {
-      openActivity = !moment(date)
-        .startOf('day')
-        .isSame(moment(oldDoc.date).startOf('day'));
+      const doc = new DocType().setACL(ACL).set(props);
 
-      closedActivity = !moment(dateMission)
-        .startOf('day')
-        .isSame(moment(oldDoc.dateMission).startOf('day'));
-    }
-
-    let activities = openActivity
-      ? [
-          {
-            type: 'DOCUMENT_CREATED',
-            user: request.user,
-            state: 'OPEN',
-            date,
-            now: new Date(request.now),
-          },
-        ]
-      : [];
-
-    if (dateValidation || paymentDate) {
       if (dateValidation) {
         doc.set({
           validation_user: request.user,
           validation_date: dateValidation,
+        });
+      } /* else if (oldDoc) {
+      doc.unset('validation_date');
+      doc.unset('validation_user');
+    } */
+
+      // Keep existing mtRapport
+      if (oldDoc && oldDoc.validation_amount) {
+        doc.set({
+          validation_amount: oldDoc.validation_amount, // keep previous amount
         });
       }
 
@@ -478,48 +471,302 @@ const Utils = {
           payment_user: request.user,
           payment_date: paymentDate,
           payment_at: new Date(request.now),
-          payment_amount: 0,
+          payment_amount: oldDoc ? oldDoc.payment_amount : 0, // keep previous amount
         });
-      }
+      } /* else if (oldDoc) {
+      doc.unset('payment_date');
+      doc.unset('payment_user');
+      doc.unset('payment_date');
+      doc.unset('payment_amount');
+    } */
 
-      const dateClosureMS = dateValidation || paymentDate;
+      if (oldDoc) {
+        // Already exists
 
-      if (closedActivity) {
+        // 1. dtValidation changed?
+        {
+          const oldDTValidation = oldDoc.validation_date
+            ? moment.utc(oldDoc.validation_date).startOf('day')
+            : null;
+
+          if (oldDTValidation) {
+            const newDTValidation = dateValidation
+              ? moment.utc(dateValidation).startOf('day')
+              : null;
+
+            // Had dtValidation:
+            // generate activity if change, deletion if no new.
+            if (!oldDTValidation.isSame(newDTValidation)) {
+              activities.push({
+                type: 'DT_VALIDATION_CHANGED',
+                now: new Date(+moment.utc(request.now).add(1, 'seconds')),
+                user: request.user,
+                date,
+                metadata: {
+                  deletion: !dateValidation,
+                  fromValue: { date: new Date(+oldDTValidation) },
+                  toValue: {
+                    date: dateValidation,
+                  },
+                },
+              });
+            } else {
+              // Since no change and there is a previous value, reset user to original.
+              doc.set({
+                validation_user: oldDoc.validation_user
+                  ? oldDoc.validation_user
+                  : request.user,
+              });
+            }
+          } else {
+            // No old validation date, check if has new
+            if (dateValidation) {
+              activities.push({
+                type: 'DT_VALIDATION_CHANGED',
+                now: new Date(+moment.utc(request.now).add(1, 'seconds')),
+                user: request.user,
+                date,
+                metadata: {
+                  fromValue: { date: null },
+                  toValue: {
+                    date: dateValidation,
+                  },
+                },
+              });
+            }
+          }
+        }
+
+        // 2. paymentDate changed?
+        {
+          const oldPaymentDate = oldDoc.payment_date
+            ? moment.utc(oldDoc.payment_date).startOf('day')
+            : null;
+          const oldPaymentAmount = oldDoc.payment_amount
+            ? oldDoc.payment_amount
+            : null;
+
+          if (oldPaymentDate || oldPaymentAmount) {
+            const newPaymentDate = paymentDate
+              ? moment.utc(paymentDate).startOf('day')
+              : null;
+            const newPaymentAmount = null;
+
+            // Had paymentDate:
+            // generate activity if change, deletion if no new.
+            if (
+              !oldPaymentDate.isSame(newPaymentDate) ||
+              oldPaymentAmount !== newPaymentAmount
+            ) {
+              activities.push({
+                type: 'PAYMENT_CHANGED',
+                now: new Date(+moment.utc(request.now).add(2, 'seconds')),
+                user: request.user,
+                date,
+                metadata: {
+                  deletion:
+                    !paymentDate &&
+                    (oldDoc.payment_amount === null ||
+                      typeof oldDoc.payment_amount === 'undefined'),
+                  fromValue: {
+                    date: oldPaymentDate ? new Date(+oldPaymentDate) : null,
+                    user: oldDoc.payment_user ? oldDoc.payment_user : null,
+                    amount: oldPaymentAmount,
+                    at: oldDoc.payment_at ? oldDoc.payment_at : null,
+                  },
+                  toValue: {
+                    date: newPaymentDate ? new Date(+newPaymentDate) : null,
+                    user: newPaymentDate ? request.user.id : null,
+                    amount: newPaymentDate ? oldDoc.payment_amount : null, // Keep old amount, no new means deletion of amount
+                    at: newPaymentDate
+                      ? new Date(+moment.utc(request.now).add(2, 'seconds'))
+                      : null,
+                  },
+                },
+              });
+            } else {
+              // Since no change and there is a previous value, reset user to original.
+              doc.set({
+                payment_user: oldDoc.payment_user
+                  ? oldDoc.payment_user
+                  : request.user,
+              });
+            }
+          } else {
+            // No old payment date and no old payment amount, check if has new
+            if (paymentDate) {
+              activities.push({
+                type: 'PAYMENT_CHANGED',
+                now: new Date(+moment.utc(request.now).add(2, 'seconds')),
+                user: request.user,
+                date,
+                metadata: {
+                  fromValue: {
+                    user: null,
+                    amount: null,
+                    date: null,
+                    at: null,
+                  },
+                  toValue: {
+                    date: paymentDate,
+                    user: request.user.id,
+                    amount: 0,
+                    at: new Date(+moment.utc(request.now).add(2, 'seconds')),
+                  },
+                },
+              });
+            }
+
+            if (
+              oldDoc.payment_amount !== null &&
+              typeof oldDoc.payment_amount !== 'undefined'
+            ) {
+              doc.set({
+                payment_amount: oldDoc.payment_amount,
+              });
+            }
+          }
+        }
+
+        const oldState = oldDoc.state;
+
+        // open again?
+        const openActivity = moment(date)
+          .startOf('day')
+          .isAfter(moment(oldDoc.date).startOf('day'));
+        if (oldState === 'CLOSED' && openActivity) {
+          activities.push({
+            type: 'DOCUMENT_STATE_CHANGED',
+            metadata: {
+              fromState: 'CLOSED',
+              toState: 'OPEN',
+            },
+            now: new Date(+moment.utc(request.now).add(5, 'seconds')),
+            date: new Date(+moment.utc(date)),
+            user: request.user,
+          });
+
+          doc.set({
+            state: 'OPEN',
+          });
+        }
+
+        // close?
+        if (paymentDate && dateValidation && oldState === 'OPEN') {
+          activities.push({
+            type: 'DOCUMENT_STATE_CHANGED',
+            metadata: {
+              fromState: 'OPEN',
+              toState: 'CLOSED',
+            },
+            now: new Date(+moment.utc(request.now).add(5, 'seconds')),
+            date: new Date(
+              +moment.max(moment.utc(paymentDate), moment.utc(dateValidation)),
+            ),
+            user: request.user,
+          });
+
+          doc.set({
+            state: 'CLOSED',
+          });
+        }
+      } else {
+        // Does not exit
+
+        // dtValidation?
+        if (dateValidation) {
+          activities.push({
+            type: 'DT_VALIDATION_CHANGED',
+            now: new Date(+moment.utc(request.now).add(1, 'seconds')),
+            user: request.user,
+            date,
+            metadata: {
+              fromValue: { date: null },
+              toValue: {
+                date: dateValidation,
+              },
+            },
+          });
+        }
+
+        // paymentDate?
+        if (paymentDate) {
+          activities.push({
+            type: 'PAYMENT_CHANGED',
+            now: new Date(+moment.utc(request.now).add(2, 'seconds')),
+            user: request.user,
+            date,
+            metadata: {
+              fromValue: {
+                user: null,
+                amount: null,
+                date: null,
+                at: null,
+              },
+              toValue: {
+                date: paymentDate,
+                user: request.user.id,
+                amount: 0,
+                at: new Date(+moment.utc(request.now).add(2, 'seconds')),
+              },
+            },
+          });
+        }
+
+        // open
         activities.push({
-          type: 'DOCUMENT_STATE_CHANGED',
-          metadata: {
-            fromState: 'OPEN',
-            toState: 'CLOSED',
-          },
-          now: new Date(+moment(request.now).add(1, 'second')),
-          date: new Date(dateClosureMS),
+          type: 'DOCUMENT_CREATED',
           user: request.user,
+          state: 'OPEN',
+          date,
+          now: new Date(request.now),
         });
+
+        // close?
+        if (paymentDate && dateValidation) {
+          activities.push({
+            type: 'DOCUMENT_STATE_CHANGED',
+            metadata: {
+              fromState: 'OPEN',
+              toState: 'CLOSED',
+            },
+            now: new Date(+moment.utc(request.now).add(5, 'seconds')),
+            date: new Date(
+              +moment.max(moment.utc(paymentDate), moment.utc(dateValidation)),
+            ),
+            user: request.user,
+          });
+
+          doc.set({
+            state: 'CLOSED',
+          });
+        }
       }
 
-      doc.set({
-        state: 'CLOSED', // TODO: fix this.
+      const objects = activities.map(({ type, user, date, now, metadata }) => {
+        return new ActivityType().setACL(ACL).set({
+          ns: 'DOCUMENTS',
+          type,
+          importation,
+          metadata: { ...metadata },
+          timestamp: date,
+          now,
+          [DOC_FOREIGN_KEY]: refNo,
+          user,
+          business: BusinessType.createWithoutData(business.id),
+        });
       });
+
+      objects.push(doc);
+
+      await Promise.all(objects.map(o => o.save(null, { useMasterKey: true })));
+
+      return doc;
+    } catch (e) {
+      console.error('Error');
+      console.error(e);
+      throw e;
     }
-
-    const objects = activities.map(({ type, user, date, now, metadata }) => {
-      return new ActivityType().setACL(ACL).set({
-        ns: 'DOCUMENTS',
-        type: type,
-        metadata: { ...metadata },
-        timestamp: date,
-        now,
-        [DOC_FOREIGN_KEY]: refNo,
-        user,
-        business: BusinessType.createWithoutData(business.id),
-      });
-    });
-
-    objects.push(doc);
-
-    await Promise.all(objects.map(o => o.save(null, { useMasterKey: true })));
-
-    return doc;
   },
 
   async getUser(request, business, _in, role) {
@@ -529,6 +776,20 @@ const Utils = {
 
     if (_in && _in.key === 'userData') {
       const { displayName } = _in[_in.key];
+
+      let user;
+
+      try {
+        user = await Utils.loaders.displayNames.load(displayName);
+      } catch (e) {
+        console.error('Find error', e);
+        Utils.loaders.displayNames.clear(displayName);
+      }
+
+      if (user) {
+        return Parse.User.createWithoutData(user.id);
+      }
+
       return await new Promise(async (resolve, reject) => {
         try {
           const signUpRequest = {
@@ -545,11 +806,35 @@ const Utils = {
           const { data: user } = await publish('AUTH', SIGN_UP, signUpRequest);
           resolve(deserializeParseObject(user));
         } catch (e) {
+          console.error('Signup error', e);
           reject(e);
         }
       });
     }
 
     return null;
+  },
+
+  loaders: {
+    displayNames: new DataLoader(
+      async function(keys) {
+        const objects = await new Parse.Query(Parse.User)
+          .matchesQuery('business', businessQuery())
+          .containedIn('displayName', keys)
+          .find({ useMasterKey: true });
+
+        return keys.map(displayName => {
+          const index = objects.findIndex(
+            object => object.get('displayName') === displayName,
+          );
+          return index !== -1
+            ? objects[index]
+            : new Error(`User ${displayName} not found`);
+        });
+      },
+      {
+        batch: false,
+      },
+    ),
   },
 };

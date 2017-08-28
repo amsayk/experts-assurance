@@ -1,7 +1,14 @@
 import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 import parseGraphqlObjectFields from '../parseGraphqlObjectFields';
 
-import { Role_ADMINISTRATORS, Role_MANAGERS, userHasRoleAll, userHasRoleAny, isAuthorized, userVerified } from 'roles';
+import {
+  Role_ADMINISTRATORS,
+  Role_MANAGERS,
+  userHasRoleAll,
+  userHasRoleAny,
+  isAuthorized,
+  userVerified,
+} from 'roles';
 
 import objectAssign from 'object-assign';
 
@@ -19,7 +26,8 @@ import { fromJS } from 'immutable';
 
 const log = require('log')('app:server:graphql');
 
-export const schema = [`
+export const schema = [
+  `
 
   type AuthorizeManagerResponse {
     user: User
@@ -126,6 +134,8 @@ export const schema = [`
   type User {
     id: ID!
 
+    changePasswordAtNextLogin: Boolean
+
     displayName: String
     email: String
     username: String!
@@ -142,10 +152,10 @@ export const schema = [`
     authorization: Authorization
   }
 
-`];
+`,
+];
 
 export const resolvers = {
-
   User: objectAssign(
     {
       roles(user) {
@@ -158,114 +168,66 @@ export const resolvers = {
 
         if (authorization_date && authorization_user) {
           return {
-            date : authorization_date,
-            user : authorization_user,
-          }
+            date: authorization_date,
+            user: authorization_user,
+          };
         }
         return null;
       },
     },
-    parseGraphqlObjectFields([
-      'business',
-    ]),
+    parseGraphqlObjectFields(['business']),
     parseGraphqlScalarFields([
       'id',
+      'changePasswordAtNextLogin',
       'displayName',
       'username',
       'sessionToken',
       'emailVerified',
       'createdAt',
       'updatedAt',
-    ])
-  ),
-
-  AuthorizeManagerResponse : objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-      'error',
     ]),
-    parseGraphqlScalarFields([
-      'activities',
-    ])
   ),
 
-  ChangeEmailResponse : objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  AuthorizeManagerResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['user', 'error']),
+    parseGraphqlScalarFields(['activities']),
   ),
 
-  SetPasswordResponse : objectAssign(
-    {
-    },
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  ChangeEmailResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields(['errors']),
   ),
 
-  UpdateAccountSettingsResponse : objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  SetPasswordResponse: objectAssign({}, parseGraphqlScalarFields(['errors'])),
+
+  UpdateAccountSettingsResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields(['errors']),
   ),
 
-  CreateUserResponse : objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  CreateUserResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields(['errors']),
   ),
 
-  PasswordResetResponse : objectAssign(
-    {
-    },
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  PasswordResetResponse: objectAssign({}, parseGraphqlScalarFields(['errors'])),
+
+  ResendEmailVerificationResponse: objectAssign(
+    {},
+    parseGraphqlScalarFields(['errors']),
   ),
 
-  ResendEmailVerificationResponse : objectAssign(
-    {
-    },
-    parseGraphqlScalarFields([
-      'errors',
-    ])
+  LogInResponse: objectAssign(
+    {},
+    parseGraphqlObjectFields(['user']),
+    parseGraphqlScalarFields(['error']),
   ),
 
-  LogInResponse : objectAssign(
-    {
-    },
-    parseGraphqlObjectFields([
-      'user',
-    ]),
-    parseGraphqlScalarFields([
-      'error',
-    ])
-  ),
-
-  LogOutResponse : objectAssign(
-    {
-    },
-    parseGraphqlScalarFields([
-      'error',
-    ])
-  ),
+  LogOutResponse: objectAssign({}, parseGraphqlScalarFields(['error'])),
 
   Mutation: {
     async authorizeManager(_, { id }, context) {
@@ -274,11 +236,14 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       async function isManager(id) {
@@ -289,15 +254,18 @@ export const resolvers = {
         return false;
       }
 
-      if (! (await isManager(id)) || isAuthorized(await context.Users.get(id))) {
-        return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+      if (!await isManager(id) || isAuthorized(await context.Users.get(id))) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ILLEGAL_OPERATION },
+        };
       }
 
       try {
         const { user, activities } = await context.Users.authorizeManager(id);
         return { user, activities };
       } catch (e) {
-        return { activities : [], error: { code: e.code } };
+        return { activities: [], error: { code: e.code } };
       }
     },
     async revokeManagerAuthorization(_, { id }, context) {
@@ -306,11 +274,14 @@ export const resolvers = {
       }
 
       if (!userVerified(context.user)) {
-        return { activities : [], error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED } };
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ACCOUNT_NOT_VERIFIED },
+        };
       }
 
       if (!userHasRoleAll(context.user, Role_ADMINISTRATORS)) {
-        return { activities : [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
+        return { activities: [], error: { code: codes.ERROR_NOT_AUTHORIZED } };
       }
 
       async function isManager(id) {
@@ -321,15 +292,21 @@ export const resolvers = {
         return false;
       }
 
-      if (! (await isManager(id)) || isAuthorized(await context.Users.get(id))) {
-        return { activities : [], error: { code: codes.ERROR_ILLEGAL_OPERATION } };
+      if (!await isManager(id) || isAuthorized(await context.Users.get(id))) {
+        return {
+          activities: [],
+          error: { code: codes.ERROR_ILLEGAL_OPERATION },
+        };
       }
 
       try {
-        const { user, activities } = await context.Users.revokeManagerAuthorization(id);
+        const {
+          user,
+          activities,
+        } = await context.Users.revokeManagerAuthorization(id);
         return { user, activities };
       } catch (e) {
-        return { activities : [], error: { code: e.code } };
+        return { activities: [], error: { code: e.code } };
       }
     },
     async updateAccountSettings(_, { payload }, context) {
@@ -346,7 +323,9 @@ export const resolvers = {
         throw new Error('A user is required.');
       }
       try {
-        await emailValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+        await emailValidations.asyncValidate(
+          fromJS({ ...payload, user: context.user }),
+        );
       } catch (errors) {
         return { errors };
       }
@@ -358,7 +337,9 @@ export const resolvers = {
         throw new Error('A user is required.');
       }
       try {
-        await passwordValidations.asyncValidate(fromJS({ ...payload, user: context.user }));
+        await passwordValidations.asyncValidate(
+          fromJS({ ...payload, user: context.user }),
+        );
       } catch (errors) {
         return { errors };
       }
@@ -372,25 +353,32 @@ export const resolvers = {
         return { errors };
       }
       return await new Promise((resolve, reject) => {
-        config.recaptcha.checkResponse(info.recaptcha, async function (error, response) {
+        config.recaptcha.checkResponse(info.recaptcha, async function(
+          error,
+          response,
+        ) {
           if (error) {
             // an internal error?
             reject({
-              errors : {
-                recaptcha : { equalTo : true },
+              errors: {
+                recaptcha: { equalTo: true },
               },
             });
             return;
           }
           if (response.success) {
             // save session.. create user.. save form data.. render page, return json.. etc.
-            const user = await context.Users.signUp({ ...info, mail : info.email, locale: context.locale });
+            const user = await context.Users.signUp({
+              ...info,
+              mail: info.email,
+              locale: context.locale,
+            });
             resolve({ user, errors: {} });
           } else {
             // show warning, render page, return a json, etc.
             reject({
-              errors : {
-                recaptcha : { equalTo : true },
+              errors: {
+                recaptcha: { equalTo: true },
               },
             });
           }
@@ -442,12 +430,18 @@ export const resolvers = {
       return context.Users.get(id);
     },
     getUsersByDisplayNameAndEmail(_, { type, displayName, email }, context) {
-      return context.Users.getUsersByDisplayNameAndEmail({ type, displayName, email });
+      return context.Users.getUsersByDisplayNameAndEmail({
+        type,
+        displayName,
+        email,
+      });
     },
     searchUsersByDisplayNameAndEmail(_, { type, displayName, email }, context) {
-      return context.Users.searchUsersByDisplayNameAndEmail({ type, displayName, email });
-    }
+      return context.Users.searchUsersByDisplayNameAndEmail({
+        type,
+        displayName,
+        email,
+      });
+    },
   },
-
 };
-

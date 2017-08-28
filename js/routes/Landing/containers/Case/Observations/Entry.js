@@ -209,7 +209,7 @@ function Info({ intl, entry }) {
         {getFileIcon(`${entry.type}|48`)}
       </div>
       <div className={style.fileEntryInfo}>
-        <strong className={style.fileEntryInfoDisplayName}>
+        <strong title={entry.name} className={style.fileEntryInfoDisplayName}>
           {entry.name}
         </strong>
         <div className={style.fileEntryInfoDate}>

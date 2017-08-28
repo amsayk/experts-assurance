@@ -1,52 +1,81 @@
-import { PATH_SETTINGS_ACCOUNT, PATH_SETTINGS_CHANGE_PASSWORD, PATH_SETTINGS_CHANGE_EMAIL } from 'vars';
+import {
+  PATH_SETTINGS_ACCOUNT,
+  PATH_SETTINGS_CHANGE_PASSWORD,
+  PATH_SETTINGS_CHANGE_EMAIL,
+} from 'vars';
 
-export default (store) => [{
-  path         : PATH_SETTINGS_ACCOUNT,
-  getComponent : (nextState, cb) => {
-    require.ensure([], (require) => {
-      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
-      const { default : Component } = require('./AccountSettingsContainer');
+export default store => [
+  {
+    path: PATH_SETTINGS_ACCOUNT,
+    getComponent: (nextState, cb) => {
+      require.ensure(
+        [],
+        require => {
+          const {
+            default: UserIsAuthenticated,
+          } = require('authWrappers/UserIsAuthenticated');
+          const { default: Component } = require('./AccountSettingsContainer');
 
-      cb(null, UserIsAuthenticated(Component));
+          cb(null, UserIsAuthenticated(Component));
 
-      /* Webpack named bundle   */
-    }, 'AccountSettings');
+          /* Webpack named bundle   */
+        },
+        'AccountSettings',
+      );
+    },
   },
-}, {
-  path         : PATH_SETTINGS_CHANGE_EMAIL,
-  getComponent : (nextState, cb) => {
-    require.ensure([], (require) => {
-      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
-      const { default : Component } = require('./ChangeEmailContainer');
+  {
+    path: PATH_SETTINGS_CHANGE_EMAIL,
+    getComponent: (nextState, cb) => {
+      require.ensure(
+        [],
+        require => {
+          const {
+            default: UserIsAuthenticated,
+          } = require('authWrappers/UserIsAuthenticated');
+          const { default: Component } = require('./ChangeEmailContainer');
 
-      cb(null, UserIsAuthenticated(Component));
+          cb(null, UserIsAuthenticated(Component));
 
-      /* Webpack named bundle   */
-    }, 'ChangeEmail');
+          /* Webpack named bundle   */
+        },
+        'ChangeEmail',
+      );
+    },
   },
-}, {
-  path         : PATH_SETTINGS_CHANGE_PASSWORD,
-  getComponent : (nextState, cb) => {
-    require.ensure([], (require) => {
-      const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
-      const { default : Component } = require('./ChangePasswordContainer');
+  {
+    path: PATH_SETTINGS_CHANGE_PASSWORD,
+    getComponent: (nextState, cb) => {
+      require.ensure(
+        [],
+        require => {
+          const { ChangePassword } = require('authWrappers/UserIsAuthenticated');
+          const { default: Component } = require('./ChangePasswordContainer');
 
-      cb(null, UserIsAuthenticated(Component));
+          cb(null, ChangePassword(Component));
 
-      /* Webpack named bundle   */
-    }, 'ChangePassword');
+          /* Webpack named bundle   */
+        },
+        'ChangePassword',
+      );
+    },
   },
-}];
+];
 
-export const getIndexRoute = (store) => (partialNextState, cb) => {
-  require.ensure([], (require) => {
-    const { UserIsAuthenticated } = require('authWrappers/UserIsAuthenticated');
-    const { default : Component } = require('./AccountSettingsContainer');
+export const getIndexRoute = store => (partialNextState, cb) => {
+  require.ensure(
+    [],
+    require => {
+      const {
+        default: UserIsAuthenticated,
+      } = require('authWrappers/UserIsAuthenticated');
+      const { default: Component } = require('./AccountSettingsContainer');
 
-    /* Return Component */
-    cb(null, { component: UserIsAuthenticated(Component) });
+      /* Return Component */
+      cb(null, { component: UserIsAuthenticated(Component) });
 
-    /* Webpack named bundle */
-  }, 'AccountSettingsIndexRoute');
+      /* Webpack named bundle */
+    },
+    'AccountSettingsIndexRoute',
+  );
 };
-

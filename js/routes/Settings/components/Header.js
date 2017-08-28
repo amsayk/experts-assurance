@@ -34,13 +34,18 @@ const getStyle = (notificationOpen, scrollTop) =>
       }
     : {};
 
-function Header({ intl, scrolling, notificationOpen, onLogOut }) {
+function Header({ intl, danger, scrolling, notificationOpen, onLogOut }) {
   return (
     <nav
       style={getStyle(notificationOpen, scrolling.scrollTop)}
       className={style.navbar}
     >
       <AppBrand />
+      {danger
+        ? <div className={style.messageDanger}>
+            {danger}
+          </div>
+        : null}
       <div className={style.menu}>
         <a className={style.logoutLink} onClick={onLogOut}>
           {intl.formatMessage(messages.logOut)}

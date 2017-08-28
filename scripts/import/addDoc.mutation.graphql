@@ -1,5 +1,4 @@
 mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
-
   addDoc(payload: $payload, meta: $meta) {
     doc {
       objectId
@@ -10,7 +9,6 @@ mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
       date
       dateMission
       state
-
       vehicle {
         manufacturer
         model
@@ -21,7 +19,6 @@ mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
         energy
         power
       }
-
       validation {
         date
         amount
@@ -30,7 +27,6 @@ mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
           displayName
         }
       }
-
       user {
         id
         displayName
@@ -47,8 +43,7 @@ mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
         id
         displayName
       }
-
-      payment : paymentInfo {
+      payment: paymentInfo {
         user {
           id
           displayName
@@ -56,17 +51,13 @@ mutation addDoc($payload: AddDocPayload!, $meta: AddDocMeta!) {
         amount
         date
       }
-
       createdAt
       updatedAt
       lastModified
     }
-
     error {
       code
     }
-
     errors
   }
 }
-
