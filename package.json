@@ -31,7 +31,7 @@
     "import": "NODE_PATH=.:./js bnr import",
 
 
-    "precommit": "lint-staged"
+    "lint-staged": "lint-staged"
   },
   "betterScripts": {
     "update-schema": {
@@ -379,6 +379,7 @@
       "git add"
     ]
   },
+  "pre-commit": "lint-staged",
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
