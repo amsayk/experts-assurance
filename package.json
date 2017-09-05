@@ -29,7 +29,9 @@
     "translate": "NODE_PATH=.:./js bnr translate",
     "update-schema": "NODE_PATH=.:./js bnr update-schema",
     "import": "NODE_PATH=.:./js bnr import",
-    "lint-staged": "lint-staged"
+
+
+    "precomit": "lint-staged"
   },
   "betterScripts": {
     "update-schema": {
@@ -360,7 +362,7 @@
     "yargs": "^8.0.2"
   },
   "lint-staged": {
-    "*.js--disabled": [
+    "*.js*": [
       "prettier --parser flow --tab-width 2 --print-width 81 --single-quote --trailing-comma all --write",
       "git add"
     ],
@@ -377,7 +379,6 @@
       "git add"
     ]
   },
-  "pre-commit": "lint-staged",
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
