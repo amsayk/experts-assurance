@@ -4,12 +4,14 @@
   "description": "Experts d'assurance",
   "private": true,
   "scripts": {
-    "persistgraphql": "node --stack-size=8192 $(npm bin)/persistgraphql js persisted_queries.json --add_typename",
+    "persistgraphql":
+      "node --stack-size=8192 $(npm bin)/persistgraphql js persisted_queries.json --add_typename",
     "clean": "rimraf dist",
     "precompile": "npm run clean",
     "compile": "NODE_PATH=.:./js bnr compile",
     "lint": "npm run stylelint && npm run jslint",
-    "jslint": "npm run update-schema && eslint bin build backend server js common data scripts",
+    "jslint":
+      "npm run update-schema && eslint bin build backend server js common data scripts",
     "jslint:fix": "npm run jslint -- --fix",
     "stylelint": "stylelint 'js/**/*.scss'; exit 0",
     "start": "NODE_PATH=.:./js bnr start",
@@ -30,12 +32,12 @@
     "update-schema": "NODE_PATH=.:./js bnr update-schema",
     "import": "NODE_PATH=.:./js bnr import",
 
-
-    "lint-staged": "lint-staged"
+    "precommit": "lint-staged"
   },
   "betterScripts": {
     "update-schema": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/update-schema",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/update-schema",
       "env": {}
     },
     "import": {
@@ -45,32 +47,37 @@
       }
     },
     "compile": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/compile",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/compile",
       "env": {}
     },
     "dev": {
-      "command": "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/www --max_old_space_size=4096 --exec node",
+      "command":
+        "nodemon --watch backend --watch server --watch data --watch common -r server/utils/validate-env-vars -r server/env bin/www --max_old_space_size=4096 --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster,apollo-local,-app:server:history"
       }
     },
     "dev:main_worker": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/main_worker --exec node",
+      "command":
+        "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/main_worker --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"
       }
     },
     "dev:es_index": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/es_index --exec node",
+      "command":
+        "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/es_index --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"
       }
     },
     "dev:mail": {
-      "command": "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/mail --exec node",
+      "command":
+        "nodemon --watch backend --watch common -r server/utils/validate-env-vars -r server/env bin/mail --exec node",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*,ioredis:cluster"
@@ -101,22 +108,26 @@
       "env": {}
     },
     "test": {
-      "command": "node -r server/utils/validate-env-vars node_modules/jest-cli/bin/jest.js",
+      "command":
+        "node -r server/utils/validate-env-vars node_modules/jest-cli/bin/jest.js",
       "env": {
         "NODE_ENV": "test",
         "DEBUG": "app:*"
       }
     },
     "translate": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/translate",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/translate",
       "env": {}
     },
     "main_worker": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/main_worker",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/main_worker",
       "env": {}
     },
     "es_index": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/es_index",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/es_index",
       "env": {}
     },
     "mail": {
@@ -379,7 +390,6 @@
       "git add"
     ]
   },
-  "pre-commit": "lint-staged",
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
