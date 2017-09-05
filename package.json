@@ -130,7 +130,8 @@
       "env": {}
     },
     "mail": {
-      "command": "node -r server/utils/validate-env-vars -r server/env bin/mail",
+      "command":
+        "node -r server/utils/validate-env-vars -r server/env bin/mail",
       "env": {}
     }
   },
@@ -373,7 +374,7 @@
   },
   "lint-staged": {
     "*.js*": [
-      "prettier --parser flow --tab-width 2 --print-width 81 --single-quote --trailing-comma all --write",
+      "prettier-standard --parser flow --tab-width 2 --print-width 81 --single-quote --trailing-comma all",
       "git add"
     ],
     "*.scss": [
