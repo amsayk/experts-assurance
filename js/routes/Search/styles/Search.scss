@@ -1,13 +1,13 @@
-@import 'variables';
+@import "variables";
 
 $navbar-height: 70px;
 
 .center {
-  composes: center from 'styles/_base.scss';
+  composes: center from "styles/_base.scss";
 }
 
 .navbar {
-  composes: fixed-top navbar flex-row justify-content-between from 'styles/_base.scss';
+  composes: fixed-top navbar flex-row justify-content-between from "styles/_base.scss";
   top: -70px;
   // z-index: 1;
   z-index: 1052;
@@ -21,22 +21,22 @@ $navbar-height: 70px;
 }
 
 .leftNav {
-  composes: leftNav from 'styles/_base.scss';
+  composes: leftNav from "styles/_base.scss";
   flex: 0;
 }
 
 .middleNav {
-  composes: middleNav from 'styles/_base.scss';
+  composes: middleNav from "styles/_base.scss";
   flex: 1;
 }
 
 .rightNav {
-  composes: rightNav from 'styles/_base.scss';
+  composes: rightNav from "styles/_base.scss";
   flex: 0;
 }
 
 .root {
-  composes: d-flex flex-column from 'styles/_base.scss';
+  composes: d-flex flex-column from "styles/_base.scss";
   // height: 100%;
   min-height: 100vh;
   background-color: #fff;
@@ -50,7 +50,7 @@ $navbar-height: 70px;
 }
 
 .backButton {
-  composes: align-middle from 'styles/_base.scss';
+  composes: align-middle from "styles/_base.scss";
   margin: 0 auto;
   padding: 0;
   font-weight: 600;
@@ -86,15 +86,15 @@ $navbar-height: 70px;
   border-radius: 4px;
   position: relative;
   transition: background 100ms ease-in, width 100ms ease-out;
-  composes: d-flex flex-row from 'styles/_base.scss';
+  composes: d-flex flex-row from "styles/_base.scss";
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: rgba(255, 255, 255, 1);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
 
-  composes: d-flex flex-row align-items-center from 'styles/_base.scss';
+  composes: d-flex flex-row align-items-center from "styles/_base.scss";
 
   .searchLoading {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
   }
 }
 
@@ -111,7 +111,7 @@ $navbar-height: 70px;
 
 .inputWrapper {
   flex: 1;
-  composes: d-flex flex-row from 'styles/_base.scss';
+  composes: d-flex flex-row from "styles/_base.scss";
 }
 
 .input {
@@ -229,7 +229,7 @@ $navbar-height: 70px;
 }
 
 .state {
-  composes: d-flex align-items-center from 'styles/_base.scss';
+  composes: d-flex align-items-center from "styles/_base.scss";
 }
 
 .OPEN:not(.selecting) {
@@ -272,7 +272,7 @@ $navbar-height: 70px;
     display: none;
   }
 
-  padding: .4rem 0;
+  padding: 0.4rem 0;
 
   height: 32px;
   border-right: 1px solid #eaecef;
@@ -306,13 +306,13 @@ $navbar-height: 70px;
 // Search results
 
 .docSearchDoc {
-  composes: d-flex flex-row from 'styles/_base.scss';
+  composes: d-flex flex-row from "styles/_base.scss";
   flex: 1;
   padding: 15px 8px 14px 25px;
 }
 
 .docSearchDocInfo {
-  composes: d-flex flex-column from 'styles/_base.scss';
+  composes: d-flex flex-column from "styles/_base.scss";
   flex: 1;
 
   .docSearchDocTop {
@@ -321,7 +321,7 @@ $navbar-height: 70px;
 }
 
 .docSearchDocMiddle {
-  composes: d-flex flex-row justify-content-start align-items-center from 'styles/_base.scss';
+  composes: d-flex flex-row justify-content-start align-items-center from "styles/_base.scss";
   flex: 1;
 }
 
@@ -361,7 +361,7 @@ $navbar-height: 70px;
   max-height: 90vh;
 }
 
-@import 'routes/Search/styles/List';
-@import 'routes/Search/styles/Cases';
-@import 'routes/Search/styles/Actions';
-@import 'routes/Search/styles/AdvancedSearch';
+@import "routes/Search/styles/List";
+@import "routes/Search/styles/Cases";
+@import "routes/Search/styles/Actions";
+@import "routes/Search/styles/AdvancedSearch";

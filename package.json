@@ -31,7 +31,6 @@
     "translate": "NODE_PATH=.:./js bnr translate",
     "update-schema": "NODE_PATH=.:./js bnr update-schema",
     "import": "NODE_PATH=.:./js bnr import",
-
     "precommit": "lint-staged"
   },
   "betterScripts": {
