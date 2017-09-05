@@ -31,7 +31,7 @@
     "import": "NODE_PATH=.:./js bnr import",
 
 
-    "precomit": "lint-staged"
+    "precommit": "lint-staged"
   },
   "betterScripts": {
     "update-schema": {
