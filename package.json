@@ -372,8 +372,8 @@
     "yargs": "^8.0.2"
   },
   "lint-staged": {
-    "*.js$": [
-      "prettier-standard --parser flow --tab-width 2 --print-width 81 --single-quote --trailing-comma all",
+    "*.{js}": [
+      "prettier --parser flow --tab-width 2 --print-width 81 --single-quote --trailing-comma all --write",
       "git add"
     ],
     "*.scss": [
